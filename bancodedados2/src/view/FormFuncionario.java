@@ -25,6 +25,11 @@ public class FormFuncionario extends JDialog implements ActionListener
 	private static JPasswordField senha;
 	private static JButton btnOK;
 	private static JButton btnCancelar;
+        
+        
+        // jack delicia =]
+        // by Caio
+        
 	
 	public FormFuncionario()
 	{
