@@ -15,6 +15,7 @@ public class Empregado {
     private String nome;
     private String endereco;
     private String superssn;
+    private String senha;
     private char sexo;
     private float salario;
     private int departamento;
@@ -74,6 +75,20 @@ public class Empregado {
      */
     public void setSuperssn(String superssn) {
         this.superssn = superssn;
+    }
+    
+    /**
+     * @return the senha
+     */
+    public String getSenha() {
+        return senha;
+    }
+    
+    /**
+     * @param senha the senha to set
+     */
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     /**
