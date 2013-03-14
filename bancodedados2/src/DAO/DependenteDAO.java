@@ -5,7 +5,7 @@
 package DAO;
 
 import java.util.ArrayList;
-
+import Model.Dependente;
 /**
  *
  * @author pablohenrique
@@ -19,27 +19,35 @@ public class DependenteDAO implements IObjectDAO{
     private Conexao connect;
 
     @Override
-    public void post(Object obj) {
+    public void post(Object input) {
+        Dependente aux = (Dependente) input;
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void update(Object obj) {
+    public void update(Object input) {
+        Dependente aux = (Dependente) input;
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Object get(int id) {
+    public Object get(int input) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
+    public Object read(String input) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public ArrayList<Object> getAll(Object obj) {
+    public ArrayList<Object> getAll(Object input) {
+        Dependente aux = (Dependente) input;
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int input) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
