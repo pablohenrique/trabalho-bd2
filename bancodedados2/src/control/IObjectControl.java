@@ -48,7 +48,19 @@ public interface IObjectControl {
      * @param String(nome)
      * @return ArrayList<Object>
      */
-    public ArrayList<Object> getSearchByName(String input);
+    public ArrayList<Object> SearchByName(String input);
+    
+    
+     /**
+     * Usado para efetuar o login do usuarios
+     * @param String(usuario), String(senha)
+     * @return 0 caso usuario e/ou senha incorretos
+     * @return 1 caso funcionario
+     * @return 2 caso gerente
+     * @return 3 caso supervisor
+     * @return 4 caso gerente e supervisor
+     */
+    public int login(String usuario, String senha);
     
     
     
