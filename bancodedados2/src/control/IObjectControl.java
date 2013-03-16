@@ -37,10 +37,9 @@ public interface IObjectControl {
     
      /**
      * Usado para recuperar todos os objetos de um banco de dados
-     * @param Object
      * @return ArrayList<Object>
      */
-    public ArrayList<Object> getAll(Object input);
+    public ArrayList<Object> getAll();
     
      /**
      * Usado para recuperar todos os objetos de um banco de dados que possuam

@@ -4,42 +4,32 @@
  */
 package control;
 
-import DAO.EmpregadoDAO;
-import Model.Empregado;
 import java.util.ArrayList;
 
 /**
  *
  * @author yuricampos
  */
-public class EmpregadoControl implements IObjectControl {
+public class ProjetoControl implements IObjectControl  {
 
     @Override
     public void post(Object input) {
-        Empregado e = (Empregado) input;
-        EmpregadoDAO edao = new EmpregadoDAO();
-        edao.post(e);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void update(Object input) {
-      Empregado e = (Empregado) input;
-      EmpregadoDAO edao = new EmpregadoDAO();
-      edao.update(e);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object getById(int input) {
-      EmpregadoDAO edao = new EmpregadoDAO();
-      Empregado e = (Empregado) edao.get(input);
-      return e;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public ArrayList<Object> getAll() {
-       EmpregadoDAO edao = new EmpregadoDAO();
-       ArrayList<Object> all =  edao.getAll();
-       return all;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -51,7 +41,5 @@ public class EmpregadoControl implements IObjectControl {
     public int login(String usuario, String senha) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
     
 }
