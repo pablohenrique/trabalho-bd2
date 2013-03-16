@@ -5,9 +5,13 @@
 package control;
 
 import DAO.EmpregadoDAO;
+import Model.Auditoria;
 import Model.Empregado;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -31,9 +35,14 @@ public class EmpregadoControl  {
         empregadoDAO.post(empregado);
         
     }
+    
 
+    
 
     public void update(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc, int dno, String superssn, String senha) {
+        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        Empregado empregadoVerifica = (Empregado) empregadoDAO.get(ssn);
+        float salarioAtual = empregadoVerifica.getSalario();
         Empregado empregado = new Empregado();
         empregado.setSsn(ssn);
         empregado.setNome(nome);
@@ -44,26 +53,43 @@ public class EmpregadoControl  {
         empregado.setDepartamento(dno);
         empregado.setSuperSsn(superssn);
         empregado.setSenha(senha);
-        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
         empregadoDAO.update(empregado);
+        if(salarioAtual != salario){
+            Auditoria auditoria = new Auditoria();
+            auditoria.setAntigosalario(salarioAtual);
+            auditoria.setNovosalario(salario);
+            auditoria.setEssn(ssn);
+            //AQUI E O GERENTE
+            auditoria.setGerssn(superssn);
+            Date data = new Date(System.currentTimeMillis()); 
+            auditoria.setDatamodificacao(data);
+            //FALTA INSERIR NO BANCO    
+        } 
+        
+
     }
 
 
-    public Object getById(int input) {
+    public Empregado getById(String input) {
         EmpregadoDAO empregadoDAO = new EmpregadoDAO();
         Empregado empregado = (Empregado) empregadoDAO.get(input);
         return empregado;
     }
 
 
-    public ArrayList<Object> getAll() {
+    public ArrayList<Empregado> getAll() {
         EmpregadoDAO empregadoDAO = new EmpregadoDAO();
-        ArrayList<Object> empregados = empregadoDAO.getAll();
+        ArrayList<Object> empregadosObject = empregadoDAO.getAll();
+        ArrayList<Empregado> empregados = null;
+        for(int i = 0 ; i < empregadosObject.size() ; i++){
+            Empregado e = (Empregado) empregadosObject.get(i);
+            empregados.add(e);
+        }
         return empregados;
     }
 
 
-    public Object SearchByNameExactly(String input) {
+    public Empregado SearchByNameExactly(String input) {
         EmpregadoDAO empregadoDAO = new EmpregadoDAO();
         Empregado empregado = (Empregado) empregadoDAO.read(input);
         return empregado;

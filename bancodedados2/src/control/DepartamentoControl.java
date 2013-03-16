@@ -40,21 +40,26 @@ public class DepartamentoControl {
     }
 
 
-    public Object getById(int numero) {
+    public Departamento getById(int numero) {
         DepartamentoDAO departamentoDAO = new DepartamentoDAO();
         Departamento departamento = (Departamento) departamentoDAO.get(numero);
         return departamento;
     }
 
 
-    public ArrayList<Object> getAll() {
+    public ArrayList<Departamento> getAll() {
          DepartamentoDAO departamentoDAO = new DepartamentoDAO();
-         ArrayList<Object> departamento = departamentoDAO.getAll();
+         ArrayList<Object> departamentoObject = departamentoDAO.getAll();
+         ArrayList<Departamento> departamento = null;
+         for(int i = 0 ; i < departamentoObject.size() ; i++){
+             Departamento d = (Departamento) departamentoObject.get(i);
+             departamento.add(d);
+         }
          return departamento;
     }
 
 
-    public Object SearchByNameExactly(String input) {
+    public Departamento SearchByNameExactly(String input) {
        DepartamentoDAO departamentoDAO = new DepartamentoDAO();
        Departamento departamento = (Departamento) departamentoDAO.read(input);
        return departamento;

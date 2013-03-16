@@ -40,21 +40,26 @@ public class DependenteControl  {
     }
 
 
-    public Object getById(int input) {
+    public Dependente getById(int input) {
         DependenteDAO dependenteDAO = new DependenteDAO();
         Dependente dependente = (Dependente) dependenteDAO.get(input);
         return dependente;
     }
 
 
-    public ArrayList<Object> getAll() {
+    public ArrayList<Dependente> getAll() {
        DependenteDAO dependenteDAO = new DependenteDAO();
-       ArrayList<Object> dependentes = dependenteDAO.getAll();
+       ArrayList<Object> dependentesObject = dependenteDAO.getAll();
+       ArrayList<Dependente> dependentes = null;
+       for(int i = 0 ; i < dependentesObject.size() ; i++){
+           Dependente d = (Dependente) dependentesObject.get(i);
+           dependentes.add(d);
+       }
        return dependentes;
     }
 
 
-    public Object SearchByNameExactly(String input) {
+    public Dependente SearchByNameExactly(String input) {
         DependenteDAO dependenteDAO = new DependenteDAO();
         Dependente dependente = (Dependente)dependenteDAO.read(input);
         return dependente;

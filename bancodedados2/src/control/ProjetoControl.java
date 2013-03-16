@@ -37,22 +37,27 @@ public class ProjetoControl  {
     }
 
 
-    public Object getById(int input) {
+    public Projeto getById(int input) {
         ProjetoDAO projetoDAO = new ProjetoDAO();
         Projeto projeto = (Projeto) projetoDAO.get(input);
         return projeto;
     }
 
 
-    public ArrayList<Object> getAll() {
+    public ArrayList<Projeto> getAll() {
         ProjetoDAO projetoDAO = new ProjetoDAO();
-        ArrayList<Object> projetos = projetoDAO.getAll();
+        ArrayList<Object> projetosObject = projetoDAO.getAll();
+        ArrayList<Projeto> projetos = null;
+        for(int i = 0 ; i < projetosObject.size() ; i++){
+            Projeto p = (Projeto) projetosObject.get(i);
+            projetos.add(p);
+        }
         return projetos;
        
     }
 
 
-    public Object SearchByNameExactly(String input) {
+    public Projeto SearchByNameExactly(String input) {
         ProjetoDAO projetoDAO = new ProjetoDAO();
         Projeto projeto = (Projeto) projetoDAO.read(input);
         return projeto;
