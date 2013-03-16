@@ -23,6 +23,23 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_DELETE = "DELETE empregado WHERE ssn = ?;";
     private PreparedStatement ps;
     
+    public void createObjectTemplate(Object input) throws SQLException{
+        try {
+            Empregado aux = (Empregado) input;
+            this.ps.setString(1,aux.getSsn());
+            this.ps.setString(2,aux.getNome());
+            this.ps.setString(3,aux.getSexo());
+            this.ps.setString(4,aux.getEndereco());
+            this.ps.setFloat(5,aux.getSalario());
+            this.ps.setDate(6,aux.getDataNascimento());
+            this.ps.setInt(7,aux.getDepartamento());
+            this.ps.setString(8,aux.getSuperSsn());
+            this.ps.setString(9,aux.getSenha());
+        } catch (Exception e) {
+            System.err.println("Erro createObjectTemplate:  " + e.toString());
+        }
+    }
+    
     @Override
     public void post(Object input) {
         try {

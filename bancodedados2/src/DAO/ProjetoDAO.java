@@ -21,17 +21,41 @@ public class ProjetoDAO implements IObjectDAO{
     private final String SQL_UPDATE = "UPDATE projeto SET pjnome = ?, plocalizacao = ?, dnum = ? WHERE pnumero = ?;";
     private final String SQL_DELETE = "DELETE FROM projeto WHERE pnumero = ?;";
     private PreparedStatement ps;
+    private ResultSet rs;
+    
+    private void createObjectTemplate(Object input){
+        try {
+            Projeto aux = (Projeto) input;
+            this.ps.setInt(1,aux.getNumero());
+            this.ps.setString(2,aux.getNome());
+            this.ps.setString(3,aux.getLocalizacao());
+            this.ps.setInt(4,aux.getDepartamento());
+            
+        } catch (Exception e) {
+            System.err.println("Erro createObjectTemplate:  " + e.toString() );
+        }
+    }
+    
+    private Object useObjectTemplate(){
+        try {
+            Projeto output = new Projeto();
+            output.setNumero(this.rs.getInt(1));
+            output.setNome(this.rs.getString(2));
+            output.setLocalizacao(this.rs.getString(3));
+            output.setDepartamento(this.rs.getInt(4));
+            return output;
+        } catch (Exception e) {
+            System.err.println("Erro useObjectTemplate:  " + e.toString() );
+            return null;
+        }
+    }
 
     @Override
     public void post(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
-            Projeto aux = (Projeto) input;
+            this.createObjectTemplate(input);
             
-            this.ps.setInt(1,aux.getNumero());
-            this.ps.setString(2,aux.getNome());
-            this.ps.setString(3,aux.getLocalizacao());
-            this.ps.setInt(4,aux.getDepartamento());
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
             
@@ -44,12 +68,7 @@ public class ProjetoDAO implements IObjectDAO{
     public void update(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-            Projeto aux = (Projeto) input;
-            
-            this.ps.setString(1,aux.getNome());
-            this.ps.setString(2,aux.getLocalizacao());
-            this.ps.setInt(3,aux.getDepartamento());
-            this.ps.setInt(4,aux.getNumero());
+            this.createObjectTemplate(input);
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");
@@ -64,15 +83,9 @@ public class ProjetoDAO implements IObjectDAO{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
             this.ps.setInt(1,input);
-            ResultSet rs = this.ps.executeQuery();
+            this.rs = this.ps.executeQuery();
+            return this.useObjectTemplate();
             
-            Projeto output = new Projeto();
-            output.setNumero(rs.getInt(1));
-            output.setNome(rs.getString(2));
-            output.setLocalizacao(rs.getString(3));
-            output.setDepartamento(rs.getInt(4));
-            
-            return output;
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
             return null;
@@ -84,15 +97,9 @@ public class ProjetoDAO implements IObjectDAO{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,input);
-            ResultSet rs = this.ps.executeQuery();
+            this.rs = this.ps.executeQuery();
+            return this.useObjectTemplate();
             
-            Projeto output = new Projeto();
-            output.setNumero(rs.getInt(1));
-            output.setNome(rs.getString(2));
-            output.setLocalizacao(rs.getString(3));
-            output.setDepartamento(rs.getInt(4));
-            
-            return output;
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
             return null;
@@ -105,15 +112,13 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             ArrayList<Object> output = new ArrayList<>();
             
-            ResultSet rs = this.ps.executeQuery();
+            this.rs = this.ps.executeQuery();
             while(rs.next()){
                 Projeto obj = new Projeto();
-                
-                obj.setNumero(rs.getInt(1));
-                obj.setNome(rs.getString(2));
-                obj.setLocalizacao(rs.getString(3));
-                obj.setDepartamento(rs.getInt(4));
-                
+                obj.setNumero(this.rs.getInt(1));
+                obj.setNome(this.rs.getString(2));
+                obj.setLocalizacao(this.rs.getString(3));
+                obj.setDepartamento(this.rs.getInt(4));
                 output.add(obj);
             }
             
