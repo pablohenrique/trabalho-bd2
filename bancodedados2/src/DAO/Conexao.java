@@ -38,6 +38,7 @@ public class Conexao {
     }
     
     public static Connection getConexao() throws SQLException{
+        System.out.println("Teste");
         return connection;
     }
 }

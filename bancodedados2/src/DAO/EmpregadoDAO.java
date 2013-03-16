@@ -23,7 +23,7 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public void post(Object input) {
         try {
-            this.ps = Conexao.getConexao().prepareStatement(SQL_POST);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
             MUDARAQUI aux = (MUDARAQUI) input;
             
             //this.ps.setInt(1,aux.getNumero());
@@ -39,7 +39,7 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public void update(Object input) {
         try {
-            this.ps = Conexao.getConexao().prepareStatement(SQL_UPDATE);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
             MUDARAQUI aux = (MUDARAQUI) input;
             
             //this.ps.setString(1,aux.getNome());
@@ -55,7 +55,7 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public Object get(int input) {
         try {
-            this.ps = Conexao.getConexao().prepareStatement(SQL_GET);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
             this.ps.setInt(1,input);
             ResultSet rs = this.ps.executeQuery();
             
@@ -72,7 +72,7 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public Object read(String input) {
         try {
-            this.ps = Conexao.getConexao().prepareStatement(SQL_READ);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,input);
             ResultSet rs = this.ps.executeQuery();
             
@@ -89,7 +89,7 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public ArrayList<Object> getAll() {
         try {
-            this.ps = Conexao.getConexao().prepareStatement(SQL_GETALL);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             ArrayList<Object> output = new ArrayList<>();
             
             ResultSet rs = this.ps.executeQuery();
@@ -114,7 +114,7 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public void delete(int input) {
         try {
-            this.ps = Conexao.getConexao().prepareStatement(SQL_DELETE);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
             this.ps.setInt(1,input);
             
             if(this.ps.executeUpdate() != 1)
