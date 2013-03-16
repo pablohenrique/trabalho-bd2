@@ -67,7 +67,7 @@ public class DepartamentoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
             this.ps.setInt(1,input);
             ResultSet rs = this.ps.executeQuery();
-            
+            rs.next();
             Departamento output = new Departamento();
             output.setNumero(rs.getInt(1));
             output.setNome(rs.getString(2));
@@ -87,7 +87,7 @@ public class DepartamentoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,input);
             ResultSet rs = this.ps.executeQuery();
-            
+            rs.next();
             Departamento output = new Departamento();
             output.setNumero(rs.getInt(1));
             output.setNome(rs.getString(2));
