@@ -75,14 +75,16 @@ public class Dependente {
     /**
      * @return the datanascimento
      */
-    public Date getDatanascimento() {
+        public Date getDataNascimento() {
         return datanascimento;
     }
 
     /**
      * @param datanascimento the datanascimento to set
      */
-    public void setDatanascimento(Date datanascimento) {
+    public void setDataNascimento(Date datanascimento) {
         this.datanascimento = datanascimento;
     }
+
+
 }
