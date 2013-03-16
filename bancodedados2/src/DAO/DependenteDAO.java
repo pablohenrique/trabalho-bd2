@@ -31,7 +31,7 @@ public class DependenteDAO implements IObjectDAO{
             this.ps.setString(1,aux.getNome());
             this.ps.setString(2,aux.getEssn());
             this.ps.setString(3,aux.getSexo());
-            this.ps.setDate(4,aux.getDatanascimento());
+            this.ps.setDate(4,aux.getDataNascimento());
             this.ps.setString(5,aux.getParentesco());
             
             if(this.ps.executeUpdate() != 1)
@@ -50,7 +50,7 @@ public class DependenteDAO implements IObjectDAO{
             
             this.ps.setString(1,aux.getNome());
             this.ps.setString(2,aux.getSexo());
-            this.ps.setDate(3,aux.getDatanascimento());
+            this.ps.setDate(3,aux.getDataNascimento());
             this.ps.setString(4,aux.getParentesco());
             this.ps.setString(5,aux.getEssn());
             
@@ -73,7 +73,7 @@ public class DependenteDAO implements IObjectDAO{
             output.setNome(rs.getString(1));
             output.setEssn(rs.getString(2));
             output.setSexo(rs.getString(3));
-            output.setDatanascimento(rs.getDate(4));
+            output.setDataNascimento(rs.getDate(4));
             output.setParentesco(rs.getString(5));
             
             return output;
@@ -94,7 +94,7 @@ public class DependenteDAO implements IObjectDAO{
             output.setNome(rs.getString(1));
             output.setEssn(rs.getString(2));
             output.setSexo(rs.getString(3));
-            output.setDatanascimento(rs.getDate(4));
+            output.setDataNascimento(rs.getDate(4));
             output.setParentesco(rs.getString(5));
             
             return output;
@@ -117,7 +117,7 @@ public class DependenteDAO implements IObjectDAO{
                 obj.setNome(rs.getString(1));
                 obj.setEssn(rs.getString(2));
                 obj.setSexo(rs.getString(3));
-                obj.setDatanascimento(rs.getDate(4));
+                obj.setDataNascimento(rs.getDate(4));
                 obj.setParentesco(rs.getString(5));
                 
                 output.add(obj);

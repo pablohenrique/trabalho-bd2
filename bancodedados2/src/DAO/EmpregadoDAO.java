@@ -4,9 +4,11 @@
  */
 package DAO;
 
-import java.util.ArrayList;
 import Model.Empregado;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -15,6 +17,7 @@ import java.sql.PreparedStatement;
 public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_POST = "";
     private final String SQL_GET = "";
+    private final String SQL_READ = "";
     private final String SQL_GETALL = "";
     private final String SQL_UPDATE = "";
     private final String SQL_DELETE = "";
@@ -24,9 +27,17 @@ public class EmpregadoDAO implements IObjectDAO{
     public void post(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
-            MUDARAQUI aux = (MUDARAQUI) input;
+            Empregado aux = (Empregado) input;
             
-            //this.ps.setInt(1,aux.getNumero());
+            this.ps.setString(1,aux.getSsn());
+            this.ps.setString(2,aux.getNome());
+            this.ps.setString(3,aux.getSexo());
+            this.ps.setString(4,aux.getEndereco());
+            this.ps.setFloat(5,aux.getSalario());
+            this.ps.setDate(6,aux.getDataNascimento());
+            this.ps.setInt(7,aux.getDepartamento());
+            this.ps.setString(8,aux.getSuperSsn());
+            this.ps.setString(9,aux.getSenha());
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
@@ -40,9 +51,17 @@ public class EmpregadoDAO implements IObjectDAO{
     public void update(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-            MUDARAQUI aux = (MUDARAQUI) input;
+            Empregado aux = (Empregado) input;
             
-            //this.ps.setString(1,aux.getNome());
+            this.ps.setString(1,aux.getNome());
+            this.ps.setString(2,aux.getSexo());
+            this.ps.setString(3,aux.getEndereco());
+            this.ps.setFloat(4,aux.getSalario());
+            this.ps.setDate(5,aux.getDataNascimento());
+            this.ps.setInt(6,aux.getDepartamento());
+            this.ps.setString(7,aux.getSuperSsn());
+            this.ps.setString(8,aux.getSenha());
+            this.ps.setString(9,aux.getSsn());
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");
@@ -59,8 +78,16 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps.setInt(1,input);
             ResultSet rs = this.ps.executeQuery();
             
-            MUDARAQUI output = new MUDARAQUI();
-            //output.setNumero(rs.getInt(1));
+            Empregado output = new Empregado();
+            output.setSsn(rs.getString(1));
+            output.setNome(rs.getString(2));
+            output.setSexo(rs.getString(3));
+            output.setEndereco(rs.getString(4));
+            output.setSalario(rs.getFloat(5));
+            output.setDataNascimento(rs.getDate(6));
+            output.setDepartamento(rs.getInt(7));
+            output.setSuperSsn(rs.getString(8));
+            output.setSenha(rs.getString(9));
             
             return output;
         } catch (Exception e) {
@@ -76,8 +103,16 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps.setString(1,input);
             ResultSet rs = this.ps.executeQuery();
             
-            MUDARAQUI output = new MUDARAQUI();
-            //output.setNumero(rs.getInt(1));
+            Empregado output = new Empregado();
+            output.setSsn(rs.getString(1));
+            output.setNome(rs.getString(2));
+            output.setSexo(rs.getString(3));
+            output.setEndereco(rs.getString(4));
+            output.setSalario(rs.getFloat(5));
+            output.setDataNascimento(rs.getDate(6));
+            output.setDepartamento(rs.getInt(7));
+            output.setSuperSsn(rs.getString(8));
+            output.setSenha(rs.getString(9));
             
             return output;
         } catch (Exception e) {
@@ -94,9 +129,16 @@ public class EmpregadoDAO implements IObjectDAO{
             
             ResultSet rs = this.ps.executeQuery();
             while(rs.next()){
-                MUDARAQUI obj = new MUDARAQUI();
-                
-                //obj.setNumero(rs.getInt(1));
+                Empregado obj = new Empregado();
+                obj.setSsn(rs.getString(1));
+                obj.setNome(rs.getString(2));
+                obj.setSexo(rs.getString(3));
+                obj.setEndereco(rs.getString(4));
+                obj.setSalario(rs.getFloat(5));
+                obj.setDataNascimento(rs.getDate(6));
+                obj.setDepartamento(rs.getInt(7));
+                obj.setSuperSsn(rs.getString(8));
+                obj.setSenha(rs.getString(9));
                 
                 output.add(obj);
             }
