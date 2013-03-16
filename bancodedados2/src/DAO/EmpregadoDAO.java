@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * @author pablohenrique
  */
 public class EmpregadoDAO implements IObjectDAO{
-    private final String SQL_POST = "";
-    private final String SQL_GET = "";
-    private final String SQL_READ = "";
-    private final String SQL_GETALL = "";
-    private final String SQL_UPDATE = "";
-    private final String SQL_DELETE = "";
+    private final String SQL_POST = "INSERT INTO empregado VALUES(?,?,?,?,?,?,?,?,?);";
+    private final String SQL_GET = "SELECT * FROM empregado WHERE ssn = ?;";
+    private final String SQL_READ = "SELECT * FROM empregado WHERE nome LIKE ?;";
+    private final String SQL_GETALL = "SELECT * FROM empregado;";
+    private final String SQL_UPDATE = "UPDATE empregado SET nome = ?, sexo = ?, endereco = ?, salario = ?, datanascimento = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
+    private final String SQL_DELETE = "DELETE empregado WHERE ssn = ?;";
     private PreparedStatement ps;
     
     @Override
@@ -100,6 +100,7 @@ public class EmpregadoDAO implements IObjectDAO{
     public Object read(String input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
+            input = "'%"+input+"%'";
             this.ps.setString(1,input);
             ResultSet rs = this.ps.executeQuery();
             
