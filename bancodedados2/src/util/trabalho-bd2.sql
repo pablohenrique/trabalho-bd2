@@ -62,7 +62,7 @@ CREATE TABLE dept_localizacao (
 CREATE TABLE empregado (
     ssn character(9) NOT NULL,
     nome character varying(60) NOT NULL, -- colocar o nome completo do empregado
-    sexo character(1),
+    sexo varchar(1),
     endereco character varying(45),
     salario numeric(10,2),
     datanasc date,
