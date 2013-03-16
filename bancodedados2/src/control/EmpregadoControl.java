@@ -51,6 +51,11 @@ public class EmpregadoControl implements IObjectControl {
     public int login(String usuario, String senha) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public Object read(String input) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     

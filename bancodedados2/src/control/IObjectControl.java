@@ -61,6 +61,12 @@ public interface IObjectControl {
      */
     public int login(String usuario, String senha);
     
+      /**
+     * Usado para recuperar um objeto do banco de dados, utilizando seu nome
+     * @param String
+     * @return Object
+     */
+    public Object read(String input);
     
     
     
