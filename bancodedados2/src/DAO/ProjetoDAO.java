@@ -28,8 +28,8 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps = Conexao.getConexao().prepareStatement(SQL_POST);
             Projeto aux = (Projeto) input;
             
-            this.ps.setString(1,aux.getNome());
-            this.ps.setInt(2,aux.getNumero());
+            this.ps.setInt(1,aux.getNumero());
+            this.ps.setString(2,aux.getNome());
             this.ps.setString(3,aux.getLocalizacao());
             this.ps.setInt(4,aux.getDepartamento());
             //this.ps.executeQuery se retornar um ResultSet

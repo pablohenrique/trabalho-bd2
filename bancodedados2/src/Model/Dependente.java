@@ -4,7 +4,7 @@
  */
 package Model;
 
-import java.util.Date;
+import java.sql.Date;
 /**
  *
  * @author pablohenrique
@@ -13,7 +13,7 @@ public class Dependente {
     private String essn;
     private String nome;
     private String parentesco;
-    private char sexo;
+    private String sexo;
     private Date datanascimento;
 
     /**
@@ -61,14 +61,14 @@ public class Dependente {
     /**
      * @return the sexo
      */
-    public char getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
     /**
      * @param sexo the sexo to set
      */
-    public void setSexo(char sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 

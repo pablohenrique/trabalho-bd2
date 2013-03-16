@@ -11,9 +11,9 @@ import java.sql.*;
  * @author pablohenrique
  */
 public class Conexao {
-    private static final String url = "jdbc:postgresql://177.71.252.132:5432/trabalho_bd2?searchpath=cia";
+    private static final String url = "jdbc:postgresql://localhost:5432/BD2?searchpath=cia";
     private static final String user = "postgres";
-    private static final String pass = "25081992";
+    private static final String pass = "postgres";
     private static Connection connection;
     
     private Conexao(){
