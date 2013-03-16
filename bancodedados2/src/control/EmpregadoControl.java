@@ -6,57 +6,75 @@ package control;
 
 import DAO.EmpregadoDAO;
 import Model.Empregado;
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
  *
  * @author yuricampos
  */
-public class EmpregadoControl implements IObjectControl {
+public class EmpregadoControl  {
 
-    @Override
-    public void post(Object input) {
-        Empregado e = (Empregado) input;
-        EmpregadoDAO edao = new EmpregadoDAO();
-        edao.post(e);
+
+    public void post(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc, int dno, String superssn, String senha) {
+        Empregado empregado = new Empregado();
+        empregado.setSsn(ssn);
+        empregado.setNome(nome);
+        empregado.setSexo(sexo);
+        empregado.setEndereco(endereco);
+        empregado.setSalario(salario);
+        empregado.setDataNascimento(datanasc);
+        empregado.setDepartamento(dno);
+        empregado.setSuperSsn(superssn);
+        empregado.setSenha(senha);
+        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        empregadoDAO.post(empregado);
+        
     }
 
-    @Override
-    public void update(Object input) {
-      Empregado e = (Empregado) input;
-      EmpregadoDAO edao = new EmpregadoDAO();
-      edao.update(e);
+
+    public void update(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc, int dno, String superssn, String senha) {
+        Empregado empregado = new Empregado();
+        empregado.setSsn(ssn);
+        empregado.setNome(nome);
+        empregado.setSexo(sexo);
+        empregado.setEndereco(endereco);
+        empregado.setSalario(salario);
+        empregado.setDataNascimento(datanasc);
+        empregado.setDepartamento(dno);
+        empregado.setSuperSsn(superssn);
+        empregado.setSenha(senha);
+        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        empregadoDAO.update(empregado);
     }
 
-    @Override
+
     public Object getById(int input) {
-      EmpregadoDAO edao = new EmpregadoDAO();
-      Empregado e = (Empregado) edao.get(input);
-      return e;
+        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        Empregado empregado = (Empregado) empregadoDAO.get(input);
+        return empregado;
     }
 
-    @Override
+
     public ArrayList<Object> getAll() {
-       EmpregadoDAO edao = new EmpregadoDAO();
-       ArrayList<Object> all =  edao.getAll();
-       return all;
+        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        ArrayList<Object> empregados = empregadoDAO.getAll();
+        return empregados;
     }
 
-    @Override
-    public ArrayList<Object> SearchByName(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public Object SearchByNameExactly(String input) {
+        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        Empregado empregado = (Empregado) empregadoDAO.read(input);
+        return empregado;
     }
 
-    @Override
+ 
     public int login(String usuario, String senha) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public Object read(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+
     
     
 }

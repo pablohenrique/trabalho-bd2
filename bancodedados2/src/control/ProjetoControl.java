@@ -4,47 +4,60 @@
  */
 package control;
 
+import DAO.ProjetoDAO;
+import Model.Projeto;
 import java.util.ArrayList;
 
 /**
  *
  * @author yuricampos
  */
-public class ProjetoControl implements IObjectControl  {
+public class ProjetoControl  {
 
-    @Override
-    public void post(Object input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public void post(int numero, String nome, String localizacao, int departamento) {
+        Projeto projeto = new Projeto();
+        projeto.setNumero(numero);
+        projeto.setNome(nome);
+        projeto.setLocalizacao(localizacao);
+        projeto.setDepartamento(departamento);
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        projetoDAO.post(projeto);
     }
 
-    @Override
-    public void update(Object input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public void update(int numero, String nome, String localizacao, int departamento) {
+        Projeto projeto = new Projeto();
+        projeto.setNumero(numero);
+        projeto.setNome(nome);
+        projeto.setLocalizacao(localizacao);
+        projeto.setDepartamento(departamento);
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        projetoDAO.update(projeto);
     }
 
-    @Override
+
     public Object getById(int input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        Projeto projeto = (Projeto) projetoDAO.get(input);
+        return projeto;
     }
 
-    @Override
+
     public ArrayList<Object> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        ArrayList<Object> projetos = projetoDAO.getAll();
+        return projetos;
+       
     }
 
-    @Override
-    public ArrayList<Object> SearchByName(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public Object SearchByNameExactly(String input) {
+        ProjetoDAO projetoDAO = new ProjetoDAO();
+        Projeto projeto = (Projeto) projetoDAO.read(input);
+        return projeto;
     }
 
-    @Override
-    public int login(String usuario, String senha) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
-    @Override
-    public Object read(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

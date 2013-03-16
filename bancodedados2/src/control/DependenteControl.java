@@ -4,47 +4,61 @@
  */
 package control;
 
+import DAO.DependenteDAO;
+import Model.Dependente;
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
  *
  * @author yuricampos
  */
-public class DependenteControl implements IObjectControl {
+public class DependenteControl  {
 
-    @Override
-    public void post(Object input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    
+    public void post(String nome, String essn, String sexo, Date datanascimento, String parentesco) {
+     Dependente dependente = new Dependente();
+     dependente.setNome(nome);
+     dependente.setEssn(essn);
+     dependente.setSexo(sexo);
+     dependente.setDataNascimento(datanascimento);
+     dependente.setParentesco(parentesco);
+     DependenteDAO dependenteDAO = new DependenteDAO();
+     dependenteDAO.post(dependente);
     }
 
-    @Override
-    public void update(Object input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public void update(String nome, String essn, String sexo, Date datanascimento, String parentesco) {
+     Dependente dependente = new Dependente();
+     dependente.setNome(nome);
+     dependente.setEssn(essn);
+     dependente.setSexo(sexo);
+     dependente.setDataNascimento(datanascimento);
+     dependente.setParentesco(parentesco);
+     DependenteDAO dependenteDAO = new DependenteDAO();
+     dependenteDAO.update(dependente);
     }
 
-    @Override
+
     public Object getById(int input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DependenteDAO dependenteDAO = new DependenteDAO();
+        Dependente dependente = (Dependente) dependenteDAO.get(input);
+        return dependente;
     }
 
-    @Override
+
     public ArrayList<Object> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       DependenteDAO dependenteDAO = new DependenteDAO();
+       ArrayList<Object> dependentes = dependenteDAO.getAll();
+       return dependentes;
     }
 
-    @Override
-    public ArrayList<Object> SearchByName(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public Object SearchByNameExactly(String input) {
+        DependenteDAO dependenteDAO = new DependenteDAO();
+        Dependente dependente = (Dependente)dependenteDAO.read(input);
+        return dependente;
     }
 
-    @Override
-    public int login(String usuario, String senha) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object read(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

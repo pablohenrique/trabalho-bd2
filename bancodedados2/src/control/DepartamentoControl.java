@@ -4,47 +4,61 @@
  */
 package control;
 
+import DAO.DepartamentoDAO;
+import Model.Departamento;
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
  *
  * @author yuricampos
  */
-public class DepartamentoControl implements IObjectControl {
+public class DepartamentoControl {
 
-    @Override
-    public void post(Object input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public void post(int numero, String nome, String gerssn, Date gerdatainicio) {
+        Departamento departamento = new Departamento();
+        departamento.setNumero(numero);
+        departamento.setNome(nome);
+        departamento.setGerenteSsn(gerssn);
+        departamento.setGerenteDataInicio(gerdatainicio);
+        DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+        departamentoDAO.post(departamento);
     }
 
-    @Override
-    public void update(Object input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public void update(int numero, String nome, String gerssn, Date gerdatainicio) {
+        Departamento departamento = new Departamento();
+        departamento.setNumero(numero);
+        departamento.setNome(nome);
+        departamento.setGerenteSsn(gerssn);
+        departamento.setGerenteDataInicio(gerdatainicio);
+        DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+        departamentoDAO.update(departamento);
+
+        
     }
 
-    @Override
-    public Object getById(int input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public Object getById(int numero) {
+        DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+        Departamento departamento = (Departamento) departamentoDAO.get(numero);
+        return departamento;
     }
 
-    @Override
+
     public ArrayList<Object> getAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+         ArrayList<Object> departamento = departamentoDAO.getAll();
+         return departamento;
     }
 
-    @Override
-    public ArrayList<Object> SearchByName(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+    public Object SearchByNameExactly(String input) {
+       DepartamentoDAO departamentoDAO = new DepartamentoDAO();
+       Departamento departamento = (Departamento) departamentoDAO.read(input);
+       return departamento;
     }
 
-    @Override
-    public int login(String usuario, String senha) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Object read(String input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }
