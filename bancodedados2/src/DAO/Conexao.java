@@ -14,6 +14,7 @@ public class Conexao {
     private static final String url = "jdbc:postgresql://localhost:5432/BD2?searchpath=cia";
     private static final String user = "postgres";
     private static final String pass = "postgres";
+    private static Conexao instance = null;
     private static Connection connection;
     
     private Conexao(){
@@ -29,10 +30,14 @@ public class Conexao {
         }
     }
     
-    public static Connection getConexao() throws SQLException{
-        if(connection != null)
-            return connection;
+    public static Conexao getInstance() {
+        if(instance != null)
+            return instance;
         else
-            throw new SQLException("Conexao nao foi criada");
+            return new Conexao();
+    }
+    
+    public static Connection getConexao() throws SQLException{
+        return connection;
     }
 }
