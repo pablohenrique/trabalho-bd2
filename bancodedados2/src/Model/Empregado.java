@@ -4,7 +4,7 @@
  */
 package Model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  *
@@ -16,7 +16,7 @@ public class Empregado {
     private String endereco;
     private String superssn;
     private String senha;
-    private char sexo;
+    private String sexo;
     private float salario;
     private int departamento;
     private Date dataNascimento;
@@ -66,14 +66,14 @@ public class Empregado {
     /**
      * @return the superssn
      */
-    public String getSuperssn() {
+    public String getSuperSsn() {
         return superssn;
     }
 
     /**
      * @param superssn the superssn to set
      */
-    public void setSuperssn(String superssn) {
+    public void setSuperSsn(String superssn) {
         this.superssn = superssn;
     }
     
@@ -94,14 +94,14 @@ public class Empregado {
     /**
      * @return the sexo
      */
-    public char getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
     /**
      * @param sexo the sexo to set
      */
-    public void setSexo(char sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 
@@ -146,4 +146,6 @@ public class Empregado {
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
+
+ 
 }
