@@ -16,6 +16,7 @@ import java.sql.SQLException;
 public class DependenteDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO dependentes VALUES(?,?,?,?,?);";
     private final String SQL_GET = "SELECT * FROM dependentes WHERE essn = ?;";
+    private final String SQL_READ = "SELECT * FROM dependentes WHERE nome = ?;";
     private final String SQL_GETALL = "SELECT * FROM dependentes;";
     private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = ?, datanasc = ?, parentesco = ? WHERE essn = ?;";
     private final String SQL_DELETE = "DELETE FROM dependentes WHERE essn = ?;";
@@ -69,7 +70,11 @@ public class DependenteDAO implements IObjectDAO{
             ResultSet rs = this.ps.executeQuery();
             
             Dependente output = new Dependente();
-            output.setNumero(rs.getInt(1));
+            output.setNome(rs.getString(1));
+            output.setEssn(rs.getString(2));
+            output.setSexo(rs.getString(3));
+            output.setDatanascimento(rs.getDate(4));
+            output.setParentesco(rs.getString(5));
             
             return output;
         } catch (Exception e) {
@@ -86,7 +91,11 @@ public class DependenteDAO implements IObjectDAO{
             ResultSet rs = this.ps.executeQuery();
             
             Dependente output = new Dependente();
-            //output.setNumero(rs.getInt(1));
+            output.setNome(rs.getString(1));
+            output.setEssn(rs.getString(2));
+            output.setSexo(rs.getString(3));
+            output.setDatanascimento(rs.getDate(4));
+            output.setParentesco(rs.getString(5));
             
             return output;
         } catch (Exception e) {
@@ -105,7 +114,11 @@ public class DependenteDAO implements IObjectDAO{
             while(rs.next()){
                 Dependente obj = new Dependente();
                 
-                //obj.setNumero(rs.getInt(1));
+                obj.setNome(rs.getString(1));
+                obj.setEssn(rs.getString(2));
+                obj.setSexo(rs.getString(3));
+                obj.setDatanascimento(rs.getDate(4));
+                obj.setParentesco(rs.getString(5));
                 
                 output.add(obj);
             }
