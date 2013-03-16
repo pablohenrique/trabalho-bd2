@@ -32,10 +32,6 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps.setString(2,aux.getNome());
             this.ps.setString(3,aux.getLocalizacao());
             this.ps.setInt(4,aux.getDepartamento());
-            //this.ps.executeQuery se retornar um ResultSet
-            //this.ps.execute se retornar mais de um ResultSet
-            //this.ps.executeUpdate se nao ha retorno de ResultSet
-            
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
             

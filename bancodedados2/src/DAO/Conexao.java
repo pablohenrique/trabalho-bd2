@@ -11,7 +11,7 @@ import java.sql.*;
  * @author pablohenrique
  */
 public class Conexao {
-    private static final String url = "jdbc:postgresql://localhost:5432/BD2?searchpath=cia";
+    private static final String url = "jdbc:postgresql://localhost:5432/BD2";
     private static final String user = "postgres";
     private static final String pass = "postgres";
     private static Conexao instance = null;
@@ -38,7 +38,6 @@ public class Conexao {
     }
     
     public static Connection getConexao() throws SQLException{
-        System.out.println("Teste");
         return connection;
     }
 }
