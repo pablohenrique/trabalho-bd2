@@ -21,13 +21,31 @@ public class DependenteDAO implements IObjectDAO{
     private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = ?, datanasc = ?, parentesco = ? WHERE essn = ?;";
     private final String SQL_DELETE = "DELETE FROM dependentes WHERE essn = ?;";
     private PreparedStatement ps;
+    private ResultSet rs;
+    
+    private Object useObjectTemplate(){
+        try {
+            Dependente output = new Dependente();
+            
+            output.setNome(this.rs.getString(1));
+            output.setEssn(this.rs.getString(2));
+            output.setSexo(this.rs.getString(3));
+            output.setDataNascimento(this.rs.getDate(4));
+            output.setParentesco(this.rs.getString(5));
+            return output;
+            
+        } catch (Exception e) {
+            System.err.println("Erro useObjectTemplate:  " + e.toString() );
+            return null;
+        }
+    }
 
     @Override
     public void post(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
-            Dependente aux = (Dependente) input;
             
+            Dependente aux = (Dependente) input;
             this.ps.setString(1,aux.getNome());
             this.ps.setString(2,aux.getEssn());
             this.ps.setString(3,aux.getSexo());
@@ -46,15 +64,15 @@ public class DependenteDAO implements IObjectDAO{
     public void update(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-            Dependente aux = (Dependente) input;
             
+            Dependente aux = (Dependente) input;
             this.ps.setString(1,aux.getNome());
             this.ps.setString(2,aux.getSexo());
             this.ps.setDate(3,aux.getDataNascimento());
             this.ps.setString(4,aux.getParentesco());
             this.ps.setString(5,aux.getEssn());
             
-            if(this.ps.executeUpdate() != 1)
+            if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi atualizado.");
             
         } catch (Exception e) {
@@ -63,20 +81,18 @@ public class DependenteDAO implements IObjectDAO{
     }
 
     @Override
-    public Object get(int input) {
+    public Object get(Object input) {
         try {
+            String aux = (String) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
-            this.ps.setInt(1,input);
-            ResultSet rs = this.ps.executeQuery();
+            this.ps.setString(1,aux);
             
-            Dependente output = new Dependente();
-            output.setNome(rs.getString(1));
-            output.setEssn(rs.getString(2));
-            output.setSexo(rs.getString(3));
-            output.setDataNascimento(rs.getDate(4));
-            output.setParentesco(rs.getString(5));
+            this.rs = this.ps.executeQuery();
+            if(!this.rs.next())
+                throw new Exception("Dependente nao encontrado.");
             
-            return output;
+            return this.useObjectTemplate();
+            
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
             return null;
@@ -84,20 +100,18 @@ public class DependenteDAO implements IObjectDAO{
     }
     
     @Override
-    public Object read(String input) {
+    public Object read(Object input) {
         try {
+            String aux = (String) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            this.ps.setString(1,input);
-            ResultSet rs = this.ps.executeQuery();
+            this.ps.setString(1,aux);
             
-            Dependente output = new Dependente();
-            output.setNome(rs.getString(1));
-            output.setEssn(rs.getString(2));
-            output.setSexo(rs.getString(3));
-            output.setDataNascimento(rs.getDate(4));
-            output.setParentesco(rs.getString(5));
+            this.rs = this.ps.executeQuery();
+            if(!this.rs.next())
+                throw new Exception("Dependente nao encontrado.");
             
-            return output;
+            return this.useObjectTemplate();
+            
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
             return null;
@@ -110,17 +124,9 @@ public class DependenteDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             ArrayList<Object> output = new ArrayList<>();
             
-            ResultSet rs = this.ps.executeQuery();
-            while(rs.next()){
-                Dependente obj = new Dependente();
-                
-                obj.setNome(rs.getString(1));
-                obj.setEssn(rs.getString(2));
-                obj.setSexo(rs.getString(3));
-                obj.setDataNascimento(rs.getDate(4));
-                obj.setParentesco(rs.getString(5));
-                
-                output.add(obj);
+            this.rs = this.ps.executeQuery();
+            while(this.rs.next()){
+                output.add(this.useObjectTemplate());
             }
             
             if(output.isEmpty())
@@ -139,7 +145,7 @@ public class DependenteDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
             this.ps.setInt(1,input);
             
-            if(this.ps.executeUpdate() != 1)
+            if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi deletado.");
             
         } catch (Exception e) {

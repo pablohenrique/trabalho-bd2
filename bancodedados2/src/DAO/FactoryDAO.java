@@ -12,8 +12,14 @@ public class FactoryDAO {
     
     public static IObjectDAO getFactory(String dao){
         switch(dao){
+            case("Departamento"):
+                return new DepartamentoDAO();
+            case("Dependente"):
+                return new DependenteDAO();
             case("Empregado"):
-                return null;
+                return new EmpregadoDAO();
+            case("Projeto"):
+                return new ProjetoDAO();
             default:
                 return null;
         }

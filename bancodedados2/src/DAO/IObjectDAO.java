@@ -31,14 +31,14 @@ public interface IObjectDAO {
      * @param int
      * @return Object
      */
-    public Object get(int input);
+    public Object get(Object input);
     
     /**
      * Usado para recuperar um objeto do banco de dados
      * @param String
      * @return Object
      */
-    public Object read(String input);
+    public Object read(Object input);
     
     /**
      * Usado para recuperar todos os objetos de um banco de dados

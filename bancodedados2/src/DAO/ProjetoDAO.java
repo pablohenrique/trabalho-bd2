@@ -23,19 +23,6 @@ public class ProjetoDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private void createObjectTemplate(Object input){
-        try {
-            Projeto aux = (Projeto) input;
-            this.ps.setInt(1,aux.getNumero());
-            this.ps.setString(2,aux.getNome());
-            this.ps.setString(3,aux.getLocalizacao());
-            this.ps.setInt(4,aux.getDepartamento());
-            
-        } catch (Exception e) {
-            System.err.println("Erro createObjectTemplate:  " + e.toString() );
-        }
-    }
-    
     private Object useObjectTemplate(){
         try {
             Projeto output = new Projeto();
@@ -54,7 +41,12 @@ public class ProjetoDAO implements IObjectDAO{
     public void post(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
-            this.createObjectTemplate(input);
+            
+            Projeto aux = (Projeto) input;
+            this.ps.setInt(1,aux.getNumero());
+            this.ps.setString(2,aux.getNome());
+            this.ps.setString(3,aux.getLocalizacao());
+            this.ps.setInt(4,aux.getDepartamento());
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
@@ -68,7 +60,12 @@ public class ProjetoDAO implements IObjectDAO{
     public void update(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-            this.createObjectTemplate(input);
+            
+            Projeto aux = (Projeto) input;
+            this.ps.setInt(4,aux.getNumero());
+            this.ps.setString(1,aux.getNome());
+            this.ps.setString(2,aux.getLocalizacao());
+            this.ps.setInt(3,aux.getDepartamento());
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");
@@ -79,10 +76,11 @@ public class ProjetoDAO implements IObjectDAO{
     }
 
     @Override
-    public Object get(int input) {
+    public Object get(Object input) {
         try {
+            int aux = (int) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
-            this.ps.setInt(1,input);
+            this.ps.setInt(1,aux);
             this.rs = this.ps.executeQuery();
             return this.useObjectTemplate();
             
@@ -93,10 +91,11 @@ public class ProjetoDAO implements IObjectDAO{
     }
     
     @Override
-    public Object read(String input) {
+    public Object read(Object input) {
         try {
+            String aux = (String) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            this.ps.setString(1,input);
+            this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
             return this.useObjectTemplate();
             
