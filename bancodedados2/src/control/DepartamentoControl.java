@@ -7,29 +7,36 @@ package control;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Departamento;
+import java.awt.List;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  *
  * @author yuricampos
  */
-public class DepartamentoControl {
-
-
-    public void post(int numero, String nome, String gerssn, Date gerdatainicio) throws Exception {
-             FuncoesControle f = new FuncoesControle();
-     if(f.verificarExistenciaEmpregado(gerssn) == false){
-         throw new Exception("Erro: empregado informado nao foi encontrado");
-     } else{
-        IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-        Departamento departamento = new Departamento();
-        departamento.setNumero(numero);
-        departamento.setNome(nome);
-        departamento.setGerenteSsn(gerssn);
-        departamento.setGerenteDataInicio(gerdatainicio);
-        dao.post(departamento);
-     }
+public class DepartamentoControl
+{
+    public void post(int numero, String nome, String gerssn, Date gerdatainicio)
+            throws Exception
+    {
+        FuncoesControle f = new FuncoesControle();
+        
+        if(f.verificarExistenciaEmpregado(gerssn) == false)
+        {
+            throw new Exception("Erro: empregado informado nao foi encontrado");
+        }
+        else
+        {
+            IObjectDAO dao = FactoryDAO.getFactory("Departamento");
+            Departamento departamento = new Departamento();
+            departamento.setNumero(numero);
+            departamento.setNome(nome);
+            departamento.setGerenteSsn(gerssn);
+            departamento.setGerenteDataInicio(gerdatainicio);
+            dao.post(departamento);
+        }
     }
 
 
@@ -58,16 +65,35 @@ public class DepartamentoControl {
     }
 
 
-    public ArrayList<Departamento> getAll() {
+    public ArrayList<Departamento> getAll()
+    {
          IObjectDAO dao = FactoryDAO.getFactory("Departamento");
          ArrayList<Object> departamentoObject = dao.getAll();
-         ArrayList<Departamento> departamento = null;
-         for(int i = 0 ; i < departamentoObject.size() ; i++){
-             Departamento d = (Departamento) departamentoObject.get(i);
+         ArrayList<Departamento> departamento = new ArrayList<Departamento>();
+         
+         for(int i = 0 ; i < departamentoObject.size() ; i++)
+         {
+             Departamento d = (Departamento) departamentoObject.get(i);             
              departamento.add(d);
          }
+         
          return departamento;
     }
+    
+    public static Vector<String> listarDepartamentos()
+    {
+         IObjectDAO dao = FactoryDAO.getFactory("Departamento");
+         ArrayList<Object> departamentoObject = dao.getAll();
+         Vector<String> departamento = new Vector<String>();
+         
+         for(int i = 0 ; i < departamentoObject.size() ; i++)
+         {
+             Departamento d = (Departamento) departamentoObject.get(i);             
+             departamento.add(d.getNome());
+         }
+         
+         return departamento;
+    }    
 
 
     public Departamento SearchByNameExactly(String input) {

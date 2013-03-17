@@ -11,37 +11,37 @@ import Model.Empregado;
 import Model.Projeto;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  *
  * @author yuricampos
  */
 public class ControlFacade {
-    private DepartamentoControl departamentoControl;
-    private DependenteControl dependenteControl;
-    private Dept_LocalizacoesControl dept_LocalizacoesControl;
-    private EmpregadoControl empregadoControl;
-    private ProjetoControl projetoControl;
-    private TrabalhaEmControl trabalhaEmControl;
+    private DepartamentoControl departamentoControl = new DepartamentoControl();
+    private DependenteControl dependenteControl = new DependenteControl();
+    private Dept_LocalizacoesControl dept_LocalizacoesControl = new Dept_LocalizacoesControl();
+    private EmpregadoControl empregadoControl = new EmpregadoControl();
+    private ProjetoControl projetoControl = new ProjetoControl();
+    private TrabalhaEmControl trabalhaEmControl = new TrabalhaEmControl();
     
     /**
      * Funcoes de funcionario
      */
     
     /**
-     * 
+     * Funcao realiza login de usuario
      * @param usuario
      * @param senha
-     * Funcao realiza login de usuario
      * @return -1 usuario ou senha incorretos
      * @return 0 usuario normal
      * @return 1 funcionario supervisor
      * @return 2 funcionario gerente
      * @return 3 funcionario supervisor e gerente
      */
-    public int login(String usuario, String senha){
-        int retorno = empregadoControl.login(usuario, senha);
-        return retorno;
+    public int login(String usuario, String senha)
+    {
+        return empregadoControl.login(usuario, senha);
     }
     
     /**
@@ -101,6 +101,11 @@ public class ControlFacade {
        return empregados;
     }
     
+    public Vector<String> listarEmpregados() {
+       Vector<String> empregados = empregadoControl.listarEmpregados();
+       return empregados;
+    }    
+    
     /**
      * 
      * @param nome
@@ -158,11 +163,15 @@ public class ControlFacade {
      * @return ArrayList<Departamento>
      * retorna todos os departamentos cadastrados
      */
-    public ArrayList<Departamento> getTodosDepartamento(){ 
-        ArrayList<Departamento> departamentos = departamentoControl.getAll();
-        return departamentos;   
+    public ArrayList<Departamento> getTodosDepartamento()
+    {        
+        return departamentoControl.getAll();
     }
-    
+
+    public Vector<String> listarDepartamentos()
+    {        
+        return departamentoControl.listarDepartamentos();
+    }        
     
     /**
      * 

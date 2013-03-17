@@ -168,18 +168,24 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public int access(String user, String password){
-        try {
+    public int access(String user, String password)
+    {
+        try
+        {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_LOGIN);
             this.ps.setString(1, user);
-            this.ps.setString(2, user);
+            this.ps.setString(2, password);
             
             this.rs = this.ps.executeQuery();
+            
             if(!this.rs.next())
                 throw new SQLException("Login nao pode ser encontrado.");
+            
             return this.rs.getInt(1);
             
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             System.err.println("Erro ao logar usuario:  " + e.toString() );
             return -1;
         }
