@@ -5,6 +5,8 @@
 package control;
 
 import DAO.DependenteDAO;
+import DAO.FactoryDAO;
+import DAO.IObjectDAO;
 import Model.Dependente;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class DependenteControl  {
      dependente.setSexo(sexo);
      dependente.setDataNascimento(datanascimento);
      dependente.setParentesco(parentesco);
-     DependenteDAO dependenteDAO = new DependenteDAO();
+     IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
      dependenteDAO.post(dependente);  
      }
 
@@ -45,21 +47,21 @@ public class DependenteControl  {
      dependente.setSexo(sexo);
      dependente.setDataNascimento(datanascimento);
      dependente.setParentesco(parentesco);
-     DependenteDAO dependenteDAO = new DependenteDAO();
+     IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
      dependenteDAO.update(dependente);
      }
     }
 
 
     public Dependente getById(int input) {
-        DependenteDAO dependenteDAO = new DependenteDAO();
+        IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
         Dependente dependente = (Dependente) dependenteDAO.get(input);
         return dependente;
     }
 
 
     public ArrayList<Dependente> getAll() {
-       DependenteDAO dependenteDAO = new DependenteDAO();
+       IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
        ArrayList<Object> dependentesObject = dependenteDAO.getAll();
        ArrayList<Dependente> dependentes = null;
        for(int i = 0 ; i < dependentesObject.size() ; i++){
@@ -71,7 +73,7 @@ public class DependenteControl  {
 
 
     public Dependente SearchByNameExactly(String input) {
-        DependenteDAO dependenteDAO = new DependenteDAO();
+        IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
         Dependente dependente = (Dependente)dependenteDAO.read(input);
         return dependente;
     }

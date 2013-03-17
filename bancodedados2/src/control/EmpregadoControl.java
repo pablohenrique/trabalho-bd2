@@ -4,14 +4,12 @@
  */
 package control;
 
-import DAO.EmpregadoDAO;
+import DAO.FactoryDAO;
+import DAO.IObjectDAO;
 import Model.Auditoria;
 import Model.Empregado;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  *
@@ -41,7 +39,7 @@ public class EmpregadoControl  {
         empregado.setDepartamento(dno);
         empregado.setSuperSsn(superssn);
         empregado.setSenha(senha);
-        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
         empregadoDAO.post(empregado);
         
     }
@@ -61,7 +59,7 @@ public class EmpregadoControl  {
            throw new Exception("Erro: sexo informado esta incorreto");  
          }
       else{
-        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
         Empregado empregadoVerifica = (Empregado) empregadoDAO.get(ssn);
         float salarioAtual = empregadoVerifica.getSalario();
         Empregado empregado = new Empregado();
@@ -93,14 +91,14 @@ public class EmpregadoControl  {
 
 
     public Empregado getById(String input) {
-        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+       IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
         Empregado empregado = (Empregado) empregadoDAO.get(input);
         return empregado;
     }
 
 
     public ArrayList<Empregado> getAll() {
-        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
         ArrayList<Object> empregadosObject = empregadoDAO.getAll();
         ArrayList<Empregado> empregados = null;
         for(int i = 0 ; i < empregadosObject.size() ; i++){
@@ -112,7 +110,7 @@ public class EmpregadoControl  {
 
 
     public Empregado SearchByNameExactly(String input) {
-        EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
         Empregado empregado = (Empregado) empregadoDAO.read(input);
         return empregado;
     }

@@ -4,7 +4,9 @@
  */
 package control;
 
-import DAO.ProjetoDAO;
+
+import DAO.FactoryDAO;
+import DAO.IObjectDAO;
 import Model.Projeto;
 import java.util.ArrayList;
 
@@ -26,7 +28,7 @@ public class ProjetoControl  {
         projeto.setNome(nome);
         projeto.setLocalizacao(localizacao);
         projeto.setDepartamento(departamento);
-        ProjetoDAO projetoDAO = new ProjetoDAO();
+        IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
         projetoDAO.post(projeto);
         }
 
@@ -43,7 +45,7 @@ public class ProjetoControl  {
         projeto.setNome(nome);
         projeto.setLocalizacao(localizacao);
         projeto.setDepartamento(departamento);
-        ProjetoDAO projetoDAO = new ProjetoDAO();
+        IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
         projetoDAO.update(projeto); 
         }
 
@@ -51,14 +53,14 @@ public class ProjetoControl  {
 
 
     public Projeto getById(int input) {
-        ProjetoDAO projetoDAO = new ProjetoDAO();
+        IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
         Projeto projeto = (Projeto) projetoDAO.get(input);
         return projeto;
     }
 
 
     public ArrayList<Projeto> getAll() {
-        ProjetoDAO projetoDAO = new ProjetoDAO();
+        IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
         ArrayList<Object> projetosObject = projetoDAO.getAll();
         ArrayList<Projeto> projetos = null;
         for(int i = 0 ; i < projetosObject.size() ; i++){
@@ -71,7 +73,7 @@ public class ProjetoControl  {
 
 
     public Projeto SearchByNameExactly(String input) {
-        ProjetoDAO projetoDAO = new ProjetoDAO();
+        IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
         Projeto projeto = (Projeto) projetoDAO.read(input);
         return projeto;
     }
