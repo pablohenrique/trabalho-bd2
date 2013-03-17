@@ -6,7 +6,9 @@ package control;
 
 import Model.Departamento;
 import Model.Dependente;
+import Model.Dept_Localizacoes;
 import Model.Empregado;
+import Model.Projeto;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -226,11 +228,151 @@ public class ControlFacade {
         return dependente;
     }
     
+     /**
+     * Funcoes de Projeto
+     */
+    
+    /**
+     * 
+     * @param numero
+     * @param nome
+     * @param localizacao
+     * @param departamento
+     * @throws Exception 
+     * Faz a insercao de um projeto
+     */
+    public void inserirProjeto(int numero, String nome, String localizacao, int departamento) throws Exception{
+        projetoControl.post(numero, nome, localizacao, departamento);
+    }
+    
+    /**
+     * 
+     * @param numero
+     * @param nome
+     * @param localizacao
+     * @param departamento
+     * @throws Exception 
+     * Faz a atualizacao de um projeto
+     */
+    public void atualizarProjeto(int numero, String nome, String localizacao, int departamento) throws Exception{
+        projetoControl.update(numero, nome, localizacao, departamento);
+    }
+    
+    /**
+     * 
+     * @param numero
+     * @return Projeto
+     * retorna um projeto de acordo com seu numero
+     */
+    public Projeto getProjetoByNumero(int numero){
+        Projeto projeto = projetoControl.getById(numero);
+        return projeto;
+    }
+    
+    /**
+     * 
+     * @return ArrayList<Projeto>
+     * retorna todos os projetos
+     */
+    public ArrayList<Projeto> getTodosProjetos(){
+        ArrayList<Projeto> projetos = projetoControl.getAll();
+        return projetos;
+    }
+    
+    /**
+     * 
+     * @param nome
+     * @return Projeto
+     * retorna projeto que possui exatamente o nome informado
+     */
+     public Projeto buscaExataNomeProjeto(String nome){
+         Projeto projeto = projetoControl.SearchByNameExactly(nome);
+         return projeto;
+     }
+     
+     /**
+     * Funcoes de trabalha_em
+     */
+     
+     
+     /**
+      * 
+      * @param ssn
+      * @param projetonumero
+      * @param horas
+      * @throws Exception 
+      * Faz insercao em trabalha em
+      */
+     public void inserirTrabalhaEm(String ssn, int projetonumero, float horas) throws Exception{
+         trabalhaEmControl.post(ssn, projetonumero, horas);
+     }
+     
+     /**
+      * 
+      * @param ssn
+      * @param projetonumero
+      * @param horas
+      * @throws Exception 
+      * Faz atualizacao em trabalha_em
+      */
+     public void atualizarTrabalhaEm(String ssn, int projetonumero, float horas) throws Exception{
+         trabalhaEmControl.update(ssn, projetonumero, horas);
+     }
+     
+     
     
     
     
+     /**
+     * Funcoes de Dept_Localizacao
+     */
+    
+    /**
+     * 
+     * @param departamento
+     * @param nome
+     * @throws Exception 
+     * Faz a insercao em um dept_localizacao
+     */
+    public void inserirDeptLocalizacoes(int departamento, String nome) throws Exception{
+        dept_LocalizacoesControl.post(departamento, nome);
+    }
+    
+    /**
+     * 
+     * @param departamento
+     * @param nome
+     * @throws Exception 
+     * atualiza um dept_localizacao
+     */
+    public void atualizarDeptLocalizacoes(int departamento, String nome) throws Exception{
+        dept_LocalizacoesControl.update(departamento, nome);
+    }
+    
+    /**
+     * 
+     * @return ArrayList<Dept_Localizacoes>
+     * Retorna todos os dept_localizacao
+     */
+    public ArrayList<Dept_Localizacoes> getTodosDeptLocalizacoes() {
+        ArrayList<Dept_Localizacoes> dept_localizacoes = dept_LocalizacoesControl.getAll();
+        return dept_localizacoes;
+    }
+    
+    /**
+     * 
+     * @param nome
+     * @return deptlocalizacao
+     * Retorna um deptlocalizacao de acordo com nome da localizacao
+     */
+    public Dept_Localizacoes BuscaExataNomeLocalizacao(String nome){
+        Dept_Localizacoes deptlocalizacoes = dept_LocalizacoesControl.SearchByNameExactly(nome);
+        return deptlocalizacoes;
+    }
     
     
+    
+
     
     
   

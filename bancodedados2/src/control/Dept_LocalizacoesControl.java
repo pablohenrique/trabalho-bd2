@@ -42,12 +42,6 @@ public class Dept_LocalizacoesControl {
     }
     
 
-
-    public Dept_Localizacoes getById(int input) {
-    throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-
     public ArrayList<Dept_Localizacoes> getAll() {
 throw new UnsupportedOperationException("Not supported yet.");
        
