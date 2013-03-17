@@ -1,9 +1,10 @@
 package view;
+import DAO.DepartamentoDAO;
+import DAO.FactoryDAO;
+import DAO.IObjectDAO;
+import Model.Departamento;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.plaf.metal.DefaultMetalTheme;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.plaf.metal.OceanTheme;
 
 public class Principal
 {
@@ -15,6 +16,36 @@ public class Principal
 	{
 		
 		 Principal.initLookAndFeel();
+                 
+                 Departamento p = new Departamento();
+                 FactoryDAO.getFactory("Departamento");
+                 ///*
+                 p.setNome("TI");
+                 p.setGerenteSsn("11021");
+                 p.setNumero(1);
+                 p.setGerenteDataInicio(java.sql.Date.valueOf("2013-03-03"));
+                 FactoryDAO.getFactory("Departamento").post(p);
+                 
+                 Departamento a = (Departamento) FactoryDAO.getFactory("Departamento").get(1);
+                 System.out.println(a.getNumero());
+                 
+                 Departamento b = (Departamento) FactoryDAO.getFactory("Departamento").read("TI");
+                 System.out.println(b.getNome());
+                 
+                 p.setNome("T.I.");
+                 p.setGerenteSsn("11021bsi");
+                 p.setNumero(1);
+                 p.setGerenteDataInicio(java.sql.Date.valueOf("2013-05-03"));
+                 
+                 FactoryDAO.getFactory("Departamento").update(p);
+                 
+                 for(Object aux : FactoryDAO.getFactory("Departamento").getAll()){
+                     Departamento d = (Departamento) aux;
+                     System.out.println(d.getNome());
+                 }
+                 //*/
+                 FactoryDAO.getFactory("Departamento").delete(1);
+                 
 		
 		 login = new Window_Login();
 	}

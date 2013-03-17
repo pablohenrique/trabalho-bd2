@@ -21,6 +21,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_GETALL = "SELECT * FROM empregado;";
     private final String SQL_UPDATE = "UPDATE empregado SET nome = ?, sexo = ?, endereco = ?, salario = ?, datanascimento = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE empregado WHERE ssn = ?;";
+    private final String SQL_LOGIN = "SELECT login(?,?);";
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -164,6 +165,23 @@ public class EmpregadoDAO implements IObjectDAO{
             
         } catch (Exception e) {
             System.err.println("Erro ao salvar objeto:  " + e.toString() );
+        }
+    }
+    
+    public int access(String user, String password){
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_LOGIN);
+            this.ps.setString(1, user);
+            this.ps.setString(2, user);
+            
+            this.rs = this.ps.executeQuery();
+            if(!this.rs.next())
+                throw new SQLException("Login nao pode ser encontrado.");
+            return this.rs.getInt(1);
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao logar usuario:  " + e.toString() );
+            return -1;
         }
     }
 }
