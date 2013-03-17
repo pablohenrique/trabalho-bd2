@@ -4,6 +4,7 @@
  */
 package control;
 
+import DAO.EmpregadoDAO;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Auditoria;
@@ -117,7 +118,9 @@ public class EmpregadoControl  {
 
  
     public int login(String usuario, String senha) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       EmpregadoDAO empregadoDAO = new EmpregadoDAO();
+       int retorno = empregadoDAO.access(usuario, senha);
+       return retorno;
     }
 
 
