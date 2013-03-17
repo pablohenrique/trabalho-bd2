@@ -21,12 +21,16 @@ public class EmpregadoControl  {
 
 
     public void post(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc, int dno, String superssn, String senha) throws Exception {
-                FuncoesControle f = new FuncoesControle();
+        FuncoesControle f = new FuncoesControle();
         if(f.verificarExistenciaDepartamento(dno) == false){
             throw new Exception("Erro: departamento informado nao foi encontrado");
         }else if(f.verificarExistenciaEmpregado(superssn) == false){
          throw new Exception("Erro: supervisor informado nao foi encontrado");
-     } else{
+        }
+         else if(!"M".equals(sexo) || !"F".equals(sexo)){
+           throw new Exception("Erro: sexo informado esta incorreto");  
+         }
+      else{
         Empregado empregado = new Empregado();
         empregado.setSsn(ssn);
         empregado.setNome(nome);
@@ -47,12 +51,16 @@ public class EmpregadoControl  {
     
 
     public void update(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc, int dno, String superssn, String senha) throws Exception {
-                        FuncoesControle f = new FuncoesControle();
+        FuncoesControle f = new FuncoesControle();
         if(f.verificarExistenciaDepartamento(dno) == false){
             throw new Exception("Erro: departamento informado nao foi encontrado");
         }else if(f.verificarExistenciaEmpregado(superssn) == false){
          throw new Exception("Erro: supervisor informado nao foi encontrado");
-     } else{
+        }
+         else if(!"M".equals(sexo) || !"F".equals(sexo)){
+           throw new Exception("Erro: sexo informado esta incorreto");  
+         }
+      else{
         EmpregadoDAO empregadoDAO = new EmpregadoDAO();
         Empregado empregadoVerifica = (Empregado) empregadoDAO.get(ssn);
         float salarioAtual = empregadoVerifica.getSalario();
