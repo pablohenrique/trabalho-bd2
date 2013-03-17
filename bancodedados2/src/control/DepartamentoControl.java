@@ -16,7 +16,11 @@ import java.util.ArrayList;
 public class DepartamentoControl {
 
 
-    public void post(int numero, String nome, String gerssn, Date gerdatainicio) {
+    public void post(int numero, String nome, String gerssn, Date gerdatainicio) throws Exception {
+             FuncoesControle f = new FuncoesControle();
+     if(f.verificarExistenciaEmpregado(gerssn) == false){
+         throw new Exception("Erro: empregado informado nao foi encontrado");
+     } else{
         Departamento departamento = new Departamento();
         departamento.setNumero(numero);
         departamento.setNome(nome);
@@ -24,10 +28,15 @@ public class DepartamentoControl {
         departamento.setGerenteDataInicio(gerdatainicio);
         DepartamentoDAO departamentoDAO = new DepartamentoDAO();
         departamentoDAO.post(departamento);
+     }
     }
 
 
-    public void update(int numero, String nome, String gerssn, Date gerdatainicio) {
+    public void update(int numero, String nome, String gerssn, Date gerdatainicio) throws Exception {
+                     FuncoesControle f = new FuncoesControle();
+     if(f.verificarExistenciaEmpregado(gerssn) == false){
+         throw new Exception("Erro: empregado informado nao foi encontrado");
+     } else{
         Departamento departamento = new Departamento();
         departamento.setNumero(numero);
         departamento.setNome(nome);
@@ -35,6 +44,7 @@ public class DepartamentoControl {
         departamento.setGerenteDataInicio(gerdatainicio);
         DepartamentoDAO departamentoDAO = new DepartamentoDAO();
         departamentoDAO.update(departamento);
+     }
 
         
     }

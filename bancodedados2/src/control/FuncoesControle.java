@@ -5,6 +5,7 @@
 package control;
 
 import DAO.DepartamentoDAO;
+import DAO.EmpregadoDAO;
 import DAO.ProjetoDAO;
 
 /**
@@ -15,21 +16,37 @@ public class FuncoesControle {
     
         public boolean verificarExistenciaProjeto(int projetonumero){
         ProjetoDAO pdao = new ProjetoDAO();
-        if(pdao.get(projetonumero) == null){
+        try{
+            pdao.get(projetonumero);
+            return true;
+        } catch(Exception e){
             return false;
-        } else{
-             return true;
+            
         }
     }
         
         public boolean verificarExistenciaDepartamento(int departamentonumero){
             DepartamentoDAO ddao = new DepartamentoDAO();
-            if(ddao.get(departamentonumero) == null){
-                return false;
-            }else{
-               return true; 
-            }
-
+            try{
+                ddao.get(departamentonumero);
+                return true;
+            }catch(Exception e){
+            return false;
         }
+        }
+            
+      
+        
+        public boolean verificarExistenciaEmpregado(String ssn){
+            EmpregadoDAO edao = new EmpregadoDAO();
+            try{
+                edao.get(ssn);
+                return true;
+            } catch(Exception e){
+                return false;
+            }
+        }
+            
+           
     
 }

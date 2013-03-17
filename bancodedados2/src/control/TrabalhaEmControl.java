@@ -19,7 +19,9 @@ public class TrabalhaEmControl {
         FuncoesControle f = new FuncoesControle();
         if(f.verificarExistenciaProjeto(projetonumero) == false){
             throw new Exception("Erro: projeto informado nao foi encontrado");
-        }else{
+        }else if(f.verificarExistenciaEmpregado(ssn) == false){
+         throw new Exception("Erro: empregado informado nao foi encontrado");
+     } else{
         Trabalha_Em trabalha_em = new Trabalha_Em();
         trabalha_em.setEssn(ssn);
         trabalha_em.setProjeto_numero(projetonumero);
@@ -34,7 +36,9 @@ public class TrabalhaEmControl {
         FuncoesControle f = new FuncoesControle();
         if(f.verificarExistenciaProjeto(projetonumero) == false){
             throw new Exception("Erro: projeto informado nao foi encontrado");
-        } else{
+        }else if(f.verificarExistenciaEmpregado(ssn) == false){
+         throw new Exception("Erro: empregado informado nao foi encontrado");
+     } else{
         Trabalha_Em trabalha_em = new Trabalha_Em();
         trabalha_em.setEssn(ssn);
         trabalha_em.setProjeto_numero(projetonumero);

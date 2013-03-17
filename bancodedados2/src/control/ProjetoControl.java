@@ -15,7 +15,12 @@ import java.util.ArrayList;
 public class ProjetoControl  {
 
 
-    public void post(int numero, String nome, String localizacao, int departamento) {
+    public void post(int numero, String nome, String localizacao, int departamento) throws Exception {
+        //FALTA VERIFICAR SE LOCALIZACAO EXISTE
+        FuncoesControle f = new FuncoesControle();
+        if(f.verificarExistenciaDepartamento(departamento) == false){
+            throw new Exception("Erro: departamento informado nao foi encontrado");
+        } else{
         Projeto projeto = new Projeto();
         projeto.setNumero(numero);
         projeto.setNome(nome);
@@ -23,17 +28,25 @@ public class ProjetoControl  {
         projeto.setDepartamento(departamento);
         ProjetoDAO projetoDAO = new ProjetoDAO();
         projetoDAO.post(projeto);
+        }
+
     }
 
 
-    public void update(int numero, String nome, String localizacao, int departamento) {
+    public void update(int numero, String nome, String localizacao, int departamento) throws Exception {
+                FuncoesControle f = new FuncoesControle();
+        if(f.verificarExistenciaDepartamento(departamento) == false){
+            throw new Exception("Erro: departamento informado nao foi encontrado");
+        } else{
         Projeto projeto = new Projeto();
         projeto.setNumero(numero);
         projeto.setNome(nome);
         projeto.setLocalizacao(localizacao);
         projeto.setDepartamento(departamento);
         ProjetoDAO projetoDAO = new ProjetoDAO();
-        projetoDAO.update(projeto);
+        projetoDAO.update(projeto); 
+        }
+
     }
 
 

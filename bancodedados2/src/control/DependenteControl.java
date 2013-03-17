@@ -16,7 +16,11 @@ import java.util.ArrayList;
 public class DependenteControl  {
 
     
-    public void post(String nome, String essn, String sexo, Date datanascimento, String parentesco) {
+    public void post(String nome, String essn, String sexo, Date datanascimento, String parentesco) throws Exception {
+     FuncoesControle f = new FuncoesControle();
+     if(f.verificarExistenciaEmpregado(essn) == false){
+         throw new Exception("Erro: empregado informado nao foi encontrado");
+     } else{
      Dependente dependente = new Dependente();
      dependente.setNome(nome);
      dependente.setEssn(essn);
@@ -24,11 +28,17 @@ public class DependenteControl  {
      dependente.setDataNascimento(datanascimento);
      dependente.setParentesco(parentesco);
      DependenteDAO dependenteDAO = new DependenteDAO();
-     dependenteDAO.post(dependente);
+     dependenteDAO.post(dependente);  
+     }
+
     }
 
 
-    public void update(String nome, String essn, String sexo, Date datanascimento, String parentesco) {
+    public void update(String nome, String essn, String sexo, Date datanascimento, String parentesco) throws Exception {
+          FuncoesControle f = new FuncoesControle();
+     if(f.verificarExistenciaEmpregado(essn) == false){
+         throw new Exception("Erro: empregado informado nao foi encontrado");
+     } else{
      Dependente dependente = new Dependente();
      dependente.setNome(nome);
      dependente.setEssn(essn);
@@ -37,6 +47,7 @@ public class DependenteControl  {
      dependente.setParentesco(parentesco);
      DependenteDAO dependenteDAO = new DependenteDAO();
      dependenteDAO.update(dependente);
+     }
     }
 
 
