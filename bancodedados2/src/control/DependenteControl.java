@@ -52,12 +52,6 @@ public class DependenteControl  {
     }
 
 
-    public Dependente getById(int input) {
-        IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
-        Dependente dependente = (Dependente) dependenteDAO.get(input);
-        return dependente;
-    }
-
 
     public ArrayList<Dependente> getAll() {
        IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
