@@ -4,6 +4,7 @@
  */
 package control;
 
+import DAO.DepartamentoDAO;
 import DAO.ProjetoDAO;
 
 /**
@@ -21,5 +22,14 @@ public class FuncoesControle {
         }
     }
         
+        public boolean verificarExistenciaDepartamento(int departamentonumero){
+            DepartamentoDAO ddao = new DepartamentoDAO();
+            if(ddao.get(departamentonumero) == null){
+                return false;
+            }else{
+               return true; 
+            }
+
+        }
     
 }
