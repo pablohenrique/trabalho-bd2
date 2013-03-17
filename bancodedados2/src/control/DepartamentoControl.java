@@ -4,7 +4,6 @@
  */
 package control;
 
-import DAO.DepartamentoDAO;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Departamento;
