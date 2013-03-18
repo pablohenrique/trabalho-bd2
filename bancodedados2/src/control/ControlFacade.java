@@ -111,6 +111,27 @@ public class ControlFacade {
        return empregadoControl.listarEmpregados();
     }    
     
+    
+    public String[][] getEmpregadosTable(Vector<Empregado> list)
+    {
+        String[][] dados = new String[list.size()][];  
+        
+        for(int i=0; i<list.size(); i++)
+        {
+            int dno = list.get(i).getDepartamento();
+            String sssn = list.get(i).getSuperSsn();
+            Departamento dep = departamentoControl.getById(dno);
+            Empregado superssn = empregadoControl.getById(sssn);
+            
+            dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSsn(), list.get(i).getSexo(),
+                                     list.get(i).getEndereco(), list.get(i).getSalarioString(), list.get(i).getDataNascimentoString(),
+                                     dep.getNome(), Integer.toString(dno), superssn.getNome(), sssn}; 
+        }
+        
+        return dados; 
+    }
+    
+    
     /**
      * 
      * @param nome

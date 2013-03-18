@@ -8,8 +8,6 @@ import DAO.DepartamentoDAO;
 import DAO.EmpregadoDAO;
 import DAO.ProjetoDAO;
 import java.sql.Date;
-import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -62,33 +60,22 @@ public class FuncoesControle {
         }
     }
     
-    public static String converteData(java.util.Date dtData)  throws Exception
+    public static String converteData(Date d)
     {  
-       SimpleDateFormat formatBra;     
-       formatBra = new SimpleDateFormat("dd/MM/yyyy");  
-       
-       try
-       {  
-          java.util.Date newData = formatBra.parse(dtData.toString());  
-          return (formatBra.format(newData));  
-       }
-       catch (ParseException ex)
-       {  
-           throw ex;  
-       }         
+        return new SimpleDateFormat("dd/MM/yyyy").format(d);
     }      
     
-   public static Date coverteStringData(String data) throws Exception
+   public static Date coverteStringData(String data)
    {   
-        SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy"); 
-        
+        SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");         
         try  
         {  
             return new java.sql.Date(formatador.parse(data).getTime());    
         }  
         catch(ParseException ex)  
         {   
-            throw ex;  
+           System.out.println("Erro conversao de Date!");
+           return null;
         }  
     }      
     
@@ -97,7 +84,7 @@ public class FuncoesControle {
         if(sexo.toLowerCase().equals('m'))
             return 0;
         return 1;
-    }    
+    }
     
     public static String getSexoChar(String sexo)
     {

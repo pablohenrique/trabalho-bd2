@@ -99,6 +99,7 @@ public class Empregado {
         return FuncoesControle.getSexoChar(sexo);
     }
 
+    
     /**
      * @param sexo the sexo to set
      */
@@ -149,12 +150,13 @@ public class Empregado {
         return dataNascimento;
     }
     
-    public String getDataNascimentoString() throws Exception
+    public String getDataNascimentoString()
     {
+        System.out.println("Aqui!");
         return FuncoesControle.converteData(dataNascimento);
     }
     
-    public void setDataNascimentoString(String d) throws Exception
+    public void setDataNascimentoString(String d) 
     {
         dataNascimento = FuncoesControle.coverteStringData(d);
     }

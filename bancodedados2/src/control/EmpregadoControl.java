@@ -129,7 +129,7 @@ public class EmpregadoControl
         
         for(int i = 0 ; i < empregadosObject.size() ; i++)
         {
-            Empregado e = (Empregado) empregadosObject.get(i);
+            Empregado e = (Empregado) empregadosObject.get(i);            
             empregados.add(e);
         }
         
@@ -168,4 +168,5 @@ public class EmpregadoControl
     
        return retorno;
     }
+
 }

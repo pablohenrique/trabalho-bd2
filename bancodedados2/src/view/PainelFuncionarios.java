@@ -41,43 +41,39 @@ public class PainelFuncionarios extends JPanel  implements ActionListener
     public static JButton btnBusca;
     public static JLabel contaRegistros;
 
-
     public PainelFuncionarios()
     {			
         tabela = new JTable()
         {
-                private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-                public boolean isCellEditable(int rowIndex, int vColIndex)
-                {
-                        return false;
-                }
+            public boolean isCellEditable(int rowIndex, int vColIndex)
+            {
+                    return false;
+            }
         };
 
-        colunas = new Vector<String>();
-        colunas.add("Nome");
-        colunas.add("Mnome");
-        colunas.add("Unome");
-        colunas.add("Data de Nascimento");
-        colunas.add("Salario");
-        colunas.add("Endereco");
-        colunas.add("Supervisor");	
-
-        modelo = new DefaultTableModel(null, colunas);
-
+        String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());
+        String[] colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
+                                           "Departamento", "Dno", "Supervisor", "SuperSnn"};  
+        
+        modelo = new DefaultTableModel(dados, colunas);
+        
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        //tabela = FormataTabela.formatar(tabela);
+        tabela.setGridColor(new Color(220,220,220));
         tabela.setModel(modelo);
-
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(300);
+        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(35);
         tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(140);
-        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(60);
-        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(200);
-
+        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(30);
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(35);
+        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(35);
+        
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
