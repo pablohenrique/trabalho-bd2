@@ -80,16 +80,16 @@ public class DepartamentoControl
          return departamento;
     }
     
-    public static Vector<String> listarDepartamentos()
+    public static Vector<Departamento> listarDepartamentos()
     {
          IObjectDAO dao = FactoryDAO.getFactory("Departamento");
          ArrayList<Object> departamentoObject = dao.getAll();
-         Vector<String> departamento = new Vector<String>();
+         Vector<Departamento> departamento = new Vector<Departamento>();
          
          for(int i = 0 ; i < departamentoObject.size() ; i++)
          {
              Departamento d = (Departamento) departamentoObject.get(i);             
-             departamento.add(d.getNome());
+             departamento.add(d);
          }
          
          return departamento;

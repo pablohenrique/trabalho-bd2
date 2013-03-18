@@ -63,29 +63,17 @@ public class Principal
         if (osName != null)
         {
             if (osName.equals("Metal"))
-            {
                 lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
-            }	                     
             else if (osName.equals("Motif"))
-            {
                 lookAndFeel = "com.sun.java.swing.plaf.motif.MotifLookAndFeel";
-            } 	            
             else if (isUnix())
-            { 
                 lookAndFeel = "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
-            }
             else if (isWindows())
-            { 
-                lookAndFeel = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-            } 	 	            
+                lookAndFeel = "com.sun.java.swing.plaf.windows.WindowsLookAndFeel";   
             else if (isMac())
-            { 
-                lookAndFeel = "javax.swing.plaf.mac.MacLookAndFeel";
-            }	            	            
+                lookAndFeel = "javax.swing.plaf.mac.MacLookAndFeel";	            
             else
-            {
                 lookAndFeel = UIManager.getSystemLookAndFeelClassName();	                
-            }
 
             try
             {

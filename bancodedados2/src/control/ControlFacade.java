@@ -58,7 +58,7 @@ public class ControlFacade {
      * @throws Exception 
      * Funcao faz a insercao de um usuario
      */
-    public void inserirEmpregado(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc, int dno, String superssn, String senha) throws Exception{
+    public void inserirEmpregado(String ssn, String nome, String sexo, String endereco, String salario, String datanasc, int dno, String superssn, String senha) throws Exception{
         empregadoControl.post(ssn, nome, sexo, endereco, salario, datanasc, dno, superssn, senha);
     }
     
@@ -92,18 +92,23 @@ public class ControlFacade {
     }
     
     /**
-     * 
+     * Funcao que retorna todos empregados
      * @return ArrayList<Empregado>
      * Retorna todos os empregados do banco
      */
-    public ArrayList<Empregado> getTodosEmpregados() {
-       ArrayList<Empregado> empregados = empregadoControl.getAll();
-       return empregados;
+    public ArrayList<Empregado> getTodosEmpregados()
+    {
+       return empregadoControl.getAll();
     }
-    
-    public Vector<String> listarEmpregados() {
-       Vector<String> empregados = empregadoControl.listarEmpregados();
-       return empregados;
+        
+    /**
+     * Funcao que retorna todos empregados
+     * @return Vector<Empregado>
+     * Retorna todos os empregados do banco
+     */    
+    public Vector<Empregado> listarEmpregados()
+    {
+       return empregadoControl.listarEmpregados();
     }    
     
     /**
@@ -168,7 +173,7 @@ public class ControlFacade {
         return departamentoControl.getAll();
     }
 
-    public Vector<String> listarDepartamentos()
+    public Vector<Departamento> listarDepartamentos()
     {        
         return departamentoControl.listarDepartamentos();
     }        
@@ -377,16 +382,5 @@ public class ControlFacade {
     public Dept_Localizacoes BuscaExataNomeLocalizacao(String nome){
         Dept_Localizacoes deptlocalizacoes = dept_LocalizacoesControl.SearchByNameExactly(nome);
         return deptlocalizacoes;
-    }
-    
-    
-    
-
-    
-    
-  
-    
-    
-    
-    
+    }         
 }

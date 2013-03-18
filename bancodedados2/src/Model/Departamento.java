@@ -71,4 +71,9 @@ public class Departamento {
     public void setGerenteDataInicio(Date gerenteDataInicio) {
         this.gerenteDataInicio = gerenteDataInicio;
     }
+    
+    public String toString()
+    {
+        return this.nome;
+    }
 }

@@ -4,6 +4,7 @@
  */
 package Model;
 
+import control.FuncoesControle;
 import java.sql.Date;
 
 /**
@@ -94,8 +95,8 @@ public class Empregado {
     /**
      * @return the sexo
      */
-    public String getSexo() {
-        return sexo;
+    public String getSexo() {       
+        return FuncoesControle.getSexoChar(sexo);
     }
 
     /**
@@ -111,6 +112,14 @@ public class Empregado {
     public float getSalario() {
         return salario;
     }
+    
+    public String getSalarioString(){
+        return String.format("%.2f", salario);
+    }
+    
+    public void setSalario(String s) {
+        salario = Float.parseFloat(s);
+    }    
 
     /**
      * @param salario the salario to set
@@ -139,6 +148,16 @@ public class Empregado {
     public Date getDataNascimento() {
         return dataNascimento;
     }
+    
+    public String getDataNascimentoString() throws Exception
+    {
+        return FuncoesControle.converteData(dataNascimento);
+    }
+    
+    public void setDataNascimentoString(String d) throws Exception
+    {
+        dataNascimento = FuncoesControle.coverteStringData(d);
+    }
 
     /**
      * @param dataNascimento the dataNascimento to set
@@ -146,6 +165,9 @@ public class Empregado {
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
-
- 
+    
+    public String toString()
+    {
+        return nome;
+    }
 }

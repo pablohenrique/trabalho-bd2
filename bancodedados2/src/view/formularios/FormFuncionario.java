@@ -5,10 +5,13 @@ import Model.Empregado;
 import control.FuncoesControle;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import static java.awt.Component.TOP_ALIGNMENT;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import static java.awt.image.ImageObserver.WIDTH;
+import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -17,11 +20,13 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -33,32 +38,34 @@ public class FormFuncionario extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     private static JTextField nome;
-    private static JFormattedTextField ssn = new JFormattedTextField();
+    private static JTextField ssn;
     private static JTextField endereco;
-    private static JFormattedTextField salario = new JFormattedTextField();  
-    private static JFormattedTextField dataNasc = new JFormattedTextField();  
+    private static JTextField salario;
+    private static JFormattedTextField dataNasc;  
 
     private static JComboBox<String> sexo;
     private static JComboBox departamento;
-    private static JComboBox<String> supervisor;
+    private static JComboBox supervisor;
     
     private static JPasswordField senha;
     
     private static JButton btnOK;
     private static JButton btnCancelar;
+    private Empregado emp_edit = null;
     
     public FormFuncionario(Empregado emp)
     {
         super(Principal.janela,"Cadastro de Empregado", true);
-
+        emp_edit = emp;
         nome = new JTextField();
         endereco = new JTextField();
-               
+        ssn = new JTextField();
+        salario = new JTextField();
+        dataNasc = new JFormattedTextField();
+        
         try
         {
             dataNasc.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));  
-            salario.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("######,##")));  
-            ssn.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#########")));  
         }
         catch (ParseException ex)
         {
@@ -73,18 +80,19 @@ public class FormFuncionario extends JDialog implements ActionListener
         sexo.addItem("Feminino");    
         
         departamento = new JComboBox(Principal.cf.listarDepartamentos());        
-        supervisor = new JComboBox(Principal.cf.listarEmpregados());
-                
-        /*
-        combo = new JComboBox<String>();
-        combo.addItem("Combo box 1");
-        combo.addItem("DEPARTAMENTO 1");
-        combo.addItem("REDES");
-        combo.addItem("Outros");
-        */
+        supervisor = new JComboBox(Principal.cf.listarEmpregados());  
         
-        if (emp != null) 
-            this.editarEmpregado(emp);
+        if (emp_edit != null)
+        {
+            try
+            {
+                this.editarEmpregado(emp_edit);
+            }
+            catch (Exception ex)
+            {
+                 JOptionPane.showMessageDialog(this,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+        }
         
         btnOK = new JButton("OK");
         btnCancelar = new JButton("Cancelar");
@@ -140,15 +148,15 @@ public class FormFuncionario extends JDialog implements ActionListener
     }
 
     
-    public void editarEmpregado(Empregado e)
+    public void editarEmpregado(Empregado e) throws Exception
     {
         nome.setText(e.getNome());
         endereco.setText(e.getEndereco());
-        dataNasc.setText(FuncoesControle.converteData(e.getDataNascimento()));
-        salario.setText(String.format("%.2f", e.getSalario()));
+        dataNasc.setText(e.getDataNascimentoString());
+        salario.setText(e.getSalarioString());
         ssn.setText(e.getSsn());
         senha.setText(e.getSenha());
-        sexo.setSelectedIndex(FuncoesControle.getSexo(e.getSexo()));
+        sexo.setSelectedIndex(FuncoesControle.getSexoView(e.getSexo()));
         //curso.setSelectedItem(aluno.getCurso());
 
         this.setTitle("Editar Empregado");
@@ -161,7 +169,28 @@ public class FormFuncionario extends JDialog implements ActionListener
 
         if(origem == btnOK)
         {
-                this.dispose();
+            if(emp_edit == null)//inserir novo elemento
+            {
+                try
+                {
+                    Departamento d = (Departamento)departamento.getSelectedItem();  
+                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
+                    
+                    Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
+                                                  endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
+                                                  superssn.getSsn(), new String (senha.getPassword()));   
+                    
+                    JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
+                    this.dispose();
+                }
+                catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+                }
+                
+            }
+            
+            //this.dispose();
         }
 
         if (origem == btnCancelar)
