@@ -79,11 +79,11 @@ public class FuncoesControle {
         }  
     }      
     
-    public static int getSexoView(String sexo)
+    public static String getSexoView(String sexo)
     {
         if(sexo.toLowerCase().equals('m'))
-            return 0;
-        return 1;
+            return "Masculino";
+        return "Feminino";
     }
     
     public static String getSexoChar(String sexo)

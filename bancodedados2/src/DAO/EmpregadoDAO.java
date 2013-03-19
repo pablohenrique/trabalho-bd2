@@ -18,7 +18,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO empregado VALUES(?,?,?,?,?,?,?,?,?);";
     private final String SQL_GET = "SELECT * FROM empregado WHERE ssn = ?;";
     private final String SQL_READ = "SELECT * FROM empregado WHERE nome LIKE ?;";
-    private final String SQL_GETALL = "SELECT * FROM empregado;";
+    private final String SQL_GETALL = "SELECT * FROM empregado ORDER BY nome ASC;";
     private final String SQL_UPDATE = "UPDATE empregado SET nome = ?, sexo = ?, endereco = ?, salario = ?, datanascimento = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE empregado WHERE ssn = ?;";
     private final String SQL_LOGIN = "SELECT login(?,?);";

@@ -111,6 +111,12 @@ public class ControlFacade {
        return empregadoControl.listarEmpregados();
     }    
     
+    /*
+     * SELECT * 
+	FROM empregado AS e, departamento AS d, empregado AS s
+	WHERE e.superssn = s.ssn AND
+	      d.numero = e.dno;
+     */
     
     public String[][] getEmpregadosTable(Vector<Empregado> list)
     {
@@ -120,6 +126,7 @@ public class ControlFacade {
         {
             int dno = list.get(i).getDepartamento();
             String sssn = list.get(i).getSuperSsn();
+            
             Departamento dep = departamentoControl.getById(dno);
             Empregado superssn = empregadoControl.getById(sssn);
             

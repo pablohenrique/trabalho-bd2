@@ -21,7 +21,7 @@ public class EmpregadoControl
 {
     
     public void post(String ssn, String nome, String sexo, String endereco, String salario, String datanasc,
-            int dno, String superssn, String senha) throws Exception
+                     int dno, String superssn, String senha) throws Exception
     {
         FuncoesControle f = new FuncoesControle();
 
@@ -55,9 +55,7 @@ public class EmpregadoControl
             IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
             empregadoDAO.post(empregado);        
         }
-    }
-    
-
+    }    
     
 
     public void update(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc,

@@ -30,8 +30,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
+import view.PainelFuncionarios;
+import static view.PainelFuncionarios.modelo;
+import static view.PainelFuncionarios.tabela;
 import view.Principal;
 
 public class FormFuncionario extends JDialog implements ActionListener
@@ -156,8 +160,8 @@ public class FormFuncionario extends JDialog implements ActionListener
         salario.setText(e.getSalarioString());
         ssn.setText(e.getSsn());
         senha.setText(e.getSenha());
-        sexo.setSelectedIndex(FuncoesControle.getSexoView(e.getSexo()));
-        //curso.setSelectedItem(aluno.getCurso());
+        sexo.setSelectedItem(FuncoesControle.getSexoView(e.getSexo()));
+        //supervisor.setSelectedItem(e.getSuperSsn());
 
         this.setTitle("Editar Empregado");
     }    
@@ -173,7 +177,7 @@ public class FormFuncionario extends JDialog implements ActionListener
             {
                 try
                 {
-                    Departamento d = (Departamento)departamento.getSelectedItem();  
+                    Departamento d = (Departamento) departamento.getSelectedItem();  
                     Empregado superssn = (Empregado) supervisor.getSelectedItem();
                     
                     Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
@@ -181,16 +185,21 @@ public class FormFuncionario extends JDialog implements ActionListener
                                                   superssn.getSsn(), new String (senha.getPassword()));   
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
+                    PainelFuncionarios.setDataTable();
                     this.dispose();
                 }
                 catch(Exception ex)
                 {
-                    JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+                    JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }
                 
             }
-            
-            //this.dispose();
+            else
+            {
+                PainelFuncionarios.setDataTable();
+                this.dispose();
+            }
+                                     
         }
 
         if (origem == btnCancelar)
