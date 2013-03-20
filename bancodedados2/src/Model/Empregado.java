@@ -15,7 +15,7 @@ public class Empregado {
     private String ssn;
     private String nome;
     private String endereco;
-    private String superssn;
+    private Empregado superssn;
     private String senha;
     private String sexo;
     private float salario;
@@ -67,14 +67,14 @@ public class Empregado {
     /**
      * @return the superssn
      */
-    public String getSuperSsn() {
+    public Empregado getSuperSsn() {
         return superssn;
     }
 
     /**
      * @param superssn the superssn to set
      */
-    public void setSuperSsn(String superssn) {
+    public void setSuperSsn(Empregado superssn) {
         this.superssn = superssn;
     }
     

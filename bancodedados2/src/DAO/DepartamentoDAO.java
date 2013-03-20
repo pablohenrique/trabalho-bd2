@@ -4,11 +4,12 @@
  */
 package DAO;
 
-import java.util.ArrayList;
 import Model.Departamento;
+import Model.Empregado;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -29,7 +30,7 @@ public class DepartamentoDAO implements IObjectDAO{
             Departamento output = new Departamento();
             output.setNumero(this.rs.getInt(1));
             output.setNome(this.rs.getString(2));
-            output.setGerenteSsn(this.rs.getString(3));
+            output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(3)));
             output.setGerenteDataInicio(this.rs.getDate(4));
             return output;
             
@@ -47,7 +48,7 @@ public class DepartamentoDAO implements IObjectDAO{
             Departamento aux = (Departamento) input;
             this.ps.setInt(1,aux.getNumero());
             this.ps.setString(2,aux.getNome());
-            this.ps.setString(3,aux.getGerenteSsn());
+            this.ps.setString(3,aux.getGerenteSsn().getSsn());
             this.ps.setDate(4,aux.getGerenteDataInicio());
             
             if(this.ps.executeUpdate() != 1)
@@ -65,7 +66,7 @@ public class DepartamentoDAO implements IObjectDAO{
             
             Departamento aux = (Departamento) input;
             this.ps.setString(1,aux.getNome());
-            this.ps.setString(2,aux.getGerenteSsn());
+            this.ps.setString(2,aux.getGerenteSsn().getSsn());
             this.ps.setDate(3,aux.getGerenteDataInicio());
             this.ps.setInt(4,aux.getNumero());
             

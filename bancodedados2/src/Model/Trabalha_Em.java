@@ -9,36 +9,36 @@ package Model;
  * @author yuricampos
  */
 public class Trabalha_Em {
-    private String essn;
-    private int projeto_numero;
+    private Empregado essn;
+    private Projeto projeto;
     private float horas;
 
     /**
      * @return the essn
      */
-    public String getEssn() {
+    public Empregado getEssn() {
         return essn;
     }
 
     /**
      * @param essn the essn to set
      */
-    public void setEssn(String essn) {
+    public void setEssn(Empregado essn) {
         this.essn = essn;
     }
 
     /**
      * @return the projeto_numero
      */
-    public int getProjeto_numero() {
-        return projeto_numero;
+    public Projeto getProjeto() {
+        return projeto;
     }
 
     /**
      * @param projeto_numero the projeto_numero to set
      */
-    public void setProjeto_numero(int projeto_numero) {
-        this.projeto_numero = projeto_numero;
+    public void setProjeto(Projeto projeto_numero) {
+        this.projeto = projeto_numero;
     }
 
     /**

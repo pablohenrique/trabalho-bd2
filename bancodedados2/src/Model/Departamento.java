@@ -14,8 +14,7 @@ public class Departamento {
     private String nome;
     private int numero;
     private Date gerenteDataInicio;
-    private Empregado gerenteSsn;
-    private Projeto projeto;
+    private Empregado gerente;
 
     /**
      * @return the nome
@@ -59,36 +58,26 @@ public class Departamento {
         this.gerenteDataInicio = gerenteDataInicio;
     }
     
+    /**
+     * @return the gerente
+     */
+    public Empregado getGerenteSsn() {
+        return gerente;
+    }
+
+    /**
+     * @param gerente the gerent to set
+     */
+    public void setGerenteSsn(Empregado gerente) {
+        this.gerente = gerente;
+    }
+    
+    /**
+     * @return the nome
+     */
+    @Override
     public String toString()
     {
         return this.nome;
-    }
-    
-    /**
-     * @return the gerenteSsn
-     */
-    public Empregado getGerenteSsn() {
-        return gerenteSsn;
-    }
-
-    /**
-     * @param gerenteSsn the gerenteSsn to set
-     */
-    public void setGerenteSsn(Empregado gerenteSsn) {
-        this.gerenteSsn = gerenteSsn;
-    }
-    
-    /**
-     * @return the gerenteSsn
-     */
-    public Empregado getGerenteSsn() {
-        return gerenteSsn;
-    }
-
-    /**
-     * @param gerenteSsn the gerenteSsn to set
-     */
-    public void setGerenteSsn(String gerenteSsn) {
-        this.gerenteSsn = gerenteSsn;
     }
 }

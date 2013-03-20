@@ -12,7 +12,7 @@ public class Projeto {
     private String nome;
     private String localizacao;
     private int numero;
-    private int departamento;
+    private Departamento departamento;
 
     /**
      * @return the nome
@@ -59,14 +59,14 @@ public class Projeto {
     /**
      * @return the departamento
      */
-    public int getDepartamento() {
+    public Departamento getDepartamento() {
         return departamento;
     }
 
     /**
      * @param departamento the departamento to set
      */
-    public void setDepartamento(int departamento) {
+    public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
     }
 }

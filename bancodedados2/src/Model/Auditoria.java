@@ -11,8 +11,8 @@ import java.sql.Date;
  * @author yuricampos
  */
 public class Auditoria {
-    private String gerssn;
-    private String essn;
+    private Empregado gerssn;
+    private Empregado essn;
     private float antigosalario;
     private float novosalario;
     private Date datamodificacao;
@@ -20,28 +20,28 @@ public class Auditoria {
     /**
      * @return the gerssn
      */
-    public String getGerssn() {
+    public Empregado getGerssn() {
         return gerssn;
     }
 
     /**
      * @param gerssn the gerssn to set
      */
-    public void setGerssn(String gerssn) {
+    public void setGerssn(Empregado gerssn) {
         this.gerssn = gerssn;
     }
 
     /**
      * @return the essn
      */
-    public String getEssn() {
+    public Empregado getEssn() {
         return essn;
     }
 
     /**
      * @param essn the essn to set
      */
-    public void setEssn(String essn) {
+    public void setEssn(Empregado essn) {
         this.essn = essn;
     }
 

@@ -10,23 +10,23 @@ import java.sql.Date;
  * @author pablohenrique
  */
 public class Dependente {
-    private String essn;
     private String nome;
     private String parentesco;
     private String sexo;
     private Date datanascimento;
+    private Empregado essn;
 
     /**
      * @return the essn
      */
-    public String getEssn() {
+    public Empregado getEssn() {
         return essn;
     }
 
     /**
      * @param essn the essn to set
      */
-    public void setEssn(String essn) {
+    public void setEssn(Empregado essn) {
         this.essn = essn;
     }
 

@@ -9,21 +9,21 @@ package Model;
  * @author yuricampos
  */
 public class Dept_Localizacoes {
-    private int departamento_numero;
+    private Departamento departamento;
     private String nome;
 
     /**
      * @return the departamento_numero
      */
-    public int getDepartamento_numero() {
-        return departamento_numero;
+    public Departamento getDepartamento() {
+        return departamento;
     }
 
     /**
      * @param departamento_numero the departamento_numero to set
      */
-    public void setDepartamento_numero(int departamento_numero) {
-        this.departamento_numero = departamento_numero;
+    public void setDepartamento(Departamento departamento_numero) {
+        this.departamento = departamento_numero;
     }
 
     /**

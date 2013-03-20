@@ -4,11 +4,12 @@
  */
 package DAO;
 
-import java.util.ArrayList;
 import Model.Dependente;
+import Model.Empregado;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 /**
  *
  * @author pablohenrique
@@ -28,7 +29,7 @@ public class DependenteDAO implements IObjectDAO{
             Dependente output = new Dependente();
             
             output.setNome(this.rs.getString(1));
-            output.setEssn(this.rs.getString(2));
+            output.setEssn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(2)));
             output.setSexo(this.rs.getString(3));
             output.setDataNascimento(this.rs.getDate(4));
             output.setParentesco(this.rs.getString(5));
@@ -47,7 +48,7 @@ public class DependenteDAO implements IObjectDAO{
             
             Dependente aux = (Dependente) input;
             this.ps.setString(1,aux.getNome());
-            this.ps.setString(2,aux.getEssn());
+            this.ps.setString(2,aux.getEssn().getSsn());
             this.ps.setString(3,aux.getSexo());
             this.ps.setDate(4,aux.getDataNascimento());
             this.ps.setString(5,aux.getParentesco());
@@ -70,7 +71,7 @@ public class DependenteDAO implements IObjectDAO{
             this.ps.setString(2,aux.getSexo());
             this.ps.setDate(3,aux.getDataNascimento());
             this.ps.setString(4,aux.getParentesco());
-            this.ps.setString(5,aux.getEssn());
+            this.ps.setString(5,aux.getEssn().getSsn());
             
             if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi atualizado.");
@@ -103,14 +104,20 @@ public class DependenteDAO implements IObjectDAO{
     public Object read(Object input) {
         try {
             String aux = (String) input;
+            aux = "'%"+aux+"%'";
+            
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
+            ArrayList<Object> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
-            if(!this.rs.next())
-                throw new Exception("Dependente nao encontrado.");
+            while(this.rs.next()){
+                output.add(this.useObjectTemplate());
+            }
             
-            return this.useObjectTemplate();
+            if(output.isEmpty())
+                throw new ArrayStoreException("Nao houve objetos encontrados.");
+            return output;
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );

@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import Model.Departamento;
 import java.util.ArrayList;
 import Model.Projeto;
 import java.sql.PreparedStatement;
@@ -29,7 +30,7 @@ public class ProjetoDAO implements IObjectDAO{
             output.setNumero(this.rs.getInt(1));
             output.setNome(this.rs.getString(2));
             output.setLocalizacao(this.rs.getString(3));
-            output.setDepartamento(this.rs.getInt(4));
+            output.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(4)));
             return output;
         } catch (Exception e) {
             System.err.println("Erro useObjectTemplate:  " + e.toString() );
@@ -46,7 +47,7 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps.setInt(1,aux.getNumero());
             this.ps.setString(2,aux.getNome());
             this.ps.setString(3,aux.getLocalizacao());
-            this.ps.setInt(4,aux.getDepartamento());
+            this.ps.setInt(4,aux.getDepartamento().getNumero());
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
@@ -65,7 +66,7 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps.setInt(4,aux.getNumero());
             this.ps.setString(1,aux.getNome());
             this.ps.setString(2,aux.getLocalizacao());
-            this.ps.setInt(3,aux.getDepartamento());
+            this.ps.setInt(3,aux.getDepartamento().getNumero());
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");
@@ -113,12 +114,7 @@ public class ProjetoDAO implements IObjectDAO{
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                Projeto obj = new Projeto();
-                obj.setNumero(this.rs.getInt(1));
-                obj.setNome(this.rs.getString(2));
-                obj.setLocalizacao(this.rs.getString(3));
-                obj.setDepartamento(this.rs.getInt(4));
-                output.add(obj);
+                output.add(this.useObjectTemplate());
             }
             
             if(output.isEmpty())

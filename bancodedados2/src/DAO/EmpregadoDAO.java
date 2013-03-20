@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import Model.Departamento;
 import Model.Empregado;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,15 +29,15 @@ public class EmpregadoDAO implements IObjectDAO{
     private Object useObjectTemplate(){
         try {
             Empregado output = new Empregado();
-            output.setSsn(rs.getString(1));
-            output.setNome(rs.getString(2));
-            output.setSexo(rs.getString(3));
-            output.setEndereco(rs.getString(4));
-            output.setSalario(rs.getFloat(5));
-            output.setDataNascimento(rs.getDate(6));
-            output.setDepartamento(rs.getInt(7));
-            output.setSuperSsn(rs.getString(8));
-            output.setSenha(rs.getString(9));
+            output.setSsn(this.rs.getString(1));
+            output.setNome(this.rs.getString(2));
+            output.setSexo(this.rs.getString(3));
+            output.setEndereco(this.rs.getString(4));
+            output.setSalario(this.rs.getFloat(5));
+            output.setDataNascimento(this.rs.getDate(6));
+            output.setDepartamento( (Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(7)) );
+            output.setSuperSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(8)));
+            output.setSenha(this.rs.getString(9));
             return output;
             
         } catch (Exception e) {
@@ -57,8 +58,8 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps.setString(4,aux.getEndereco());
             this.ps.setFloat(5,aux.getSalario());
             this.ps.setDate(6,aux.getDataNascimento());
-            this.ps.setInt(7,aux.getDepartamento());
-            this.ps.setString(8,aux.getSuperSsn());
+            this.ps.setInt(7,aux.getDepartamento().getNumero());
+            this.ps.setString(8,aux.getSuperSsn().getSsn());
             this.ps.setString(9,aux.getSenha());
             
             if(this.ps.executeUpdate() != 1)
@@ -81,8 +82,8 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps.setString(3,aux.getEndereco());
             this.ps.setFloat(4,aux.getSalario());
             this.ps.setDate(5,aux.getDataNascimento());
-            this.ps.setInt(6,aux.getDepartamento());
-            this.ps.setString(7,aux.getSuperSsn());
+            this.ps.setInt(6,aux.getDepartamento().getNumero());
+            this.ps.setString(7,aux.getSuperSsn().getSsn());
             this.ps.setString(8,aux.getSenha());
             
             if(this.ps.executeUpdate() != 1)
@@ -116,15 +117,22 @@ public class EmpregadoDAO implements IObjectDAO{
     public Object read(Object input) {
         try {
             String aux = (String) input;
+            aux = "'%"+aux+"%'";
+            
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            input = "'%"+input+"%'";
             this.ps.setString(1,aux);
             
-            this.rs = this.ps.executeQuery();
-            if(!this.rs.next())
-                throw new Exception("Empregado nao encontrado.");
+            ArrayList<Object> output = new ArrayList<>();
             
-            return this.useObjectTemplate();
+            this.rs = this.ps.executeQuery();
+            while(rs.next()){
+                output.add(this.useObjectTemplate());
+            }
+            
+            if(output.isEmpty())
+                throw new ArrayStoreException("Nao houve objetos encontrados.");
+            
+            return output;
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
