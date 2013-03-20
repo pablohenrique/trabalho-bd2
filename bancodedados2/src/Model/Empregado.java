@@ -19,8 +19,8 @@ public class Empregado {
     private String senha;
     private String sexo;
     private float salario;
-    private int departamento;
     private Date dataNascimento;
+    private Departamento departamento;
 
     /**
      * @return the ssn
@@ -132,14 +132,14 @@ public class Empregado {
     /**
      * @return the departamento
      */
-    public int getDepartamento() {
+    public Departamento getDepartamento() {
         return departamento;
     }
 
     /**
      * @param departamento the departamento to set
      */
-    public void setDepartamento(int departamento) {
+    public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
     }
 
