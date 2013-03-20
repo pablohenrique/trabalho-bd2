@@ -1,6 +1,11 @@
---
--- PostgreSQL database dump
---
+/*
+ * SCRIPT SQL - SISTEMA DE GESTAO
+ *
+ * Grupo:
+ * Caio Thomas
+ * Yuri Campos
+ * Pablo Henrique
+ */
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -9,20 +14,16 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET escape_string_warning = off;
 
---
--- Name: cia; Type: SCHEMA; Schema: -; Owner: -
---
 drop schema if exists cia cascade;
 CREATE SCHEMA cia;
 
 
 SET search_path = cia, pg_catalog;
+
 SET default_tablespace = '';
+
 SET default_with_oids = false;
 
---
--- Name: departamento; Type: TABLE; Schema: cia; Owner: -; Tablespace: 
---
 
 CREATE TABLE departamento (
     numero integer NOT NULL,
@@ -30,11 +31,6 @@ CREATE TABLE departamento (
     gerssn character(9) NOT NULL,
     gerdatainicio date
 );
-
-
---
--- Name: dependentes; Type: TABLE; Schema: cia; Owner: -; Tablespace: 
---
 
 CREATE TABLE dependentes (
     nome_dependente character varying(255) NOT NULL,
@@ -45,19 +41,11 @@ CREATE TABLE dependentes (
 );
 
 
---
--- Name: dept_localizacao; Type: TABLE; Schema: cia; Owner: -; Tablespace: 
---
-
 CREATE TABLE dept_localizacao (
     dlocalizacao character varying(15) NOT NULL,
     departamento_numero integer NOT NULL
 );
 
-
---
--- Name: empregado; Type: TABLE; Schema: cia; Owner: -; Tablespace: 
---
 
 CREATE TABLE empregado (
     ssn character(9) NOT NULL,
@@ -81,21 +69,12 @@ CREATE TABLE auditoria(
 );
 
 
---
--- Name: projeto; Type: TABLE; Schema: cia; Owner: -; Tablespace: 
---
-
 CREATE TABLE projeto (
     pnumero integer NOT NULL,
     pjnome character varying(15) NOT NULL,
     plocalizacao character varying(15),
     dnum integer NOT NULL
 );
-
-
---
--- Name: trabalha_em; Type: TABLE; Schema: cia; Owner: -; Tablespace: 
---
 
 CREATE TABLE trabalha_em (
     essn character(9) NOT NULL,
@@ -105,134 +84,151 @@ CREATE TABLE trabalha_em (
 
 
 --
--- Name: pk_departamento; Type: CONSTRAINT; Schema: cia; Owner: -; Tablespace: 
+-- RESTRICOES PRIMARY KEY
 --
 
 ALTER TABLE ONLY departamento
     ADD CONSTRAINT pk_departamento PRIMARY KEY (numero);
 
-
---
--- Name: pk_dependentes; Type: CONSTRAINT; Schema: cia; Owner: -; Tablespace: 
---
-
 ALTER TABLE ONLY dependentes
     ADD CONSTRAINT pk_dependentes PRIMARY KEY (nome_dependente, essn);
-
-
---
--- Name: pk_dept_localizacao; Type: CONSTRAINT; Schema: cia; Owner: -; Tablespace: 
---
 
 ALTER TABLE ONLY dept_localizacao
     ADD CONSTRAINT pk_dept_localizacao PRIMARY KEY (dlocalizacao, departamento_numero);
 
-
---
--- Name: pk_empregado; Type: CONSTRAINT; Schema: cia; Owner: -; Tablespace: 
---
-
 ALTER TABLE ONLY empregado
     ADD CONSTRAINT pk_empregado PRIMARY KEY (ssn);
-
-
---
--- Name: pk_projeto; Type: CONSTRAINT; Schema: cia; Owner: -; Tablespace: 
---
 
 ALTER TABLE ONLY projeto
     ADD CONSTRAINT pk_projeto PRIMARY KEY (pnumero);
 
-
---
--- Name: pk_trabalha_em; Type: CONSTRAINT; Schema: cia; Owner: -; Tablespace: 
---
-
 ALTER TABLE ONLY trabalha_em
     ADD CONSTRAINT pk_trabalha_em PRIMARY KEY (essn, projeto_pnumero);
 
-
 --
--- Name: uq_dnome; Type: CONSTRAINT; Schema: cia; Owner: -; Tablespace: 
+-- RESTRICOES UNIQUE
 --
 
 ALTER TABLE ONLY departamento
     ADD CONSTRAINT uq_dnome UNIQUE (nome);
 
 
---
--- Name: uq_pnome; Type: CONSTRAINT; Schema: cia; Owner: -; Tablespace: 
---
-
 ALTER TABLE ONLY projeto
     ADD CONSTRAINT uq_pnome UNIQUE (pjnome);
 
 
 --
--- Name: fk_dependentes_do_empregado; Type: FK CONSTRAINT; Schema: cia; Owner: -
+-- RESTRICOES FOREIGN KEY
 --
 
-ALTER TABLE ONLY dependentes
-    ADD CONSTRAINT fk_dependentes_do_empregado FOREIGN KEY (essn) REFERENCES empregado(ssn);
+ALTER TABLE ONLY departamento ADD CONSTRAINT fk_empregado_gerencia_dpto
+    FOREIGN KEY (gerssn)
+    REFERENCES empregado(ssn)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE;
 
 
---
--- Name: fk_dept_localizacao_departamento; Type: FK CONSTRAINT; Schema: cia; Owner: -
---
+ALTER TABLE empregado ADD CONSTRAINT fk_empregado_trabalha_departamento 
+    FOREIGN KEY (dno)
+    REFERENCES departamento (numero)
+    ON DELETE NO ACTION--NAO PERMITE REMOVER DEPARTAMENTO
+    ON UPDATE CASCADE;--CASO ATUALIZE CHAVE DEPARTAMENTO, ATUALIZA EM TODO BANCO AS CHAVES QUE REFERENCIAM
+    
+ALTER TABLE empregado ADD CONSTRAINT fk_empregado_supervisiona_empregado
+    FOREIGN KEY (superssn)
+    REFERENCES empregado (ssn)
+    ON DELETE SET NULL--se remover o o empregado genrente os que referenciam vao ficar NULL
+    ON UPDATE SET NULL;
 
-ALTER TABLE ONLY dept_localizacao
-    ADD CONSTRAINT fk_dept_localizacao_departamento FOREIGN KEY (departamento_numero) REFERENCES departamento(numero);
+ALTER TABLE departamento ADD CONSTRAINT fk_Empregado_gerencia_dpto
+    FOREIGN KEY (gerssn)
+    REFERENCES empregado (ssn)
+    ON DELETE NO ACTION--um departamento nao pode ficar sem gerente 
+    ON UPDATE NO ACTION;--no maximo que poderia alterar seria o UPDATE CASCADE
 
+ALTER TABLE projeto ADD CONSTRAINT fk_projeto_controlado_departamento
+    FOREIGN KEY (dnum)
+    REFERENCES Departamento (numero)
+    ON DELETE NO ACTION--um projeto nao pode ficar sem departamento
+    ON UPDATE CASCADE;--se alterar a chave departamento altera em projeto
 
---
--- Name: fk_empregado_gerencia_dpto; Type: FK CONSTRAINT; Schema: cia; Owner: -
---
+ALTER TABLE dependentes ADD CONSTRAINT fk_dependentes_do_empregado
+    FOREIGN KEY (essn)
+    REFERENCES empregado (ssn)
+    ON DELETE CASCADE --as atualizacoes de delete/update dependentes e empregados devem ocorrer em conjuntos
+    ON UPDATE CASCADE;
 
-ALTER TABLE ONLY departamento
-    ADD CONSTRAINT fk_empregado_gerencia_dpto FOREIGN KEY (gerssn) REFERENCES empregado(ssn);
+ALTER TABLE dept_localizacao ADD CONSTRAINT fk_dept_localizacao_departamento
+    FOREIGN KEY (Departamento_numero)
+    REFERENCES Departamento (numero)
+    ON DELETE CASCADE --caso remova um departamento pode remover a localizacao
+    ON UPDATE CASCADE;--caso atualize o numero do departamento deve atualizar a localizacao
 
+ALTER TABLE trabalha_em ADD CONSTRAINT fk_trabalha_em_empregado
+    FOREIGN KEY (essn)
+    REFERENCES empregado (ssn)
+    ON DELETE CASCADE --caso remova um empregado deve remover os projetos que ele trabalha
+    ON UPDATE CASCADE;--caso ocorra uma atualizacao no SSN deve fazer update na tabela trabalha_em
 
---
--- Name: fk_empregado_supervisiona_empregado; Type: FK CONSTRAINT; Schema: cia; Owner: -
---
-
-ALTER TABLE ONLY empregado
-    ADD CONSTRAINT fk_empregado_supervisiona_empregado FOREIGN KEY (superssn) REFERENCES empregado(ssn);
-
-
---
--- Name: fk_empregado_trabalha_departamento; Type: FK CONSTRAINT; Schema: cia; Owner: -
---
-
-ALTER TABLE ONLY empregado
-    ADD CONSTRAINT fk_empregado_trabalha_departamento FOREIGN KEY (dno) REFERENCES departamento(numero);
-
-
---
--- Name: fk_projeto_controlado_departamento; Type: FK CONSTRAINT; Schema: cia; Owner: -
---
-
-ALTER TABLE ONLY projeto
-    ADD CONSTRAINT fk_projeto_controlado_departamento FOREIGN KEY (dnum) REFERENCES departamento(numero);
-
-
---
--- Name: fk_trabalha_em_empregado; Type: FK CONSTRAINT; Schema: cia; Owner: -
---
-
-ALTER TABLE ONLY trabalha_em
-    ADD CONSTRAINT fk_trabalha_em_empregado FOREIGN KEY (essn) REFERENCES empregado(ssn);
-
-
---
--- Name: fk_trabalha_em_projeto; Type: FK CONSTRAINT; Schema: cia; Owner: -
---
-
-ALTER TABLE ONLY trabalha_em
-    ADD CONSTRAINT fk_trabalha_em_projeto FOREIGN KEY (projeto_pnumero) REFERENCES projeto(pnumero);
-
+ALTER TABLE trabalha_em ADD CONSTRAINT  fk_trabalha_em_projeto
+    FOREIGN KEY (projeto_pnumero)
+    REFERENCES projeto (pnumero)
+    ON DELETE NO ACTION --caso remova um projeto nao pode remover o trabalha em, pois tem trabalhadores
+    ON UPDATE CASCADE;--caso atualize chave primaria de projeto posso atualizar em trabalha em
 
 --
--- PostgreSQL database dump complete
+-- FUNCOES
 --
 
+DROP FUNCTION IF EXISTS login(varchar(9),varchar(15));
+
+CREATE OR REPLACE FUNCTION login (argssn VARCHAR(9),argsenha VARCHAR(15))
+--RETURNS INTEGER AS $$
+RETURNS login.senha%TYPE AS $$
+DECLARE 
+    TipoDeUsuario INTEGER;
+    ssnAux   login.ssn%TYPE;
+    senhaAux login.senha%TYPE;
+    superAux login.superssn%TYPE;
+    gerenAux login.gerssn%TYPE;
+BEGIN
+    SELECT COUNT(DISTINCT ssn) INTO TipoDeUsuario FROM login WHERE ssn = argssn AND senha = argsenha;
+    SELECT DISTINCT ssn INTO ssnAux FROM login WHERE ssn = argssn AND senha = argsenha;
+    SELECT DISTINCT senha INTO senhaAux FROM login WHERE ssn = argssn AND senha = argsenha;
+    SELECT DISTINCT superssn INTO superAux FROM login WHERE ssn = argssn AND senha = argsenha;
+    SELECT DISTINCT gerssn INTO gerenAux FROM login WHERE ssn = argssn AND senha = argsenha;
+        
+    IF (TipoDeUsuario = 0)
+    THEN 
+        TipoDeUsuario := -1;
+    ELSE
+        IF (argssn = gerenAux AND argssn = superAux)
+        THEN
+            TipoDeUsuario := 3;
+        ELSE
+            IF (argssn = gerenAux)
+            THEN
+                TipoDeUsuario := 2;
+            ELSE
+                IF (argssn = superAux)
+                THEN
+                    TipoDeUsuario := 1;
+                ELSE
+                    TipoDeUsuario := 0;
+                END IF;
+            END IF;
+        END IF;
+    END IF;
+    
+    RETURN TipoDeUsuario;
+END;
+$$ language 'plpgsql';
+
+
+--CONSULTAS
+
+SELECT  e.ssn, e.pnome, CASE e.sexo
+                WHEN 'M' THEN 'Masculino'
+                ELSE 'Feminino' END AS sexo,
+        e.endereco, e.salario, e.datanasc, e.dno, e.superssn
+        FROM empregado AS e;
