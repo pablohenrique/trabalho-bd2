@@ -117,7 +117,7 @@ public class DepartamentoDAO implements IObjectDAO{
     }
 
     @Override
-    public ArrayList<Object> getAll() {
+    public Object getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             ArrayList<Object> output = new ArrayList<>();

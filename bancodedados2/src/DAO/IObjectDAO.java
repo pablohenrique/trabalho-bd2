@@ -45,7 +45,7 @@ public interface IObjectDAO {
      * @param Object
      * @return ArrayList<Object>
      */
-    public ArrayList<Object> getAll();
+    public Object getAll();
     
     /**
      * Usado para remover um objeto do banco de dados
