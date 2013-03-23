@@ -108,11 +108,11 @@ public class DependenteDAO implements IObjectDAO{
             
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Dependente> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(this.rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Dependente) this.useObjectTemplate());
             }
             
             if(output.isEmpty())
@@ -129,11 +129,11 @@ public class DependenteDAO implements IObjectDAO{
     public Object getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Dependente> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(this.rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Dependente) this.useObjectTemplate());
             }
             
             if(output.isEmpty())

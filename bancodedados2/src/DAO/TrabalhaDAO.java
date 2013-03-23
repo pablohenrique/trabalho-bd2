@@ -82,11 +82,11 @@ public class TrabalhaDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
             this.ps.setString(1,aux);
             
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Trabalha> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Trabalha) this.useObjectTemplate());
             }
             
             if(output.isEmpty())
@@ -106,11 +106,11 @@ public class TrabalhaDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setInt(1,aux);
             
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Trabalha> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Trabalha) this.useObjectTemplate());
             }
             
             if(output.isEmpty())
@@ -128,11 +128,11 @@ public class TrabalhaDAO implements IObjectDAO{
     public Object getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Trabalha> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Trabalha) this.useObjectTemplate());
             }
             
             if(output.isEmpty())

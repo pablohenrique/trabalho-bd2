@@ -109,11 +109,11 @@ public class LocalizacaoDAO implements IObjectDAO{
     public Object getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Localizacao> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Localizacao) this.useObjectTemplate());
             }
             
             if(output.isEmpty())

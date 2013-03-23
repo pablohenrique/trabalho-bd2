@@ -125,11 +125,11 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
             
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Empregado> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Empregado) this.useObjectTemplate());
             }
             
             if(output.isEmpty())
@@ -147,11 +147,11 @@ public class EmpregadoDAO implements IObjectDAO{
     public Object getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Empregado> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Empregado) this.useObjectTemplate());
             }
             
             if(output.isEmpty())

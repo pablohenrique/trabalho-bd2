@@ -120,11 +120,11 @@ public class DepartamentoDAO implements IObjectDAO{
     public Object getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Departamento> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(this.rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Departamento) this.useObjectTemplate());
             }
             
             if(output.isEmpty())

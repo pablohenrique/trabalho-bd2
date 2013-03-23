@@ -110,11 +110,11 @@ public class ProjetoDAO implements IObjectDAO{
     public Object getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Object> output = new ArrayList<>();
+            ArrayList<Projeto> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add(this.useObjectTemplate());
+                output.add((Projeto) this.useObjectTemplate());
             }
             
             if(output.isEmpty())
