@@ -8,19 +8,19 @@ package Model;
  *
  * @author yuricampos
  */
-public class Dept_Localizacoes {
+public class Localizacao {
     private Departamento departamento;
     private String nome;
 
     /**
-     * @return the departamento_numero
+     * @return the departamento
      */
     public Departamento getDepartamento() {
         return departamento;
     }
 
     /**
-     * @param departamento_numero the departamento_numero to set
+     * @param departamento the departamento to set
      */
     public void setDepartamento(Departamento departamento_numero) {
         this.departamento = departamento_numero;

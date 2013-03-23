@@ -8,7 +8,7 @@ package Model;
  *
  * @author yuricampos
  */
-public class Trabalha_Em {
+public class Trabalha {
     private Empregado essn;
     private Projeto projeto;
     private float horas;
