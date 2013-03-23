@@ -36,7 +36,10 @@ public class EmpregadoDAO implements IObjectDAO{
             output.setSalario(this.rs.getFloat(5));
             output.setDataNascimento(this.rs.getDate(6));
             output.setDepartamento( (Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(7)) );
-            output.setSuperSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(8)));
+            if(this.rs.getString(8) != this.rs.getString(1))
+                output.setSuperSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(8)));
+            else
+                output.setSuperSsn(null);
             output.setSenha(this.rs.getString(9));
             return output;
             
@@ -163,10 +166,10 @@ public class EmpregadoDAO implements IObjectDAO{
     }
 
     @Override
-    public void delete(int input) {
+    public void delete(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
-            this.ps.setInt(1,input);
+            this.ps.setInt(1,(int) input);
             
             if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi deletado.");

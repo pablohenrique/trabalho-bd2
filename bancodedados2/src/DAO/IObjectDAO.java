@@ -52,6 +52,6 @@ public interface IObjectDAO {
      * @param int
      * @return void
      */
-    public void delete(int input);
+    public void delete(Object input);
     
 }

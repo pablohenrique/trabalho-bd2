@@ -128,10 +128,10 @@ public class ProjetoDAO implements IObjectDAO{
     }
 
     @Override
-    public void delete(int input) {
+    public void delete(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
-            this.ps.setInt(1,input);
+            this.ps.setInt(1,(int) input);
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi deletado.");
