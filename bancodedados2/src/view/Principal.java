@@ -1,10 +1,12 @@
 package view;
 import DAO.DepartamentoDAO;
+import DAO.EmpregadoDAO;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Departamento;
 import Model.Empregado;
 import control.ControlFacade;
+import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -52,6 +54,14 @@ public class Principal
 
 
          //login = new Window_Login();
+         /*
+         EmpregadoDAO va = new EmpregadoDAO();
+         ArrayList<Empregado> em = (ArrayList<Empregado>) va.getAll();
+         
+         
+         for(int i=0; i<em.size(); i++)
+            System.out.println(em.get(i).toString());
+         */
          janela = new Window();
     }
 

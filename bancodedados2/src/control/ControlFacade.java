@@ -11,6 +11,7 @@ import Model.Empregado;
 import Model.Projeto;
 import Model.Trabalha;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -124,15 +125,14 @@ public class ControlFacade {
         
         for(int i=0; i<list.size(); i++)
         {
-            String dno = list.get(i).getDepartamento().toString();
-            String sssn = list.get(i).getSuperSsn().toString();
-            int dp = Integer.parseInt(dno);
-            Departamento dep = departamentoControl.getById(dp);
-            Empregado superssn = empregadoControl.getById(sssn);
+            String dno = String.valueOf(list.get(i).getDepartamento().getNumero());
+            String departamentoNome = list.get(i).getDepartamento().getNome();
+            String supervisorNome = list.get(i).getSuperSsn().getNome();
+            String sssn = list.get(i).getSuperSsn().getSsn();            
             
             dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSsn(), list.get(i).getSexo(),
                                      list.get(i).getEndereco(), list.get(i).getSalarioString(), list.get(i).getDataNascimentoString(),
-                                     dep.getNome(), dno, superssn.getNome(), sssn}; 
+                                     departamentoNome,dno,supervisorNome,sssn}; 
         }
         
         return dados; 

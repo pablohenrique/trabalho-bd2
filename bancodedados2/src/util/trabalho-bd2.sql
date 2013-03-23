@@ -6,7 +6,6 @@
  * Yuri Campos
  * Pablo Henrique
  */
-
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = off;
@@ -14,11 +13,10 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET escape_string_warning = off;
 
-drop schema if exists cia cascade;
+DROP SCHEMA IF EXISTS cia CASCADE;
 CREATE SCHEMA cia;
 
-
-SET search_path = cia, pg_catalog;
+SET search_path TO cia;
 
 SET default_tablespace = '';
 
@@ -83,6 +81,54 @@ CREATE TABLE trabalha_em (
 );
 
 
+
+--
+-- REMOVER RESTRICOES DE INTEGRIDADE
+--
+/*
+ALTER TABLE departamento DROP CONSTRAINT fk_empregado_gerencia_dpto;
+ALTER TABLE dependentes DROP CONSTRAINT fk_dependentes_do_empregado;
+ALTER TABLE dept_localizacao DROP CONSTRAINT fk_dept_localizacao_departamento;
+ALTER TABLE empregado DROP CONSTRAINT fk_empregado_supervisiona_empregado;
+ALTER TABLE empregado DROP CONSTRAINT fk_empregado_trabalha_departamento;
+ALTER TABLE projeto DROP CONSTRAINT fk_projeto_controlado_departamento;
+ALTER TABLE trabalha_em DROP CONSTRAINT fk_trabalha_em_empregado;
+ALTER TABLE trabalha_em DROP CONSTRAINT fk_trabalha_em_projeto;
+
+ALTER TABLE departamento DROP CONSTRAINT uq_dnome;
+ALTER TABLE projeto DROP CONSTRAINT uq_pnome;
+
+ALTER TABLE projeto DROP CONSTRAINT pk_projeto;
+ALTER TABLE departamento DROP CONSTRAINT pk_departamento;
+ALTER TABLE dependentes DROP CONSTRAINT pk_dependentes;
+ALTER TABLE dept_localizacao DROP CONSTRAINT pk_dept_localizacao;
+ALTER TABLE empregado DROP CONSTRAINT pk_empregado CASCADE;
+ALTER TABLE trabalha_em DROP CONSTRAINT pk_trabalha_em;
+*/
+
+--
+-- INSERTS BASICOS
+--
+    
+INSERT INTO departamento VALUES('1', 'PESQUISA', '11013', '2013-02-01');
+INSERT INTO departamento VALUES('2', 'TESTES', '11012', '2013-02-01');
+
+INSERT INTO empregado VALUES('11011', 'CAIO THOMAS OLIVEIRA', 'M', 'RUA DA ALEGRIA', 1234.09, '1991-11-21', 1, NULL, 123);
+INSERT INTO empregado VALUES('11012', 'RICARDO DA SILVA', 'M', 'RUA DA FELICIADE', 934.09, '1990-02-12', 1, '11011', 123);
+INSERT INTO empregado VALUES('11013', 'LUCIANA FERREIRA', 'F', 'RUA DA FELICIADE', 934.09, '1990-04-29', 1, '11011', 123);
+INSERT INTO empregado VALUES('11014', 'MARIANA DA SILVA', 'F', 'RUA DA FELICIADE', 934.09, '1990-02-12', 1, '11011', 123);
+
+INSERT INTO projeto VALUES(1, 'XML', 'FACOM', 1);
+INSERT INTO projeto VALUES(2, 'MINERACAO', 'FACOM', 1);
+
+INSERT INTO trabalha_em VALUES('11011', 1, 8);
+INSERT INTO trabalha_em VALUES('11011', 2, 8);
+INSERT INTO trabalha_em VALUES('11012', 1, 8);
+INSERT INTO trabalha_em VALUES('11013', 2, 8);
+INSERT INTO trabalha_em VALUES('11014', 1, 8);
+INSERT INTO trabalha_em VALUES('11014', 2, 8);
+
+
 --
 -- RESTRICOES PRIMARY KEY
 --
@@ -103,7 +149,7 @@ ALTER TABLE ONLY projeto
     ADD CONSTRAINT pk_projeto PRIMARY KEY (pnumero);
 
 ALTER TABLE ONLY trabalha_em
-    ADD CONSTRAINT pk_trabalha_em PRIMARY KEY (essn, projeto_pnumero);
+    ADD CONSTRAINT pk_trabalha_em PRIMARY KEY (essn, pjnumero);
 
 --
 -- RESTRICOES UNIQUE
@@ -127,7 +173,6 @@ ALTER TABLE ONLY departamento ADD CONSTRAINT fk_empregado_gerencia_dpto
     ON DELETE NO ACTION
     ON UPDATE CASCADE;
 
-
 ALTER TABLE empregado ADD CONSTRAINT fk_empregado_trabalha_departamento 
     FOREIGN KEY (dno)
     REFERENCES departamento (numero)
@@ -139,12 +184,6 @@ ALTER TABLE empregado ADD CONSTRAINT fk_empregado_supervisiona_empregado
     REFERENCES empregado (ssn)
     ON DELETE SET NULL--se remover o o empregado genrente os que referenciam vao ficar NULL
     ON UPDATE SET NULL;
-
-ALTER TABLE departamento ADD CONSTRAINT fk_Empregado_gerencia_dpto
-    FOREIGN KEY (gerssn)
-    REFERENCES empregado (ssn)
-    ON DELETE NO ACTION--um departamento nao pode ficar sem gerente 
-    ON UPDATE NO ACTION;--no maximo que poderia alterar seria o UPDATE CASCADE
 
 ALTER TABLE projeto ADD CONSTRAINT fk_projeto_controlado_departamento
     FOREIGN KEY (dnum)
@@ -171,10 +210,11 @@ ALTER TABLE trabalha_em ADD CONSTRAINT fk_trabalha_em_empregado
     ON UPDATE CASCADE;--caso ocorra uma atualizacao no SSN deve fazer update na tabela trabalha_em
 
 ALTER TABLE trabalha_em ADD CONSTRAINT  fk_trabalha_em_projeto
-    FOREIGN KEY (projeto_pnumero)
+    FOREIGN KEY (pjnumero)
     REFERENCES projeto (pnumero)
     ON DELETE NO ACTION --caso remova um projeto nao pode remover o trabalha em, pois tem trabalhadores
     ON UPDATE CASCADE;--caso atualize chave primaria de projeto posso atualizar em trabalha em
+
 
 --
 -- FUNCOES
@@ -224,13 +264,39 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-select login('11024','senha4');
+SELECT login('11024','senha4');
+
+--
+-- FUNCAO SEXO 
+--
 
 
---CONSULTAS
+CREATE OR REPLACE FUNCTION sexo (sexo VARCHAR(1))
+RETURNS VARCHAR AS $$
+    BEGIN
+        IF(lower(sexo) = 'm') THEN            
+            RETURN 'Masculino';
+        ELSEIF(lower(sexo) = 'f') THEN            
+            RETURN 'Feminino';
+        ELSE 
+		RETURN '';
+        END IF;
+    END;
+$$ language 'plpgsql';
 
-SELECT  e.ssn, e.pnome, CASE e.sexo
-                WHEN 'M' THEN 'Masculino'
-                ELSE 'Feminino' END AS sexo,
-        e.endereco, e.salario, e.datanasc, e.dno, e.superssn
-        FROM empregado AS e;
+--
+--CONSULTAS BASICAS
+--
+
+--Recuperar todos empregados com seu dependente e supervisor
+
+SELECT *, cia.sexo(e.sexo) AS sexoEmp, cia.sexo(ger.sexo) AS sexoGer, cia.sexo(s.sexo) AS sexoSuper
+    FROM (((cia.empregado AS e LEFT JOIN cia.departamento
+		AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger
+		ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s 
+			ON e.superssn = s.ssn)
+    ORDER BY e.nome ASC;
+
+
+
+

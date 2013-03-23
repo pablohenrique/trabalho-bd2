@@ -96,7 +96,7 @@ public class Empregado {
      * @return the sexo
      */
     public String getSexo() {       
-        return FuncoesControle.getSexoChar(sexo);
+        return sexo;
     }
 
     
@@ -152,7 +152,6 @@ public class Empregado {
     
     public String getDataNascimentoString()
     {
-        System.out.println("Aqui!");
         return FuncoesControle.converteData(dataNascimento);
     }
     

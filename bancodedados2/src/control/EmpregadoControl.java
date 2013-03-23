@@ -80,9 +80,7 @@ public class EmpregadoControl
            throw new Exception("Erro: sexo informado esta incorreto");  
         }
         else
-        {
-            
-            
+        {                        
             IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");     
             Empregado empregadoVerifica = (Empregado) empregadoDAO.get(ssn);
             float salarioAtual = empregadoVerifica.getSalario();   
@@ -90,6 +88,7 @@ public class EmpregadoControl
             Empregado gerente = (Empregado) dao0.get(superssn);
             IObjectDAO dao1 = FactoryDAO.getFactory("Departamento"); 
             Departamento departamento = (Departamento) dao1.read(dno);
+           
             Empregado empregado = new Empregado();    
             empregado.setSsn(ssn);
             empregado.setNome(nome);

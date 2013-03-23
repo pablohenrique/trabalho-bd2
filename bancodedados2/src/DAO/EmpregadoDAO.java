@@ -18,11 +18,17 @@ import java.util.ArrayList;
 public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO empregado VALUES(?,?,?,?,?,?,?,?,?);";
     private final String SQL_GET = "SELECT * FROM empregado WHERE ssn = ?;";
-    private final String SQL_READ = "SELECT * FROM empregado WHERE nome LIKE ?;";
-    private final String SQL_GETALL = "SELECT * FROM empregado ORDER BY nome ASC;";
+    private final String SQL_READ = "SELECT * FROM empregado WHERE nome LIKE ?;";    
     private final String SQL_UPDATE = "UPDATE empregado SET nome = ?, sexo = ?, endereco = ?, salario = ?, datanascimento = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE empregado WHERE ssn = ?;";
-    private final String SQL_LOGIN = "SELECT login(?,?);";
+    private final String SQL_LOGIN = "SELECT login(?,?);";    
+    private final String SQL_GETALL = "SELECT *, cia.sexo(e.sexo) AS sexoEmp, cia.sexo(ger.sexo) AS sexoGer, cia.sexo(s.sexo) AS sexoSuper\n" +
+                                      "    FROM (((cia.empregado AS e LEFT JOIN cia.departamento\n" +
+                                      "             AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger\n" +
+                                      "		ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s \n" +
+                                      "		ON e.superssn = s.ssn)\n" +
+                                      "    ORDER BY e.nome ASC;";   
+    
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -151,7 +157,8 @@ public class EmpregadoDAO implements IObjectDAO{
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add((Empregado) this.useObjectTemplate());
+                output.add((Empregado) this.useObjectTemplateAll());
+                
             }
             
             if(output.isEmpty())
@@ -161,6 +168,62 @@ public class EmpregadoDAO implements IObjectDAO{
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    private Object useObjectTemplateAll()
+    {
+        try
+        {
+            Empregado emp = new Empregado();
+            
+            Empregado sssn = new Empregado();            
+            
+            Empregado ger = new Empregado();     
+
+            Departamento dep = new Departamento();
+            
+            emp.setSsn(this.rs.getString(1));
+            emp.setNome(this.rs.getString(2));
+            emp.setSexo(this.rs.getString(32));
+            emp.setEndereco(this.rs.getString(4));
+            emp.setSalario(this.rs.getFloat(5));
+            emp.setDataNascimento(this.rs.getDate(6));
+            emp.setSenha(this.rs.getString(9));            
+            
+            dep.setNumero(this.rs.getInt(10));
+            dep.setNome(this.rs.getString(11));           
+            dep.setGerenteDataInicio(this.rs.getDate(13));  
+            
+            ger.setSsn(this.rs.getString(14));
+            ger.setNome(this.rs.getString(15));
+            ger.setSexo(this.rs.getString(33));
+            ger.setEndereco(this.rs.getString(17));
+            ger.setSalario(this.rs.getFloat(18));
+            ger.setDataNascimento(this.rs.getDate(19));                           
+            ger.setDepartamento(null);
+            ger.setSuperSsn(null);
+            ger.setSenha(this.rs.getString(22)); 
+            
+            sssn.setSsn(this.rs.getString(23));
+            sssn.setNome(this.rs.getString(24));
+            sssn.setSexo(this.rs.getString(34));
+            sssn.setEndereco(this.rs.getString(26));
+            sssn.setSalario(this.rs.getFloat(27));
+            sssn.setDataNascimento(this.rs.getDate(28));            
+            sssn.setDepartamento(null);
+            sssn.setSuperSsn(null);            
+            sssn.setSenha(this.rs.getString(31)); 
+            
+            emp.setDepartamento(dep);
+            emp.setSuperSsn(sssn);
+            dep.setGerenteSsn(ger);
+                                    
+            return emp;
+            
+        } catch (Exception e) {
+            System.err.println("Erro useObjectTemplate:  " + e.toString() );
             return null;
         }
     }
