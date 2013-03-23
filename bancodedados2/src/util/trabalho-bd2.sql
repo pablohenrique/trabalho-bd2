@@ -183,46 +183,41 @@ ALTER TABLE trabalha_em ADD CONSTRAINT  fk_trabalha_em_projeto
 DROP FUNCTION IF EXISTS login(varchar(9),varchar(15));
 
 CREATE OR REPLACE FUNCTION login (argssn VARCHAR(9),argsenha VARCHAR(15))
---RETURNS INTEGER AS $$
-RETURNS login.senha%TYPE AS $$
+RETURNS int4 AS $$
 DECLARE 
-    TipoDeUsuario INTEGER;
-    ssnAux   login.ssn%TYPE;
-    senhaAux login.senha%TYPE;
-    superAux login.superssn%TYPE;
-    gerenAux login.gerssn%TYPE;
+    userInfo record;
 BEGIN
-    SELECT COUNT(DISTINCT ssn) INTO TipoDeUsuario FROM login WHERE ssn = argssn AND senha = argsenha;
-    SELECT DISTINCT ssn INTO ssnAux FROM login WHERE ssn = argssn AND senha = argsenha;
-    SELECT DISTINCT senha INTO senhaAux FROM login WHERE ssn = argssn AND senha = argsenha;
-    SELECT DISTINCT superssn INTO superAux FROM login WHERE ssn = argssn AND senha = argsenha;
-    SELECT DISTINCT gerssn INTO gerenAux FROM login WHERE ssn = argssn AND senha = argsenha;
-        
-    IF (TipoDeUsuario = 0)
+    SELECT COUNT(DISTINCT ssn) as qtdusuario, ssn, senha, superssn, gerssn
+    INTO userInfo 
+    FROM login 
+    WHERE ssn = argssn AND senha = argsenha
+    GROUP BY ssn,senha,superssn,gerssn;
+    
+    IF ( userInfo.senha != argsenha OR userInfo.qtdusuario = 0 OR userInfo.qtdusuario IS NULL)
     THEN 
-        TipoDeUsuario := -1;
+	RETURN -1;
     ELSE
-        IF (argssn = gerenAux AND argssn = superAux)
+        IF (argssn = userInfo.gerssn AND argssn = userInfo.superssn)
         THEN
-            TipoDeUsuario := 3;
+	    RETURN 3;
         ELSE
-            IF (argssn = gerenAux)
+            IF (argssn = userInfo.gerssn)
             THEN
-                TipoDeUsuario := 2;
+		RETURN 2;
             ELSE
-                IF (argssn = superAux)
+                IF (argssn = userInfo.superssn)
                 THEN
-                    TipoDeUsuario := 1;
+		    RETURN 1;
                 ELSE
-                    TipoDeUsuario := 0;
+		    RETURN 0;
                 END IF;
             END IF;
         END IF;
     END IF;
-    
-    RETURN TipoDeUsuario;
 END;
 $$ language 'plpgsql';
+
+select login('11024','senha4');
 
 
 --CONSULTAS
