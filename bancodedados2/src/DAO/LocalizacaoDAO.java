@@ -29,7 +29,7 @@ public class LocalizacaoDAO implements IObjectDAO{
     private Object useObjectTemplate(){
         try {
             Localizacao output = new Localizacao();
-            output.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getString(1)));
+            output.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(1)));
             output.setNome(this.rs.getString(2));
             return output;
             
