@@ -20,7 +20,7 @@ public class DependenteDAO implements IObjectDAO{
     private final String SQL_READ = "SELECT * FROM dependentes WHERE nome = ?;";
     private final String SQL_GETALL = "SELECT * FROM dependentes;";
     private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = ?, datanasc = ?, parentesco = ? WHERE essn = ?;";
-    private final String SQL_DELETE = "DELETE FROM dependentes WHERE essn = ?;";
+    private final String SQL_DELETE = "DELETE FROM dependentes WHERE nome_dependente = ?;";
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -150,7 +150,7 @@ public class DependenteDAO implements IObjectDAO{
     public void delete(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
-            this.ps.setInt(1,(int) input);
+            this.ps.setString(1,(String) input);
             
             if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi deletado.");

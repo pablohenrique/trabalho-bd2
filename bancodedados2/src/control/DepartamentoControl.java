@@ -7,6 +7,7 @@ package control;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Departamento;
+import Model.Empregado;
 import java.awt.List;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -25,15 +26,17 @@ public class DepartamentoControl
         
         if(f.verificarExistenciaEmpregado(gerssn) == false)
         {
-            throw new Exception("Erro: empregado informado nao foi encontrado");
+            throw new Exception("Erro: gerente informado nao foi encontrado");
         }
         else
         {
+            IObjectDAO dao0 = FactoryDAO.getFactory("Empregado");
+            Empregado gerente = (Empregado) dao0.read(gerssn);
             IObjectDAO dao = FactoryDAO.getFactory("Departamento");
             Departamento departamento = new Departamento();
             departamento.setNumero(numero);
             departamento.setNome(nome);
-            departamento.setGerenteSsn(gerssn);
+            departamento.setGerenteSsn(gerente);
             departamento.setGerenteDataInicio(gerdatainicio);
             dao.post(departamento);
         }
@@ -45,16 +48,28 @@ public class DepartamentoControl
      if(f.verificarExistenciaEmpregado(gerssn) == false){
          throw new Exception("Erro: empregado informado nao foi encontrado");
      } else{
+        IObjectDAO dao0 = FactoryDAO.getFactory("Empregado");
+        Empregado gerente = (Empregado) dao0.read(gerssn);
         Departamento departamento = new Departamento();
         departamento.setNumero(numero);
         departamento.setNome(nome);
-        departamento.setGerenteSsn(gerssn);
+        departamento.setGerenteSsn(gerente);
         departamento.setGerenteDataInicio(gerdatainicio);
         IObjectDAO dao = FactoryDAO.getFactory("Departamento");
         dao.update(departamento);
      }
 
         
+    }
+    
+    public void delete(int numero) throws Exception{
+        FuncoesControle f = new FuncoesControle();
+        if(f.verificarExistenciaDepartamento(numero) == false){
+            throw new Exception("Erro: departamento informado nao foi encontrado");
+        } else{  
+            IObjectDAO dao0 = FactoryDAO.getFactory("Departamento");
+            dao0.delete(numero);
+        }
     }
 
 
@@ -64,26 +79,11 @@ public class DepartamentoControl
         return departamento;
     }
 
-
-    public ArrayList<Departamento> getAll()
-    {
-         IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-         ArrayList<Object> departamentoObject = dao.getAll();
-         ArrayList<Departamento> departamento = new ArrayList<Departamento>();
-         
-         for(int i = 0 ; i < departamentoObject.size() ; i++)
-         {
-             Departamento d = (Departamento) departamentoObject.get(i);             
-             departamento.add(d);
-         }
-         
-         return departamento;
-    }
     
-    public static Vector<Departamento> listarDepartamentos()
+    public static Vector<Departamento> getAll()
     {
          IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-         ArrayList<Object> departamentoObject = dao.getAll();
+         ArrayList<Object> departamentoObject = (ArrayList<Object>) dao.getAll();
          Vector<Departamento> departamento = new Vector<Departamento>();
          
          for(int i = 0 ; i < departamentoObject.size() ; i++)
@@ -96,11 +96,19 @@ public class DepartamentoControl
     }    
 
 
-    public Departamento SearchByNameExactly(String input) {
+    public Vector<Departamento> SearchByName(String input) {
        IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-       Departamento departamento = (Departamento) dao.read(input);
-       return departamento;
-    }
+       ArrayList<Object> departamentoObject = (ArrayList<Object>) dao.get(input);
+       Vector<Departamento> departamento = new Vector<Departamento>();
+                for(int i = 0 ; i < departamentoObject.size() ; i++)
+         {
+             Departamento d = (Departamento) departamentoObject.get(i);             
+             departamento.add(d);
+         }
+         
+         return departamento;
+    }  
+    
 
     
 }

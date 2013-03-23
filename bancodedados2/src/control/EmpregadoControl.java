@@ -8,6 +8,7 @@ import DAO.EmpregadoDAO;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Auditoria;
+import Model.Departamento;
 import Model.Empregado;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -41,6 +42,10 @@ public class EmpregadoControl
             throw new Exception("Senha vazia!");                        
         else
         {
+            IObjectDAO dao0 = FactoryDAO.getFactory("Empregado"); 
+            Empregado gerente = (Empregado) dao0.get(superssn);
+            IObjectDAO dao1 = FactoryDAO.getFactory("Departamento"); 
+            Departamento departamento = (Departamento) dao1.read(dno);
             Empregado empregado = new Empregado();
             empregado.setSsn(ssn);
             empregado.setNome(nome);
@@ -48,8 +53,8 @@ public class EmpregadoControl
             empregado.setEndereco(endereco);
             empregado.setSalario(salario);
             empregado.setDataNascimentoString(datanasc);
-            empregado.setDepartamento(dno);
-            empregado.setSuperSsn(superssn);
+            empregado.setDepartamento(departamento);
+            empregado.setSuperSsn(gerente);
             empregado.setSenha(senha);
             System.out.println("empregado inserido!");
             IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
@@ -76,40 +81,49 @@ public class EmpregadoControl
         }
         else
         {
-            IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
             
+            
+            IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");     
             Empregado empregadoVerifica = (Empregado) empregadoDAO.get(ssn);
-            
-            float salarioAtual = empregadoVerifica.getSalario();
-            
-            Empregado empregado = new Empregado();
-            
+            float salarioAtual = empregadoVerifica.getSalario();   
+            IObjectDAO dao0 = FactoryDAO.getFactory("Empregado"); 
+            Empregado gerente = (Empregado) dao0.get(superssn);
+            IObjectDAO dao1 = FactoryDAO.getFactory("Departamento"); 
+            Departamento departamento = (Departamento) dao1.read(dno);
+            Empregado empregado = new Empregado();    
             empregado.setSsn(ssn);
             empregado.setNome(nome);
             empregado.setSexo(sexo);
             empregado.setEndereco(endereco);
             empregado.setSalario(salario);
             empregado.setDataNascimento(datanasc);
-            empregado.setDepartamento(dno);
-            empregado.setSuperSsn(superssn);
+            empregado.setDepartamento(departamento);
+            empregado.setSuperSsn(gerente);
             empregado.setSenha(senha);
-            empregadoDAO.update(empregado);
-            
+            empregadoDAO.update(empregado); 
             if(salarioAtual != salario)
             {
                 Auditoria auditoria = new Auditoria();
                 auditoria.setAntigosalario(salarioAtual);
                 auditoria.setNovosalario(salario);
-                auditoria.setEssn(ssn);
-                //AQUI E O GERENTE
-                auditoria.setGerssn(superssn);
+                auditoria.setEssn(empregadoVerifica);
+                //AQUI GERENTE
+                auditoria.setGerssn(gerente);
                 Date data = new Date(System.currentTimeMillis()); 
                 auditoria.setDatamodificacao(data);
                 //FALTA INSERIR NO BANCO    
             }         
         }
     }
-
+    
+    public void delete(String input) throws Exception{
+        FuncoesControle f = new FuncoesControle();
+        if(f.verificarExistenciaEmpregado(input) == false){
+             throw new Exception("Erro: empregado informado nao foi encontrado");
+        }
+        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
+        empregadoDAO.delete(input);
+    }
 
     public Empregado getById(String input)
     {
@@ -118,26 +132,12 @@ public class EmpregadoControl
         
         return empregado;
     }
-
-    public ArrayList<Empregado> getAll()
-    {
-        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
-        ArrayList<Object> empregadosObject = empregadoDAO.getAll();
-        ArrayList<Empregado> empregados = null;
-        
-        for(int i = 0 ; i < empregadosObject.size() ; i++)
-        {
-            Empregado e = (Empregado) empregadosObject.get(i);            
-            empregados.add(e);
-        }
-        
-        return empregados;
-    }    
+  
     
-    public Vector<Empregado> listarEmpregados()
+    public Vector<Empregado> getAll()
     {
         IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
-        ArrayList<Object> empregadosObject = empregadoDAO.getAll();
+        ArrayList<Object> empregadosObject = (ArrayList<Object>) empregadoDAO.getAll();
         Vector<Empregado> empregados = new Vector<Empregado>();
         
         for(int i = 0 ; i < empregadosObject.size() ; i++)
@@ -150,13 +150,20 @@ public class EmpregadoControl
     }    
     
 
-    public Empregado SearchByNameExactly(String input)
+    public Vector<Empregado> SearchByName(String input)
     {
         IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
-        Empregado empregado = (Empregado) empregadoDAO.read(input);
-       
-        return empregado;
-    }
+        ArrayList<Object> empregadosObject = (ArrayList<Object>) empregadoDAO.read(input);
+        Vector<Empregado> empregados = new Vector<Empregado>();
+        
+        for(int i = 0 ; i < empregadosObject.size() ; i++)
+        {
+            Empregado e = (Empregado) empregadosObject.get(i);
+            empregados.add(e);
+        }
+        
+        return empregados;
+    } 
 
 
     public int login(String usuario, String senha)

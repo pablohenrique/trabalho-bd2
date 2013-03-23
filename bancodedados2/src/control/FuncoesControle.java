@@ -4,9 +4,9 @@
  */
 package control;
 
-import DAO.DepartamentoDAO;
-import DAO.EmpregadoDAO;
-import DAO.ProjetoDAO;
+
+import DAO.FactoryDAO;
+import DAO.IObjectDAO;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,7 +19,7 @@ public class FuncoesControle {
     
     public boolean verificarExistenciaProjeto(int projetonumero)
     {
-        ProjetoDAO pdao = new ProjetoDAO();
+        IObjectDAO pdao = FactoryDAO.getFactory("Projeto");
         try
         {
             pdao.get(projetonumero);
@@ -30,10 +30,45 @@ public class FuncoesControle {
             return false;            
         }
     }
+    
+    public boolean verificarExistenciaLocalizacao(String localizacao){
+        IObjectDAO ldao = FactoryDAO.getFactory("Localizacao");
+        try{
+           ldao.get(localizacao);
+           return true;
+        }
+        catch(Exception e)
+        {
+            return false;            
+        }
+    }
+    
+        public boolean verificarExistenciaTrabalha(String essn){
+        IObjectDAO tdao = FactoryDAO.getFactory("Trabalha");
+        try{
+           tdao.get(essn);
+           return true;
+        }
+        catch(Exception e)
+        {
+            return false;            
+        }
+    }
+    
+    public boolean verificarExistenciaDependente(String nome_dependenete){
+        IObjectDAO ddao = FactoryDAO.getFactory("Dependente");
+        try{
+            ddao.get(nome_dependenete);
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
         
     public boolean verificarExistenciaDepartamento(int departamentonumero)
     {
-        DepartamentoDAO ddao = new DepartamentoDAO();
+       IObjectDAO ddao = FactoryDAO.getFactory("Departamento");
         try
         {
             ddao.get(departamentonumero);
@@ -47,8 +82,7 @@ public class FuncoesControle {
 
     public boolean verificarExistenciaEmpregado(String ssn)
     {
-        EmpregadoDAO edao = new EmpregadoDAO();
-        
+        IObjectDAO edao = FactoryDAO.getFactory("Empregado");
         try
         {
             edao.get(ssn);

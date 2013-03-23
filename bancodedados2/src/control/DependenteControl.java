@@ -7,8 +7,10 @@ package control;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Dependente;
+import Model.Empregado;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  *
@@ -22,9 +24,11 @@ public class DependenteControl  {
      if(f.verificarExistenciaEmpregado(essn) == false){
          throw new Exception("Erro: empregado informado nao foi encontrado");
      } else{
+     IObjectDAO dao0 = FactoryDAO.getFactory("Empregado");   
+     Empregado empregado = (Empregado) dao0.read(essn);
      Dependente dependente = new Dependente();
      dependente.setNome(nome);
-     dependente.setEssn(essn);
+     dependente.setEssn(empregado);
      dependente.setSexo(sexo);
      dependente.setDataNascimento(datanascimento);
      dependente.setParentesco(parentesco);
@@ -40,9 +44,11 @@ public class DependenteControl  {
      if(f.verificarExistenciaEmpregado(essn) == false){
          throw new Exception("Erro: empregado informado nao foi encontrado");
      } else{
+     IObjectDAO dao0 = FactoryDAO.getFactory("Empregado");   
+     Empregado empregado = (Empregado) dao0.read(essn);
      Dependente dependente = new Dependente();
      dependente.setNome(nome);
-     dependente.setEssn(essn);
+     dependente.setEssn(empregado);
      dependente.setSexo(sexo);
      dependente.setDataNascimento(datanascimento);
      dependente.setParentesco(parentesco);
@@ -50,26 +56,44 @@ public class DependenteControl  {
      dependenteDAO.update(dependente);
      }
     }
-
-
-
-    public ArrayList<Dependente> getAll() {
-       IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
-       ArrayList<Object> dependentesObject = dependenteDAO.getAll();
-       ArrayList<Dependente> dependentes = null;
-       for(int i = 0 ; i < dependentesObject.size() ; i++){
-           Dependente d = (Dependente) dependentesObject.get(i);
-           dependentes.add(d);
-       }
-       return dependentes;
+    
+    public void delete(String nome) throws Exception{
+        FuncoesControle f = new FuncoesControle();
+        if(f.verificarExistenciaDependente(nome) == false){
+            throw new Exception("Erro: dependente informado nao foi encontrado");
+        } else{
+            IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
+            dependenteDAO.delete(nome);
+        }
     }
+    
+        public static Vector<Dependente> getAll(){
+         IObjectDAO dao = FactoryDAO.getFactory("Dependente");
+         ArrayList<Object> dependenteObject = (ArrayList<Object>) dao.getAll();
+         Vector<Dependente> dependente = new Vector<Dependente>();
+         
+         for(int i = 0 ; i < dependenteObject.size() ; i++)
+         {
+             Dependente d = (Dependente) dependenteObject.get(i);             
+             dependente.add(d);
+         }
+         
+         return dependente;
+    }    
 
 
-    public Dependente SearchByNameExactly(String input) {
-        IObjectDAO dependenteDAO = FactoryDAO.getFactory("Dependente");
-        Dependente dependente = (Dependente)dependenteDAO.read(input);
-        return dependente;
-    }
+    public Vector<Dependente> SearchByName(String input) {
+       IObjectDAO dao = FactoryDAO.getFactory("Departamento");
+       ArrayList<Object> dependenteObject = (ArrayList<Object>) dao.get(input);
+       Vector<Dependente> dependente = new Vector<Dependente>();
+                for(int i = 0 ; i < dependenteObject.size() ; i++)
+         {
+             Dependente d = (Dependente) dependenteObject.get(i);             
+             dependente.add(d);
+         }
+         
+         return dependente;
+    } 
 
     
 }

@@ -169,7 +169,7 @@ public class EmpregadoDAO implements IObjectDAO{
     public void delete(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
-            this.ps.setInt(1,(int) input);
+            this.ps.setString(1,(String) input);
             
             if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi deletado.");

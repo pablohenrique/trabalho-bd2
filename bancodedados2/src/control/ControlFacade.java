@@ -6,11 +6,11 @@ package control;
 
 import Model.Departamento;
 import Model.Dependente;
-import Model.Dept_Localizacoes;
+import Model.Localizacao;
 import Model.Empregado;
 import Model.Projeto;
+import Model.Trabalha;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -20,10 +20,10 @@ import java.util.Vector;
 public class ControlFacade {
     private DepartamentoControl departamentoControl = new DepartamentoControl();
     private DependenteControl dependenteControl = new DependenteControl();
-    private Dept_LocalizacoesControl dept_LocalizacoesControl = new Dept_LocalizacoesControl();
+    private Localizacoes localizacoesControl = new Localizacoes();
     private EmpregadoControl empregadoControl = new EmpregadoControl();
     private ProjetoControl projetoControl = new ProjetoControl();
-    private TrabalhaEmControl trabalhaEmControl = new TrabalhaEmControl();
+    private TrabalhaControl trabalhaControl = new TrabalhaControl();
     
     /**
      * Funcoes de funcionario
@@ -91,15 +91,6 @@ public class ControlFacade {
         return empregado;
     }
     
-    /**
-     * Funcao que retorna todos empregados
-     * @return ArrayList<Empregado>
-     * Retorna todos os empregados do banco
-     */
-    public ArrayList<Empregado> getTodosEmpregados()
-    {
-       return empregadoControl.getAll();
-    }
         
     /**
      * Funcao que retorna todos empregados
@@ -108,8 +99,17 @@ public class ControlFacade {
      */    
     public Vector<Empregado> listarEmpregados()
     {
-       return empregadoControl.listarEmpregados();
+       return empregadoControl.getAll();
     }    
+    
+    /**
+     * 
+     * @param ssn 
+     * Apaga empregado com ssn informado
+     */
+    public void apagarEmpregado(String ssn) throws Exception{
+        empregadoControl.delete(ssn);
+    }
     
     /*
      * SELECT * 
@@ -124,15 +124,15 @@ public class ControlFacade {
         
         for(int i=0; i<list.size(); i++)
         {
-            int dno = list.get(i).getDepartamento();
-            String sssn = list.get(i).getSuperSsn();
-            
-            Departamento dep = departamentoControl.getById(dno);
+            String dno = list.get(i).getDepartamento().toString();
+            String sssn = list.get(i).getSuperSsn().toString();
+            int dp = Integer.parseInt(dno);
+            Departamento dep = departamentoControl.getById(dp);
             Empregado superssn = empregadoControl.getById(sssn);
             
             dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSsn(), list.get(i).getSexo(),
                                      list.get(i).getEndereco(), list.get(i).getSalarioString(), list.get(i).getDataNascimentoString(),
-                                     dep.getNome(), Integer.toString(dno), superssn.getNome(), sssn}; 
+                                     dep.getNome(), dno, superssn.getNome(), sssn}; 
         }
         
         return dados; 
@@ -142,12 +142,11 @@ public class ControlFacade {
     /**
      * 
      * @param nome
-     * @return Empregado
-     * retorna um empregado que possui exatamente o nome informado
+     * @return Vector<Empregado>
+     * retorna vetores de empregados que possuem nome informado (LIKE)
      */
-    public Empregado buscaExataNomeEmpregado(String nome){
-        Empregado empregado = empregadoControl.SearchByNameExactly(nome);
-        return empregado;
+    public Vector<Empregado> buscaNomeEmpregado(String nome){
+        return empregadoControl.SearchByName(nome);
     }
     
      /**
@@ -193,29 +192,34 @@ public class ControlFacade {
     
     /**
      * 
-     * @return ArrayList<Departamento>
+     * @return Vector<Departamento>
      * retorna todos os departamentos cadastrados
      */
-    public ArrayList<Departamento> getTodosDepartamento()
-    {        
-        return departamentoControl.getAll();
-    }
-
     public Vector<Departamento> listarDepartamentos()
     {        
-        return departamentoControl.listarDepartamentos();
+        return departamentoControl.getAll();
     }        
     
     /**
      * 
      * @param nome
      * @return departamento
-     * retorna o departamento que possui exatamente o nome informado
+     * retorna departamentos que possuem nome (LIKE)
      */
-    public Departamento buscaExataNomeDepartamento(String nome){
-        Departamento departamento = departamentoControl.SearchByNameExactly(nome);
-        return departamento;
+    public Vector<Departamento> buscaNomeDepartamento(String nome){
+        return departamentoControl.SearchByName(nome);
     }
+    
+    /**
+     * 
+     * @param numero
+     * @throws Exception 
+     * apaga departamento com id informado
+     */
+    public void apagarDepartamento(int numero) throws Exception{
+        departamentoControl.delete(numero);
+    }
+    
     
      /**
      * Funcoes de dependente
@@ -251,23 +255,32 @@ public class ControlFacade {
     
     /**
      * 
-     * @return ArrayList<Dependente>
+     * @return Vector<Dependente>
      * retorna todos os dependentes cadastrados
      */
-    public ArrayList<Dependente> getTodosDependentes(){
-        ArrayList<Dependente> dependentes = dependenteControl.getAll();
-        return dependentes;
+    public Vector<Dependente> listarDependentes(){
+        return dependenteControl.getAll();
     }
     
     /**
      * 
      * @param nome
-     * @return Dependente
-     * Retorna dependente que possui exatamente o nome informado
+     * @return Vector<Dependente>
+     * Retorna dependente que possui o nome informado (LIKE)
      */
-    public Dependente buscaExataNomeDependente(String nome){
-        Dependente dependente = dependenteControl.SearchByNameExactly(nome);
-        return dependente;
+    public Vector<Dependente> buscaNomeDependente(String nome){
+        return dependenteControl.SearchByName(nome);
+    }
+    
+
+    /**
+     * 
+     * @param nome
+     * @throws Exception 
+     * apaga dependente com nome informado
+     */
+    public void apagarDependente(String nome) throws Exception{
+        dependenteControl.delete(nome);
     }
     
      /**
@@ -313,54 +326,32 @@ public class ControlFacade {
     
     /**
      * 
-     * @return ArrayList<Projeto>
+     * @return Vector<Projeto>
      * retorna todos os projetos
      */
-    public ArrayList<Projeto> getTodosProjetos(){
-        ArrayList<Projeto> projetos = projetoControl.getAll();
-        return projetos;
+    public Vector<Projeto> listarProjetos(){
+        return projetoControl.getAll();
     }
     
     /**
      * 
      * @param nome
-     * @return Projeto
-     * retorna projeto que possui exatamente o nome informado
+     * @return Vector<Projeto>
+     * retorna projeto que possui  o nome informado (Like)
      */
-     public Projeto buscaExataNomeProjeto(String nome){
-         Projeto projeto = projetoControl.SearchByNameExactly(nome);
-         return projeto;
-     }
-     
-     /**
-     * Funcoes de trabalha_em
-     */
-     
-     
-     /**
-      * 
-      * @param ssn
-      * @param projetonumero
-      * @param horas
-      * @throws Exception 
-      * Faz insercao em trabalha em
-      */
-     public void inserirTrabalhaEm(String ssn, int projetonumero, float horas) throws Exception{
-         trabalhaEmControl.post(ssn, projetonumero, horas);
+     public Vector<Projeto> buscaNomeProjeto(String nome){
+         return projetoControl.SearchByName(nome);
      }
      
      /**
       * 
-      * @param ssn
-      * @param projetonumero
-      * @param horas
+      * @param numero
       * @throws Exception 
-      * Faz atualizacao em trabalha_em
+      * apaga projeto com numero informado
       */
-     public void atualizarTrabalhaEm(String ssn, int projetonumero, float horas) throws Exception{
-         trabalhaEmControl.update(ssn, projetonumero, horas);
+     public void apagarProjeto(int numero) throws Exception{
+         projetoControl.delete(numero);
      }
-     
      
     
     
@@ -376,8 +367,8 @@ public class ControlFacade {
      * @throws Exception 
      * Faz a insercao em um dept_localizacao
      */
-    public void inserirDeptLocalizacoes(int departamento, String nome) throws Exception{
-        dept_LocalizacoesControl.post(departamento, nome);
+    public void inserirLocalizacoes(int departamento, String nome) throws Exception{
+        localizacoesControl.post(departamento, nome);
     }
     
     /**
@@ -387,18 +378,17 @@ public class ControlFacade {
      * @throws Exception 
      * atualiza um dept_localizacao
      */
-    public void atualizarDeptLocalizacoes(int departamento, String nome) throws Exception{
-        dept_LocalizacoesControl.update(departamento, nome);
+    public void atualizarLocalizacoes(int departamento, String nome) throws Exception{
+        localizacoesControl.update(departamento, nome);
     }
     
     /**
      * 
-     * @return ArrayList<Dept_Localizacoes>
+     * @return Vector<Localizacao>
      * Retorna todos os dept_localizacao
      */
-    public ArrayList<Dept_Localizacoes> getTodosDeptLocalizacoes() {
-        ArrayList<Dept_Localizacoes> dept_localizacoes = dept_LocalizacoesControl.getAll();
-        return dept_localizacoes;
+    public Vector<Localizacao> listarLocalizacoes() {
+        return localizacoesControl.getAll();
     }
     
     /**
@@ -407,8 +397,65 @@ public class ControlFacade {
      * @return deptlocalizacao
      * Retorna um deptlocalizacao de acordo com nome da localizacao
      */
-    public Dept_Localizacoes BuscaExataNomeLocalizacao(String nome){
-        Dept_Localizacoes deptlocalizacoes = dept_LocalizacoesControl.SearchByNameExactly(nome);
-        return deptlocalizacoes;
+    public Vector<Localizacao> BuscaNomeLocalizacao(String nome){
+        return localizacoesControl.SearchByName(nome);
     }         
+    
+   /**
+    * 
+    * @param localizacao
+    * @throws Exception 
+    * deleta localizacao informada
+    */
+    public void apagarLocalizacao(String localizacao) throws Exception{
+        localizacoesControl.delete(localizacao);
+    }
+
+
+     /**
+     * Funcoes de trabalha_em
+     */
+     
+     
+     /**
+      * 
+      * @param ssn
+      * @param projetonumero
+      * @param horas
+      * @throws Exception 
+      * Faz insercao em trabalha em
+      */
+     public void inserirTrabalha(String ssn, int projetonumero, float horas) throws Exception{
+         trabalhaControl.post(ssn, projetonumero, horas);
+     }
+     
+     /**
+      * 
+      * @param ssn
+      * @param projetonumero
+      * @param horas
+      * @throws Exception 
+      * Faz atualizacao em trabalha_em
+      */
+     public void atualizarTrabalha(String ssn, int projetonumero, float horas) throws Exception{
+         trabalhaControl.update(ssn, projetonumero, horas);
+     }
+     
+     /**
+      * 
+      * @return Vector<Trabalha>
+      * Retorna todos os trabalha_em
+      */
+     public Vector<Trabalha> listarTrabalha(){
+         return trabalhaControl.getAll();
+     }
+     
+     /**
+      * 
+      * @param ssn 
+      * apaga trabalhaem com ssn informado
+      */
+     public void deletaTrabalha(String ssn) throws Exception{
+         trabalhaControl.delete(ssn);
+     }
 }

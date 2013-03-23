@@ -20,6 +20,10 @@ public class FactoryDAO {
                 return new EmpregadoDAO();
             case("Projeto"):
                 return new ProjetoDAO();
+            case("Trabalha"):
+                return new TrabalhaDAO();
+            case("Localizacao"):
+                return new LocalizacaoDAO();
             default:
                 return null;
         }

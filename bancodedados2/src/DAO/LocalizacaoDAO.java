@@ -22,7 +22,7 @@ public class LocalizacaoDAO implements IObjectDAO{
     private final String SQL_READ = "SELECT * FROM dept_localizacao WHERE dlocalizacao = ?;";
     private final String SQL_GETALL = "SELECT * FROM dept_localizacao;";
     private final String SQL_UPDATE = "UPDATE dept_localizacao SET dlocalizacao = ? WHERE departamento_numero = ?;";
-    private final String SQL_DELETE = "DELETE FROM dept_localizacao WHERE departamento_numero = ?;";
+    private final String SQL_DELETE = "DELETE FROM dept_localizacao WHERE dlocalizacao = ?;";
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -130,7 +130,7 @@ public class LocalizacaoDAO implements IObjectDAO{
     public void delete(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
-            this.ps.setInt(1,(int) input);
+            this.ps.setString(1,(String) input);
             
             if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi deletado.");
