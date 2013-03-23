@@ -180,6 +180,13 @@ ALTER TABLE trabalha_em ADD CONSTRAINT  fk_trabalha_em_projeto
 -- FUNCOES
 --
 
+CREATE OR REPLACE VIEW login AS 
+SELECT e.ssn, e.superssn, e.senha, d.gerssn, d1.gerssn AS gerente
+  FROM empregado e
+  LEFT JOIN departamento d ON e.ssn = d.gerssn
+  JOIN departamento d1 ON d1.numero = e.dno;
+
+
 DROP FUNCTION IF EXISTS login(varchar(9),varchar(15));
 
 CREATE OR REPLACE FUNCTION login (argssn VARCHAR(9),argsenha VARCHAR(15))
