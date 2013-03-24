@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author caio
  */
-public class NovoDao implements IObjectDAO{
+public class NovoDAO implements IObjectDAO{
  
     private final String SQL_GETALL = "SELECT e.ssn AS E_ssn, e.nome AS E_nome, cia.sexo(e.sexo) AS E_sexo, e.endereco AS E_endereco, e.salario AS E_salario, e.datanasc AS E_datanasc, e.dno AS E_dno, \n" +
 "       e.superssn AS E_superssn, e.senha AS E_senha, s.ssn AS S_ssn, s.nome AS S_nome, cia.sexo(s.sexo) AS S_sexo, s.endereco AS S_endereco, s.salario AS S_salario,\n" +

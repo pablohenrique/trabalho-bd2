@@ -16,8 +16,10 @@ public class FactoryDAO {
                 return new DepartamentoDAO();
             case("Dependente"):
                 return new DependenteDAO();
+            case("Novo"):
+                return new NovoDAO();
             case("Empregado"):
-                return new NovoDao();
+                return new EmpregadoDAO();
             case("Projeto"):
                 return new ProjetoDAO();
             case("Trabalha"):
