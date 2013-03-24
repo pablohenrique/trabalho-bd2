@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO cia.empregado VALUES(?,?,cia.sexoToBd(?),?,?,?,?,?,?);";
-    private final String SQL_GET = "SELECT * FROM cia.empregado AS e WHERE e.ssn = ?;";
+    private final String SQL_GET = "SELECT e.ssn, e.nome, cia.sexo(e.sexo), e.endereco, e.salario, e.datanasc, e.dno, e.superssn, e.senha FROM cia.empregado AS e WHERE e.ssn = ?;";
     private final String SQL_READ = "SELECT * FROM cia.empregado WHERE nome LIKE ?;";    
     private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanasc = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";

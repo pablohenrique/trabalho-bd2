@@ -77,7 +77,7 @@ public class ControlFacade {
      * @throws Exception 
      * Funcao atualiza os dados de um um empregado
      */
-    public void atualizarEmpregado(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc, int dno, String superssn, String senha) throws Exception{
+    public void atualizarEmpregado(String ssn, String nome, String sexo, String endereco, String salario, String datanasc, int dno, String superssn, String senha) throws Exception{
         empregadoControl.update(ssn, nome, sexo, endereco, salario, datanasc, dno, superssn, senha);
     }
     

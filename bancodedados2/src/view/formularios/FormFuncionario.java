@@ -80,7 +80,6 @@ public class FormFuncionario extends JDialog implements ActionListener
         }
         
         senha = new JPasswordField();
-        
         sexo = new JComboBox<String>();
         sexo.addItem("Masculino");
         sexo.addItem("Feminino");    
@@ -177,10 +176,11 @@ public class FormFuncionario extends JDialog implements ActionListener
         
         
         System.out.println("ssn" + e.getSuperSsn().getSsn());
+
         if(e.getSuperSsn().getSsn() != null)
             supervisor.setSelectedIndex(this.selecionarComboBoxSup(e.getSuperSsn(), supervisor));
         else
-            supervisor.setSelectedIndex(supervisor.getItemCount());
+            supervisor.setSelectedIndex(supervisor.getItemCount()-1);
         
         this.setTitle("Editar Empregado");
     }    
@@ -244,8 +244,23 @@ public class FormFuncionario extends JDialog implements ActionListener
             }
             else
             {
-                PainelFuncionarios.setDataTable();
-                this.dispose();
+               try
+                {                
+                    Departamento d = (Departamento) departamento.getSelectedItem();  
+                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
+                    
+                    Principal.cf.atualizarEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
+                                                    endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
+                                                    superssn.getSsn(), new String (senha.getPassword()));                                           
+                    
+                    JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
+                    PainelFuncionarios.setDataTable();
+                    this.dispose();
+                }
+                catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
+                }                    
             }
                                      
         }

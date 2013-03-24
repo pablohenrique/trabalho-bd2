@@ -48,31 +48,23 @@ public class EmpregadoControl
     }    
     
 
-    public void update(String ssn, String nome, String sexo, String endereco, float salario, Date datanasc,
+    public void update(String ssn, String nome, String sexo, String endereco, String salario, String datanasc,
                        int dno, String superssn, String senha) throws Exception
     {
-        FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaDepartamento(dno) == false)
-        {
-            throw new Exception("Erro: departamento informado nao foi encontrado");
-        }
-        else if(f.verificarExistenciaEmpregado(superssn) == false)
-        {
-            throw new Exception("Erro: supervisor informado nao foi encontrado");
-        }
-        else if(!"M".equals(sexo) || !"F".equals(sexo))
-        {
-           throw new Exception("Erro: sexo informado esta incorreto");  
-        }
-        else
-        {                        
+            Empregado gerente = new Empregado();
+            gerente.setSsn(superssn);
+            
+            Departamento dep = new Departamento();
+            dep.setNumero(dno);
+            
             IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");     
             Empregado empregadoVerifica = (Empregado) empregadoDAO.get(ssn);
+            
             float salarioAtual = empregadoVerifica.getSalario();   
-            IObjectDAO dao0 = FactoryDAO.getFactory("Empregado"); 
-            Empregado gerente = (Empregado) dao0.get(superssn);
-            IObjectDAO dao1 = FactoryDAO.getFactory("Departamento"); 
-            Departamento departamento = (Departamento) dao1.read(dno);
+            float salarioEmp = Float.parseFloat(salario);
+            
+            //IObjectDAO dao0 = FactoryDAO.getFactory("Empregado"); 
+            //Empregado gerente = (Empregado) dao0.get(superssn);            
            
             Empregado empregado = new Empregado();    
             empregado.setSsn(ssn);
@@ -80,24 +72,26 @@ public class EmpregadoControl
             empregado.setSexo(sexo);
             empregado.setEndereco(endereco);
             empregado.setSalario(salario);
-            empregado.setDataNascimento(datanasc);
-            empregado.setDepartamento(departamento);
+            empregado.setDataNascimentoString(datanasc);
+            empregado.setDepartamento(dep);
             empregado.setSuperSsn(gerente);
             empregado.setSenha(senha);
+            
+            System.out.println("empregado atualizado!");            
             empregadoDAO.update(empregado); 
-            if(salarioAtual != salario)
+            
+            if(salarioAtual !=  salarioEmp)
             {
                 Auditoria auditoria = new Auditoria();
                 auditoria.setAntigosalario(salarioAtual);
-                auditoria.setNovosalario(salario);
+                auditoria.setNovosalario(salarioEmp);
                 auditoria.setEssn(empregadoVerifica);
                 //AQUI GERENTE
                 auditoria.setGerssn(gerente);
                 Date data = new Date(System.currentTimeMillis()); 
                 auditoria.setDatamodificacao(data);
                 //FALTA INSERIR NO BANCO    
-            }         
-        }
+            }                 
     }
     
     public void delete(String input) throws Exception
