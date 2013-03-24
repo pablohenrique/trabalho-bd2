@@ -87,9 +87,8 @@ public class ControlFacade {
      * @return Empregado
      * Retorna um empregado usando seu ssn
      */
-    public Empregado getEmpregadoBySsn(String ssn){
-       Empregado empregado =  empregadoControl.getById(ssn);
-        return empregado;
+    public Empregado getEmpregadoBySsn(String ssn) throws Exception {
+        return empregadoControl.getById(ssn);
     }
     
         
@@ -110,14 +109,7 @@ public class ControlFacade {
      */
     public void apagarEmpregado(String ssn) throws Exception{
         empregadoControl.delete(ssn);
-    }
-    
-    /*
-     * SELECT * 
-	FROM empregado AS e, departamento AS d, empregado AS s
-	WHERE e.superssn = s.ssn AND
-	      d.numero = e.dno;
-     */
+    }    
     
     public String[][] getEmpregadosTable(Vector<Empregado> list)
     {
@@ -185,7 +177,7 @@ public class ControlFacade {
      * @return Departamento
      * Retorna um departamento usando o numero de departamento
      */
-    public Departamento getDepartamentoByNumero(int numero){
+    public Departamento getDepartamentoByNumero(int numero) throws Exception{
         Departamento departamento = departamentoControl.getById(numero);
         return departamento;
     }
@@ -206,7 +198,7 @@ public class ControlFacade {
      * @return departamento
      * retorna departamentos que possuem nome (LIKE)
      */
-    public Vector<Departamento> buscaNomeDepartamento(String nome){
+    public Vector<Departamento> buscaNomeDepartamento(String nome) throws Exception{
         return departamentoControl.SearchByName(nome);
     }
     
@@ -268,7 +260,7 @@ public class ControlFacade {
      * @return Vector<Dependente>
      * Retorna dependente que possui o nome informado (LIKE)
      */
-    public Vector<Dependente> buscaNomeDependente(String nome){
+    public Vector<Dependente> buscaNomeDependente(String nome) throws Exception{
         return dependenteControl.SearchByName(nome);
     }
     
@@ -319,7 +311,7 @@ public class ControlFacade {
      * @return Projeto
      * retorna um projeto de acordo com seu numero
      */
-    public Projeto getProjetoByNumero(int numero){
+    public Projeto getProjetoByNumero(int numero) throws Exception{
         Projeto projeto = projetoControl.getById(numero);
         return projeto;
     }
@@ -339,7 +331,7 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorna projeto que possui  o nome informado (Like)
      */
-     public Vector<Projeto> buscaNomeProjeto(String nome){
+     public Vector<Projeto> buscaNomeProjeto(String nome) throws Exception{
          return projetoControl.SearchByName(nome);
      }
      

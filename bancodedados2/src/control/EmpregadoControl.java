@@ -101,21 +101,22 @@ public class EmpregadoControl
     }
     
     public void delete(String input) throws Exception
-    {
+    {/* acho que nao precisa, yuri vc decide... att caio thoams
         FuncoesControle f = new FuncoesControle();
-        /* VERIFICAR ESSA FUNCAO
+        
         if(f.verificarExistenciaEmpregado(input) == false)
         {
              throw new Exception("Erro: empregado informado nao foi encontrado");
         }
-        */
+       */ 
         IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
         empregadoDAO.delete(input);
     }
 
-    public Empregado getById(String input)
+    //o pablo tem que arrumar o empregado dao (provisorio)
+    public Empregado getById(String input) throws Exception
     {
-        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
+        IObjectDAO empregadoDAO = FactoryDAO.getFactory("NewDao");
         Empregado empregado = (Empregado) empregadoDAO.get(input);
         
         return empregado;
@@ -124,7 +125,7 @@ public class EmpregadoControl
     
     public Vector<Empregado> getAll()
     {
-        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
+        IObjectDAO empregadoDAO = FactoryDAO.getFactory("NewDao");
         ArrayList<Object> empregadosObject = (ArrayList<Object>) empregadoDAO.getAll();
         Vector<Empregado> empregados = new Vector<Empregado>();
         

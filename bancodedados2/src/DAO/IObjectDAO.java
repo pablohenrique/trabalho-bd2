@@ -17,7 +17,7 @@ public interface IObjectDAO {
      * @param Objeto
      * @return void
      */
-    public void post(Object input);
+    public void post(Object input) throws Exception;
     
     /**
      * Usado para atualizar um objeto no banco de dados
@@ -31,7 +31,7 @@ public interface IObjectDAO {
      * @param int
      * @return Object
      */
-    public Object get(Object input);
+    public Object get(Object input) throws Exception;
     
     /**
      * Usado para recuperar um objeto do banco de dados
@@ -52,6 +52,6 @@ public interface IObjectDAO {
      * @param int
      * @return void
      */
-    public void delete(Object input);
+    public void delete(Object input) throws Exception;
     
 }

@@ -73,7 +73,7 @@ public class DepartamentoControl
     }
 
 
-    public Departamento getById(int numero) {
+    public Departamento getById(int numero) throws Exception {
         IObjectDAO dao = FactoryDAO.getFactory("Departamento");
         Departamento departamento = (Departamento) dao.get(numero);
         return departamento;
@@ -96,7 +96,7 @@ public class DepartamentoControl
     }    
 
 
-    public Vector<Departamento> SearchByName(String input) {
+    public Vector<Departamento> SearchByName(String input) throws Exception {
        IObjectDAO dao = FactoryDAO.getFactory("Departamento");
        ArrayList<Object> departamentoObject = (ArrayList<Object>) dao.get(input);
        Vector<Departamento> departamento = new Vector<Departamento>();

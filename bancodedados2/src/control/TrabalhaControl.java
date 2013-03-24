@@ -76,7 +76,7 @@ public class TrabalhaControl {
 
 
 // retorn usando ssn
-    public Trabalha getById(String input) {
+    public Trabalha getById(String input) throws Exception {
         IObjectDAO trabalhaDAO = FactoryDAO.getFactory("Trabalha");
         Trabalha trabalha = (Trabalha) trabalhaDAO.get(input);
         return trabalha;

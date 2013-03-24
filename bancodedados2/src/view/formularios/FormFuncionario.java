@@ -140,7 +140,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         botoes.add(Box.createVerticalStrut(45));
         botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));
 
-        this.setTestes();
+        //this.setTestes();
         
         if(emp != null && logado == false)
             senha.setEnabled(false);
@@ -166,9 +166,10 @@ public class FormFuncionario extends JDialog implements ActionListener
         salario.setText(e.getSalarioString());
         ssn.setText(e.getSsn());
         senha.setText(e.getSenha());
-        sexo.setSelectedItem(FuncoesControle.getSexoView(e.getSexo()));
-        //supervisor.setSelectedItem(e.getSuperSsn());
-
+        sexo.setSelectedItem(e.getSexo());
+        supervisor.setSelectedItem(e.getSuperSsn());
+        departamento.setSelectedItem(e.getDepartamento());
+        
         this.setTitle("Editar Empregado");
     }    
 

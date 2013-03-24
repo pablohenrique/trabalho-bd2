@@ -16,11 +16,11 @@ import java.util.ArrayList;
  * @author pablohenrique
  */
 public class EmpregadoDAO implements IObjectDAO{
-    private final String SQL_POST = "INSERT INTO cia.empregado VALUES(?,?,?,?,?,?,?,?,?);";
-    private final String SQL_GET = "SELECT * FROM cia.empregado WHERE ssn = ?;";
+    private final String SQL_POST = "INSERT INTO cia.empregado VALUES(?,?,cia.sexoToBd(?),?,?,?,?,?,?);";
+    private final String SQL_GET = "";//"SELECT e.ssn, e.nome, cia.sexo(e.sexo) AS sexo, e.endereco, e.salario, e.datanasc, e.dno, e.superssn, e.senha FROM cia.empregado AS e WHERE e.ssn = ?;";
     private final String SQL_READ = "SELECT * FROM cia.empregado WHERE nome LIKE ?;";    
-    private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanascimento = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
-    private final String SQL_DELETE = "DELETE cia.empregado WHERE ssn = ?;";
+    private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanasc = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
+    private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
     private final String SQL_LOGIN = "SELECT login(?,?);";    
     private final String SQL_GETALL = "SELECT *, cia.sexo(e.sexo) AS sexoEmp, cia.sexo(ger.sexo) AS sexoGer, cia.sexo(s.sexo) AS sexoSuper\n" +
                                       "    FROM (((cia.empregado AS e LEFT JOIN cia.departamento\n" +
@@ -34,18 +34,23 @@ public class EmpregadoDAO implements IObjectDAO{
     
     private Object useObjectTemplate(){
         try {
+            
             Empregado output = new Empregado();
+            
+            Departamento dep = new Departamento();
+            dep.setNumero(this.rs.getInt(7));
+            
+            Empregado superssn = new Empregado();
+            superssn.setSsn(this.rs.getString(1));
+            
             output.setSsn(this.rs.getString(1));
             output.setNome(this.rs.getString(2));
             output.setSexo(this.rs.getString(3));
             output.setEndereco(this.rs.getString(4));
             output.setSalario(this.rs.getFloat(5));
             output.setDataNascimento(this.rs.getDate(6));
-            output.setDepartamento( (Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(7)) );
-            if(this.rs.getString(8) != this.rs.getString(1))
-                output.setSuperSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(8)));
-            else
-                output.setSuperSsn(null);
+            output.setDepartamento(dep);
+            output.setSuperSsn(superssn);
             output.setSenha(this.rs.getString(9));
             return output;
             
@@ -56,12 +61,13 @@ public class EmpregadoDAO implements IObjectDAO{
     }
     
     @Override
-    public void post(Object input) {
+    public void post(Object input) throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
             
             Empregado aux = (Empregado) input;
-            this.ps.setString(1,aux.getSsn());
+                        
+            this.ps.setString(1,aux.getSsn().trim());               
             this.ps.setString(2,aux.getNome());
             this.ps.setString(3,aux.getSexo());
             this.ps.setString(4,aux.getEndereco());
@@ -69,13 +75,13 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps.setDate(6,aux.getDataNascimento());
             this.ps.setInt(7,aux.getDepartamento().getNumero());
             this.ps.setString(8,aux.getSuperSsn().getSsn());
-            this.ps.setString(9,aux.getSenha());
+            this.ps.setString(9,aux.getSenha());         
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
             
-        } catch (Exception e) {
-            System.err.println("Erro ao salvar objeto:  " + e.toString() );
+        } catch (Exception e) {            
+            throw new Exception(e.getMessage().toString());
         }
     }
 
@@ -104,7 +110,7 @@ public class EmpregadoDAO implements IObjectDAO{
     }
 
     @Override
-    public Object get(Object input) {
+    public Object get(Object input) throws Exception {
         try {
             String aux = (String) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
@@ -117,9 +123,8 @@ public class EmpregadoDAO implements IObjectDAO{
             return this.useObjectTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
-            return null;
-        }
+               throw new Exception("Erro ao buscar [GET] o objeto:  " + e.toString());
+        }        
     }
     
     @Override
@@ -157,7 +162,7 @@ public class EmpregadoDAO implements IObjectDAO{
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add((Empregado) this.useObjectTemplateAll());
+            //    output.add((Empregado) this.useObjectTemplateAll());
                 
             }
             
@@ -171,7 +176,7 @@ public class EmpregadoDAO implements IObjectDAO{
             return null;
         }
     }
-    
+    /* teste, pode remover
     private Object useObjectTemplateAll()
     {
         try
@@ -227,9 +232,9 @@ public class EmpregadoDAO implements IObjectDAO{
             return null;
         }
     }
-
+*/
     @Override
-    public void delete(Object input) {
+    public void delete(Object input) throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
             this.ps.setString(1,(String) input);
@@ -238,14 +243,13 @@ public class EmpregadoDAO implements IObjectDAO{
                 throw new SQLException("Objeto nao foi deletado.");
             
         } catch (Exception e) {
-            System.err.println("Erro ao deletar objeto:  " + e.toString() );
+             throw new Exception("Erro ao deletar objeto:  " + e.toString() );
         }
     }
     
-    public int access(String user, String password)
-    {
-        try
-        {
+    public int access(String user, String password){
+        
+        try{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_LOGIN);
             this.ps.setString(1, user);
             this.ps.setString(2, password);
@@ -258,8 +262,7 @@ public class EmpregadoDAO implements IObjectDAO{
             return this.rs.getInt(1);
             
         }
-        catch (Exception e)
-        {
+        catch (Exception e){
             System.err.println("Erro ao logar usuario:  " + e.toString() );
             return -1;
         }

@@ -76,7 +76,7 @@ public class ProjetoControl  {
         }
     }
 
-    public Projeto getById(int input) 
+    public Projeto getById(int input) throws Exception 
     {
         IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
         Projeto projeto = (Projeto) projetoDAO.get(input);
@@ -102,7 +102,7 @@ public class ProjetoControl  {
     }    
 
 
-    public Vector<Projeto> SearchByName(String input) {
+    public Vector<Projeto> SearchByName(String input) throws Exception {
        IObjectDAO dao = FactoryDAO.getFactory("Projeto");
        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.get(input);
        Vector<Projeto> projeto = new Vector<Projeto>();

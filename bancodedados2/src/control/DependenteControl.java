@@ -82,7 +82,7 @@ public class DependenteControl  {
     }    
 
 
-    public Vector<Dependente> SearchByName(String input) {
+    public Vector<Dependente> SearchByName(String input) throws Exception {
        IObjectDAO dao = FactoryDAO.getFactory("Departamento");
        ArrayList<Object> dependenteObject = (ArrayList<Object>) dao.get(input);
        Vector<Dependente> dependente = new Vector<Dependente>();

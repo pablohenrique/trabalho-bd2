@@ -33,8 +33,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.formularios.FormFuncionario;
 
-public final class PainelFuncionarios extends JPanel  implements ActionListener 
-{	
+public final class PainelFuncionarios extends JPanel  implements ActionListener {	
+    
     private static final long serialVersionUID = 1L;
     private static JButton novo;
     private static JButton editar;
@@ -47,14 +47,12 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener
     public static DefaultTableModel modelo;
     public static String[] colunas;
     
-    public PainelFuncionarios()
-    {			
-        tabela = new JTable()
-        {
+    public PainelFuncionarios(){			
+        
+        tabela = new JTable(){
             private static final long serialVersionUID = 1L;
 
-            public boolean isCellEditable(int rowIndex, int vColIndex)
-            {
+            public boolean isCellEditable(int rowIndex, int vColIndex){
                     return false;
             }
         };
@@ -119,34 +117,36 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener
     }
 
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e){
         Object origem = e.getSource();	
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
                 new FormFuncionario(null, false);
-        else if (origem == editar && (item != -1))
-        {
+        else if (origem == editar && (item != -1)){
+            
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            Empregado em = Principal.cf.getEmpregadoBySsn(ssn);
-            new FormFuncionario(em, true);
+            Empregado em;
+            try {
+                em = Principal.cf.getEmpregadoBySsn(ssn);
+                new FormFuncionario(em, true);
+            } catch (Exception ex) {
+                Logger.getLogger(PainelFuncionarios.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+            
         }         
-        else if (origem == excluir  && (item != -1))
-        {
+        else if (origem == excluir  && (item != -1)) {
+            
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
             int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover empregado com Ssn "+ssn.trim()+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
             
-            if(opcao == JOptionPane.YES_OPTION)
-            {
-                try
-                {
-                    //Principal.cf.apagarEmpregado(ssn);
+            if(opcao == JOptionPane.YES_OPTION) {
+                try {
+                    Principal.cf.apagarEmpregado(ssn);
                     modelo.removeRow(item);
                     contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex){
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -166,8 +166,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener
         
     }
     
-    public static void setSizeColumn()
-    {
+    public static void setSizeColumn(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(35);
         tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(100);
@@ -180,8 +179,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener
         tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(35);        
     }
     
-    public static void setDataTable()
-    {
+    public static void setDataTable(){
         String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());        
         PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);
         PainelFuncionarios.tabela.setModel(PainelFuncionarios.modelo);                    

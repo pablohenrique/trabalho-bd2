@@ -24,6 +24,13 @@ public class NovoDao implements IObjectDAO{
 "		ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s \n" +
 "			ON e.superssn = s.ssn)\n" +
 "    ORDER BY e.nome ASC;";
+    
+    //essa retorna um elemento de acordo com id
+    private final String SQL_GET = "SELECT e.ssn AS E_ssn, e.nome AS E_nome, cia.sexo(e.sexo) AS E_sexo, e.endereco AS E_endereco, e.salario AS E_salario, e.datanasc AS E_datanasc, e.dno AS E_dno, \n" +
+                                   " e.superssn AS E_superssn, e.senha AS E_senha, s.ssn AS S_ssn, s.nome AS S_nome, cia.sexo(s.sexo) AS S_sexo, s.endereco AS S_endereco, s.salario AS S_salario,\n" +
+                                   " s.datanasc AS S_datanasc, s.dno AS S_dno, s.superssn AS S_superssn, s.senha AS S_senha, d.numero AS D_numero, d.nome AS D_nome, d.gerssn AS D_gerssn, d.gerdatainicio AS D_gerdatainicio\n" +
+                                   " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.ssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
+            
     private PreparedStatement ps;
     private ResultSet rs;
 
@@ -114,8 +121,27 @@ public class NovoDao implements IObjectDAO{
     }
 
     @Override
-    public Object get(Object input) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object get(Object input) throws Exception {
+        try {
+            String aux = (String) input;
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
+            this.ps.setString(1,aux);
+                        
+            this.rs = this.ps.executeQuery();
+            
+            this.rs.next();
+                //throw new Exception("Empregado nao encontrado.");                             
+   
+            Empregado emp = (Empregado) this.useObjectTemplateEmpregado("e_");
+            Empregado sup = (Empregado) this.useObjectTemplateEmpregado("s_");
+            Departamento dep = (Departamento)this.useObjectTemplateDepartamento("d_");
+            emp.setDepartamento(dep);
+            emp.setSuperSsn(sup);
+            
+            return emp;            
+        } catch (Exception e) {
+             throw new Exception(e.toString());
+        }        
     }
 
     @Override
