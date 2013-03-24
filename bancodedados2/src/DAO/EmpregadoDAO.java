@@ -17,17 +17,12 @@ import java.util.ArrayList;
  */
 public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO cia.empregado VALUES(?,?,cia.sexoToBd(?),?,?,?,?,?,?);";
-    private final String SQL_GET = "";//"SELECT e.ssn, e.nome, cia.sexo(e.sexo) AS sexo, e.endereco, e.salario, e.datanasc, e.dno, e.superssn, e.senha FROM cia.empregado AS e WHERE e.ssn = ?;";
+    private final String SQL_GET = "SELECT * FROM cia.empregado AS e WHERE e.ssn = ?;";
     private final String SQL_READ = "SELECT * FROM cia.empregado WHERE nome LIKE ?;";    
     private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanasc = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
-    private final String SQL_LOGIN = "SELECT login(?,?);";    
-    private final String SQL_GETALL = "SELECT *, cia.sexo(e.sexo) AS sexoEmp, cia.sexo(ger.sexo) AS sexoGer, cia.sexo(s.sexo) AS sexoSuper\n" +
-                                      "    FROM (((cia.empregado AS e LEFT JOIN cia.departamento\n" +
-                                      "             AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger\n" +
-                                      "		ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s \n" +
-                                      "		ON e.superssn = s.ssn)\n" +
-                                      "    ORDER BY e.nome ASC;";   
+    private final String SQL_LOGIN = "SELECT cia.login(?,?);";    
+    private final String SQL_GETALL = "";
     
     private PreparedStatement ps;
     private ResultSet rs;
@@ -41,7 +36,7 @@ public class EmpregadoDAO implements IObjectDAO{
             dep.setNumero(this.rs.getInt(7));
             
             Empregado superssn = new Empregado();
-            superssn.setSsn(this.rs.getString(1));
+            superssn.setSsn(this.rs.getString(8));
             
             output.setSsn(this.rs.getString(1));
             output.setNome(this.rs.getString(2));

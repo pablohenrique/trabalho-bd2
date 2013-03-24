@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -83,9 +84,14 @@ public class FormFuncionario extends JDialog implements ActionListener
         sexo = new JComboBox<String>();
         sexo.addItem("Masculino");
         sexo.addItem("Feminino");    
+                
+        Empregado superssn = new Empregado();
+        superssn.setNome("Nenhum Supervisor");
         
-        departamento = new JComboBox(Principal.cf.listarDepartamentos());        
+        departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+        
         supervisor = new JComboBox(Principal.cf.listarEmpregados());  
+        supervisor.addItem(superssn);
         
         if (emp_edit != null)
         {
@@ -167,13 +173,36 @@ public class FormFuncionario extends JDialog implements ActionListener
         ssn.setText(e.getSsn());
         senha.setText(e.getSenha());
         sexo.setSelectedItem(e.getSexo());
-        supervisor.setSelectedItem(e.getSuperSsn());
-        departamento.setSelectedItem(e.getDepartamento());
+        departamento.setSelectedIndex(this.selecionarComboBoxDep(e.getDepartamento().getNumero(), departamento));
+        
+        
+        System.out.println("ssn" + e.getSuperSsn().getSsn());
+        if(e.getSuperSsn().getSsn() != null)
+            supervisor.setSelectedIndex(this.selecionarComboBoxSup(e.getSuperSsn(), supervisor));
+        else
+            supervisor.setSelectedIndex(supervisor.getItemCount());
         
         this.setTitle("Editar Empregado");
     }    
+    
+    public int selecionarComboBoxDep(int id, JComboBox<Departamento> box){
+        for(int i=0; i < box.getItemCount(); i++)   
+            if (id == box.getItemAt(i).getNumero())
+                    return i;        
+        return -1;                
+    }
 
+    public int selecionarComboBoxSup(Empregado e, JComboBox<Empregado> box){
+        if(e == null)
+            return box.getItemCount();
         
+        for(int i=0; i < box.getItemCount(); i++)   
+            if (e.getSsn().equals(box.getItemAt(i).getSsn()))
+                    return i;        
+        
+        return box.getItemCount();
+    }
+    
     public void setTestes()
     {
         nome.setText("PABLO HENRIQUE");

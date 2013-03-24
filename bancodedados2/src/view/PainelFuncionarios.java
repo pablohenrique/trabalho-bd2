@@ -131,7 +131,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
                 em = Principal.cf.getEmpregadoBySsn(ssn);
                 new FormFuncionario(em, true);
             } catch (Exception ex) {
-                Logger.getLogger(PainelFuncionarios.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }            
             
         }         
