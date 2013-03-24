@@ -16,11 +16,11 @@ import java.util.ArrayList;
  * @author pablohenrique
  */
 public class EmpregadoDAO implements IObjectDAO{
-    private final String SQL_POST = "INSERT INTO empregado VALUES(?,?,?,?,?,?,?,?,?);";
-    private final String SQL_GET = "SELECT * FROM empregado WHERE ssn = ?;";
-    private final String SQL_READ = "SELECT * FROM empregado WHERE nome LIKE ?;";    
-    private final String SQL_UPDATE = "UPDATE empregado SET nome = ?, sexo = ?, endereco = ?, salario = ?, datanascimento = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
-    private final String SQL_DELETE = "DELETE empregado WHERE ssn = ?;";
+    private final String SQL_POST = "INSERT INTO cia.empregado VALUES(?,?,?,?,?,?,?,?,?);";
+    private final String SQL_GET = "SELECT * FROM cia.empregado WHERE ssn = ?;";
+    private final String SQL_READ = "SELECT * FROM cia.empregado WHERE nome LIKE ?;";    
+    private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanascimento = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
+    private final String SQL_DELETE = "DELETE cia.empregado WHERE ssn = ?;";
     private final String SQL_LOGIN = "SELECT login(?,?);";    
     private final String SQL_GETALL = "SELECT *, cia.sexo(e.sexo) AS sexoEmp, cia.sexo(ger.sexo) AS sexoGer, cia.sexo(s.sexo) AS sexoSuper\n" +
                                       "    FROM (((cia.empregado AS e LEFT JOIN cia.departamento\n" +
@@ -238,7 +238,7 @@ public class EmpregadoDAO implements IObjectDAO{
                 throw new SQLException("Objeto nao foi deletado.");
             
         } catch (Exception e) {
-            System.err.println("Erro ao salvar objeto:  " + e.toString() );
+            System.err.println("Erro ao deletar objeto:  " + e.toString() );
         }
     }
     

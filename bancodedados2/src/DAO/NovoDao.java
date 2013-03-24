@@ -59,7 +59,7 @@ public class NovoDao implements IObjectDAO{
             
             Empregado output = new Empregado();
             
-            output.setSsn(this.rs.getString(this.rs.findColumn(column+"ssn")));
+            output.setSsn(this.rs.getString(column+"ssn"));
             output.setNome(this.rs.getString(this.rs.findColumn(column+"nome")));
             output.setSexo(this.rs.getString(this.rs.findColumn(column+"sexo")));
             output.setEndereco(this.rs.getString(this.rs.findColumn(column+"endereco")));

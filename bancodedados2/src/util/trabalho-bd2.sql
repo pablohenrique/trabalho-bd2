@@ -117,6 +117,7 @@ INSERT INTO empregado VALUES('11011', 'CAIO THOMAS OLIVEIRA', 'M', 'RUA DA ALEGR
 INSERT INTO empregado VALUES('11012', 'RICARDO DA SILVA', 'M', 'RUA DA FELICIADE', 934.09, '1990-02-12', 1, '11011', 123);
 INSERT INTO empregado VALUES('11013', 'LUCIANA FERREIRA', 'F', 'RUA DA FELICIADE', 934.09, '1990-04-29', 1, '11011', 123);
 INSERT INTO empregado VALUES('11014', 'MARIANA DA SILVA', 'F', 'RUA DA FELICIADE', 934.09, '1990-02-12', 1, '11011', 123);
+INSERT INTO empregado VALUES('11015', 'SUELEN GIMENEZ', 'F', 'RUA JOHEN CARNEIRO', 900.00, '1989-02-12', 2, '11011', 123);
 
 INSERT INTO projeto VALUES(1, 'XML', 'FACOM', 1);
 INSERT INTO projeto VALUES(2, 'MINERACAO', 'FACOM', 1);
@@ -284,6 +285,18 @@ RETURNS VARCHAR AS $$
     END;
 $$ language 'plpgsql';
 
+CREATE OR REPLACE FUNCTION sexoToBd (sexo VARCHAR)
+RETURNS VARCHAR AS $$
+    BEGIN
+        IF(lower(sexo) = 'masculino') THEN            
+            RETURN 'M';
+        ELSEIF(lower(sexo) = 'feminino') THEN            
+            RETURN 'F';
+        END IF;
+    END;
+$$ language 'plpgsql';
+
+
 --
 --CONSULTAS BASICAS
 --
@@ -300,3 +313,15 @@ SELECT *, cia.sexo(e.sexo) AS sexoEmp, cia.sexo(ger.sexo) AS sexoGer, cia.sexo(s
 
 
 
+
+SELECT e.ssn AS E_ssn, e.nome AS E_nome, cia.sexo(e.sexo) AS E_sexo, e.endereco AS E_endereco, e.salario AS E_salario, e.datanasc AS E_datanasc, e.dno AS E_dno, 
+       e.superssn AS E_superssn, e.senha AS E_senha, s.ssn AS S_ssn, s.nome AS S_nome, cia.sexo(s.sexo) AS S_sexo, s.endereco AS S_endereco, s.salario AS S_salario,
+       s.datanasc AS S_datanasc, s.dno AS S_dno, s.superssn AS S_superssn, s.senha AS S_senha, d.numero AS D_numero, d.nome AS D_nome, d.gerssn AS D_gerssn, d.gerdatainicio AS D_gerdatainicio
+    FROM (((cia.empregado AS e LEFT JOIN cia.departamento
+		AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger
+		ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s 
+			ON e.superssn = s.ssn)
+    ORDER BY e.nome ASC;
+
+
+       

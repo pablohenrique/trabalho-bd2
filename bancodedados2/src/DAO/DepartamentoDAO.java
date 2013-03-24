@@ -16,12 +16,12 @@ import java.util.ArrayList;
  * @author pablohenrique
  */
 public class DepartamentoDAO implements IObjectDAO{
-    private final String SQL_POST = "INSERT INTO departamento VALUES(?,?,?,?);";
-    private final String SQL_GET = "SELECT * FROM departamento WHERE numero = ?;";
-    private final String SQL_READ = "SELECT * FROM departamento WHERE nome = ?;";
-    private final String SQL_GETALL = "SELECT * FROM departamento;";
-    private final String SQL_UPDATE = "UPDATE departamento SET nome = ?, gerssn = ?, gerdatainicio = ? WHERE numero = ?";
-    private final String SQL_DELETE = "DELETE FROM departamento WHERE numero = ?";
+    private final String SQL_POST = "INSERT INTO cia.departamento VALUES(?,?,?,?);";
+    private final String SQL_GET = "SELECT * FROM cia.departamento WHERE numero = ?;";
+    private final String SQL_READ = "SELECT * FROM cia.departamento WHERE nome = ?;";
+    private final String SQL_GETALL = "SELECT * FROM cia.departamento;";
+    private final String SQL_UPDATE = "UPDATE cia.departamento SET nome = ?, gerssn = ?, gerdatainicio = ? WHERE numero = ?";
+    private final String SQL_DELETE = "DELETE FROM cia.departamento WHERE numero = ?";
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -30,7 +30,8 @@ public class DepartamentoDAO implements IObjectDAO{
             Departamento output = new Departamento();
             output.setNumero(this.rs.getInt(1));
             output.setNome(this.rs.getString(2));
-            output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(3)));
+            //output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(3)));
+            output.setGerenteSsn(null);
             output.setGerenteDataInicio(this.rs.getDate(4));
             return output;
             

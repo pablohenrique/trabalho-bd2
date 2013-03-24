@@ -16,6 +16,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -123,23 +125,31 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormFuncionario(null);
+                new FormFuncionario(null, false);
         else if (origem == editar && (item != -1))
         {
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
             Empregado em = Principal.cf.getEmpregadoBySsn(ssn);
-            new FormFuncionario(em);
+            new FormFuncionario(em, true);
         }         
         else if (origem == excluir  && (item != -1))
         {
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover empregado com Ssn ("+ssn+")?","Atenção!",JOptionPane.YES_NO_OPTION);    
+            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover empregado com Ssn "+ssn.trim()+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
             
             if(opcao == JOptionPane.YES_OPTION)
             {
-                //Principal.cf. REMOVER EMPREGADO
-                modelo.removeRow(item);
-                contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
+                try
+                {
+                    //Principal.cf.apagarEmpregado(ssn);
+                    modelo.removeRow(item);
+                    contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
+                }
+                catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
             }
         }
         /*

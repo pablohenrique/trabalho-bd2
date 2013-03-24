@@ -24,28 +24,12 @@ public class EmpregadoControl
     public void post(String ssn, String nome, String sexo, String endereco, String salario, String datanasc,
                      int dno, String superssn, String senha) throws Exception
     {
-        FuncoesControle f = new FuncoesControle();
-
-        if(f.verificarExistenciaDepartamento(dno) == false)
-        {
-            throw new Exception("Departamento informado nao foi encontrado");
-        }
-        else if(f.verificarExistenciaEmpregado(superssn) == false)
-            throw new Exception("Supervisor informado nao foi encontrado");
-        else if(nome.isEmpty())
-            throw new Exception("Nome vazio!");
-        else if(salario.isEmpty())
-            throw new Exception("Salario vazio!");        
-        else if(datanasc.isEmpty())
-            throw new Exception("Data de Nascimento vazio!");                
-        else if(senha.isEmpty())
-            throw new Exception("Senha vazia!");                        
-        else
-        {
-            IObjectDAO dao0 = FactoryDAO.getFactory("Empregado"); 
-            Empregado gerente = (Empregado) dao0.get(superssn);
-            IObjectDAO dao1 = FactoryDAO.getFactory("Departamento"); 
-            Departamento departamento = (Departamento) dao1.read(dno);
+            Empregado gerente = new Empregado();
+            gerente.setSsn(superssn);
+            
+            Departamento dep = new Departamento();
+            dep.setNumero(dno);
+            
             Empregado empregado = new Empregado();
             empregado.setSsn(ssn);
             empregado.setNome(nome);
@@ -53,13 +37,14 @@ public class EmpregadoControl
             empregado.setEndereco(endereco);
             empregado.setSalario(salario);
             empregado.setDataNascimentoString(datanasc);
-            empregado.setDepartamento(departamento);
+            empregado.setDepartamento(dep);
             empregado.setSuperSsn(gerente);
             empregado.setSenha(senha);
+            
             System.out.println("empregado inserido!");
+            
             IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
             empregadoDAO.post(empregado);        
-        }
     }    
     
 
@@ -115,11 +100,15 @@ public class EmpregadoControl
         }
     }
     
-    public void delete(String input) throws Exception{
+    public void delete(String input) throws Exception
+    {
         FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaEmpregado(input) == false){
+        /* VERIFICAR ESSA FUNCAO
+        if(f.verificarExistenciaEmpregado(input) == false)
+        {
              throw new Exception("Erro: empregado informado nao foi encontrado");
         }
+        */
         IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
         empregadoDAO.delete(input);
     }

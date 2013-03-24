@@ -149,7 +149,7 @@ public class Window extends JFrame implements ActionListener
             }
             else if (origem == menuCadastroFuncionarios)
             {
-                    new FormFuncionario(null);
+                    new FormFuncionario(null, false);
             }		
     }
 }

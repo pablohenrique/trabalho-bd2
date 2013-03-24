@@ -57,7 +57,7 @@ public class FormFuncionario extends JDialog implements ActionListener
     private static JButton btnCancelar;
     private Empregado emp_edit = null;
     
-    public FormFuncionario(Empregado emp)
+    public FormFuncionario(Empregado emp, boolean logado)
     {
         super(Principal.janela,"Cadastro de Empregado", true);
         emp_edit = emp;
@@ -66,6 +66,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         ssn = new JTextField();
         salario = new JTextField();
         dataNasc = new JFormattedTextField();
+                
         
         try
         {
@@ -139,6 +140,11 @@ public class FormFuncionario extends JDialog implements ActionListener
         botoes.add(Box.createVerticalStrut(45));
         botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));
 
+        this.setTestes();
+        
+        if(emp != null && logado == false)
+            senha.setEnabled(false);
+        
         this.add(painel, BorderLayout.CENTER);
         this.add(botoes, BorderLayout.SOUTH);
         this.setSize(550, 510);
@@ -166,6 +172,18 @@ public class FormFuncionario extends JDialog implements ActionListener
         this.setTitle("Editar Empregado");
     }    
 
+        
+    public void setTestes()
+    {
+        nome.setText("PABLO HENRIQUE");
+        endereco.setText("RUA ALEGRIA");
+        dataNasc.setText("02/11/1998");
+        salario.setText("123.0");
+        ssn.setText("1111124");
+        senha.setText("SENHA");              
+    }    
+
+    
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -182,7 +200,7 @@ public class FormFuncionario extends JDialog implements ActionListener
                     
                     Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
                                                   endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
-                                                  superssn.getSsn(), new String (senha.getPassword()));   
+                                                 superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     PainelFuncionarios.setDataTable();
