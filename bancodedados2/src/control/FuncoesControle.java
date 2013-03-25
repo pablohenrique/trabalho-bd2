@@ -19,10 +19,9 @@ public class FuncoesControle {
     
     public boolean verificarExistenciaProjeto(int projetonumero)
     {
-        IObjectDAO pdao = FactoryDAO.getFactory("Projeto");
         try
         {
-            pdao.get(projetonumero);
+            FactoryDAO.getFactory("Projeto").get(projetonumero);
             return true;
         }
         catch(Exception e)
@@ -32,9 +31,8 @@ public class FuncoesControle {
     }
     
     public boolean verificarExistenciaLocalizacao(String localizacao){
-        IObjectDAO ldao = FactoryDAO.getFactory("Localizacao");
         try{
-           ldao.get(localizacao);
+           FactoryDAO.getFactory("Localizacao").get(localizacao);
            return true;
         }
         catch(Exception e)
@@ -44,9 +42,8 @@ public class FuncoesControle {
     }
     
         public boolean verificarExistenciaTrabalha(String essn){
-        IObjectDAO tdao = FactoryDAO.getFactory("Trabalha");
         try{
-           tdao.get(essn);
+           FactoryDAO.getFactory("Trabalha").get(essn);
            return true;
         }
         catch(Exception e)
@@ -56,9 +53,8 @@ public class FuncoesControle {
     }
     
     public boolean verificarExistenciaDependente(String nome_dependenete){
-        IObjectDAO ddao = FactoryDAO.getFactory("Dependente");
         try{
-            ddao.get(nome_dependenete);
+            FactoryDAO.getFactory("Dependente").get(nome_dependenete);
             return true;
         }
         catch(Exception e){
@@ -68,10 +64,9 @@ public class FuncoesControle {
         
     public boolean verificarExistenciaDepartamento(int departamentonumero)
     {
-       IObjectDAO ddao = FactoryDAO.getFactory("Departamento");
         try
         {
-            ddao.get(departamentonumero);
+            FactoryDAO.getFactory("Departamento").get(departamentonumero);
             return true;
         }
         catch(Exception e)
@@ -82,10 +77,9 @@ public class FuncoesControle {
 
     public boolean verificarExistenciaEmpregado(String ssn)
     {
-        IObjectDAO edao = FactoryDAO.getFactory("Empregado");
         try
         {
-            edao.get(ssn);
+            FactoryDAO.getFactory("Empregado").get(ssn);
             return true;
         }
         catch(Exception e)

@@ -27,16 +27,13 @@ public class TrabalhaControl {
         }else if(f.verificarExistenciaEmpregado(ssn) == false){
          throw new Exception("Erro: empregado informado nao foi encontrado");
      } else{
-        IObjectDAO dao0 = FactoryDAO.getFactory("Empregado");
-        Empregado empregado = (Empregado) dao0.read(ssn);
-        IObjectDAO dao = FactoryDAO.getFactory("Projeto");
-        Projeto projeto = (Projeto) dao0.read(projetonumero);
+        Empregado empregado = (Empregado) FactoryDAO.getFactory("Empregado").read(ssn);
+        Projeto projeto = (Projeto) FactoryDAO.getFactory("Projeto").read(projetonumero);
         Trabalha trabalha = new Trabalha();
         trabalha.setEssn(empregado);
         trabalha.setProjeto(projeto);
         trabalha.setHoras(horas);
-        IObjectDAO trabalhaDAO = FactoryDAO.getFactory("Trabalha");
-        trabalhaDAO.post(trabalha);
+        FactoryDAO.getFactory("Trabalha").post(trabalha);
         }
 
     }
@@ -49,16 +46,13 @@ public class TrabalhaControl {
         }else if(f.verificarExistenciaEmpregado(ssn) == false){
          throw new Exception("Erro: empregado informado nao foi encontrado");
      } else{
-        IObjectDAO dao0 = FactoryDAO.getFactory("Empregado");
-        Empregado empregado = (Empregado) dao0.read(ssn);
-        IObjectDAO dao = FactoryDAO.getFactory("Projeto");
-        Projeto projeto = (Projeto) dao0.read(projetonumero);
+        Empregado empregado = (Empregado) FactoryDAO.getFactory("Empregado").read(ssn);
+        Projeto projeto = (Projeto) FactoryDAO.getFactory("Projeto").read(projetonumero);
         Trabalha trabalha = new Trabalha();
         trabalha.setEssn(empregado);
         trabalha.setProjeto(projeto);
         trabalha.setHoras(horas);
-        IObjectDAO trabalhaDAO = FactoryDAO.getFactory("Trabalha");
-        trabalhaDAO.update(trabalha);
+        FactoryDAO.getFactory("Trabalha").update(trabalha);
         }
     }
     
@@ -67,8 +61,7 @@ public class TrabalhaControl {
         if(f.verificarExistenciaTrabalha(ssn) == false){
             throw new Exception("Erro: empregado informado nao foi encontrado");
         } else{
-            IObjectDAO trabalhaDAO = FactoryDAO.getFactory("Trabalha");
-            trabalhaDAO.delete(ssn);
+            FactoryDAO.getFactory("Trabalha").delete(ssn);
         }
     }
     
@@ -77,8 +70,7 @@ public class TrabalhaControl {
 
 // retorn usando ssn
     public Trabalha getById(String input) throws Exception {
-        IObjectDAO trabalhaDAO = FactoryDAO.getFactory("Trabalha");
-        Trabalha trabalha = (Trabalha) trabalhaDAO.get(input);
+        Trabalha trabalha = (Trabalha) FactoryDAO.getFactory("Trabalha").get(input);
         return trabalha;
     }
 
@@ -87,8 +79,7 @@ public class TrabalhaControl {
     
         public Vector<Trabalha> getAll()
     {
-         IObjectDAO trabalhaDAO = FactoryDAO.getFactory("Trabalha");
-        ArrayList<Object> trabalhaObject = (ArrayList<Object>) trabalhaDAO.getAll();
+        ArrayList<Object> trabalhaObject = (ArrayList<Object>) FactoryDAO.getFactory("Trabalha").getAll();
         Vector<Trabalha> trabalha = new Vector<Trabalha>();
         
         for(int i = 0 ; i < trabalhaObject.size() ; i++)
@@ -103,8 +94,7 @@ public class TrabalhaControl {
  //retorna usando projeto
     public Vector<Trabalha> SearchByName(String input)
     {
-        IObjectDAO trabalhaDAO = FactoryDAO.getFactory("Trabalha");
-        ArrayList<Object> trabalhaObject = (ArrayList<Object>) trabalhaDAO.read(input);
+        ArrayList<Object> trabalhaObject = (ArrayList<Object>) FactoryDAO.getFactory("Trabalha").read(input);
         Vector<Trabalha> trabalha = new Vector<Trabalha>();
         
         for(int i = 0 ; i < trabalhaObject.size() ; i++)

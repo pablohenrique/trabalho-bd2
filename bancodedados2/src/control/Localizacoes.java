@@ -23,13 +23,11 @@ public class Localizacoes {
         if(f.verificarExistenciaDepartamento(dnumero) == false){
             throw new Exception("Erro: departamento informado nao foi encontrado");
         }else{
-        IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-        Departamento departamento = (Departamento) dao.read(dnumero);
+        Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
         Localizacao localizacao = new Localizacao();
         localizacao.setDepartamento(departamento);
         localizacao.setNome(nome);
-        IObjectDAO localizacaoDAO = FactoryDAO.getFactory("Localizacao");
-        localizacaoDAO.post(departamento);
+        FactoryDAO.getFactory("Localizacao").post(departamento);
         }
 
 
@@ -41,21 +39,18 @@ public class Localizacoes {
         if(f.verificarExistenciaDepartamento(dnumero) == false){
            throw new Exception("Erro: departamento informado nao foi encontrado"); 
         }else{
-        IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-        Departamento departamento = (Departamento) dao.read(dnumero);
+        Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
         Localizacao localizacao = new Localizacao();
         localizacao.setDepartamento(departamento);
         localizacao.setNome(nome);
-        IObjectDAO localizacaoDAO = FactoryDAO.getFactory("Localizacao");
-        localizacaoDAO.update(departamento);
+        FactoryDAO.getFactory("Localizacao").update(departamento);
         }
     }
     
     
         public Vector<Localizacao>  getAll()
     {
-        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Localizacao");
-        ArrayList<Object> localizacaoObject = (ArrayList<Object>) empregadoDAO.getAll();
+        ArrayList<Object> localizacaoObject = (ArrayList<Object>) FactoryDAO.getFactory("Localizacao").getAll();
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         
         for(int i = 0 ; i < localizacaoObject.size() ; i++)
@@ -72,8 +67,7 @@ public class Localizacoes {
             if(f.verificarExistenciaLocalizacao(localizacao) == false){
                 throw new Exception("Erro: localizacao informado nao foi encontrado"); 
             } else{
-                IObjectDAO localizacaoDAO = FactoryDAO.getFactory("Localizacao");
-                localizacaoDAO.delete(localizacao);
+                FactoryDAO.getFactory("Localizacao").delete(localizacao);
             }
         }
 
@@ -81,8 +75,7 @@ public class Localizacoes {
     
             public Vector<Localizacao>  SearchByName(String input)
     {
-        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Localizacao");
-        ArrayList<Object> localizacaoObject = (ArrayList<Object>) empregadoDAO.read(input);
+        ArrayList<Object> localizacaoObject = (ArrayList<Object>) FactoryDAO.getFactory("Localizacao").read(input);
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         
         for(int i = 0 ; i < localizacaoObject.size() ; i++)

@@ -43,8 +43,7 @@ public class EmpregadoControl
             
             System.out.println("empregado inserido!");
             
-            IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
-            empregadoDAO.post(empregado);        
+            FactoryDAO.getFactory("Empregado").post(empregado);        
     }    
     
 
@@ -56,9 +55,8 @@ public class EmpregadoControl
             
             Departamento dep = new Departamento();
             dep.setNumero(dno);
-            
-            IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");     
-            Empregado empregadoVerifica = (Empregado) empregadoDAO.get(ssn);
+              
+            Empregado empregadoVerifica = (Empregado) FactoryDAO.getFactory("Empregado").get(ssn);
             
             float salarioAtual = empregadoVerifica.getSalario();   
             float salarioEmp = Float.parseFloat(salario);
@@ -78,7 +76,7 @@ public class EmpregadoControl
             empregado.setSenha(senha);
             
             System.out.println("empregado atualizado!");            
-            empregadoDAO.update(empregado); 
+            FactoryDAO.getFactory("Empregado").update(empregado); 
             
             if(salarioAtual !=  salarioEmp)
             {
@@ -110,8 +108,7 @@ public class EmpregadoControl
     //o pablo tem que arrumar o empregado dao (provisorio)
     public Empregado getById(String input) throws Exception
     {
-        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
-        Empregado empregado = (Empregado) empregadoDAO.get(input);
+        Empregado empregado = (Empregado) FactoryDAO.getFactory("Empregado").get(input);
         
         return empregado;
     }
@@ -119,8 +116,7 @@ public class EmpregadoControl
     
     public Vector<Empregado> getAll()
     {
-        IObjectDAO empregadoDAO = FactoryDAO.getFactory("NewDao");
-        ArrayList<Object> empregadosObject = (ArrayList<Object>) empregadoDAO.getAll();
+        ArrayList<Object> empregadosObject = (ArrayList<Object>) FactoryDAO.getFactory("NewDao").getAll();
         Vector<Empregado> empregados = new Vector<Empregado>();
         
         for(int i = 0 ; i < empregadosObject.size() ; i++)
@@ -135,8 +131,7 @@ public class EmpregadoControl
 
     public Vector<Empregado> SearchByName(String input)
     {
-        IObjectDAO empregadoDAO = FactoryDAO.getFactory("Empregado");
-        ArrayList<Object> empregadosObject = (ArrayList<Object>) empregadoDAO.read(input);
+        ArrayList<Object> empregadosObject = (ArrayList<Object>) FactoryDAO.getFactory("Empregado").read(input);
         Vector<Empregado> empregados = new Vector<Empregado>();
         
         for(int i = 0 ; i < empregadosObject.size() ; i++)

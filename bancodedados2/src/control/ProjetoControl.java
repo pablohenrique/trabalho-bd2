@@ -30,15 +30,13 @@ public class ProjetoControl  {
         }
         else
         {
-            IObjectDAO dao0 = FactoryDAO.getFactory("Departamento");
-            Departamento departamento = (Departamento) dao0.read(dnumero);
+            Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
             Projeto projeto = new Projeto();
             projeto.setNumero(numero);
             projeto.setNome(nome);
             projeto.setLocalizacao(localizacao);
             projeto.setDepartamento(departamento);
-            IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
-            projetoDAO.post(projeto);
+            FactoryDAO.getFactory("Projeto").post(projeto);
         }
     }
 
@@ -53,15 +51,13 @@ public class ProjetoControl  {
         }
         else
         {
-            IObjectDAO dao0 = FactoryDAO.getFactory("Departamento");
-            Departamento departamento = (Departamento) dao0.read(dnumero);
+            Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
             Projeto projeto = new Projeto();
             projeto.setNumero(numero);
             projeto.setNome(nome);
             projeto.setLocalizacao(localizacao);
             projeto.setDepartamento(departamento);
-            IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
-            projetoDAO.update(projeto); 
+            FactoryDAO.getFactory("Projeto").update(projeto); 
         }
 
     }
@@ -71,15 +67,13 @@ public class ProjetoControl  {
         if(f.verificarExistenciaProjeto(numero) == false){
             throw new Exception("Erro: projeto informado nao foi encontrado");
         } else{
-            IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
-            projetoDAO.delete(numero);
+            FactoryDAO.getFactory("Projeto").delete(numero);
         }
     }
 
     public Projeto getById(int input) throws Exception 
     {
-        IObjectDAO projetoDAO = FactoryDAO.getFactory("Projeto");
-        Projeto projeto = (Projeto) projetoDAO.get(input);
+        Projeto projeto = (Projeto) FactoryDAO.getFactory("Projeto").get(input);
         return projeto;
     }
 
@@ -88,8 +82,7 @@ public class ProjetoControl  {
     
         public static Vector<Projeto> getAll()
     {
-         IObjectDAO dao = FactoryDAO.getFactory("Projeto");
-         ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAll();
+         ArrayList<Object> projetoObject = (ArrayList<Object>) FactoryDAO.getFactory("Projeto").getAll();
          Vector<Projeto> projeto = new Vector<Projeto>();
          
          for(int i = 0 ; i < projetoObject.size() ; i++)
@@ -103,8 +96,8 @@ public class ProjetoControl  {
 
 
     public Vector<Projeto> SearchByName(String input) throws Exception {
-       IObjectDAO dao = FactoryDAO.getFactory("Projeto");
-       ArrayList<Object> projetoObject = (ArrayList<Object>) dao.get(input);
+
+       ArrayList<Object> projetoObject = (ArrayList<Object>) FactoryDAO.getFactory("Projeto").get(input);
        Vector<Projeto> projeto = new Vector<Projeto>();
                 for(int i = 0 ; i < projetoObject.size() ; i++)
          {

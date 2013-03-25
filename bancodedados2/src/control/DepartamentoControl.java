@@ -30,15 +30,12 @@ public class DepartamentoControl
         }
         else
         {
-            IObjectDAO dao0 = FactoryDAO.getFactory("Empregado");
-            Empregado gerente = (Empregado) dao0.read(gerssn);
-            IObjectDAO dao = FactoryDAO.getFactory("Departamento");
             Departamento departamento = new Departamento();
             departamento.setNumero(numero);
             departamento.setNome(nome);
-            departamento.setGerenteSsn(gerente);
+            departamento.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").read(gerssn));
             departamento.setGerenteDataInicio(gerdatainicio);
-            dao.post(departamento);
+            FactoryDAO.getFactory("Departamento").post(departamento);
         }
     }
 
@@ -48,15 +45,12 @@ public class DepartamentoControl
      if(f.verificarExistenciaEmpregado(gerssn) == false){
          throw new Exception("Erro: empregado informado nao foi encontrado");
      } else{
-        IObjectDAO dao0 = FactoryDAO.getFactory("Empregado");
-        Empregado gerente = (Empregado) dao0.read(gerssn);
         Departamento departamento = new Departamento();
         departamento.setNumero(numero);
         departamento.setNome(nome);
-        departamento.setGerenteSsn(gerente);
+        departamento.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").read(gerssn));
         departamento.setGerenteDataInicio(gerdatainicio);
-        IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-        dao.update(departamento);
+        FactoryDAO.getFactory("Departamento").update(departamento);
      }
 
         
@@ -67,23 +61,20 @@ public class DepartamentoControl
         if(f.verificarExistenciaDepartamento(numero) == false){
             throw new Exception("Erro: departamento informado nao foi encontrado");
         } else{  
-            IObjectDAO dao0 = FactoryDAO.getFactory("Departamento");
-            dao0.delete(numero);
+            FactoryDAO.getFactory("Departamento").delete(numero);
         }
     }
 
 
     public Departamento getById(int numero) throws Exception {
-        IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-        Departamento departamento = (Departamento) dao.get(numero);
+        Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").get(numero);
         return departamento;
     }
 
     
     public static Vector<Departamento> getAll()
     {
-         IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-         ArrayList<Object> departamentoObject = (ArrayList<Object>) dao.getAll();
+         ArrayList<Object> departamentoObject = (ArrayList<Object>) FactoryDAO.getFactory("Departamento").getAll();
          Vector<Departamento> departamento = new Vector<Departamento>();
          
          for(int i = 0 ; i < departamentoObject.size() ; i++)
@@ -97,8 +88,7 @@ public class DepartamentoControl
 
 
     public Vector<Departamento> SearchByName(String input) throws Exception {
-       IObjectDAO dao = FactoryDAO.getFactory("Departamento");
-       ArrayList<Object> departamentoObject = (ArrayList<Object>) dao.get(input);
+       ArrayList<Object> departamentoObject = (ArrayList<Object>) FactoryDAO.getFactory("Departamento").get(input);
        Vector<Departamento> departamento = new Vector<Departamento>();
                 for(int i = 0 ; i < departamentoObject.size() ; i++)
          {
