@@ -31,6 +31,9 @@ public class LocalizacaoDAO implements IObjectDAO{
             Localizacao output = new Localizacao();
             output.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(1)));
             output.setNome(this.rs.getString(2));
+            
+            System.gc();
+            
             return output;
             
         } catch (Exception e) {
@@ -46,6 +49,8 @@ public class LocalizacaoDAO implements IObjectDAO{
             Localizacao aux = (Localizacao) input;
             this.ps.setInt(1,aux.getDepartamento().getNumero());
             this.ps.setString(2,aux.getNome());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
@@ -64,6 +69,8 @@ public class LocalizacaoDAO implements IObjectDAO{
             
             this.ps.setString(1,aux.getNome());
             this.ps.setInt(2,aux.getDepartamento().getNumero());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");

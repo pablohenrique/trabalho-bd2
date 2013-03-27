@@ -6,6 +6,7 @@ package DAO;
 
 import Model.Departamento;
 import Model.Empregado;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,15 +31,29 @@ public class DepartamentoDAO implements IObjectDAO{
             Departamento output = new Departamento();
             output.setNumero(this.rs.getInt(1));
             output.setNome(this.rs.getString(2));
-            //output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(3)));
+            output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(3)));
             output.setGerenteSsn(null);
             output.setGerenteDataInicio(this.rs.getDate(4));
+            
+            System.gc();
+            
             return output;
             
         } catch (Exception e) {
             System.err.println("Erro useObjectTemplate:  " + e.toString() );
             return null;
         }
+    }
+    
+    public Object createObject(int numero, String nome, Date gerenteInicio, Empregado gerente){
+        Departamento dep = new Departamento();
+        dep.setNumero(numero);
+        dep.setNome(nome);
+        dep.setGerenteDataInicio(gerenteInicio);
+        dep.setGerenteSsn(gerente);
+        gerente.setDepartamento(dep);
+        System.gc();
+        return dep;
     }
     
     @Override
@@ -51,6 +66,8 @@ public class DepartamentoDAO implements IObjectDAO{
             this.ps.setString(2,aux.getNome());
             this.ps.setString(3,aux.getGerenteSsn().getSsn());
             this.ps.setDate(4,aux.getGerenteDataInicio());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
@@ -70,6 +87,8 @@ public class DepartamentoDAO implements IObjectDAO{
             this.ps.setString(2,aux.getGerenteSsn().getSsn());
             this.ps.setDate(3,aux.getGerenteDataInicio());
             this.ps.setInt(4,aux.getNumero());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi atualizado.");

@@ -31,6 +31,9 @@ public class ProjetoDAO implements IObjectDAO{
             output.setNome(this.rs.getString(2));
             output.setLocalizacao(this.rs.getString(3));
             output.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(4)));
+            
+            System.gc();
+            
             return output;
         } catch (Exception e) {
             System.err.println("Erro useObjectTemplate:  " + e.toString() );
@@ -48,6 +51,8 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps.setString(2,aux.getNome());
             this.ps.setString(3,aux.getLocalizacao());
             this.ps.setInt(4,aux.getDepartamento().getNumero());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
@@ -67,6 +72,8 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps.setString(1,aux.getNome());
             this.ps.setString(2,aux.getLocalizacao());
             this.ps.setInt(3,aux.getDepartamento().getNumero());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");

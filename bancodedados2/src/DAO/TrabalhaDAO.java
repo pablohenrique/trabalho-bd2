@@ -32,6 +32,9 @@ public class TrabalhaDAO implements IObjectDAO{
             output.setEssn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(1)));
             output.setProjeto((Projeto) FactoryDAO.getFactory("Projeto").get(this.rs.getInt(2)));
             output.setHoras(this.rs.getFloat(3));
+            
+            System.gc();
+            
             return output;
         } catch (Exception e) {
             System.err.println("Erro useObjectTemplate:  " + e.toString() );
@@ -48,6 +51,8 @@ public class TrabalhaDAO implements IObjectDAO{
             this.ps.setString(1,aux.getEssn().getSsn());
             this.ps.setInt(2,aux.getProjeto().getNumero());
             this.ps.setFloat(3,aux.getHoras());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
@@ -66,6 +71,8 @@ public class TrabalhaDAO implements IObjectDAO{
             this.ps.setInt(1,aux.getProjeto().getNumero());
             this.ps.setFloat(2,aux.getHoras());
             this.ps.setString(3,aux.getEssn().getSsn());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");

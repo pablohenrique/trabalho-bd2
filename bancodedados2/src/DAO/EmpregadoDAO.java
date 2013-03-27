@@ -17,36 +17,53 @@ import java.util.ArrayList;
  */
 public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO cia.empregado VALUES(?,?,cia.sexoToBd(?),?,?,?,?,?,?);";
-    private final String SQL_GET = "SELECT e.ssn, e.nome, cia.sexo(e.sexo), e.endereco, e.salario, e.datanasc, e.dno, e.superssn, e.senha FROM cia.empregado AS e WHERE e.ssn = ?;";
-    private final String SQL_READ = "SELECT * FROM cia.empregado WHERE nome LIKE ?;";    
     private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanasc = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
-    private final String SQL_LOGIN = "SELECT cia.login(?,?);";    
-    private final String SQL_GETALL = "";
+    private final String SQL_LOGIN = "SELECT cia.login(?,?);";
+    private final String SQL_GETALL = 
+"SELECT e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno," +
+" e.superssn AS e_superssn, e.senha AS e_senha, s.ssn AS s_ssn, s.nome AS s_nome, cia.sexo(s.sexo) AS s_sexo, s.endereco AS s_endereco, s.salario AS s_salario," +
+" s.datanasc AS s_datanasc, s.dno AS s_dno, s.superssn AS s_superssn, s.senha AS s_senha, d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_gerdatainicio" +
+" FROM (((cia.empregado AS e LEFT JOIN" +
+" cia.departamento AS d ON e.dno = d.numero)" +
+" LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn)" +
+" LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn)" +
+" ORDER BY e.nome ASC;";
+    private final String SQL_READ = 
+"SELECT e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno," +
+" e.superssn AS e_superssn, e.senha AS e_senha, s.ssn AS s_ssn, s.nome AS s_nome, cia.sexo(s.sexo) AS s_sexo, s.endereco AS s_endereco, s.salario AS s_salario," +
+" s.datanasc AS s_datanasc, s.dno AS s_dno, s.superssn AS s_superssn, s.senha AS s_senha, d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_gerdatainicio" +
+" FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE ? AND e.superssn = s.ssn AND e.dno = d.numero;";
+    private final String SQL_GET = 
+"SELECT e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno," +
+" e.superssn AS e_superssn, e.senha AS e_senha, s.ssn AS s_ssn, s.nome AS s_nome, cia.sexo(s.sexo) AS s_sexo, s.endereco AS s_endereco, s.salario AS s_salario," +
+" s.datanasc AS s_datanasc, s.dno AS s_dno, s.superssn AS s_superssn, s.senha AS s_senha, d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_gerdatainicio" +
+" FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.ssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object useObjectTemplate(){
+    private Object useObjectTemplate(String column){
         try {
-            
             Empregado output = new Empregado();
             
-            Departamento dep = new Departamento();
-            dep.setNumero(this.rs.getInt(7));
+            output.setSsn(this.rs.getString(column+"ssn"));
+            output.setNome(this.rs.getString(this.rs.findColumn(column+"nome")));
+            output.setSexo(this.rs.getString(this.rs.findColumn(column+"sexo")));
+            output.setEndereco(this.rs.getString(this.rs.findColumn(column+"endereco")));
+            output.setSalario(this.rs.getFloat(this.rs.findColumn(column+"salario")));
+            output.setDataNascimento(this.rs.getDate(this.rs.findColumn(column+"datanasc")));
+            output.setSenha(this.rs.getString(this.rs.findColumn(column+"senha")));
             
-            Empregado superssn = new Empregado();
-            superssn.setSsn(this.rs.getString(8));
+            if(column.equals("s_") || this.rs.getString(column+"ssn") == this.rs.getString("s_ssn"))
+                output.setSuperSsn(null);
+            else
+                output.setSuperSsn((Empregado) useObjectTemplate("s_"));
             
-            output.setSsn(this.rs.getString(1));
-            output.setNome(this.rs.getString(2));
-            output.setSexo(this.rs.getString(3));
-            output.setEndereco(this.rs.getString(4));
-            output.setSalario(this.rs.getFloat(5));
-            output.setDataNascimento(this.rs.getDate(6));
-            output.setDepartamento(dep);
-            output.setSuperSsn(superssn);
-            output.setSenha(this.rs.getString(9));
+            DepartamentoDAO dao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
+            output.setDepartamento((Departamento) dao.createObject(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getDate("d_gerdatainicio"), output));
+            
+            System.gc();
             return output;
             
         } catch (Exception e) {
@@ -72,6 +89,8 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps.setString(8,aux.getSuperSsn().getSsn());
             this.ps.setString(9,aux.getSenha());         
             
+            System.gc();
+            
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
             
@@ -96,6 +115,8 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps.setString(7,aux.getSuperSsn().getSsn());
             this.ps.setString(8,aux.getSenha());
             
+            System.gc();
+            
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");
             
@@ -110,15 +131,15 @@ public class EmpregadoDAO implements IObjectDAO{
             String aux = (String) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
             this.ps.setString(1,aux);
-            
+                        
             this.rs = this.ps.executeQuery();
-            if(!this.rs.next())
-                throw new Exception("Empregado nao encontrado.");
             
-            return this.useObjectTemplate();
+            this.rs.next();
+            
+            return this.useObjectTemplate("e_");
             
         } catch (Exception e) {
-               throw new Exception("Erro ao buscar [GET] o objeto:  " + e.toString());
+             throw new Exception(e.toString());
         }        
     }
     
@@ -135,7 +156,7 @@ public class EmpregadoDAO implements IObjectDAO{
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add((Empregado) this.useObjectTemplate());
+                output.add((Empregado) this.useObjectTemplate("e_"));
             }
             
             if(output.isEmpty())
@@ -157,8 +178,7 @@ public class EmpregadoDAO implements IObjectDAO{
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-            //    output.add((Empregado) this.useObjectTemplateAll());
-                
+                output.add((Empregado) this.useObjectTemplate("e_"));  
             }
             
             if(output.isEmpty())
@@ -171,63 +191,7 @@ public class EmpregadoDAO implements IObjectDAO{
             return null;
         }
     }
-    /* teste, pode remover
-    private Object useObjectTemplateAll()
-    {
-        try
-        {
-            Empregado emp = new Empregado();
-            
-            Empregado sssn = new Empregado();            
-            
-            Empregado ger = new Empregado();     
 
-            Departamento dep = new Departamento();
-            
-            emp.setSsn(this.rs.getString(1));
-            emp.setNome(this.rs.getString(2));
-            emp.setSexo(this.rs.getString(32));
-            emp.setEndereco(this.rs.getString(4));
-            emp.setSalario(this.rs.getFloat(5));
-            emp.setDataNascimento(this.rs.getDate(6));
-            emp.setSenha(this.rs.getString(9));            
-            
-            dep.setNumero(this.rs.getInt(10));
-            dep.setNome(this.rs.getString(11));           
-            dep.setGerenteDataInicio(this.rs.getDate(13));  
-            
-            ger.setSsn(this.rs.getString(14));
-            ger.setNome(this.rs.getString(15));
-            ger.setSexo(this.rs.getString(33));
-            ger.setEndereco(this.rs.getString(17));
-            ger.setSalario(this.rs.getFloat(18));
-            ger.setDataNascimento(this.rs.getDate(19));                           
-            ger.setDepartamento(null);
-            ger.setSuperSsn(null);
-            ger.setSenha(this.rs.getString(22)); 
-            
-            sssn.setSsn(this.rs.getString(23));
-            sssn.setNome(this.rs.getString(24));
-            sssn.setSexo(this.rs.getString(34));
-            sssn.setEndereco(this.rs.getString(26));
-            sssn.setSalario(this.rs.getFloat(27));
-            sssn.setDataNascimento(this.rs.getDate(28));            
-            sssn.setDepartamento(null);
-            sssn.setSuperSsn(null);            
-            sssn.setSenha(this.rs.getString(31)); 
-            
-            emp.setDepartamento(dep);
-            emp.setSuperSsn(sssn);
-            dep.setGerenteSsn(ger);
-                                    
-            return emp;
-            
-        } catch (Exception e) {
-            System.err.println("Erro useObjectTemplate:  " + e.toString() );
-            return null;
-        }
-    }
-*/
     @Override
     public void delete(Object input) throws Exception {
         try {

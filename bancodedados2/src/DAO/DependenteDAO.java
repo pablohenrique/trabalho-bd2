@@ -33,6 +33,9 @@ public class DependenteDAO implements IObjectDAO{
             output.setSexo(this.rs.getString(3));
             output.setDataNascimento(this.rs.getDate(4));
             output.setParentesco(this.rs.getString(5));
+            
+            System.gc();
+            
             return output;
             
         } catch (Exception e) {
@@ -53,6 +56,8 @@ public class DependenteDAO implements IObjectDAO{
             this.ps.setDate(4,aux.getDataNascimento());
             this.ps.setString(5,aux.getParentesco());
             
+            System.gc();
+            
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
             
@@ -72,6 +77,8 @@ public class DependenteDAO implements IObjectDAO{
             this.ps.setDate(3,aux.getDataNascimento());
             this.ps.setString(4,aux.getParentesco());
             this.ps.setString(5,aux.getEssn().getSsn());
+            
+            System.gc();
             
             if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi atualizado.");
