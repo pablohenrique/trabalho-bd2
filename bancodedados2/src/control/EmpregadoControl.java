@@ -108,9 +108,7 @@ public class EmpregadoControl
     //o pablo tem que arrumar o empregado dao (provisorio)
     public Empregado getById(String input) throws Exception
     {
-        Empregado empregado = (Empregado) FactoryDAO.getFactory("Empregado").get(input);
-        
-        return empregado;
+        return (Empregado) FactoryDAO.getFactory("Empregado").get(input);
     }
   
     
