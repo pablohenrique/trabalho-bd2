@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.formularios.FormFuncionario;
+import view.formularios.FormFuncionarioProjetos;
 
 public final class PainelFuncionarios extends JPanel  implements ActionListener {	
     
@@ -117,7 +118,9 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         editar.addActionListener(this);
         btnBusca.addActionListener(this);
         excluir.addActionListener(this);        
-
+        projetos.addActionListener(this);
+        dependentes.addActionListener(this);
+        
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));
         this.add(botoes, BorderLayout.SOUTH);
@@ -158,6 +161,17 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+            }
+        }
+        else if (origem == projetos)
+        {
+            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+            Empregado em;
+            try {
+                em = Principal.cf.getEmpregadoBySsn(ssn);
+                new FormFuncionarioProjetos(em);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }
         }
         /*

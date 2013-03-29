@@ -23,6 +23,7 @@ public class ProjetoDAO implements IObjectDAO{
     private final String SQL_DELETE = "DELETE FROM projeto WHERE pnumero = ?;";
     private PreparedStatement ps;
     private ResultSet rs;
+       
     
     private Object useObjectTemplate(){
         try {
