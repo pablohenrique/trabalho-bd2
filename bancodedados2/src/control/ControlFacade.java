@@ -130,6 +130,19 @@ public class ControlFacade {
         return dados; 
     }
     
+    public String[][] getDependentesTable(Vector<Dependente> list) {
+        String[][] dados = new String[list.size()][];  
+        
+        for(int i=0; i<list.size(); i++)
+        {
+            String empregado = list.get(i).getEssn().getNome();
+            String empregadoSsn = list.get(i).getEssn().getSsn();
+            
+            dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSexo(),list.get(i).getDataNascimentoString(), empregado, empregadoSsn}; 
+        }
+        
+        return dados;         
+    }    
     
     /**
      * 
@@ -450,4 +463,5 @@ public class ControlFacade {
      public void deletaTrabalha(String ssn) throws Exception{
          trabalhaControl.delete(ssn);
      }
+
 }

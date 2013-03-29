@@ -33,14 +33,22 @@ public class Window extends JFrame implements ActionListener
 
     private static JMenuItem menuCadastroFuncionarios;
     private static JMenuItem menuCadastroDepartamento;
-    private static JMenuItem menuCadastroDependentes;
+    private static JMenuItem menuCadastroDependentes;   
     private static JMenuItem menuCadastroProjetos;	
+    private static JMenuItem menuFuncionariosListar;
+    
     private static JMenuItem menuExit;
     private static JMenuItem menuInit;
     private static JMenuItem menuAbout;
 
     private static JButton btnFunc; 
     private static JButton btnDep;
+    private static JButton btnDepartamentos;
+    private static JButton btnProjetos;
+    private static JButton btnPropagandas;
+    private static JButton btnFinancas;
+    private static JButton btnCargaHoraria;
+    private static JButton btnCalculadora;
     private static CardLayout card;
 
     public Window()
@@ -51,24 +59,29 @@ public class Window extends JFrame implements ActionListener
             painelCentral = new JPanel(card);
             painelCentral.add(new PainelInit(), "inicio");
             painelCentral.add(new PainelFuncionarios(), "funcionarios");
+            painelCentral.add(new PainelDependentes(), "dependente");
 
             //menu
             JMenu arquivo = new JMenu("Arquivo");		
-            menuCadastroFuncionarios = new JMenuItem("Cadastro de Funcionarios");
-            menuCadastroDepartamento = new JMenuItem("Cadastro de Departamentos");
-            menuCadastroDependentes = new JMenuItem("Cadastro de Dependentes");
-            menuCadastroProjetos = new JMenuItem("Cadastro de Projetos");
-
+            
             menuExit = new JMenuItem("Sair");
             menuInit = new JMenuItem("Inicio");
             arquivo.add(menuInit);
             arquivo.add(new JSeparator());
-            arquivo.add(menuCadastroFuncionarios);
-            arquivo.add(menuCadastroDepartamento);
-            arquivo.add(menuCadastroDependentes);
-            arquivo.add(menuCadastroProjetos);
-            arquivo.add(new JSeparator());
             arquivo.add(menuExit);		
+            
+            JMenu funcionarios = new JMenu("Funcionarios");		
+            menuCadastroFuncionarios = new JMenuItem("Cadastro de Funcionarios");            
+            menuCadastroDependentes = new JMenuItem("Cadastro de Dependentes");
+            menuFuncionariosListar = new  JMenuItem("Listar todos Funcionarios");
+            
+            funcionarios.add(menuCadastroFuncionarios);
+            funcionarios.add(menuCadastroDependentes);
+            funcionarios.add(new JSeparator());
+            funcionarios.add(menuFuncionariosListar);
+            
+            //menuCadastroDepartamento = new JMenuItem("Cadastro de Departamentos");
+            //menuCadastroProjetos = new JMenuItem("Cadastro de Projetos");           
 
 
             JMenu ajuda = new JMenu("Ajuda");
@@ -77,13 +90,15 @@ public class Window extends JFrame implements ActionListener
 
             JMenuBar menubar = new JMenuBar();
             menubar.add(arquivo);	
+            menubar.add(funcionarios);	
             menubar.add(ajuda);
 
             //actions listerns
             menuCadastroFuncionarios.addActionListener(this);
+            menuFuncionariosListar.addActionListener(this);
             menuInit.addActionListener(this);
             menuAbout.addActionListener(this);
-            menuExit.addActionListener(this);	
+            menuExit.addActionListener(this);	            
 
 
             JToolBar barraFerramentas = new JToolBar();
@@ -92,11 +107,36 @@ public class Window extends JFrame implements ActionListener
             btnFunc = new JButton("Funcionarios");
             btnFunc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/funcionarios.png")));
             botoes.add(btnFunc);
-
+            
             btnDep = new JButton("Dependentes");
             btnDep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dependentes.png")));
-            botoes.add(btnDep);		
+            botoes.add(btnDep);	
+            
+            btnDepartamentos = new JButton("Departamentos");
+            btnDepartamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/departamento.png")));
+            botoes.add(btnDepartamentos);            
 
+            btnProjetos = new JButton("Projetos");
+            btnProjetos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/projetos.png")));
+            botoes.add(btnProjetos); 
+            
+            btnFinancas = new JButton("Financas");
+            btnFinancas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/finanacas.png")));
+            botoes.add(btnFinancas);             
+
+            btnPropagandas = new JButton("Propagandas");
+            btnPropagandas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/propagandas.png")));
+            botoes.add(btnPropagandas);   
+
+            btnCalculadora = new JButton("Calculos Salarios");
+            btnCalculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/max-min.png")));
+            botoes.add(btnCalculadora);
+            
+            
+            btnCargaHoraria = new JButton("Carga Horaria");
+            btnCargaHoraria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/carga-horaria.png")));
+            botoes.add(btnCargaHoraria);
+            
             for (JButton botao : botoes)
             {
                     botao.setVerticalTextPosition(JButton.BOTTOM);
@@ -108,7 +148,13 @@ public class Window extends JFrame implements ActionListener
 
             barraFerramentas.add(btnFunc);
             barraFerramentas.add(btnDep);
-
+            barraFerramentas.add(btnDepartamentos);
+            barraFerramentas.add(btnProjetos);
+            barraFerramentas.add(btnFinancas);
+            barraFerramentas.add(btnPropagandas);
+            barraFerramentas.add(btnCalculadora);
+            barraFerramentas.add(btnCargaHoraria);
+            
             barraFerramentas.setFloatable(false);
             barraFerramentas.setOpaque(false);		
 
@@ -143,10 +189,14 @@ public class Window extends JFrame implements ActionListener
             {
                     Window.card.show(Window.painelCentral, "inicio");
             }		
-            else if (origem == btnFunc)
+            else if (origem == btnFunc || origem == menuFuncionariosListar)
             {
                     Window.card.show(Window.painelCentral, "funcionarios");
             }
+            else if (origem == btnDep)
+            {
+                    Window.card.show(Window.painelCentral, "dependente");
+            }            
             else if (origem == menuCadastroFuncionarios)
             {
                     new FormFuncionario(null, false);

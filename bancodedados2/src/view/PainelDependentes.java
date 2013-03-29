@@ -1,10 +1,10 @@
 /*
- * PainelFuncionarios
+ * PainelDependentes
  * ---------------------------------------
  * 
  * - Esta classe representa a visao de dentro do programa
  * - Eh uma extensao de JPanel.
- * - Mostra todos funcionarios, faz pesquisa, edita, insere, exclui.
+ * - Mostra todos dependentes, faz pesquisa, edita, insere, exclui.
  * 
  */
 package view;
@@ -33,14 +33,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.formularios.FormFuncionario;
 
-public final class PainelFuncionarios extends JPanel  implements ActionListener {	
+public final class PainelDependentes extends JPanel  implements ActionListener {	
     
     private static final long serialVersionUID = 1L;
     private static JButton novo;
     private static JButton editar;
     private static JButton excluir;    
-    private static JButton dependentes;    
-    private static JButton projetos;    
     private static JTextField txtBusca;
     private static JButton btnBusca;
     private static JLabel contaRegistros;
@@ -49,7 +47,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     public static DefaultTableModel modelo;
     public static String[] colunas;
     
-    public PainelFuncionarios(){			
+    public PainelDependentes(){			
         
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
@@ -59,8 +57,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
             }
         };
 
-        colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
-                                           "Departamento", "Dno", "Supervisor", "SuperSnn"};  
+        colunas = new String [] { "Nome", "Sexo", "Data de Nascimento", "Parentesco", "Nome Empregado", "Ssn"};  
         
         this.setDataTable();
         
@@ -82,8 +79,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         novo = new JButton("Novo");
         editar = new JButton("Editar");
         excluir = new JButton("Excluir");
-        projetos = new JButton("Projetos");
-        dependentes = new JButton("Dependentes");
+                
         btnBusca = new JButton("Pesquisar");
         txtBusca = new JTextField();
         txtBusca.setPreferredSize(new Dimension(200, 24));
@@ -98,10 +94,6 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         botoes.add(editar);
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(excluir);
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(projetos);        
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(dependentes);        
         botoes.add(Box.createVerticalStrut(45));
         botoes.add(Box.createHorizontalGlue());
         botoes.add(contaRegistros);
@@ -176,21 +168,17 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     
     public static void setSizeColumn(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(35);
-        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(30);
-        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(35);
-        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(35);        
+        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(50);
+        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(50);
+        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(50);
     }
     
     public static void setDataTable(){
-        String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());        
-        PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);
-        PainelFuncionarios.tabela.setModel(PainelFuncionarios.modelo);                    
-        PainelFuncionarios.setSizeColumn();        
+        String[][] dados = Principal.cf.getDependentesTable(Principal.cf.listarDependentes());        
+        PainelDependentes.modelo = new DefaultTableModel(dados, PainelDependentes.colunas);
+        PainelDependentes.tabela.setModel(PainelDependentes.modelo);                    
+        PainelDependentes.setSizeColumn();        
     }
 }

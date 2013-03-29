@@ -4,6 +4,7 @@
  */
 package Model;
 
+import control.FuncoesControle;
 import java.sql.Date;
 /**
  *
@@ -79,6 +80,11 @@ public class Dependente {
         return datanascimento;
     }
 
+    public String getDataNascimentoString()
+    {
+        return FuncoesControle.converteData(datanascimento);
+    }
+    
     /**
      * @param datanascimento the datanascimento to set
      */

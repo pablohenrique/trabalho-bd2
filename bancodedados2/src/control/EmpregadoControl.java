@@ -31,7 +31,7 @@ public class EmpregadoControl
             dep.setNumero(dno);
             
             Empregado empregado = new Empregado();
-            empregado.setSsn(ssn);
+            empregado.setSsn(ssn.trim());
             empregado.setNome(nome);
             empregado.setSexo(sexo);
             empregado.setEndereco(endereco);
@@ -114,7 +114,7 @@ public class EmpregadoControl
     
     public Vector<Empregado> getAll()
     {
-        ArrayList<Object> empregadosObject = (ArrayList<Object>) FactoryDAO.getFactory("NewDao").getAll();
+        ArrayList<Object> empregadosObject = (ArrayList<Object>) FactoryDAO.getFactory("Empregado").getAll();
         Vector<Empregado> empregados = new Vector<Empregado>();
         
         for(int i = 0 ; i < empregadosObject.size() ; i++)
