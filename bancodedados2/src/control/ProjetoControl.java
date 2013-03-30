@@ -94,12 +94,41 @@ public class ProjetoControl  {
          
          return projeto;
     }    
-
         
-    public static Vector<Projeto> getAllBy(String ssn) {
+        public static Vector<Projeto> getAllByDepNome(String nomeDepto) {
         ProjetoDAO dao = new ProjetoDAO();
         
-        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllBy(ssn);
+        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllDep(nomeDepto);
+        Vector<Projeto> projeto = new Vector<Projeto>();
+         
+        for(int i = 0 ; i < projetoObject.size() ; i++){
+            Projeto p = (Projeto) projetoObject.get(i);             
+            projeto.add(p);
+         }
+        
+        return projeto;
+    }   
+        
+    public static Vector<Projeto> getAllByDepNumero(int depnumero) {
+        ProjetoDAO dao = new ProjetoDAO();
+
+        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllDep(depnumero);
+        Vector<Projeto> projeto = new Vector<Projeto>();
+
+        for (int i = 0; i < projetoObject.size(); i++) {
+            Projeto p = (Projeto) projetoObject.get(i);
+            projeto.add(p);
+        }
+
+        return projeto;
+    }
+   
+
+        
+    public static Vector<Projeto> getAllByEmp(String ssn) {
+        ProjetoDAO dao = new ProjetoDAO();
+        
+        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllEmp(ssn);
         Vector<Projeto> projeto = new Vector<Projeto>();
          
         for(int i = 0 ; i < projetoObject.size() ; i++){

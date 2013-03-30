@@ -339,9 +339,39 @@ public class ControlFacade {
         return projetoControl.getAll();
     }
     
-    public Vector<Projeto> listarProjetosBy(String ssn){
-        return projetoControl.getAllBy(ssn);
-    }  
+    /**
+     * 
+     * @param ssn
+     * @return Vector<Projeto>
+     * retorn todos os projetos de um ssn
+     */
+    public Vector<Projeto> listarProjetosByEmp(String ssn) {
+        return projetoControl.getAllByEmp(ssn);
+    }
+
+    /**
+     * 
+     * @param nomedepto
+     * @return Vector<Projeto>
+     * retorna todos os projetos de acordo com o nome do departamento 
+     */
+    public Vector<Projeto> listarProjetosByNomeDepto(String nomedepto) {
+        return projetoControl.getAllByDepNome(nomedepto);
+    }
+
+    /**
+     * 
+     * @param numero
+     * @return Vector<Projeto>
+     * retorna todos os projetos de acordo com o numero do departamento 
+     */
+    public Vector<Projeto> listarProjetosByNumeroDepto(int numero) {
+        return projetoControl.getAllByDepNumero(numero);
+    }
+
+    
+    
+    
 
     public String[][] getProjetoBySsn(Vector<Projeto> list)
     {
