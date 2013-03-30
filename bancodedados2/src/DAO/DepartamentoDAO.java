@@ -29,7 +29,7 @@ public class DepartamentoDAO implements IObjectDAO{
     private final String SQL_GET = BEFORECOND + " WHERE d.numero = ?" + AFTERCOND;
     private final String SQL_READ = BEFORECOND + " WHERE d.nome = ?" + AFTERCOND;
     private final String SQL_GETGER = BEFORECOND + " WHERE d.gerssn = ?" + AFTERCOND;
-    private final String SQL_GETALL = BEFORECOND + "WHERE d.gerssn = e.ssn;";
+    private final String SQL_GETALL = BEFORECOND + " WHERE d.gerssn = e.ssn;";
     
     private PreparedStatement ps;
     private ResultSet rs;
