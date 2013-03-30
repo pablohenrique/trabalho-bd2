@@ -91,11 +91,12 @@ public class FormFuncionario extends JDialog implements ActionListener
         
         supervisor = new JComboBox(Principal.cf.listarEmpregados());  
         supervisor.addItem(superssn);
-        
+                        
         if (emp_edit != null)
-        {
+        {            
             try
             {
+                System.out.println("EMPREGADO "+ emp.getNome());
                 this.editarEmpregado(emp_edit);
             }
             catch (Exception ex)

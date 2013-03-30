@@ -45,7 +45,7 @@ public class DepartamentoDAO implements IObjectDAO{
             
             EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
-            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, output);
+            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, output);
             
             if(output.getGerenteSsn() == null)
                 output.setGerenteSsn(emp);

@@ -132,6 +132,9 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         else if (origem == editar && (item != -1)){
             
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+            
+            System.out.println("SSN " + ssn);
+            
             Empregado em;
             try {
                 em = Principal.cf.getEmpregadoBySsn(ssn);
@@ -196,7 +199,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     }
     
     public static void setDataTable(){
-        String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());        
+        String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());                         
         PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);
         PainelFuncionarios.tabela.setModel(PainelFuncionarios.modelo);                    
         PainelFuncionarios.setSizeColumn();        
