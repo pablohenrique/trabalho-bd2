@@ -125,7 +125,7 @@ public class ProjetoControl  {
    
 
         
-    public static Vector<Projeto> getAllByEmp(String ssn) {
+    public static Vector<Projeto> getAllByEmp(String ssn) throws Exception {
         ProjetoDAO dao = new ProjetoDAO();
         
         ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllEmp(ssn);

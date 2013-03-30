@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class ProjetoDAO implements IObjectDAO{
     private final String BEFORECOND = 
 " p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao," +
-" d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio" +
+" d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, " +
 "e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha" +
 " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
     
@@ -49,7 +49,7 @@ public class ProjetoDAO implements IObjectDAO{
             Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));
             
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
-            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, dep);
+            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
             
             System.gc();
             return output;
@@ -197,7 +197,7 @@ public class ProjetoDAO implements IObjectDAO{
         }
     }
     
-    public ArrayList<Object> getAllEmp(String ssn) {
+    public ArrayList<Object> getAllEmp(String ssn) throws Exception{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLEMP);
             this.ps.setString(1, ssn);
@@ -206,8 +206,7 @@ public class ProjetoDAO implements IObjectDAO{
             return this.getAllTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
-            return null;
+            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
         }
     }
 

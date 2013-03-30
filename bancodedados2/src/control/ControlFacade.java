@@ -357,7 +357,7 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorn todos os projetos de um ssn
      */
-    public Vector<Projeto> listarProjetosByEmp(String ssn) {
+    public Vector<Projeto> listarProjetosByEmp(String ssn) throws Exception{
         return projetoControl.getAllByEmp(ssn);
     }
 
@@ -381,17 +381,13 @@ public class ControlFacade {
         return projetoControl.getAllByDepNumero(numero);
     }
 
-    
-    
-    
-
+            
     public String[][] getProjetoBySsn(Vector<Projeto> list)
-    {
+    {     
         String[][] dados = new String[list.size()][];  
-
+                        
         for(int i=0; i<list.size(); i++)
-        {            
-        
+        {                
             dados[i] = new String[] {list.get(i).getNome(), Integer.toString(list.get(i).getNumero()), list.get(i).getLocalizacao(), 
                                      list.get(i).getDepartamento().getNome(), Integer.toString(list.get(i).getDepartamento().getNumero())}; 
         }

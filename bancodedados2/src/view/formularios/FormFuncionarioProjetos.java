@@ -65,7 +65,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         btnCancelar = new JButton("Cancelar");
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnCancelar.setPreferredSize(new Dimension(100, 25));
-        emp = e;
+        emp = e;                
         
         btnOK.addActionListener(this);
         btnCancelar.addActionListener(this);
@@ -75,7 +75,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        grid.setLayout(new GridLayout(6, 2, 5, 5));
+        grid.setLayout(new GridLayout(4, 2, 5, 5));
         grid.add(nome);
         grid.add(new JLabel(e.getNome()));
         grid.add(new JLabel("Seguridade Social: "));
@@ -84,10 +84,6 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         grid.add(new JLabel(e.getDepartamento().getNome()));
         grid.add(new JLabel("Supervisor: "));
         grid.add(new JLabel(e.getSuperSsn().getNome()));
-        grid.add(new JLabel("Carga Horaria Total: "));
-        grid.add(new JLabel("100"));
-        grid.add(new JLabel("Qtd. de Projetos: "));
-        grid.add(new JLabel("100"));
         
         nome.setPreferredSize(new Dimension(250, 25));
         
@@ -176,11 +172,20 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(80);
         tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(200);
         tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(200);        
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(200);        
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(50);        
     }
     
     public static void setDataTableFuncionariosProjetos(){
-        //String[][] dados = Principal.cf.getProjetoBySsn(Principal.cf.listarProjetosBy(emp.getSsn()));        
-        FormFuncionarioProjetos.modelo = new DefaultTableModel(null, FormFuncionarioProjetos.colunas);
+        String[][] dados = null;    
+        
+        try {
+            dados = Principal.cf.getProjetoBySsn(Principal.cf.listarProjetosByEmp(emp.getSsn()));                        
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        FormFuncionarioProjetos.modelo = new DefaultTableModel(dados, FormFuncionarioProjetos.colunas);
         FormFuncionarioProjetos.tabela.setModel(FormFuncionarioProjetos.modelo);                    
         FormFuncionarioProjetos.setSizeColumnFuncionariosProjetos();        
     }    

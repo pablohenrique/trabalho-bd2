@@ -53,7 +53,7 @@ CREATE TABLE empregado (
     salario numeric(10,2),
     datanasc date,
     dno integer NOT NULL,
-    superssn character(9),
+    superssn character(9) NOT NULL,
     senha character(15) NOT NULL
 );
 
