@@ -226,6 +226,18 @@ public class ControlFacade {
         departamentoControl.delete(numero);
     }
     
+    /**
+     * 
+     * @param gerssn
+     * @return Departamento
+     * @throws Exception 
+     * retorna departamento que possui gerente com ssn informado
+     */
+    public Departamento getDepartamentoByGerente(String gerssn) throws Exception{
+        Departamento departamento = departamentoControl.getByGer(gerssn);
+        return departamento;
+    }
+    
     
      /**
      * Funcoes de dependente
@@ -513,10 +525,7 @@ public class ControlFacade {
          trabalhaControl.delete(ssn);
      }
 
-    public ComboBoxModel listarProjetosByDep(int numero) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        //gostaria de LISTAR PROJETOS BY DEPARTAMENTO
-    }
+
 
    
 }

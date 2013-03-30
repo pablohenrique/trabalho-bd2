@@ -4,6 +4,7 @@
  */
 package control;
 
+import DAO.DepartamentoDAO;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Departamento;
@@ -68,6 +69,12 @@ public class DepartamentoControl
 
     public Departamento getById(int numero) throws Exception {
         Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").get(numero);
+        return departamento;
+    }
+    
+        public Departamento getByGer(String gerssn) throws Exception {
+            DepartamentoDAO dao = new DepartamentoDAO();
+        Departamento departamento = (Departamento) dao.getGer(gerssn);
         return departamento;
     }
 
