@@ -6,6 +6,7 @@ package DAO;
 
 import Model.Departamento;
 import Model.Empregado;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,29 +17,22 @@ import java.util.ArrayList;
  * @author pablohenrique
  */
 public class EmpregadoDAO implements IObjectDAO{
+    private final String BEFORECOND = 
+"SELECT e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno," +
+" e.superssn AS e_superssn, e.senha AS e_senha, s.ssn AS s_ssn, s.nome AS s_nome, cia.sexo(s.sexo) AS s_sexo, s.endereco AS s_endereco, s.salario AS s_salario," +
+" s.datanasc AS s_datanasc, s.dno AS s_dno, s.superssn AS s_superssn, s.senha AS s_senha, d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_gerdatainicio";
+    
     private final String SQL_POST = "INSERT INTO cia.empregado VALUES(?,?,cia.sexoToBd(?),?,?,?,?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanasc = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
     private final String SQL_LOGIN = "SELECT cia.login(?,?);";
-    private final String SQL_GETALL = 
-"SELECT e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno," +
-" e.superssn AS e_superssn, e.senha AS e_senha, s.ssn AS s_ssn, s.nome AS s_nome, cia.sexo(s.sexo) AS s_sexo, s.endereco AS s_endereco, s.salario AS s_salario," +
-" s.datanasc AS s_datanasc, s.dno AS s_dno, s.superssn AS s_superssn, s.senha AS s_senha, d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_gerdatainicio" +
-" FROM (((cia.empregado AS e LEFT JOIN" +
+    private final String SQL_GET = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.ssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
+    private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE ? AND e.superssn = s.ssn AND e.dno = d.numero;";
+    private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN" +
 " cia.departamento AS d ON e.dno = d.numero)" +
 " LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn)" +
 " LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn)" +
 " ORDER BY e.nome ASC;";
-    private final String SQL_READ = 
-"SELECT e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno," +
-" e.superssn AS e_superssn, e.senha AS e_senha, s.ssn AS s_ssn, s.nome AS s_nome, cia.sexo(s.sexo) AS s_sexo, s.endereco AS s_endereco, s.salario AS s_salario," +
-" s.datanasc AS s_datanasc, s.dno AS s_dno, s.superssn AS s_superssn, s.senha AS s_senha, d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_gerdatainicio" +
-" FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE ? AND e.superssn = s.ssn AND e.dno = d.numero;";
-    private final String SQL_GET = 
-"SELECT e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno," +
-" e.superssn AS e_superssn, e.senha AS e_senha, s.ssn AS s_ssn, s.nome AS s_nome, cia.sexo(s.sexo) AS s_sexo, s.endereco AS s_endereco, s.salario AS s_salario," +
-" s.datanasc AS s_datanasc, s.dno AS s_dno, s.superssn AS s_superssn, s.senha AS s_senha, d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_gerdatainicio" +
-" FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.ssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     
     private PreparedStatement ps;
     private ResultSet rs;
@@ -46,14 +40,13 @@ public class EmpregadoDAO implements IObjectDAO{
     private Object useObjectTemplate(String column){
         try {
             Empregado output = new Empregado();
-            
             output.setSsn(this.rs.getString(column+"ssn"));
-            output.setNome(this.rs.getString(this.rs.findColumn(column+"nome")));
-            output.setSexo(this.rs.getString(this.rs.findColumn(column+"sexo")));
-            output.setEndereco(this.rs.getString(this.rs.findColumn(column+"endereco")));
-            output.setSalario(this.rs.getFloat(this.rs.findColumn(column+"salario")));
-            output.setDataNascimento(this.rs.getDate(this.rs.findColumn(column+"datanasc")));
-            output.setSenha(this.rs.getString(this.rs.findColumn(column+"senha")));
+            output.setNome(this.rs.getString(column+"nome"));
+            output.setSexo(this.rs.getString(column+"sexo"));
+            output.setEndereco(this.rs.getString(column+"endereco"));
+            output.setSalario(this.rs.getFloat(column+"salario"));
+            output.setDataNascimento(this.rs.getDate(column+"datanasc"));
+            output.setSenha(this.rs.getString(column+"senha"));
             
             if(column.equals("s_") || this.rs.getString(column+"ssn") == this.rs.getString("s_ssn"))
                 output.setSuperSsn(null);
@@ -67,9 +60,27 @@ public class EmpregadoDAO implements IObjectDAO{
             return output;
             
         } catch (Exception e) {
-            System.err.println("Erro useObjectTemplate:  " + e.toString() );
+            System.err.println("Erro [EMPR] useObjectTemplate:  " + e.toString() );
             return null;
         }
+    }
+    
+    public Object createObject(String ssn, String nome, String sexo, String endereco, Float salario, Date datanascimento, String senha, Empregado superssn, Departamento departamento){
+        Empregado emp = new Empregado();
+        emp.setSsn(ssn);
+        emp.setNome(nome);
+        emp.setSexo(sexo);
+        emp.setEndereco(endereco);
+        emp.setSalario(salario);
+        emp.setDataNascimento(datanascimento);
+        emp.setSenha(senha);
+        emp.setSuperSsn(superssn);
+        emp.setDepartamento(departamento);
+        if(departamento.getGerenteSsn() == null)
+            departamento.setGerenteSsn(emp);
+        
+        System.gc();
+        return emp;
     }
     
     @Override
@@ -171,10 +182,10 @@ public class EmpregadoDAO implements IObjectDAO{
     }
 
     @Override
-    public Object getAll() {
+    public ArrayList<Object> getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Empregado> output = new ArrayList<>();
+            ArrayList<Object> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){

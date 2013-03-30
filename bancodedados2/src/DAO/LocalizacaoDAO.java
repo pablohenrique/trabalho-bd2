@@ -5,42 +5,60 @@
 package DAO;
 
 import Model.Departamento;
+import Model.Empregado;
+import Model.Localizacao;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import Model.Localizacao;
-import Model.Projeto;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
  * @author pablohenrique
  */
 public class LocalizacaoDAO implements IObjectDAO{
+    private final String BEFORECOND = 
+"SELECT l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero,"+
+" d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio"+
+" FROM cia.dept_localizacao AS l, cia.departamento AS d";
+    private final String AFTERCOND = "l.departamento_numero = d.numero;";
     private final String SQL_POST = "INSERT INTO dept_localizacao VALUES(?,?);";
-    private final String SQL_GET = "SELECT * FROM dept_localizacao WHERE departamento_numero = ?;";
-    private final String SQL_READ = "SELECT * FROM dept_localizacao WHERE dlocalizacao = ?;";
-    private final String SQL_GETALL = "SELECT * FROM dept_localizacao;";
     private final String SQL_UPDATE = "UPDATE dept_localizacao SET dlocalizacao = ? WHERE departamento_numero = ?;";
     private final String SQL_DELETE = "DELETE FROM dept_localizacao WHERE dlocalizacao = ?;";
+    private final String SQL_GET = BEFORECOND + " WHERE d.numero = ? " + AFTERCOND;
+    private final String SQL_READ = BEFORECOND + " WHERE l.dlocalizacao LIKE ? " + AFTERCOND;
+    private final String SQL_GETALL = BEFORECOND + " WHERE " + AFTERCOND;
     private PreparedStatement ps;
     private ResultSet rs;
     
     private Object useObjectTemplate(){
         try {
+            DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
+            
             Localizacao output = new Localizacao();
-            output.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(1)));
-            output.setNome(this.rs.getString(2));
+            output.setNome(this.rs.getString("l_localizacao"));
+            output.setDepartamento((Departamento) depdao.createObject(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getDate("d_dataInicio"), (Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("d_gerssn"))));
             
             System.gc();
-            
             return output;
             
         } catch (Exception e) {
-            System.err.println("Erro useObjectTemplate:  " + e.toString() );
+            System.err.println("Erro [LOCA] useObjectTemplate:  " + e.toString() );
             return null;
         }
     }
+    
+    private ArrayList<Object> getAllTemplate() throws SQLException{
+        ArrayList<Object> output = new ArrayList<>();
+            
+        while(this.rs.next())
+            output.add((Localizacao) this.useObjectTemplate());
+
+        if(output.isEmpty())
+            throw new ArrayStoreException("Nao houve objetos encontrados.");
+        return output;
+    }
+    
     @Override
     public void post(Object input) {
         try {
@@ -99,12 +117,12 @@ public class LocalizacaoDAO implements IObjectDAO{
     @Override
     public Object read(Object input) {
         try {
-            String aux = (String) input;
+            String aux = "'%" + (String) input + "%'";
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
-            
             this.rs = this.ps.executeQuery();
-            return this.useObjectTemplate();
+            
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -113,19 +131,12 @@ public class LocalizacaoDAO implements IObjectDAO{
     }
 
     @Override
-    public Object getAll() {
+    public ArrayList<Object> getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Localizacao> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(rs.next()){
-                output.add((Localizacao) this.useObjectTemplate());
-            }
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            return output;
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GETALL] o objeto:  " + e.toString() );

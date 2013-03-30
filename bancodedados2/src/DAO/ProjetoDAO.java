@@ -16,39 +16,71 @@ import java.sql.SQLException;
  * @author pablohenrique
  */
 public class ProjetoDAO implements IObjectDAO{
+    private final String BEFORECOND = 
+" p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao," +
+" d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio" +
+"e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha" +
+" FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
+    
     private final String SQL_POST = "INSERT INTO projeto VALUES(?,?,?,?);";
-    private final String SQL_GET = "SELECT * FROM projeto WHERE pnumero = ?;";
-    private final String SQL_READ = "SELECT * FROM projeto WHERE pjnome = ?;";
-    private final String SQL_GETALL = "SELECT * FROM projeto;";
     private final String SQL_UPDATE = "UPDATE projeto SET pjnome = ?, plocalizacao = ?, dnum = ? WHERE pnumero = ?;";
     private final String SQL_DELETE = "DELETE FROM projeto WHERE pnumero = ?;";
-    private final String SQL_GET_BY_DEP = "SELECT p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, d.numero AS d_numero,\n" +
-                                          " d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio\n" +
-                                          " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t\n" +
-                                          " WHERE e.ssn = t.essn AND\n" +
-                                          " t.pjnumero = p.pnumero AND\n" +
-                                          " p.dnum = d.numero AND\n" +
-                                          " e.ssn = ?;";
+    private final String SQL_GET = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE p.pnumero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
+    private final String SQL_READ = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE p.pjnome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
+    private final String SQL_GETALL = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.gerssn = e.ssn AND t.pjnumero = p.pnumero AND d.numero = p.dnum";
+    private final String SQL_GETALLDEPNOME = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + "WHERE d.nome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
+    private final String SQL_GETALLDEPNUMERO = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + "WHERE d.numero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
+    private final String SQL_GETALLEMP = "SELECT " + BEFORECOND + " WHERE e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero AND e.ssn = ? ORDER BY t.horas ASC;";
+    
     private PreparedStatement ps;
     private ResultSet rs;
            
-    private Object useObjectTemplate(String column){
+    private Object useObjectTemplate(){
         try {
+            String column = "p_";
             Projeto output = new Projeto();
-            output.setNumero(this.rs.getInt(rs.findColumn(column+"numero")));
-            output.setNome(this.rs.getString(rs.findColumn(column+"nome")));
-            output.setLocalizacao(this.rs.getString(rs.findColumn(column+"localizacao")));
+            output.setNumero(this.rs.getInt(column+"numero"));
+            output.setNome(this.rs.getString(column+"nome"));
+            output.setLocalizacao(this.rs.getString(column+"localizacao"));
             
-            DepartamentoDAO dep = new DepartamentoDAO();
-            output.setDepartamento((Departamento) dep.useObjectTemplate("d_"));
+            EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
+            DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
+            
+            Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));
+            
+            Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
+            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, dep);
             
             System.gc();
-            
             return output;
+            
         } catch (Exception e) {
-            System.err.println("Erro useObjectTemplate:  " + e.toString() );
+            System.err.println("Erro [PROJ] useObjectTemplate:  " + e.toString() );
             return null;
         }
+    }
+    
+    private ArrayList<Object> getAllTemplate() throws SQLException{
+        ArrayList<Object> output = new ArrayList<>();
+        while(this.rs.next())
+            output.add((Projeto) this.useObjectTemplate());            
+
+        if(output.isEmpty())
+            throw new ArrayStoreException("Nao houve objetos encontrados.");
+        
+        return output;
+    }
+    
+    public Object createObject(int numero, String nome, String localizacao, Departamento departamento){
+        Projeto pro = new Projeto();
+        pro.setNumero(numero);
+        pro.setNome(nome);
+        pro.setLocalizacao(localizacao);
+        pro.setDepartamento(departamento);
+        
+        System.gc();
+        
+        return pro;
     }
 
     @Override
@@ -100,7 +132,7 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
             this.ps.setInt(1,aux);
             this.rs = this.ps.executeQuery();
-            return this.useObjectTemplate("");
+            return this.useObjectTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -115,7 +147,7 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
-            return this.useObjectTemplate("");
+            return this.useObjectTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -124,19 +156,12 @@ public class ProjetoDAO implements IObjectDAO{
     }
 
     @Override
-    public Object getAll() {
+    public ArrayList<Object> getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Projeto> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(rs.next()){
-                output.add((Projeto) this.useObjectTemplate(""));
-            }
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            return output;
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
@@ -144,26 +169,47 @@ public class ProjetoDAO implements IObjectDAO{
         }
     }
     
-    public Object getAllBy(String essn) {
+    public ArrayList<Object> getAllDep(int numero) {
         try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET_BY_DEP);
-            ArrayList<Projeto> output = new ArrayList<Projeto>();
-            
-            this.ps.setString(1, essn);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLDEPNUMERO);
+            this.ps.setInt(1, numero);
             this.rs = this.ps.executeQuery();
-
-            while(rs.next())
-                output.add((Projeto) this.useObjectTemplate("p_"));            
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            return output;
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
             return null;
         }
-    }    
+    }
+    
+    public ArrayList<Object> getAllDep(String nome) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLDEPNOME);
+            this.ps.setString(1, nome);
+            this.rs = this.ps.executeQuery();
+
+            return this.getAllTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public ArrayList<Object> getAllEmp(String ssn) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLEMP);
+            this.ps.setString(1, ssn);
+            this.rs = this.ps.executeQuery();
+
+            return this.getAllTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
+        }
+    }
 
     @Override
     public void delete(Object input) {

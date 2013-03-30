@@ -4,6 +4,7 @@
  */
 package DAO;
 
+import Model.Departamento;
 import Model.Dependente;
 import Model.Empregado;
 import java.sql.PreparedStatement;
@@ -15,33 +16,58 @@ import java.util.ArrayList;
  * @author pablohenrique
  */
 public class DependenteDAO implements IObjectDAO{
+    private final String BEFORECOND = 
+"SELECT d.nome_dependente AS d_nomedependente, d.essn AS d_essn, cia.sexo(d.sexo) AS d_sexo, d.datanasc AS d_datanascimento, d.parentesco AS d_parentesco,"+
+" e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha"+
+" FROM cia.dependentes AS d, cia.empregado AS e";
+    private final String AFTERCOND = " AND d.essn = e.ssn ORDER BY d.nome_dependente ASC";
+    
     private final String SQL_POST = "INSERT INTO cia.dependentes VALUES(?,?,?,?,?);";
-    private final String SQL_GET = "SELECT * FROM cia.dependentes WHERE essn = ?;";
-    private final String SQL_READ = "SELECT * FROM cia.dependentes WHERE nome = ?;";
-    private final String SQL_GETALL = "SELECT * FROM cia.dependentes;";
     private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = ?, datanasc = ?, parentesco = ? WHERE essn = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE nome_dependente = ?;";
+    private final String SQL_GET = BEFORECOND + " WHERE d.essn = ?" + AFTERCOND;
+    private final String SQL_READ = BEFORECOND +  " WHERE d.nome LIKE ?" + AFTERCOND;
+    private final String SQL_GETALL = BEFORECOND + " WHERE d.essn = e.ssn ORDER BY d.nome_dependente ASC";
     private PreparedStatement ps;
     private ResultSet rs;
     
     private Object useObjectTemplate(){
         try {
-            Dependente output = new Dependente();
+            String column = "d_";
+                        
+            EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
+            DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
             
-            output.setNome(this.rs.getString(1));
-            output.setEssn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(2)));
-            output.setSexo(this.rs.getString(3));
-            output.setDataNascimento(this.rs.getDate(4));
-            output.setParentesco(this.rs.getString(5));
+            Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));
+            
+            Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
+            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, dep);
+            
+            Dependente output = new Dependente();
+            output.setNome(this.rs.getString(column+"nome"));
+            output.setSexo(this.rs.getString(column+"sexo"));
+            output.setDataNascimento(this.rs.getDate(column+"datanascimento"));
+            output.setParentesco(this.rs.getString(column+"parentesco"));
+            output.setEssn(emp);
             
             System.gc();
-            
             return output;
             
         } catch (Exception e) {
-            System.err.println("Erro useObjectTemplate:  " + e.toString() );
+            System.err.println("Erro [DEPE] useObjectTemplate:  " + e.toString() );
             return null;
         }
+    }
+    
+    private ArrayList<Object> getAllTemplate() throws SQLException{
+        ArrayList<Object> output = new ArrayList<>();
+        while(this.rs.next())
+            output.add((Dependente) this.useObjectTemplate());
+
+        if(output.isEmpty())
+            throw new ArrayStoreException("Nao houve objetos encontrados.");
+        
+        return output;
     }
 
     @Override
@@ -94,12 +120,9 @@ public class DependenteDAO implements IObjectDAO{
             String aux = (String) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
             this.ps.setString(1,aux);
-            
             this.rs = this.ps.executeQuery();
-            if(!this.rs.next())
-                throw new Exception("Dependente nao encontrado.");
             
-            return this.useObjectTemplate();
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -110,21 +133,11 @@ public class DependenteDAO implements IObjectDAO{
     @Override
     public Object read(Object input) {
         try {
-            String aux = (String) input;
-            aux = "'%"+aux+"%'";
-            
+            String aux = "'%" + (String) input + "%'";
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
-            ArrayList<Dependente> output = new ArrayList<>();
             
-            this.rs = this.ps.executeQuery();
-            while(this.rs.next()){
-                output.add((Dependente) this.useObjectTemplate());
-            }
-            
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            return output;
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -133,19 +146,12 @@ public class DependenteDAO implements IObjectDAO{
     }
 
     @Override
-    public Object getAll() {
+    public ArrayList<Object> getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Dependente> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(this.rs.next()){
-                output.add((Dependente) this.useObjectTemplate());
-            }
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            return output;
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );

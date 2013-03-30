@@ -17,30 +17,44 @@ import java.util.ArrayList;
  * @author pablohenrique
  */
 public class DepartamentoDAO implements IObjectDAO{
+    private final String BEFORECOND = 
+"SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio,"+
+" e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha"+
+" FROM cia.departamento AS d, cia.empregado AS e";
+    private final String AFTERCOND = " AND d.gerssn = e.ssn;";
+    
     private final String SQL_POST = "INSERT INTO cia.departamento VALUES(?,?,?,?);";
-    private final String SQL_GET = "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio FROM cia.departamento AS d WHERE numero = ?;";
-    private final String SQL_READ = "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio  FROM cia.departamento AS d WHERE nome = ?;";
-    private final String SQL_GETALL = "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio  FROM cia.departamento AS d;";
     private final String SQL_UPDATE = "UPDATE cia.departamento SET nome = ?, gerssn = ?, gerdatainicio = ? WHERE numero = ?";
     private final String SQL_DELETE = "DELETE FROM cia.departamento WHERE numero = ?";
+    private final String SQL_GET = BEFORECOND + " WHERE d.numero = ?" + AFTERCOND;
+    private final String SQL_READ = BEFORECOND + " WHERE d.nome = ?" + AFTERCOND;
+    private final String SQL_GETGER = BEFORECOND + " WHERE d.gerssn = ?" + AFTERCOND;
+    private final String SQL_GETALL = BEFORECOND + AFTERCOND ;
+    
     private PreparedStatement ps;
     private ResultSet rs;
     
-    public Object useObjectTemplate(String column){
+    public Object useObjectTemplate(){
         try {
+            String column = "d_";
             Departamento output = new Departamento();
             output.setNumero(this.rs.getInt(rs.findColumn(column+"numero")));
             output.setNome(this.rs.getString(rs.findColumn(column+"nome")));
-            //output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(3)));
+            output.setGerenteDataInicio(this.rs.getDate(column+"dataInicio"));
             output.setGerenteSsn(null);
-            output.setGerenteDataInicio(this.rs.getDate((rs.findColumn(column+"dataInicio"))));
+            
+            EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
+            Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
+            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, output);
+            
+            if(output.getGerenteSsn() == null)
+                output.setGerenteSsn(emp);
             
             System.gc();
-            
             return output;
             
         } catch (Exception e) {
-            System.err.println("Erro useObjectTemplate:  " + e.toString() );
+            System.err.println("Erro [DEPA] useObjectTemplate:  " + e.toString() );
             return null;
         }
     }
@@ -52,7 +66,9 @@ public class DepartamentoDAO implements IObjectDAO{
         dep.setGerenteDataInicio(gerenteInicio);
         dep.setGerenteSsn(gerente);
         gerente.setDepartamento(dep);
+        
         System.gc();
+        
         return dep;
     }
     
@@ -109,7 +125,24 @@ public class DepartamentoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate("d_");
+            return this.useObjectTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public Object getGer(String gerssn) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
+            this.ps.setString(1,gerssn);
+            
+            this.rs = this.ps.executeQuery();
+            if(!this.rs.next())
+                throw new Exception("Departamento nao encontrado.");
+            
+            return this.useObjectTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -128,7 +161,7 @@ public class DepartamentoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate("d_");
+            return this.useObjectTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -137,14 +170,14 @@ public class DepartamentoDAO implements IObjectDAO{
     }
 
     @Override
-    public Object getAll() {
+    public ArrayList<Object> getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Departamento> output = new ArrayList<>();
+            ArrayList<Object> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
             while(this.rs.next()){
-                output.add((Departamento) this.useObjectTemplate("d_"));
+                output.add((Departamento) this.useObjectTemplate());
             }
             
             if(output.isEmpty())
