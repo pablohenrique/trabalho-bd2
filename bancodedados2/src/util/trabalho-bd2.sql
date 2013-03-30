@@ -324,4 +324,11 @@ SELECT e.ssn AS E_ssn, e.nome AS E_nome, cia.sexo(e.sexo) AS E_sexo, e.endereco 
     ORDER BY e.nome ASC;
 
 
-       
+--SELECIONAR TODOS PROJETOS E O DEPARTAMENTO DE UM EMPREGADO       
+SELECT p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, d.numero AS d_numero,
+       d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio
+       FROM empregado AS e, projeto AS p, departamento AS d, trabalha_em AS t
+       WHERE e.ssn = t.essn AND
+	     t.pjnumero = p.pnumero AND
+	     p.dnum = d.numero AND
+	     e.ssn = '11014';

@@ -5,6 +5,7 @@
 package DAO;
 
 import Model.Departamento;
+import Model.Empregado;
 import java.util.ArrayList;
 import Model.Projeto;
 import java.sql.PreparedStatement;
@@ -21,17 +22,25 @@ public class ProjetoDAO implements IObjectDAO{
     private final String SQL_GETALL = "SELECT * FROM projeto;";
     private final String SQL_UPDATE = "UPDATE projeto SET pjnome = ?, plocalizacao = ?, dnum = ? WHERE pnumero = ?;";
     private final String SQL_DELETE = "DELETE FROM projeto WHERE pnumero = ?;";
+    private final String SQL_GET_BY_DEP = "SELECT p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, d.numero AS d_numero,\n" +
+                                          " d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio\n" +
+                                          " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t\n" +
+                                          " WHERE e.ssn = t.essn AND\n" +
+                                          " t.pjnumero = p.pnumero AND\n" +
+                                          " p.dnum = d.numero AND\n" +
+                                          " e.ssn = ?;";
     private PreparedStatement ps;
     private ResultSet rs;
-       
-    
-    private Object useObjectTemplate(){
+           
+    private Object useObjectTemplate(String column){
         try {
             Projeto output = new Projeto();
-            output.setNumero(this.rs.getInt(1));
-            output.setNome(this.rs.getString(2));
-            output.setLocalizacao(this.rs.getString(3));
-            output.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").get(this.rs.getInt(4)));
+            output.setNumero(this.rs.getInt(rs.findColumn(column+"numero")));
+            output.setNome(this.rs.getString(rs.findColumn(column+"nome")));
+            output.setLocalizacao(this.rs.getString(rs.findColumn(column+"localizacao")));
+            
+            DepartamentoDAO dep = new DepartamentoDAO();
+            output.setDepartamento((Departamento) dep.useObjectTemplate("d_"));
             
             System.gc();
             
@@ -91,13 +100,13 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
             this.ps.setInt(1,aux);
             this.rs = this.ps.executeQuery();
-            return this.useObjectTemplate();
+            return this.useObjectTemplate("");
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
             return null;
         }
-    }
+    }    
     
     @Override
     public Object read(Object input) {
@@ -106,7 +115,7 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
-            return this.useObjectTemplate();
+            return this.useObjectTemplate("");
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -122,7 +131,7 @@ public class ProjetoDAO implements IObjectDAO{
             
             this.rs = this.ps.executeQuery();
             while(rs.next()){
-                output.add((Projeto) this.useObjectTemplate());
+                output.add((Projeto) this.useObjectTemplate(""));
             }
             
             if(output.isEmpty())
@@ -134,6 +143,27 @@ public class ProjetoDAO implements IObjectDAO{
             return null;
         }
     }
+    
+    public Object getAllBy(String essn) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET_BY_DEP);
+            ArrayList<Projeto> output = new ArrayList<Projeto>();
+            
+            this.ps.setString(1, essn);
+            this.rs = this.ps.executeQuery();
+
+            while(rs.next())
+                output.add((Projeto) this.useObjectTemplate("p_"));            
+            
+            if(output.isEmpty())
+                throw new ArrayStoreException("Nao houve objetos encontrados.");
+            return output;
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
+        }
+    }    
 
     @Override
     public void delete(Object input) {

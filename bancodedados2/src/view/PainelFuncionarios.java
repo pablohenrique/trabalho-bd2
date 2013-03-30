@@ -163,8 +163,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
                 }
             }
         }
-        else if (origem == projetos)
-        {
+        else if (origem == projetos && (item != -1)) {
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
             Empregado em;
             try {

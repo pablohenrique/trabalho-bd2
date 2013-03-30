@@ -55,6 +55,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     private static JTable tabela;
     private static DefaultTableModel modelo;
     private static String[] colunas;
+    private static Empregado emp;
     
     public FormFuncionarioProjetos(Empregado e)
     {
@@ -64,12 +65,14 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         btnCancelar = new JButton("Cancelar");
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnCancelar.setPreferredSize(new Dimension(100, 25));
-
+        emp = e;
+        
         btnOK.addActionListener(this);
         btnCancelar.addActionListener(this);
 
         JLabel nome = new JLabel("Nome: ");
-                
+         
+        
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(4, 2, 5, 5));
@@ -105,6 +108,8 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         botoes.add(btnCancelar);        
         botoes.add(Box.createHorizontalStrut(5));
         
+        novo.addActionListener(this);
+                
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
 
@@ -113,7 +118,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
             }
         };
 
-        colunas = new String [] { "Nome Projeto", "Carga Horaria", "Localizacao", "Departamento"};  
+        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Carga Horaria", "Localizacao", "Departamento", "Numero Departamento"};  
         
         this.setDataTableFuncionariosProjetos();
         
@@ -149,6 +154,8 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     {
         Object origem = e.getSource();
 
+        if(origem == novo)
+            new FormFuncionarioProjetosForm(null, emp, false);        
         if(origem == btnOK)
         {
                                      
@@ -168,7 +175,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     }
     
     public static void setDataTableFuncionariosProjetos(){
-       //String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());        
+        String[][] dados = Principal.cf.getProjetoBySsn(Principal.cf.listarProjetosBy(emp.getSsn()));        
         FormFuncionarioProjetos.modelo = new DefaultTableModel(null, FormFuncionarioProjetos.colunas);
         FormFuncionarioProjetos.tabela.setModel(FormFuncionarioProjetos.modelo);                    
         FormFuncionarioProjetos.setSizeColumnFuncionariosProjetos();        

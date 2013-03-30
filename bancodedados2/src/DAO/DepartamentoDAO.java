@@ -26,14 +26,14 @@ public class DepartamentoDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object useObjectTemplate(){
+    public Object useObjectTemplate(String column){
         try {
             Departamento output = new Departamento();
-            output.setNumero(this.rs.getInt(1));
-            output.setNome(this.rs.getString(2));
-            output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(3)));
+            output.setNumero(this.rs.getInt(rs.findColumn(column+"numero")));
+            output.setNome(this.rs.getString(rs.findColumn(column+"nome")));
+            //output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString(3)));
             output.setGerenteSsn(null);
-            output.setGerenteDataInicio(this.rs.getDate(4));
+            output.setGerenteDataInicio(this.rs.getDate((rs.findColumn(column+"dataInicio"))));
             
             System.gc();
             
@@ -109,7 +109,7 @@ public class DepartamentoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate();
+            return this.useObjectTemplate("");
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -128,7 +128,7 @@ public class DepartamentoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate();
+            return this.useObjectTemplate("");
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -144,7 +144,7 @@ public class DepartamentoDAO implements IObjectDAO{
             
             this.rs = this.ps.executeQuery();
             while(this.rs.next()){
-                output.add((Departamento) this.useObjectTemplate());
+                output.add((Departamento) this.useObjectTemplate(""));
             }
             
             if(output.isEmpty())

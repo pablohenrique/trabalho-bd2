@@ -13,6 +13,7 @@ import Model.Trabalha;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.ComboBoxModel;
 
 /**
  *
@@ -338,6 +339,24 @@ public class ControlFacade {
         return projetoControl.getAll();
     }
     
+    public Vector<Projeto> listarProjetosBy(String ssn){
+        return projetoControl.getAllBy(ssn);
+    }  
+
+    public String[][] getProjetoBySsn(Vector<Projeto> list)
+    {
+        String[][] dados = new String[list.size()][];  
+
+        for(int i=0; i<list.size(); i++)
+        {            
+        
+            dados[i] = new String[] {list.get(i).getNome(), Integer.toString(list.get(i).getNumero()), list.get(i).getLocalizacao(), 
+                                     list.get(i).getDepartamento().getNome(), Integer.toString(list.get(i).getDepartamento().getNumero())}; 
+        }
+
+        return dados; 
+    }    
+    
     /**
      * 
      * @param nome
@@ -464,4 +483,10 @@ public class ControlFacade {
          trabalhaControl.delete(ssn);
      }
 
+    public ComboBoxModel listarProjetosByDep(int numero) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //gostaria de LISTAR PROJETOS BY DEPARTAMENTO
+    }
+
+   
 }

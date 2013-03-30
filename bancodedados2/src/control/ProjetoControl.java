@@ -7,6 +7,7 @@ package control;
 
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
+import DAO.ProjetoDAO;
 import Model.Departamento;
 import Model.Projeto;
 import java.util.ArrayList;
@@ -94,6 +95,21 @@ public class ProjetoControl  {
          return projeto;
     }    
 
+        
+    public static Vector<Projeto> getAllBy(String ssn) {
+        ProjetoDAO dao = new ProjetoDAO();
+        
+        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllBy(ssn);
+        Vector<Projeto> projeto = new Vector<Projeto>();
+         
+        for(int i = 0 ; i < projetoObject.size() ; i++){
+            Projeto p = (Projeto) projetoObject.get(i);             
+            projeto.add(p);
+         }
+        
+        return projeto;
+    }    
+        
 
     public Vector<Projeto> SearchByName(String input) throws Exception {
 
