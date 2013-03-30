@@ -40,7 +40,6 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     private static JButton novo;
     private static JButton editar;
     private static JButton excluir;    
-    private static JButton dependentes;    
     private static JButton projetos;    
     private static JTextField txtBusca;
     private static JButton btnBusca;
@@ -84,7 +83,6 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         editar = new JButton("Editar");
         excluir = new JButton("Excluir");
         projetos = new JButton("Projetos");
-        dependentes = new JButton("Dependentes");
         btnBusca = new JButton("Pesquisar");
         txtBusca = new JTextField();
         txtBusca.setPreferredSize(new Dimension(200, 24));
@@ -100,9 +98,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(excluir);
         botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(projetos);        
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(dependentes);        
+        botoes.add(projetos);         
         botoes.add(Box.createVerticalStrut(45));
         botoes.add(Box.createHorizontalGlue());
         botoes.add(contaRegistros);
@@ -119,7 +115,6 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         btnBusca.addActionListener(this);
         excluir.addActionListener(this);        
         projetos.addActionListener(this);
-        dependentes.addActionListener(this);
         
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));

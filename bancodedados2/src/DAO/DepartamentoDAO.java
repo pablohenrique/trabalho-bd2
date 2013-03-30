@@ -18,9 +18,9 @@ import java.util.ArrayList;
  */
 public class DepartamentoDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO cia.departamento VALUES(?,?,?,?);";
-    private final String SQL_GET = "SELECT * FROM cia.departamento WHERE numero = ?;";
-    private final String SQL_READ = "SELECT * FROM cia.departamento WHERE nome = ?;";
-    private final String SQL_GETALL = "SELECT * FROM cia.departamento;";
+    private final String SQL_GET = "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio FROM cia.departamento AS d WHERE numero = ?;";
+    private final String SQL_READ = "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio  FROM cia.departamento AS d WHERE nome = ?;";
+    private final String SQL_GETALL = "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio  FROM cia.departamento AS d;";
     private final String SQL_UPDATE = "UPDATE cia.departamento SET nome = ?, gerssn = ?, gerdatainicio = ? WHERE numero = ?";
     private final String SQL_DELETE = "DELETE FROM cia.departamento WHERE numero = ?";
     private PreparedStatement ps;
@@ -109,7 +109,7 @@ public class DepartamentoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate("");
+            return this.useObjectTemplate("d_");
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -128,7 +128,7 @@ public class DepartamentoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate("");
+            return this.useObjectTemplate("d_");
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -144,7 +144,7 @@ public class DepartamentoDAO implements IObjectDAO{
             
             this.rs = this.ps.executeQuery();
             while(this.rs.next()){
-                output.add((Departamento) this.useObjectTemplate(""));
+                output.add((Departamento) this.useObjectTemplate("d_"));
             }
             
             if(output.isEmpty())

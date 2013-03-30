@@ -41,13 +41,9 @@ import javax.swing.text.MaskFormatter;
 import static view.PainelDependentes.tabela;
 import view.Principal;
 
-public class FormFuncionarioProjetos extends JDialog implements ActionListener
+public class FormDepartamentoProjetos extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
-    
-    private static JButton novo;
-    private static JButton editarHora;
-    private static JButton excluir;
     
     private static JButton btnOK;
     private static JButton btnCancelar;
@@ -55,64 +51,41 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     private static JTable tabela;
     private static DefaultTableModel modelo;
     private static String[] colunas;
-    private static Empregado emp;
+    private static Departamento dep;
     
-    public FormFuncionarioProjetos(Empregado e)
+    public FormDepartamentoProjetos(Departamento d)
     {
-        super(Principal.janela,"Todos Projetos do Empregado", true);
+        super(Principal.janela,"Todos Projetos de Departamentos", true);
                                
         btnOK = new JButton("OK");
         btnCancelar = new JButton("Cancelar");
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnCancelar.setPreferredSize(new Dimension(100, 25));
-        emp = e;
+        dep = d;
         
         btnOK.addActionListener(this);
         btnCancelar.addActionListener(this);
 
-        JLabel nome = new JLabel("Nome: ");
-         
+        JLabel nome = new JLabel("Departamento: ");         
         
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        grid.setLayout(new GridLayout(6, 2, 5, 5));
+        grid.setLayout(new GridLayout(4, 2, 5, 5));
         grid.add(nome);
-        grid.add(new JLabel(e.getNome()));
-        grid.add(new JLabel("Seguridade Social: "));
-        grid.add(new JLabel(e.getSsn()));     
-        grid.add(new JLabel("Departamento: "));
-        grid.add(new JLabel(e.getDepartamento().getNome()));
-        grid.add(new JLabel("Supervisor: "));
-        grid.add(new JLabel(e.getSuperSsn().getNome()));
-        grid.add(new JLabel("Carga Horaria Total: "));
-        grid.add(new JLabel("100"));
-        grid.add(new JLabel("Qtd. de Projetos: "));
-        grid.add(new JLabel("100"));
+        grid.add(new JLabel("JORNAL DA GLOBO"));
+        grid.add(new JLabel("Gerente: "));
+        grid.add(new JLabel("CAIO LINDO"));     
+        grid.add(new JLabel("Data Inicio: "));
+        grid.add(new JLabel("21/09/2010"));
         
         nome.setPreferredSize(new Dimension(250, 25));
         
         JPanel botoes = new JPanel();
-        botoes.setLayout(new BoxLayout(botoes, BoxLayout.X_AXIS));
-        botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));
 
-        novo = new JButton("Add Projeto");
-        editarHora = new JButton("Editar Hora");
-        excluir = new JButton("Excluir");                
-
-        botoes.add(Box.createHorizontalStrut(5));
-        botoes.add(novo);
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(editarHora);
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(excluir);
-        botoes.add(Box.createVerticalStrut(45));
-        botoes.add(Box.createHorizontalStrut(3));
         botoes.add(btnOK);
-        botoes.add(Box.createHorizontalStrut(3));
         botoes.add(btnCancelar);        
-        botoes.add(Box.createHorizontalStrut(5));
-        
-        novo.addActionListener(this);
+        botoes.add(Box.createVerticalStrut(45));
+        botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));        
                 
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
@@ -122,7 +95,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
             }
         };
 
-        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Carga Horaria", "Localizacao", "Departamento", "Numero Departamento"};  
+        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Carga Horaria Total", "Localizacao"};  
         
         this.setDataTableFuncionariosProjetos();
         
@@ -142,7 +115,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         this.add(painel, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);        
         this.add(botoes, BorderLayout.SOUTH);
-        this.setSize(550, 610);
+        this.setSize(550, 510);
         this.setLocation((java.awt.Toolkit.getDefaultToolkit()
                                         .getScreenSize().width / 2)
                                         - (this.getWidth() / 2), (java.awt.Toolkit
@@ -158,8 +131,6 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     {
         Object origem = e.getSource();
 
-        if(origem == novo)
-            new FormFuncionarioProjetosForm(null, emp, false);        
         if(origem == btnOK)
         {
                                      
@@ -180,8 +151,8 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     
     public static void setDataTableFuncionariosProjetos(){
         //String[][] dados = Principal.cf.getProjetoBySsn(Principal.cf.listarProjetosBy(emp.getSsn()));        
-        FormFuncionarioProjetos.modelo = new DefaultTableModel(null, FormFuncionarioProjetos.colunas);
-        FormFuncionarioProjetos.tabela.setModel(FormFuncionarioProjetos.modelo);                    
-        FormFuncionarioProjetos.setSizeColumnFuncionariosProjetos();        
+        FormDepartamentoProjetos.modelo = new DefaultTableModel(null, FormDepartamentoProjetos.colunas);
+        FormDepartamentoProjetos.tabela.setModel(FormDepartamentoProjetos.modelo);                    
+        FormDepartamentoProjetos.setSizeColumnFuncionariosProjetos();        
     }    
 }

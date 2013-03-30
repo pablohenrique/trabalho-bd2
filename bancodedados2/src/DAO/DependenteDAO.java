@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * @author pablohenrique
  */
 public class DependenteDAO implements IObjectDAO{
-    private final String SQL_POST = "INSERT INTO dependentes VALUES(?,?,?,?,?);";
-    private final String SQL_GET = "SELECT * FROM dependentes WHERE essn = ?;";
-    private final String SQL_READ = "SELECT * FROM dependentes WHERE nome = ?;";
-    private final String SQL_GETALL = "SELECT * FROM dependentes;";
+    private final String SQL_POST = "INSERT INTO cia.dependentes VALUES(?,?,?,?,?);";
+    private final String SQL_GET = "SELECT * FROM cia.dependentes WHERE essn = ?;";
+    private final String SQL_READ = "SELECT * FROM cia.dependentes WHERE nome = ?;";
+    private final String SQL_GETALL = "SELECT * FROM cia.dependentes;";
     private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = ?, datanasc = ?, parentesco = ? WHERE essn = ?;";
-    private final String SQL_DELETE = "DELETE FROM dependentes WHERE nome_dependente = ?;";
+    private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE nome_dependente = ?;";
     private PreparedStatement ps;
     private ResultSet rs;
     

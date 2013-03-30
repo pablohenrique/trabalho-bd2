@@ -58,8 +58,10 @@ public class Window extends JFrame implements ActionListener
             card = new CardLayout();
             painelCentral = new JPanel(card);
             painelCentral.add(new PainelInit(), "inicio");
-            painelCentral.add(new PainelFuncionarios(), "funcionarios");
-            //painelCentral.add(new PainelDependentes(), "dependente");
+            painelCentral.add(new PainelFuncionarios(), "funcionario");
+            painelCentral.add(new PainelDependentes(), "dependente");
+            painelCentral.add(new PainelDepartamento(), "departamento");
+            painelCentral.add(new PainelProjetos(), "projeto");
 
             //menu
             JMenu arquivo = new JMenu("Arquivo");		
@@ -177,25 +179,26 @@ public class Window extends JFrame implements ActionListener
     {
             Object origem = e.getSource();
 
-            if(origem == menuAbout)
-            {
+            if(origem == menuAbout){
                     JOptionPane.showMessageDialog(this,"Grupo:\nCaio Thomás\nPablo Henrique\nYuri Campos","Sobre", JOptionPane.PLAIN_MESSAGE);
             }		
-            else if(origem == menuExit)
-            {
+            else if(origem == menuExit){
                     System.exit(0);
             }
-            else if (origem == menuInit)
-            {
+            else if (origem == menuInit){
                     Window.card.show(Window.painelCentral, "inicio");
             }		
-            else if (origem == btnFunc || origem == menuFuncionariosListar)
-            {
-                    Window.card.show(Window.painelCentral, "funcionarios");
+            else if (origem == btnFunc || origem == menuFuncionariosListar){
+                    Window.card.show(Window.painelCentral, "funcionario");
             }
-            else if (origem == btnDep)
-            {
+            else if (origem == btnDep){
                     Window.card.show(Window.painelCentral, "dependente");
+            }  
+            else if( origem == btnDepartamentos){
+                    Window.card.show(Window.painelCentral, "departamento");
+            }
+            else if( origem == btnProjetos){
+                    Window.card.show(Window.painelCentral, "projeto");
             }            
             else if (origem == menuCadastroFuncionarios)
             {

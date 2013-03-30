@@ -2,7 +2,6 @@ package view.formularios;
 
 import Model.Departamento;
 import Model.Empregado;
-import Model.Projeto;
 import control.FuncoesControle;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -40,39 +39,43 @@ import static view.PainelFuncionarios.modelo;
 import static view.PainelFuncionarios.tabela;
 import view.Principal;
 
-public class FormFuncionarioProjetosForm extends JDialog implements ActionListener
+public class FormDepartamento extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
-    private static JTextField horas;
-
-    private static JComboBox departamento;
-    private static JComboBox projetos;
-       
+    
+    private static JTextField nome;
+    private static JFormattedTextField dataInicio;  
+    private static JComboBox gerente;
+    
     private static JButton btnOK;
     private static JButton btnCancelar;
-    private Projeto projeto_edit = null;
+    private Departamento dep_edit = null;
     
-    public FormFuncionarioProjetosForm(Projeto p, Empregado emp, boolean logado)
-    {       
-        super(Principal.janela,"Inserir Empregado em Projeto", true);
-        
-        if(emp == null)
-            return;
+    public FormDepartamento(Departamento emp, boolean logado)
+    {
+        super(Principal.janela,"Cadastro de Departamento", true);
+        dep_edit = emp;
+        nome = new JTextField();
+        dataInicio = new JFormattedTextField();
                 
-        projeto_edit = p;
-        horas = new JTextField();
-
-        departamento = new JComboBox(Principal.cf.listarDepartamentos());  
         
-        projetos = new JComboBox();  
-        projetos.setEnabled(false);
-        horas.setEnabled(false);
+        try
+        {
+            dataInicio.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));  
+        }
+        catch (ParseException ex)
+        {
+            Logger.getLogger(FormDepartamento.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro mascara! " + ex);
+        }
+                          
+        gerente = new JComboBox(Principal.cf.listarEmpregados());  
         
-        if (projeto_edit != null)
+        if (dep_edit != null)
         {
             try
             {
-                this.editarProjeto(projeto_edit);
+                this.editarEmpregado(dep_edit);
             }
             catch (Exception ex)
             {
@@ -91,16 +94,15 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(3, 2, 5, 5));
-        grid.add(new JLabel("Departamento: "));
-        grid.add(departamento);           
-        grid.add(new JLabel("Projeto: "));
-        grid.add(projetos);           
-        grid.add(new JLabel("Horas: "));
-        grid.add(horas);                                  
+        grid.add(new JLabel("Nome Departamento: "));
+        grid.add(nome);            
+        grid.add(new JLabel("Gerente: "));
+        grid.add(gerente);                
+        grid.add(new JLabel("Data Inicio: "));
+        grid.add(dataInicio);                         
         
-        departamento.setPreferredSize(new Dimension(200, 25));        
-        departamento.addActionListener(this);
-        
+        nome.setPreferredSize(new Dimension(250, 25));
+
         JPanel painel = new JPanel();
         painel.add(grid);
 
@@ -109,10 +111,10 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
         botoes.add(btnCancelar);
         botoes.add(Box.createVerticalStrut(45));
         botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));
-       
+        
         this.add(painel, BorderLayout.CENTER);
         this.add(botoes, BorderLayout.SOUTH);
-        this.setSize(440, 200);
+        this.setSize(550, 200);
         this.setLocation((java.awt.Toolkit.getDefaultToolkit()
                                         .getScreenSize().width / 2)
                                         - (this.getWidth() / 2), (java.awt.Toolkit
@@ -123,7 +125,7 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
     }
 
     
-    public void editarProjeto(Projeto e) throws Exception
+    public void editarEmpregado(Departamento e) throws Exception
     {
         /*
         nome.setText(e.getNome());
@@ -142,8 +144,8 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
             supervisor.setSelectedIndex(this.selecionarComboBoxSup(e.getSuperSsn(), supervisor));
         else
             supervisor.setSelectedIndex(supervisor.getItemCount()-1);
-        
-        this.setTitle("Editar Empregado");*/
+            */
+        this.setTitle("Editar Departamento");
     }    
     
     public int selecionarComboBoxDep(int id, JComboBox<Departamento> box){
@@ -162,29 +164,24 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
                     return i;        
         
         return box.getItemCount();
-    }
-
+    }    
+    
     @Override
     public void actionPerformed(ActionEvent e)
     {
         Object origem = e.getSource();
-        
-        if(origem == departamento){
-             Departamento dep = (Departamento) departamento.getSelectedItem();
-             //projetos = new JComboBox(Principal.cf.listarProjetosByDep(dep.g));  
-             //horas.setEnabled(true);
-        }         
+
         if(origem == btnOK)
-        {
-            if(projeto_edit == null)//inserir novo elemento
-            {/*
+        {/*
+            if(dep_edit == null)//inserir novo elemento
+            {
                 try
                 {
                     Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
+                    Empregado superssn = (Empregado) gerente.getSelectedItem();
                     
                     Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                  endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
+                                                  endereco.getText(), salario.getText(), dataInicio.getText(), d.getNumero(),
                                                  superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
@@ -195,18 +192,17 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
                 {
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }
-               */ 
+                
             }
             else
             {
-                /*
                try
                 {                
                     Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
+                    Empregado superssn = (Empregado) gerente.getSelectedItem();
                     
                     Principal.cf.atualizarEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                    endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
+                                                    endereco.getText(), salario.getText(), dataInicio.getText(), d.getNumero(),
                                                     superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
@@ -216,9 +212,9 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
                 catch(Exception ex)
                 {
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
-                } */                   
+                }                    
             }
-                                     
+           */                          
         }
 
         if (origem == btnCancelar)

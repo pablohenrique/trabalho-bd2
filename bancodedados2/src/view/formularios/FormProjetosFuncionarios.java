@@ -2,6 +2,7 @@ package view.formularios;
 
 import Model.Departamento;
 import Model.Empregado;
+import Model.Projeto;
 import control.FuncoesControle;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,7 +42,7 @@ import javax.swing.text.MaskFormatter;
 import static view.PainelDependentes.tabela;
 import view.Principal;
 
-public class FormFuncionarioProjetos extends JDialog implements ActionListener
+public class FormProjetosFuncionarios extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
@@ -55,17 +56,17 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     private static JTable tabela;
     private static DefaultTableModel modelo;
     private static String[] colunas;
-    private static Empregado emp;
+    private static Projeto proj;
     
-    public FormFuncionarioProjetos(Empregado e)
+    public FormProjetosFuncionarios(Projeto p)
     {
-        super(Principal.janela,"Todos Projetos do Empregado", true);
+        super(Principal.janela,"Todos Empregados do Projeto", true);
                                
         btnOK = new JButton("OK");
         btnCancelar = new JButton("Cancelar");
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnCancelar.setPreferredSize(new Dimension(100, 25));
-        emp = e;
+        proj = p;
         
         btnOK.addActionListener(this);
         btnCancelar.addActionListener(this);
@@ -77,17 +78,17 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(6, 2, 5, 5));
         grid.add(nome);
-        grid.add(new JLabel(e.getNome()));
-        grid.add(new JLabel("Seguridade Social: "));
-        grid.add(new JLabel(e.getSsn()));     
-        grid.add(new JLabel("Departamento: "));
-        grid.add(new JLabel(e.getDepartamento().getNome()));
-        grid.add(new JLabel("Supervisor: "));
-        grid.add(new JLabel(e.getSuperSsn().getNome()));
+        grid.add(new JLabel("RESTRICOES XML"));
         grid.add(new JLabel("Carga Horaria Total: "));
-        grid.add(new JLabel("100"));
-        grid.add(new JLabel("Qtd. de Projetos: "));
-        grid.add(new JLabel("100"));
+        grid.add(new JLabel("90"));    
+        grid.add(new JLabel("Qtd. Empregados: "));
+        grid.add(new JLabel("10"));        
+        grid.add(new JLabel("Localizacao Projeto: "));
+        grid.add(new JLabel("FACOM "));        
+        grid.add(new JLabel("Departamento: "));
+        grid.add(new JLabel("BANCO DE DADOS"));
+        grid.add(new JLabel("Supervisor Departamento: "));
+        grid.add(new JLabel("BRUNO "));
         
         nome.setPreferredSize(new Dimension(250, 25));
         
@@ -95,7 +96,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         botoes.setLayout(new BoxLayout(botoes, BoxLayout.X_AXIS));
         botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));
 
-        novo = new JButton("Add Projeto");
+        novo = new JButton("Add Empregado");
         editarHora = new JButton("Editar Hora");
         excluir = new JButton("Excluir");                
 
@@ -122,7 +123,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
             }
         };
 
-        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Carga Horaria", "Localizacao", "Departamento", "Numero Departamento"};  
+        colunas = new String [] { "Nome", "Ssn", "Departamento", "Dno", "Supervisor", "SuperSnn"};  
         
         this.setDataTableFuncionariosProjetos();
         
@@ -142,7 +143,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         this.add(painel, BorderLayout.NORTH);
         this.add(scrollPane, BorderLayout.CENTER);        
         this.add(botoes, BorderLayout.SOUTH);
-        this.setSize(550, 610);
+        this.setSize(750, 610);
         this.setLocation((java.awt.Toolkit.getDefaultToolkit()
                                         .getScreenSize().width / 2)
                                         - (this.getWidth() / 2), (java.awt.Toolkit
@@ -159,7 +160,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         Object origem = e.getSource();
 
         if(origem == novo)
-            new FormFuncionarioProjetosForm(null, emp, false);        
+            //new FormFuncionarioProjetosForm(null, proj, false);        
         if(origem == btnOK)
         {
                                      
@@ -170,18 +171,20 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
                 this.dispose();
         } 
     }
-    
+
     public static void setSizeColumnFuncionariosProjetos(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(80);
-        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(200);
-        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(200);        
+        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(50);        
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(250);        
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(50);        
     }
     
     public static void setDataTableFuncionariosProjetos(){
         //String[][] dados = Principal.cf.getProjetoBySsn(Principal.cf.listarProjetosBy(emp.getSsn()));        
-        FormFuncionarioProjetos.modelo = new DefaultTableModel(null, FormFuncionarioProjetos.colunas);
-        FormFuncionarioProjetos.tabela.setModel(FormFuncionarioProjetos.modelo);                    
-        FormFuncionarioProjetos.setSizeColumnFuncionariosProjetos();        
+        FormProjetosFuncionarios.modelo = new DefaultTableModel(null, FormProjetosFuncionarios.colunas);
+        FormProjetosFuncionarios.tabela.setModel(FormProjetosFuncionarios.modelo);                    
+        FormProjetosFuncionarios.setSizeColumnFuncionariosProjetos();        
     }    
 }

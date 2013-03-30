@@ -4,6 +4,7 @@
  */
 package Model;
 
+import control.FuncoesControle;
 import java.sql.Date;
 
 /**
@@ -79,5 +80,10 @@ public class Departamento {
     public String toString()
     {
         return this.nome;
+    }
+
+    public String getGerenteDataInicioString() {
+        return FuncoesControle.converteData(gerenteDataInicio);
+
     }
 }
