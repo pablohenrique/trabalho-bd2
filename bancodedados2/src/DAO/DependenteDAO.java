@@ -23,9 +23,10 @@ public class DependenteDAO implements IObjectDAO{
     private final String AFTERCOND = " AND d.essn = e.ssn ORDER BY d.nome_dependente ASC";
     
     private final String SQL_POST = "INSERT INTO cia.dependentes VALUES(?,?,cia.sexoToBd(?),?,?);";
-    private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = cia.sexoToBd(?), datanasc = ?, parentesco = ? WHERE essn = ?;";
+    private final String SQL_UPDATE = "UPDATE cia.dependentes SET sexo = cia.sexoToBd(?), datanasc = ?, parentesco = ? WHERE essn = ? AND nome_dependente = ? ;";
     private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
-    private final String SQL_GET = BEFORECOND + " WHERE d.essn = ?" + AFTERCOND;
+    private final String SQL_GET_DEPENDENTE = BEFORECOND + " WHERE d.essn = ? AND d.nome_dependente = ?" + AFTERCOND;
+    private final String SQL_GET = BEFORECOND + " WHERE d.essn = ? AND " + AFTERCOND;
     private final String SQL_READ = BEFORECOND +  " WHERE d.nome LIKE ?" + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE d.essn = e.ssn ORDER BY d.nome_dependente ASC";
     private final String SQL_DELETE_DEPENDENTE = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
@@ -97,12 +98,12 @@ public class DependenteDAO implements IObjectDAO{
     public void update(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-            
             Dependente aux = (Dependente) input;
-            this.ps.setString(1,aux.getNome());
-            this.ps.setString(2,aux.getSexo());
-            this.ps.setDate(3,aux.getDataNascimento());
-            this.ps.setString(4,aux.getParentesco());
+            
+            this.ps.setString(1,aux.getSexo());
+            this.ps.setDate(2,aux.getDataNascimento());
+            this.ps.setString(3,aux.getParentesco());
+            this.ps.setString(4,aux.getNome());
             this.ps.setString(5,aux.getEssn().getSsn());
             
             System.gc();
@@ -130,6 +131,23 @@ public class DependenteDAO implements IObjectDAO{
             return null;
         }
     }
+    
+        public Object getDependente(String essn, String nome) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET_DEPENDENTE);
+            this.ps.setString(1,essn);
+            this.ps.setString(2,nome);
+            this.rs = this.ps.executeQuery();
+            
+            return this.getAllTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+   
     
     @Override
     public Object read(Object input) {
