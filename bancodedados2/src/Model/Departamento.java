@@ -51,6 +51,10 @@ public class Departamento {
     public Date getGerenteDataInicio() {
         return gerenteDataInicio;
     }
+    
+    public String getGerenteDataInicioString() {
+        return FuncoesControle.converteData(gerenteDataInicio);
+    }    
 
     /**
      * @param gerenteDataInicio the gerenteDataInicio to set
@@ -58,6 +62,10 @@ public class Departamento {
     public void setGerenteDataInicio(Date gerenteDataInicio) {
         this.gerenteDataInicio = gerenteDataInicio;
     }
+    
+    public void setGerenteDataInicio(String d) {
+        this.gerenteDataInicio = FuncoesControle.coverteStringData(d);
+    }    
     
     /**
      * @return the gerente
@@ -77,13 +85,7 @@ public class Departamento {
      * @return the nome
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.nome;
-    }
-
-    public String getGerenteDataInicioString() {
-        return FuncoesControle.converteData(gerenteDataInicio);
-
     }
 }

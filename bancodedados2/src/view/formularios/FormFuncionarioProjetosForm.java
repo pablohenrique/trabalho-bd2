@@ -61,8 +61,11 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
                 
         projeto_edit = p;
         horas = new JTextField();
-
-        departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+        try {
+            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+        } catch (Exception ex) {
+            departamento = new JComboBox();  
+        }
         
         projetos = new JComboBox();  
         projetos.setEnabled(false);

@@ -19,38 +19,38 @@ import java.util.Vector;
 public class DependenteControl  {
 
     
-    public void post(String nome, String essn, String sexo, Date datanascimento, String parentesco) throws Exception {
-     FuncoesControle f = new FuncoesControle();
-     if(f.verificarExistenciaEmpregado(essn) == false){
-         throw new Exception("Erro: empregado informado nao foi encontrado");
-     } else{ 
-     Empregado empregado = (Empregado) FactoryDAO.getFactory("Empregado").read(essn);
-     Dependente dependente = new Dependente();
-     dependente.setNome(nome);
-     dependente.setEssn(empregado);
-     dependente.setSexo(sexo);
-     dependente.setDataNascimento(datanascimento);
-     dependente.setParentesco(parentesco);
-     FactoryDAO.getFactory("Dependente").post(dependente);  
-     }
+    public void post(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception {
+        
+        Empregado empregado = new Empregado();
+        empregado.setSsn(essn);
+        
+        Dependente dependente = new Dependente();
+        dependente.setNome(nome);
+        dependente.setEssn(empregado);
+        dependente.setSexo(sexo);
+        dependente.setDataNascimento(datanascimento);
+        dependente.setParentesco(parentesco);
 
+        FactoryDAO.getFactory("Dependente").post(dependente);  
     }
 
 
-    public void update(String nome, String essn, String sexo, Date datanascimento, String parentesco) throws Exception {
-          FuncoesControle f = new FuncoesControle();
-     if(f.verificarExistenciaEmpregado(essn) == false){
-         throw new Exception("Erro: empregado informado nao foi encontrado");
-     } else{
-     Empregado empregado = (Empregado) FactoryDAO.getFactory("Empregado").read(essn);
-     Dependente dependente = new Dependente();
-     dependente.setNome(nome);
-     dependente.setEssn(empregado);
-     dependente.setSexo(sexo);
-     dependente.setDataNascimento(datanascimento);
-     dependente.setParentesco(parentesco);
-     FactoryDAO.getFactory("Dependente").update(dependente);  
-     }
+    public void update(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception {
+        FuncoesControle f = new FuncoesControle();
+        if(f.verificarExistenciaEmpregado(essn) == false)
+            throw new Exception("Erro: empregado informado nao foi encontrado");
+        else{
+            Empregado empregado = (Empregado) FactoryDAO.getFactory("Empregado").read(essn);
+            
+            Dependente dependente = new Dependente();
+            dependente.setNome(nome);
+            dependente.setEssn(empregado);
+            dependente.setSexo(sexo);
+            dependente.setDataNascimento(datanascimento);
+            dependente.setParentesco(parentesco);
+            
+            FactoryDAO.getFactory("Dependente").update(dependente);  
+        }
     }
     
     public void delete(String nome) throws Exception{
@@ -62,7 +62,7 @@ public class DependenteControl  {
         }
     }
     
-        public static Vector<Dependente> getAll(){
+        public static Vector<Dependente> getAll() throws Exception{
          ArrayList<Object> dependenteObject = (ArrayList<Object>) FactoryDAO.getFactory("Dependente").getAll();
          Vector<Dependente> dependente = new Vector<Dependente>();
          

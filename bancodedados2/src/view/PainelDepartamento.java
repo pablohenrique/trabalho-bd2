@@ -132,26 +132,26 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
                 
         if (origem == novo)
                 new FormDepartamento(null, false);
-        else if (origem == editar && (item != -1)){
-            /*
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            Empregado em;
+        else if (origem == editar && (item != -1)){            
+            String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+            Departamento dep;
             try {
-                em = Principal.cf.getEmpregadoBySsn(ssn);
-                new FormFuncionario(em, true);
+                dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));
+                new FormDepartamento(dep, true);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-            } */           
+            }
             
         }         
-        else if (origem == excluir  && (item != -1)) {
-            /*
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover empregado com Ssn "+ssn.trim()+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
+        else if (origem == excluir  && (item != -1)) {            
+            String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+            String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Departamento"));
+
+            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover departamento "+nome+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
             
             if(opcao == JOptionPane.YES_OPTION) {
                 try {
-                    Principal.cf.apagarEmpregado(ssn);
+                    Principal.cf.apagarDepartamento(Integer.parseInt(numero));
                     modelo.removeRow(item);
                     contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
                 }
@@ -159,19 +159,18 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-            }*/
+            }
         }
-        else if (origem == projetos) {//&& (item != -1)
-            new FormDepartamentoProjetos(null);
-            /*
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            Empregado em;
+        else if (origem == projetos && (item != -1)) {
+            String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+            Departamento dep;
             try {
-                em = Principal.cf.getEmpregadoBySsn(ssn);
-                new FormDepartamentoProjetos(em);
+                dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));
+                new FormDepartamentoProjetos(dep);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-            }*/
+            }
+            
         }
         /*
         else if (origem == btnBusca)
@@ -203,8 +202,15 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
     }
     
     public static void setDataTable(){
-        //String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());        
-        PainelDepartamento.modelo = new DefaultTableModel(null, PainelDepartamento.colunas);
+        String[][] dados = null;
+        
+        try {        
+            dados = Principal.cf.getDepartamentosTable(Principal.cf.listarDepartamentos());
+        } catch (Exception ex) {
+            System.err.println("Erro Painel Departamentos: " + ex);
+        }
+        
+        PainelDepartamento.modelo = new DefaultTableModel(dados, PainelDepartamento.colunas);
         PainelDepartamento.tabela.setModel(PainelDepartamento.modelo);                    
         PainelDepartamento.setSizeColumn();        
     }

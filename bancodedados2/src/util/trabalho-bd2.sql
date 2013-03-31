@@ -80,6 +80,14 @@ CREATE TABLE trabalha_em (
     horas numeric(3,1) NOT NULL
 );
 
+--
+-- criando sequencias 
+--
+CREATE SEQUENCE departamento_seq INCREMENT 1; 
+CREATE SEQUENCE projeto_seq INCREMENT 1; 
+
+ALTER TABLE departamento ALTER COLUMN numero SET DEFAULT nextval('departamento_seq');
+ALTER TABLE projeto ALTER COLUMN pnumero SET DEFAULT nextval('projeto_seq');
 
 
 --

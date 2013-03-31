@@ -22,8 +22,8 @@ public class DepartamentoDAO implements IObjectDAO{
 " e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha"+
 " FROM cia.departamento AS d, cia.empregado AS e";
     private final String AFTERCOND = " AND d.gerssn = e.ssn;";
-    
-    private final String SQL_POST = "INSERT INTO cia.departamento VALUES(?,?,?,?);";
+          
+    private final String SQL_POST = "INSERT INTO cia.departamento(nome, gerssn, gerdatainicio) VALUES(?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.departamento SET nome = ?, gerssn = ?, gerdatainicio = ? WHERE numero = ?";
     private final String SQL_DELETE = "DELETE FROM cia.departamento WHERE numero = ?";
     private final String SQL_GET = BEFORECOND + " WHERE d.numero = ?" + AFTERCOND;
@@ -45,6 +45,7 @@ public class DepartamentoDAO implements IObjectDAO{
             
             EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
+            
             Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, output);
             
             if(output.getGerenteSsn() == null)
@@ -78,10 +79,9 @@ public class DepartamentoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
             
             Departamento aux = (Departamento) input;
-            this.ps.setInt(1,aux.getNumero());
-            this.ps.setString(2,aux.getNome());
-            this.ps.setString(3,aux.getGerenteSsn().getSsn());
-            this.ps.setDate(4,aux.getGerenteDataInicio());
+            this.ps.setString(1,aux.getNome());
+            this.ps.setString(2,aux.getGerenteSsn().getSsn());
+            this.ps.setDate(3,aux.getGerenteDataInicio());
             
             System.gc();
             

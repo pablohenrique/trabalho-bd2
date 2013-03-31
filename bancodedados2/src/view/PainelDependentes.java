@@ -9,6 +9,7 @@
  */
 package view;
 
+import Model.Dependente;
 import Model.Empregado;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -43,7 +44,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     private static JButton excluir;    
     private static JTextField txtBusca;
     private static JButton btnBusca;
-    private static JLabel contaRegistros;
+    private static JLabel contaRegistros =  new JLabel();
     private static JComboBox empregados;
             
     public static JTable tabela;
@@ -60,7 +61,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             }
         };
 
-        colunas = new String [] { "Nome", "Sexo", "Data de Nascimento", "Parentesco", "Nome Empregado", "Ssn"};  
+        colunas = new String [] { "Nome", "Sexo", "Data de Nascimento", "Parentesco", "Nome Empregado", "Ssn", "Departamento"};  
         
         this.setDataTable();
         
@@ -86,14 +87,19 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         Empregado em = new Empregado();
         em.setNome("Todos Empregados");
         
-        empregados = new JComboBox(Principal.cf.listarEmpregados());
+        try {
+            empregados = new JComboBox(Principal.cf.listarEmpregados());
+        } catch (Exception ex) {
+            empregados = new JComboBox();
+        }
+        
         empregados.addItem(em);
         empregados.setSelectedItem(em);
         empregados.setPreferredSize(new Dimension(320, 24));
         empregados.setMaximumSize(new Dimension(320, 24));
 
-        contaRegistros = new JLabel();
-        contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
+        //contaRegistros = new JLabel();
+        //contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
 
         botoes.add(Box.createHorizontalStrut(5));
         botoes.add(novo);
@@ -127,24 +133,27 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
                 new FormDependente(null, false);
         else if (origem == editar && (item != -1)){
             
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            Empregado em;
+            String essn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+            String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome"));
+            Dependente dep = null;
             try {
-                em = Principal.cf.getEmpregadoBySsn(ssn);
-                new FormFuncionario(em, true);
+                //dep = Principal.cf.getDependente(nome, essn);
+                new FormDependente(dep, true);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }            
             
         }         
-        else if (origem == excluir  && (item != -1)) {
+        else if (origem == excluir  && (item != -1)) {            
+            String essn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+            String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome"));
+            String nomeEmpregado = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Empregado"));
             
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover empregado com Ssn "+ssn.trim()+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
+            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover dependente "+nome+" do empregado "+nomeEmpregado+" ("+essn.trim()+")?","Atenção!",JOptionPane.YES_NO_OPTION);    
             
             if(opcao == JOptionPane.YES_OPTION) {
                 try {
-                    Principal.cf.apagarEmpregado(ssn);
+                    //Principal.cf.apagarDependente(nome, essn);
                     modelo.removeRow(item);
                     contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
                 }
@@ -169,18 +178,27 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     }
     
     public static void setSizeColumn(){
-        tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(350);
         tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(50);
         tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(150);
-        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(150);
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(350);
         tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(100);
     }
     
     public static void setDataTable(){
-       // String[][] dados = Principal.cf.getDependentesTable(Principal.cf.listarDependentes());        
-        PainelDependentes.modelo = new DefaultTableModel(null, PainelDependentes.colunas);
+        String[][] dados = null;        
+
+        try {
+            dados = Principal.cf.getDependentesTable(Principal.cf.listarDependentes());
+        } catch (Exception ex) {
+            System.err.println("Erro listar dependentes: " + ex);
+        }
+
+        PainelDependentes.modelo = new DefaultTableModel(dados, PainelDependentes.colunas);
         PainelDependentes.tabela.setModel(PainelDependentes.modelo);                    
+        PainelDependentes.contaRegistros.setText(PainelDependentes.tabela.getRowCount() + " registro(s) encontrado(s)");                    
         PainelDependentes.setSizeColumn();        
     }
 }

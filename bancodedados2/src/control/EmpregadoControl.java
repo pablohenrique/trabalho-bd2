@@ -36,7 +36,7 @@ public class EmpregadoControl
             empregado.setSexo(sexo);
             empregado.setEndereco(endereco);
             empregado.setSalario(salario);
-            empregado.setDataNascimentoString(datanasc);
+            empregado.setDataNascimento(datanasc);
             empregado.setDepartamento(dep);
             empregado.setSuperSsn(gerente);
             empregado.setSenha(senha);
@@ -70,7 +70,7 @@ public class EmpregadoControl
             empregado.setSexo(sexo);
             empregado.setEndereco(endereco);
             empregado.setSalario(salario);
-            empregado.setDataNascimentoString(datanasc);
+            empregado.setDataNascimento(datanasc);
             empregado.setDepartamento(dep);
             empregado.setSuperSsn(gerente);
             empregado.setSenha(senha);
@@ -112,8 +112,7 @@ public class EmpregadoControl
     }
   
     
-    public Vector<Empregado> getAll()
-    {
+    public Vector<Empregado> getAll() throws Exception {
         ArrayList<Object> empregadosObject = (ArrayList<Object>) FactoryDAO.getFactory("Empregado").getAll();
         Vector<Empregado> empregados = new Vector<Empregado>();
         

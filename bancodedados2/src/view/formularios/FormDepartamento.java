@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
+import view.PainelDepartamento;
 import view.PainelFuncionarios;
 import static view.PainelFuncionarios.modelo;
 import static view.PainelFuncionarios.tabela;
@@ -68,18 +69,21 @@ public class FormDepartamento extends JDialog implements ActionListener
             Logger.getLogger(FormDepartamento.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Erro mascara! " + ex);
         }
-                          
-        gerente = new JComboBox(Principal.cf.listarEmpregados());  
+        try {
+            gerente = new JComboBox(Principal.cf.listarEmpregados());  
+        } catch (Exception ex) {
+            gerente = new JComboBox();
+        }
         
         if (dep_edit != null)
         {
             try
             {
-                this.editarEmpregado(dep_edit);
+                this.editar(dep_edit);
             }
             catch (Exception ex)
             {
-                 JOptionPane.showMessageDialog(this,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+                 JOptionPane.showMessageDialog(this,"Erro Departamento: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
             }
         }
         
@@ -125,36 +129,18 @@ public class FormDepartamento extends JDialog implements ActionListener
     }
 
     
-    public void editarEmpregado(Departamento e) throws Exception
+    public void editar(Departamento dep) throws Exception
     {
-        /*
-        nome.setText(e.getNome());
-        endereco.setText(e.getEndereco());
-        dataNasc.setText(e.getDataNascimentoString());
-        salario.setText(e.getSalarioString());
-        ssn.setText(e.getSsn());
-        senha.setText(e.getSenha());
-        sexo.setSelectedItem(e.getSexo());
-        departamento.setSelectedIndex(this.selecionarComboBoxDep(e.getDepartamento().getNumero(), departamento));
-        
-        
-        System.out.println("ssn" + e.getSuperSsn().getSsn());
 
-        if(e.getSuperSsn().getSsn() != null)
-            supervisor.setSelectedIndex(this.selecionarComboBoxSup(e.getSuperSsn(), supervisor));
-        else
-            supervisor.setSelectedIndex(supervisor.getItemCount()-1);
-            */
+        nome.setText(dep.getNome());
+        dataInicio.setText(dep.getGerenteDataInicioString());
+        
+        if(dep.getGerenteSsn().getSuperSsn().getSsn() != null)
+            gerente.setSelectedIndex(this.selecionarComboBoxSup(dep.getGerenteSsn(), gerente));
+            
         this.setTitle("Editar Departamento");
     }    
     
-    public int selecionarComboBoxDep(int id, JComboBox<Departamento> box){
-        for(int i=0; i < box.getItemCount(); i++)   
-            if (id == box.getItemAt(i).getNumero())
-                    return i;        
-        return -1;                
-    }
-
     public int selecionarComboBoxSup(Empregado e, JComboBox<Empregado> box){
         if(e == null)
             return box.getItemCount();
@@ -167,58 +153,42 @@ public class FormDepartamento extends JDialog implements ActionListener
     }    
     
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e){
         Object origem = e.getSource();
 
-        if(origem == btnOK)
-        {/*
-            if(dep_edit == null)//inserir novo elemento
-            {
-                try
-                {
-                    Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) gerente.getSelectedItem();
+        if(origem == btnOK){
+            if(dep_edit == null){
+                try{                    
+                    Empregado gerssn = (Empregado) gerente.getSelectedItem();
                     
-                    Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                  endereco.getText(), salario.getText(), dataInicio.getText(), d.getNumero(),
-                                                 superssn.getSsn(), new String (senha.getPassword()));                                           
+                    Principal.cf.inserirDepartamento(nome.getText(), gerssn.getSsn(), dataInicio.getText());
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();
+                    PainelDepartamento.setDataTable();
                     this.dispose();
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }
                 
             }
-            else
-            {
-               try
-                {                
-                    Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) gerente.getSelectedItem();
+            else{
+               try{                
+                    Empregado gerssn = (Empregado) gerente.getSelectedItem();
                     
-                    Principal.cf.atualizarEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                    endereco.getText(), salario.getText(), dataInicio.getText(), d.getNumero(),
-                                                    superssn.getSsn(), new String (senha.getPassword()));                                           
+                    Principal.cf.atualizarDepartamento(dep_edit.getNumero(), nome.getText(), gerssn.getSsn(), dataInicio.getText());
                     
-                    JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();
+                    JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
+                    PainelDepartamento.setDataTable();
                     this.dispose();
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }                    
-            }
-           */                          
+            }                                     
         }
 
-        if (origem == btnCancelar)
-        {
+        if (origem == btnCancelar){
                 this.dispose();
         } 
     }

@@ -22,8 +22,8 @@ public class DependenteDAO implements IObjectDAO{
 " FROM cia.dependentes AS d, cia.empregado AS e";
     private final String AFTERCOND = " AND d.essn = e.ssn ORDER BY d.nome_dependente ASC";
     
-    private final String SQL_POST = "INSERT INTO cia.dependentes VALUES(?,?,?,?,?);";
-    private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = ?, datanasc = ?, parentesco = ? WHERE essn = ?;";
+    private final String SQL_POST = "INSERT INTO cia.dependentes VALUES(?,?,cia.sexoToBd(?),?,?);";
+    private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = cia.sexoToBd(?), datanasc = ?, parentesco = ? WHERE essn = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE nome_dependente = ?;";
     private final String SQL_GET = BEFORECOND + " WHERE d.essn = ?" + AFTERCOND;
     private final String SQL_READ = BEFORECOND +  " WHERE d.nome LIKE ?" + AFTERCOND;
@@ -38,13 +38,13 @@ public class DependenteDAO implements IObjectDAO{
             EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
             DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
             
-            Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));
+            Departamento dep = (Departamento) depdao.get(this.rs.getInt("e_dno"));
             
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
-            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, dep);
+            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
             
             Dependente output = new Dependente();
-            output.setNome(this.rs.getString(column+"nome"));
+            output.setNome(this.rs.getString(column+"nomedependente"));
             output.setSexo(this.rs.getString(column+"sexo"));
             output.setDataNascimento(this.rs.getDate(column+"datanascimento"));
             output.setParentesco(this.rs.getString(column+"parentesco"));
@@ -146,7 +146,7 @@ public class DependenteDAO implements IObjectDAO{
     }
 
     @Override
-    public ArrayList<Object> getAll() {
+    public ArrayList<Object> getAll() throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             this.rs = this.ps.executeQuery();
@@ -154,8 +154,7 @@ public class DependenteDAO implements IObjectDAO{
             return this.getAllTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
-            return null;
+            throw new Exception("Erro ao recuperar todos os objeto:  " + e.toString() );
         }
     }
 

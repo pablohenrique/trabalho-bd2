@@ -20,26 +20,19 @@ import java.util.Vector;
 public class ProjetoControl  {
 
 
-    public void post(int numero, String nome, String localizacao, int dnumero)
-            throws Exception
-    {
-        //FALTA VERIFICAR SE LOCALIZACAO EXISTE
-        FuncoesControle f = new FuncoesControle();
+    public void post(String nome, String localizacao, int dnumero) throws Exception {
         
-        if(f.verificarExistenciaDepartamento(dnumero) == false){
-            throw new Exception("Erro: departamento informado nao foi encontrado");
-        }
-        else
-        {
-            Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
-            Projeto projeto = new Projeto();
-            projeto.setNumero(numero);
-            projeto.setNome(nome);
-            projeto.setLocalizacao(localizacao);
-            projeto.setDepartamento(departamento);
-            FactoryDAO.getFactory("Projeto").post(projeto);
-        }
+        Departamento dep = new Departamento();
+        dep.setNumero(dnumero);
+        
+        Projeto projeto = new Projeto();
+        projeto.setNome(nome);
+        projeto.setLocalizacao(localizacao);
+        projeto.setDepartamento(dep);
+        
+        FactoryDAO.getFactory("Projeto").post(projeto);
     }
+    
 
     public void update(int numero, String nome, String localizacao, int dnumero) 
             throws Exception
@@ -74,20 +67,14 @@ public class ProjetoControl  {
 
     public Projeto getById(int input) throws Exception 
     {
-        Projeto projeto = (Projeto) FactoryDAO.getFactory("Projeto").get(input);
-        return projeto;
+        return (Projeto) FactoryDAO.getFactory("Projeto").get(input);
     }
-
-
-  
-    
-        public static Vector<Projeto> getAll()
-    {
+         
+    public static Vector<Projeto> getAll() throws Exception {
          ArrayList<Object> projetoObject = (ArrayList<Object>) FactoryDAO.getFactory("Projeto").getAll();
          Vector<Projeto> projeto = new Vector<Projeto>();
          
-         for(int i = 0 ; i < projetoObject.size() ; i++)
-         {
+         for(int i = 0 ; i < projetoObject.size() ; i++){
              Projeto p = (Projeto) projetoObject.get(i);             
              projeto.add(p);
          }
@@ -95,7 +82,7 @@ public class ProjetoControl  {
          return projeto;
     }    
         
-        public static Vector<Projeto> getAllByDepNome(String nomeDepto) {
+        public static Vector<Projeto> getAllByDepNome(String nomeDepto)  throws Exception{
         ProjetoDAO dao = new ProjetoDAO();
         
         ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllDep(nomeDepto);
@@ -109,7 +96,7 @@ public class ProjetoControl  {
         return projeto;
     }   
         
-    public static Vector<Projeto> getAllByDepNumero(int depnumero) {
+    public static Vector<Projeto> getAllByDepNumero(int depnumero)  throws Exception{
         ProjetoDAO dao = new ProjetoDAO();
 
         ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllDep(depnumero);

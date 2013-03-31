@@ -98,7 +98,6 @@ public class Empregado {
     public String getSexo() {       
         return sexo;
     }
-
     
     /**
      * @param sexo the sexo to set
@@ -150,13 +149,11 @@ public class Empregado {
         return dataNascimento;
     }
     
-    public String getDataNascimentoString()
-    {
+    public String getDataNascimentoString(){
         return FuncoesControle.converteData(dataNascimento);
     }
     
-    public void setDataNascimentoString(String d) 
-    {
+    public void setDataNascimento(String d){
         dataNascimento = FuncoesControle.coverteStringData(d);
     }
 

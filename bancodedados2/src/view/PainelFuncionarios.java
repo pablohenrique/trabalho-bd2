@@ -43,7 +43,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     private static JButton projetos;    
     private static JTextField txtBusca;
     private static JButton btnBusca;
-    private static JLabel contaRegistros;
+    private static JLabel contaRegistros = new JLabel();
     
     public static JTable tabela;
     public static DefaultTableModel modelo;
@@ -88,8 +88,8 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         txtBusca.setPreferredSize(new Dimension(200, 24));
         txtBusca.setMaximumSize(new Dimension(200, 24));
 
-        contaRegistros = new JLabel();
-        contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
+        //contaRegistros = new JLabel();
+        //contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
 
         botoes.add(Box.createHorizontalStrut(5));
         botoes.add(novo);
@@ -199,9 +199,17 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     }
     
     public static void setDataTable(){
-        String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());                         
+        String[][] dados = null;                         
+        
+        try {
+            dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());
+        } catch (Exception ex) {
+            System.err.println("Erro em Painel Funcionario: " + ex);
+        }
+        
         PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);
         PainelFuncionarios.tabela.setModel(PainelFuncionarios.modelo);                    
+        PainelFuncionarios.contaRegistros.setText(PainelFuncionarios.tabela.getRowCount() + " registro(s) encontrado(s)");                    
         PainelFuncionarios.setSizeColumn();        
     }
 }

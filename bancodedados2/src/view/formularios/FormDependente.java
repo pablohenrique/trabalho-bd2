@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
+import view.PainelDependentes;
 import view.PainelFuncionarios;
 import static view.PainelFuncionarios.modelo;
 import static view.PainelFuncionarios.tabela;
@@ -79,8 +80,12 @@ public class FormDependente extends JDialog implements ActionListener
         parentesco.addItem("Filho(a)");
         parentesco.addItem("Conjugue");
         parentesco.addItem("Nao sei");
-                               
-        empregado = new JComboBox(Principal.cf.listarEmpregados());  
+        
+        try {
+            empregado = new JComboBox(Principal.cf.listarEmpregados());  
+        } catch (Exception ex) {
+            empregado = new JComboBox();
+        }
         
         if (dep != null)
         {
@@ -143,7 +148,7 @@ public class FormDependente extends JDialog implements ActionListener
     }
 
     
-    public void editarEmpregado(Dependente e) throws Exception
+    public void editar(Dependente e) throws Exception
     {
         /*
         nome.setText(e.getNome());
@@ -201,20 +206,17 @@ public class FormDependente extends JDialog implements ActionListener
             this.setEnable(true);
         
         if(origem == btnOK)
-        {/*
-            if(emp_edit == null)//inserir novo elemento
+        {
+            if(dep_edit == null)//inserir novo elemento
             {
                 try
                 {
-                    Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
+                    Empregado emp = (Empregado) empregado.getSelectedItem();
                     
-                    Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                  endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
-                                                 superssn.getSsn(), new String (senha.getPassword()));                                           
+                    Principal.cf.inserirDependente(nome.getText(), emp.getSsn(), sexo.getItemAt(sexo.getSelectedIndex()), dataNasc.getText(),  parentesco.getItemAt(parentesco.getSelectedIndex()));                              
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();
+                    PainelDependentes.setDataTable();
                     this.dispose();
                 }
                 catch(Exception ex)
@@ -223,18 +225,13 @@ public class FormDependente extends JDialog implements ActionListener
                 }
                 
             }
-            else
-            {
-               try
-                {                
-                    Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
-                    
-                    Principal.cf.atualizarEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                    endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
-                                                    superssn.getSsn(), new String (senha.getPassword()));                                           
-                    
-                    JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
+            else {
+               try {                
+                    Empregado emp = (Empregado) empregado.getSelectedItem();
+
+                    Principal.cf.atualizarDependente(nome.getText(), emp.getSsn(), sexo.getItemAt(sexo.getSelectedIndex()), dataNasc.getText(),  parentesco.getItemAt(parentesco.getSelectedIndex()));                              
+
+                    JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     PainelFuncionarios.setDataTable();
                     this.dispose();
                 }
@@ -242,7 +239,7 @@ public class FormDependente extends JDialog implements ActionListener
                 {
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }                    
-            }*/
+            }
                                      
         }
 

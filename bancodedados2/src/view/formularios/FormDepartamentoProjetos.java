@@ -72,11 +72,11 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(4, 2, 5, 5));
         grid.add(nome);
-        grid.add(new JLabel("JORNAL DA GLOBO"));
+        grid.add(new JLabel(dep.getNome()));
         grid.add(new JLabel("Gerente: "));
-        grid.add(new JLabel("CAIO LINDO"));     
+        grid.add(new JLabel(dep.getGerenteSsn().getNome()));     
         grid.add(new JLabel("Data Inicio: "));
-        grid.add(new JLabel("21/09/2010"));
+        grid.add(new JLabel(dep.getGerenteDataInicioString()));
         
         nome.setPreferredSize(new Dimension(250, 25));
         
@@ -150,8 +150,13 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     }
     
     public static void setDataTableFuncionariosProjetos(){
-        //String[][] dados = Principal.cf.getProjetoBySsn(Principal.cf.listarProjetosBy(emp.getSsn()));        
-        FormDepartamentoProjetos.modelo = new DefaultTableModel(null, FormDepartamentoProjetos.colunas);
+        String[][] dados = null;
+        try {        
+            dados = Principal.cf.getProjetoByDepartamentos(Principal.cf.listarProjetosByNumeroDepto(dep.getNumero()));
+        } catch (Exception ex) {
+            System.err.println("Erro listar projetos de Departamento: " + ex);
+        }
+        FormDepartamentoProjetos.modelo = new DefaultTableModel(dados, FormDepartamentoProjetos.colunas);
         FormDepartamentoProjetos.tabela.setModel(FormDepartamentoProjetos.modelo);                    
         FormDepartamentoProjetos.setSizeColumnFuncionariosProjetos();        
     }    

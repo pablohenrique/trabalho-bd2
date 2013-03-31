@@ -87,9 +87,17 @@ public class FormFuncionario extends JDialog implements ActionListener
         Empregado superssn = new Empregado();
         superssn.setNome("Nenhum Supervisor");
         
-        departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+        try {
+            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+        } catch (Exception ex) {
+            departamento = new JComboBox();
+        }
         
-        supervisor = new JComboBox(Principal.cf.listarEmpregados());  
+        try {
+            supervisor = new JComboBox(Principal.cf.listarEmpregados());  
+        } catch (Exception ex) {
+            supervisor = new JComboBox();  
+        }
         supervisor.addItem(superssn);
                         
         if (emp_edit != null)
@@ -254,7 +262,7 @@ public class FormFuncionario extends JDialog implements ActionListener
                                                     endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
                                                     superssn.getSsn(), new String (senha.getPassword()));                                           
                     
-                    JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
+                    JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     PainelFuncionarios.setDataTable();
                     this.dispose();
                 }

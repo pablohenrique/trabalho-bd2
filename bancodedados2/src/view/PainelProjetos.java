@@ -11,6 +11,7 @@ package view;
 
 import Model.Departamento;
 import Model.Empregado;
+import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -64,7 +65,8 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             }
         };
 
-        colunas = new String [] {"Nome Projeto", "Localizacao", "Qtd. Empregados", "Carga Horaria Total", "Nome Departamento", "Dno"};      
+        colunas = new String [] {"Nome Projeto", "Numero", "Localizacao", "Qtd. Empregados",
+                                 "Carga Horaria Total", "Nome Departamento", "Dno", "Nome Gerente", "Ssn"}; 
   
         this.setDataTable();
         
@@ -134,25 +136,24 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         if (origem == novo)
                 new FormProjetos(null, false);
         else if (origem == editar && (item != -1)){
-            /*
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            Empregado em;
+            String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+            Projeto p = null;
             try {
-                em = Principal.cf.getEmpregadoBySsn(ssn);
-                new FormFuncionario(em, true);
+                p = Principal.cf.getProjetoByNumero(Integer.parseInt(numero));
+                new FormProjetos(p, true);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-            } */           
-            
+            }             
         }         
         else if (origem == excluir  && (item != -1)) {
-            /*
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover empregado com Ssn "+ssn.trim()+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
+            String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+            String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Projeto"));
+            
+            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover projeto "+nome+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
             
             if(opcao == JOptionPane.YES_OPTION) {
                 try {
-                    Principal.cf.apagarEmpregado(ssn);
+                    Principal.cf.apagarProjeto(Integer.parseInt(numero));
                     modelo.removeRow(item);
                     contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
                 }
@@ -160,7 +161,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-            }*/
+            }
         }
         else if (origem == empregados) {//&& (item != -1)
                 new FormProjetosFuncionarios(null);
@@ -190,16 +191,26 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
      
     public static void setSizeColumn(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(50);
-        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(170);
-        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(50);
+        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(50);
+        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(120);
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(50);
+        tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(80);
     }
     
-    public static void setDataTable(){
-        //String[][] dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());        
-        PainelProjetos.modelo = new DefaultTableModel(null, PainelProjetos.colunas);
+    public static void setDataTable(){       
+        String[][] dados = null;
+        
+        try {        
+            dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
+        } catch (Exception ex) {
+            System.err.println("Erro Painel Projetos: " + ex);
+        }
+        
+        PainelProjetos.modelo = new DefaultTableModel(dados, PainelProjetos.colunas);
         PainelProjetos.tabela.setModel(PainelProjetos.modelo);                    
         PainelProjetos.setSizeColumn();        
     }

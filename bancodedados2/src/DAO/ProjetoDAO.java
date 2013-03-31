@@ -17,19 +17,19 @@ import java.sql.SQLException;
  */
 public class ProjetoDAO implements IObjectDAO{
     private final String BEFORECOND = 
-" p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao," +
+" p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, " +
 " d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, " +
 "e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha" +
 " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
-    
-    private final String SQL_POST = "INSERT INTO projeto VALUES(?,?,?,?);";
-    private final String SQL_UPDATE = "UPDATE projeto SET pjnome = ?, plocalizacao = ?, dnum = ? WHERE pnumero = ?;";
-    private final String SQL_DELETE = "DELETE FROM projeto WHERE pnumero = ?;";
+
+    private final String SQL_POST = "INSERT INTO cia.projeto(pjnome, plocalizacao, dnum) VALUES(?,?,?);";
+    private final String SQL_UPDATE = "UPDATE cia.projeto SET pjnome = ?, plocalizacao = ?, dnum = ? WHERE pnumero = ?;";
+    private final String SQL_DELETE = "DELETE FROM cia.projeto WHERE pnumero = ?;";
     private final String SQL_GET = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE p.pnumero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_READ = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE p.pjnome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_GETALL = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.gerssn = e.ssn AND t.pjnumero = p.pnumero AND d.numero = p.dnum";
-    private final String SQL_GETALLDEPNOME = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + "WHERE d.nome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
-    private final String SQL_GETALLDEPNUMERO = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + "WHERE d.numero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
+    private final String SQL_GETALLDEPNOME = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.nome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
+    private final String SQL_GETALLDEPNUMERO = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.numero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_GETALLEMP = "SELECT " + BEFORECOND + " WHERE e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero AND e.ssn = ? ORDER BY t.horas ASC;";
     
     private PreparedStatement ps;
@@ -46,7 +46,8 @@ public class ProjetoDAO implements IObjectDAO{
             EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
             DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
             
-            Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));
+            Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));            
+            output.setDepartamento(dep);
             
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
             Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
@@ -60,7 +61,7 @@ public class ProjetoDAO implements IObjectDAO{
         }
     }
     
-    private ArrayList<Object> getAllTemplate() throws SQLException{
+    private ArrayList<Object> getAllTemplate() throws SQLException {
         ArrayList<Object> output = new ArrayList<>();
         while(this.rs.next())
             output.add((Projeto) this.useObjectTemplate());            
@@ -84,15 +85,14 @@ public class ProjetoDAO implements IObjectDAO{
     }
 
     @Override
-    public void post(Object input) {
+    public void post(Object input) throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
             
             Projeto aux = (Projeto) input;
-            this.ps.setInt(1,aux.getNumero());
-            this.ps.setString(2,aux.getNome());
-            this.ps.setString(3,aux.getLocalizacao());
-            this.ps.setInt(4,aux.getDepartamento().getNumero());
+            this.ps.setString(1,aux.getNome());
+            this.ps.setString(2,aux.getLocalizacao());
+            this.ps.setInt(3,aux.getDepartamento().getNumero());
             
             System.gc();
             
@@ -100,12 +100,12 @@ public class ProjetoDAO implements IObjectDAO{
                 throw new SQLException("Objeto nao foi gravado.");
             
         } catch (Exception e) {
-            System.err.println("Erro ao salvar objeto:  " + e.toString() );
+           throw new SQLException("Erro ao salvar objeto:  " + e.toString() );
         }
     }
 
     @Override
-    public void update(Object input) {
+    public void update(Object input) throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
             
@@ -121,7 +121,7 @@ public class ProjetoDAO implements IObjectDAO{
                 throw new SQLException("Objeto nao foi atualizado.");
             
         } catch (Exception e) {
-            System.err.println("Erro ao atualizar o objeto:  " + e.toString() );
+             throw new SQLException("Erro ao salvar objeto:  " + e.toString() );
         }
     }
 
@@ -169,7 +169,7 @@ public class ProjetoDAO implements IObjectDAO{
         }
     }
     
-    public ArrayList<Object> getAllDep(int numero) {
+    public ArrayList<Object> getAllDep(int numero)  throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLDEPNUMERO);
             this.ps.setInt(1, numero);
@@ -178,12 +178,11 @@ public class ProjetoDAO implements IObjectDAO{
             return this.getAllTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
-            return null;
+            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
         }
     }
     
-    public ArrayList<Object> getAllDep(String nome) {
+    public ArrayList<Object> getAllDep(String nome) throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLDEPNOME);
             this.ps.setString(1, nome);
@@ -192,12 +191,11 @@ public class ProjetoDAO implements IObjectDAO{
             return this.getAllTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
-            return null;
+            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
         }
     }
     
-    public ArrayList<Object> getAllEmp(String ssn) throws Exception{
+    public ArrayList<Object> getAllEmp(String ssn) throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLEMP);
             this.ps.setString(1, ssn);
@@ -211,7 +209,7 @@ public class ProjetoDAO implements IObjectDAO{
     }
 
     @Override
-    public void delete(Object input) {
+    public void delete(Object input)  throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
             this.ps.setInt(1,(int) input);
@@ -220,7 +218,7 @@ public class ProjetoDAO implements IObjectDAO{
                 throw new SQLException("Objeto nao foi deletado.");
             
         } catch (Exception e) {
-            System.err.println("Erro ao salvar objeto:  " + e.toString() );
+            throw new SQLException("Erro deletar objeto:  " + e.toString());            
         }
     }
     

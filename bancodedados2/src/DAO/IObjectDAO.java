@@ -24,7 +24,7 @@ public interface IObjectDAO {
      * @param Objeto
      * @return void
      */
-    public void update(Object input);
+    public void update(Object input)  throws Exception;
     
     /**
      * Usado para recuperar um objeto do banco de dados
@@ -45,7 +45,7 @@ public interface IObjectDAO {
      * @param Object
      * @return ArrayList<Object>
      */
-    public ArrayList<Object> getAll();
+    public ArrayList<Object> getAll() throws Exception;
     
     /**
      * Usado para remover um objeto do banco de dados

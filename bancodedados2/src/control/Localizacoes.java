@@ -48,8 +48,7 @@ public class Localizacoes {
     }
     
     
-        public Vector<Localizacao>  getAll()
-    {
+    public Vector<Localizacao>  getAll() throws Exception {
         ArrayList<Object> localizacaoObject = (ArrayList<Object>) FactoryDAO.getFactory("Localizacao").getAll();
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         

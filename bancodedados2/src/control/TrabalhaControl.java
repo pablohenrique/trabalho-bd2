@@ -77,8 +77,7 @@ public class TrabalhaControl {
     
     
     
-        public Vector<Trabalha> getAll()
-    {
+    public Vector<Trabalha> getAll() throws Exception {
         ArrayList<Object> trabalhaObject = (ArrayList<Object>) FactoryDAO.getFactory("Trabalha").getAll();
         Vector<Trabalha> trabalha = new Vector<Trabalha>();
         

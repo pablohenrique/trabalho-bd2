@@ -57,11 +57,11 @@ public class Window extends JFrame implements ActionListener
             //definir todos painel central
             card = new CardLayout();
             painelCentral = new JPanel(card);
-            //painelCentral.add(new PainelInit(), "inicio");
-            painelCentral.add(new PainelFuncionarios(), "funcionario");
-            //painelCentral.add(new PainelDependentes(), "dependente");
-            //painelCentral.add(new PainelDepartamento(), "departamento");
-            //painelCentral.add(new PainelProjetos(), "projeto");
+            //painelCentral.add(new PainelInit(), "inicio");           
+            painelCentral.add(new PainelProjetos(), "projeto");            
+            painelCentral.add(new PainelDepartamento(), "departamento");
+            painelCentral.add(new PainelDependentes(), "dependente");
+            painelCentral.add(new PainelFuncionarios(), "funcionario");                        
 
             //menu
             JMenu arquivo = new JMenu("Arquivo");		

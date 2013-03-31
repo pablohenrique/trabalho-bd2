@@ -38,6 +38,7 @@ import javax.swing.text.MaskFormatter;
 import view.PainelFuncionarios;
 import static view.PainelFuncionarios.modelo;
 import static view.PainelFuncionarios.tabela;
+import view.PainelProjetos;
 import view.Principal;
 
 public class FormProjetos extends JDialog implements ActionListener
@@ -57,8 +58,12 @@ public class FormProjetos extends JDialog implements ActionListener
         p_edit = p;
         nome = new JTextField();
         localizacao = new JTextField();                
-
-        departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+        
+        try {
+            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+        } catch (Exception ex) {
+            departamento = new JComboBox();  
+        }
         
         if (p_edit != null)
         {
@@ -132,20 +137,17 @@ public class FormProjetos extends JDialog implements ActionListener
         Object origem = e.getSource();
 
         if(origem == btnOK)
-        {/*
+        {
             if(p_edit == null)//inserir novo elemento
             {
                 try
                 {
-                    Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
+                    Departamento d = (Departamento) departamento.getSelectedItem();                      
                     
-                    Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                  endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
-                                                 superssn.getSsn(), new String (senha.getPassword()));                                           
+                    Principal.cf.inserirProjeto(nome.getText(), localizacao.getText(), d.getNumero());
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();
+                    PainelProjetos.setDataTable();
                     this.dispose();
                 }
                 catch(Exception ex)
@@ -154,7 +156,7 @@ public class FormProjetos extends JDialog implements ActionListener
                 }
                 
             }
-            else
+         /*   else
             {
                try
                 {                

@@ -20,41 +20,29 @@ import java.util.Vector;
  */
 public class DepartamentoControl
 {
-    public void post(int numero, String nome, String gerssn, Date gerdatainicio)
-            throws Exception
-    {
-        FuncoesControle f = new FuncoesControle();
+    public void post(String nome, String gerssn, String gerdatainicio) throws Exception {
+        Empregado em = new Empregado();
+        em.setSsn(gerssn);
         
-        if(f.verificarExistenciaEmpregado(gerssn) == false)
-        {
-            throw new Exception("Erro: gerente informado nao foi encontrado");
-        }
-        else
-        {
-            Departamento departamento = new Departamento();
-            departamento.setNumero(numero);
-            departamento.setNome(nome);
-            departamento.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").read(gerssn));
-            departamento.setGerenteDataInicio(gerdatainicio);
-            FactoryDAO.getFactory("Departamento").post(departamento);
-        }
+        Departamento departamento = new Departamento();        
+        departamento.setNome(nome);
+        departamento.setGerenteSsn(em);
+        departamento.setGerenteDataInicio(gerdatainicio);
+        
+        FactoryDAO.getFactory("Departamento").post(departamento);
     }
 
 
-    public void update(int numero, String nome, String gerssn, Date gerdatainicio) throws Exception {
-                     FuncoesControle f = new FuncoesControle();
-     if(f.verificarExistenciaEmpregado(gerssn) == false){
-         throw new Exception("Erro: empregado informado nao foi encontrado");
-     } else{
+    public void update(int numero, String nome, String gerssn, String gerdatainicio) throws Exception {
+        Empregado em = new Empregado();
+        em.setSsn(gerssn);
+        
         Departamento departamento = new Departamento();
         departamento.setNumero(numero);
         departamento.setNome(nome);
-        departamento.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").read(gerssn));
+        departamento.setGerenteSsn(em);
         departamento.setGerenteDataInicio(gerdatainicio);
-        FactoryDAO.getFactory("Departamento").update(departamento);
-     }
-
-        
+        FactoryDAO.getFactory("Departamento").update(departamento);        
     }
     
     public void delete(int numero) throws Exception{
@@ -79,8 +67,7 @@ public class DepartamentoControl
     }
 
     
-    public static Vector<Departamento> getAll()
-    {
+    public static Vector<Departamento> getAll() throws Exception {
          ArrayList<Object> departamentoObject = (ArrayList<Object>) FactoryDAO.getFactory("Departamento").getAll();
          Vector<Departamento> departamento = new Vector<Departamento>();
          

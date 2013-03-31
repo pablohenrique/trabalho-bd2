@@ -98,7 +98,7 @@ public class ControlFacade {
      * @return Vector<Empregado>
      * Retorna todos os empregados do banco
      */    
-    public Vector<Empregado> listarEmpregados()
+    public Vector<Empregado> listarEmpregados() throws Exception
     {
        return empregadoControl.getAll();
     }    
@@ -136,10 +136,9 @@ public class ControlFacade {
         
         for(int i=0; i<list.size(); i++)
         {
-            String empregado = list.get(i).getEssn().getNome();
-            String empregadoSsn = list.get(i).getEssn().getSsn();
+            Empregado empregado = list.get(i).getEssn();
             
-            dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSexo(),list.get(i).getDataNascimentoString(), empregado, empregadoSsn}; 
+            dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSexo(),list.get(i).getDataNascimentoString(), list.get(i).getParentesco(), empregado.getNome(), empregado.getSsn(), empregado.getDepartamento().getNome() }; 
         }
         
         return dados;         
@@ -168,8 +167,8 @@ public class ControlFacade {
      * @throws Exception 
      * Realiza insercao no departamento
      */
-    public void inserirDepartamento(int numero, String nome, String gerssn, Date gerdatainicio) throws Exception{
-        departamentoControl.post(numero, nome, gerssn, gerdatainicio);
+    public void inserirDepartamento(String nome, String gerssn, String gerdatainicio) throws Exception{
+        departamentoControl.post(nome, gerssn, gerdatainicio);
     }
     
     /**
@@ -181,7 +180,7 @@ public class ControlFacade {
      * @throws Exception 
      * Faz atualizacao em departamento
      */
-    public void atualizarDepartamento(int numero, String nome, String gerssn, Date gerdatainicio) throws Exception{
+    public void atualizarDepartamento(int numero, String nome, String gerssn, String gerdatainicio) throws Exception{
         departamentoControl.update(numero, nome, gerssn, gerdatainicio);
     }
     
@@ -201,7 +200,7 @@ public class ControlFacade {
      * @return Vector<Departamento>
      * retorna todos os departamentos cadastrados
      */
-    public Vector<Departamento> listarDepartamentos()
+    public Vector<Departamento> listarDepartamentos() throws Exception
     {        
         return departamentoControl.getAll();
     }        
@@ -237,7 +236,21 @@ public class ControlFacade {
         Departamento departamento = departamentoControl.getByGer(gerssn);
         return departamento;
     }
-    
+      
+    public String[][] getDepartamentosTable(Vector<Departamento> list) {
+        String[][] dados = new String[list.size()][];  
+        
+        for(int i=0; i<list.size(); i++){
+            Departamento dep = list.get(i);
+            Empregado emp = list.get(i).getGerenteSsn();
+            
+            dados[i] = new String[] {dep.getNome(), Integer.toString(dep.getNumero()), emp.getNome(), dep.getGerenteDataInicioString(), emp.getSsn(),
+                                     emp.getSexo(), emp.getEndereco(), emp.getSalarioString(), emp.getDataNascimentoString(), emp.getDepartamento().getNome(), Integer.toString(emp.getDepartamento().getNumero()), emp.getSuperSsn().getNome(), emp.getSuperSsn().getSsn()}; 
+        }
+        
+        return dados;         
+    }
+
     
      /**
      * Funcoes de dependente
@@ -253,7 +266,7 @@ public class ControlFacade {
      * @throws Exception 
      * Faz a insercao de um dependente
      */
-    public void inserirDependente(String nome, String essn, String sexo, Date datanascimento, String parentesco) throws Exception{
+    public void inserirDependente(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception{
         dependenteControl.post(nome, essn, sexo, datanascimento, parentesco);
     }
     
@@ -267,7 +280,7 @@ public class ControlFacade {
      * @throws Exception 
      * Faz a atualizacao de um dependente
      */
-    public void atualizarDependente(String nome, String essn, String sexo, Date datanascimento, String parentesco) throws Exception{
+    public void atualizarDependente(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception{
         dependenteControl.update(nome, essn, sexo, datanascimento, parentesco);
     }
     
@@ -276,7 +289,7 @@ public class ControlFacade {
      * @return Vector<Dependente>
      * retorna todos os dependentes cadastrados
      */
-    public Vector<Dependente> listarDependentes(){
+    public Vector<Dependente> listarDependentes() throws Exception{
         return dependenteControl.getAll();
     }
     
@@ -314,8 +327,8 @@ public class ControlFacade {
      * @throws Exception 
      * Faz a insercao de um projeto
      */
-    public void inserirProjeto(int numero, String nome, String localizacao, int departamento) throws Exception{
-        projetoControl.post(numero, nome, localizacao, departamento);
+    public void inserirProjeto(String nome, String localizacao, int departamento) throws Exception {
+        projetoControl.post(nome, localizacao, departamento);
     }
     
     /**
@@ -337,9 +350,8 @@ public class ControlFacade {
      * @return Projeto
      * retorna um projeto de acordo com seu numero
      */
-    public Projeto getProjetoByNumero(int numero) throws Exception{
-        Projeto projeto = projetoControl.getById(numero);
-        return projeto;
+    public Projeto getProjetoByNumero(int numero) throws Exception {
+        return projetoControl.getById(numero);
     }
     
     /**
@@ -347,7 +359,7 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorna todos os projetos
      */
-    public Vector<Projeto> listarProjetos(){
+    public Vector<Projeto> listarProjetos() throws Exception {
         return projetoControl.getAll();
     }
     
@@ -357,7 +369,7 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorn todos os projetos de um ssn
      */
-    public Vector<Projeto> listarProjetosByEmp(String ssn) throws Exception{
+    public Vector<Projeto> listarProjetosByEmp(String ssn) throws Exception {
         return projetoControl.getAllByEmp(ssn);
     }
 
@@ -367,7 +379,7 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorna todos os projetos de acordo com o nome do departamento 
      */
-    public Vector<Projeto> listarProjetosByNomeDepto(String nomedepto) {
+    public Vector<Projeto> listarProjetosByNomeDepto(String nomedepto) throws Exception {
         return projetoControl.getAllByDepNome(nomedepto);
     }
 
@@ -377,17 +389,15 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorna todos os projetos de acordo com o numero do departamento 
      */
-    public Vector<Projeto> listarProjetosByNumeroDepto(int numero) {
+    public Vector<Projeto> listarProjetosByNumeroDepto(int numero) throws Exception {
         return projetoControl.getAllByDepNumero(numero);
     }
 
             
-    public String[][] getProjetoBySsn(Vector<Projeto> list)
-    {     
+    public String[][] getProjetoBySsn(Vector<Projeto> list){     
         String[][] dados = new String[list.size()][];  
                         
-        for(int i=0; i<list.size(); i++)
-        {                
+        for(int i=0; i<list.size(); i++){                           
             dados[i] = new String[] {list.get(i).getNome(), Integer.toString(list.get(i).getNumero()), list.get(i).getLocalizacao(), 
                                      list.get(i).getDepartamento().getNome(), Integer.toString(list.get(i).getDepartamento().getNumero())}; 
         }
@@ -395,6 +405,29 @@ public class ControlFacade {
         return dados; 
     }    
     
+    public String[][] getProjetoByDepartamentos(Vector<Projeto> list){
+        String[][] dados = new String[list.size()][];  
+                        
+        for(int i=0; i<list.size(); i++){             
+            Projeto p = list.get(i);
+            dados[i] = new String[] {p.getNome(), String.valueOf(p.getNumero()), "0", p.getLocalizacao()}; 
+        }
+
+        return dados; 
+    }
+    
+    public String[][] getProjetosTable(Vector<Projeto> list) {                
+        String[][] dados = new String[list.size()][];  
+                        
+        for(int i=0; i<list.size(); i++){             
+            Projeto p = list.get(i);
+            Departamento d = list.get(i).getDepartamento();
+            Empregado e = d.getGerenteSsn();
+            dados[i] = new String[] {p.getNome(), String.valueOf(p.getNumero()), p.getLocalizacao(), "0", "0", d.getNome(), String.valueOf(d.getNumero()), e.getNome(), e.getSsn()}; 
+        }
+
+        return dados;                 
+    }    
     /**
      * 
      * @param nome
@@ -449,7 +482,7 @@ public class ControlFacade {
      * @return Vector<Localizacao>
      * Retorna todos os dept_localizacao
      */
-    public Vector<Localizacao> listarLocalizacoes() {
+    public Vector<Localizacao> listarLocalizacoes() throws Exception { 
         return localizacoesControl.getAll();
     }
     
@@ -508,7 +541,7 @@ public class ControlFacade {
       * @return Vector<Trabalha>
       * Retorna todos os trabalha_em
       */
-     public Vector<Trabalha> listarTrabalha(){
+     public Vector<Trabalha> listarTrabalha() throws Exception { 
          return trabalhaControl.getAll();
      }
      
@@ -519,9 +552,5 @@ public class ControlFacade {
       */
      public void deletaTrabalha(String ssn) throws Exception{
          trabalhaControl.delete(ssn);
-     }
-
-
-
-   
+     }   
 }
