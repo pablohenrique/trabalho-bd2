@@ -28,6 +28,7 @@ public class DependenteDAO implements IObjectDAO{
     private final String SQL_GET = BEFORECOND + " WHERE d.essn = ?" + AFTERCOND;
     private final String SQL_READ = BEFORECOND +  " WHERE d.nome LIKE ?" + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE d.essn = e.ssn ORDER BY d.nome_dependente ASC";
+    private final String SQL_DELETE_DEPENDENTE = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -171,4 +172,22 @@ public class DependenteDAO implements IObjectDAO{
             System.err.println("Erro ao salvar objeto:  " + e.toString() );
         }
     }
+    
+    public void deleteDep(String essn, String nomedependente) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
+            this.ps.setString(1, nomedependente);
+            this.ps.setString(1, essn);
+            if (this.ps.executeUpdate() == 0) {
+                throw new SQLException("Objeto nao foi deletado.");
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao apagar dependente:  " + e.toString());
+        }
+
+
+    }
+    
+    
 }
