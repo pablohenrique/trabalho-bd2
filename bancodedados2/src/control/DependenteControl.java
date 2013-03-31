@@ -84,6 +84,14 @@ public class DependenteControl  {
          
          return dependente;
     } 
+    
+    
+    public Dependente SearchByEssnNome(String essn, String nome) throws Exception{
+        DependenteDAO dao = new DependenteDAO();
+        Dependente dependente = (Dependente) dao.getDependente(essn, nome);
+        return dependente;
+        
+    }
 
     
 }

@@ -303,6 +303,19 @@ public class ControlFacade {
         return dependenteControl.SearchByEssn(essn);
     }
     
+        
+    /**
+     * 
+     * @param essn
+     * @param nome
+     * @return
+     * @throws Exception 
+     * retorna dependente com essn e nome informado
+     */
+    public Dependente buscaEssnNome(String essn, String nome) throws Exception{
+        return dependenteControl.SearchByEssnNome(essn,nome);
+    }
+    
 
     /**
      * 

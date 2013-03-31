@@ -52,9 +52,9 @@ public class FuncoesControle {
         }
     }
     
-    public boolean verificarExistenciaDependente(String nome_dependenete){
+    public boolean verificarExistenciaDependente(String essn){
         try{
-            FactoryDAO.getFactory("Dependente").get(nome_dependenete);
+            FactoryDAO.getFactory("Dependente").get(essn);
             return true;
         }
         catch(Exception e){
