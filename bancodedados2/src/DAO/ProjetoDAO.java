@@ -21,6 +21,10 @@ public class ProjetoDAO implements IObjectDAO{
 " d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, " +
 "e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha" +
 " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
+        private final String BEFORECOND_JOIN = 
+" p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, " +
+" d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, " +
+"e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha";
 
     private final String SQL_POST = "INSERT INTO cia.projeto(pjnome, plocalizacao, dnum) VALUES(?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.projeto SET pjnome = ?, plocalizacao = ?, dnum = ? WHERE pnumero = ?;";
@@ -28,6 +32,7 @@ public class ProjetoDAO implements IObjectDAO{
     private final String SQL_GET = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE p.pnumero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_READ = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE p.pjnome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_GETALL = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.gerssn = e.ssn AND t.pjnumero = p.pnumero AND d.numero = p.dnum";
+    private final String SQL_GETALL_JOIN = "SELECT DISTINCT(p.pnumero)," + BEFORECOND_JOIN + " FROM (((cia.projeto as p LEFT OUTER JOIN cia.departamento AS d ON d.numero = p.dnum) LEFT OUTER JOIN cia.empregado AS e ON d.gerssn = e.ssn) LEFT OUTER JOIN cia.trabalha_em AS t ON t.pjnumero = p.pnumero); ";
     private final String SQL_GETALLDEPNOME = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.nome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_GETALLDEPNUMERO = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.numero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_GETALLEMP = "SELECT " + BEFORECOND + " WHERE e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero AND e.ssn = ? ORDER BY t.horas ASC;";
@@ -158,7 +163,7 @@ public class ProjetoDAO implements IObjectDAO{
     @Override
     public ArrayList<Object> getAll() {
         try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL_JOIN);
             this.rs = this.ps.executeQuery();
             
             return this.getAllTemplate();
