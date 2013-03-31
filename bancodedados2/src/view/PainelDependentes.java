@@ -153,7 +153,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             
             if(opcao == JOptionPane.YES_OPTION) {
                 try {
-                    //Principal.cf.apagarDependente(nome, essn);
+                    Principal.cf.apagarDependente(nome, essn);
                     modelo.removeRow(item);
                     contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
                 }

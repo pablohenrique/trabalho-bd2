@@ -24,7 +24,7 @@ public class DependenteDAO implements IObjectDAO{
     
     private final String SQL_POST = "INSERT INTO cia.dependentes VALUES(?,?,cia.sexoToBd(?),?,?);";
     private final String SQL_UPDATE = "UPDATE dependentes SET nome_dependente = ?, sexo = cia.sexoToBd(?), datanasc = ?, parentesco = ? WHERE essn = ?;";
-    private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE nome_dependente = ?;";
+    private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
     private final String SQL_GET = BEFORECOND + " WHERE d.essn = ?" + AFTERCOND;
     private final String SQL_READ = BEFORECOND +  " WHERE d.nome LIKE ?" + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE d.essn = e.ssn ORDER BY d.nome_dependente ASC";
@@ -173,20 +173,18 @@ public class DependenteDAO implements IObjectDAO{
         }
     }
     
-    public void deleteDep(String essn, String nomedependente) {
+    public void deleteDep(String essn, String nomedependente) throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
             this.ps.setString(1, nomedependente);
-            this.ps.setString(1, essn);
+            this.ps.setString(2, essn);
             if (this.ps.executeUpdate() == 0) {
-                throw new SQLException("Objeto nao foi deletado.");
+                throw new SQLException("Restricao de integridade de empregado.");
             }
 
         } catch (Exception e) {
-            System.err.println("Erro ao apagar dependente:  " + e.toString());
+           throw new SQLException("Erro ao apagar dependente:  " + e.toString());
         }
-
-
     }
     
     

@@ -55,13 +55,8 @@ public class DependenteControl  {
     }
     
     public void delete(String essn, String nomedependente) throws Exception{
-        FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaDependente(essn) == false){
-            throw new Exception("Erro: dependente informado nao foi encontrado");
-        } else{
-            DependenteDAO dependentedao = new DependenteDAO();
-            dependentedao.deleteDep(essn, nomedependente);
-        }
+        DependenteDAO dependentedao = new DependenteDAO();
+        dependentedao.deleteDep(essn, nomedependente);
     }
     
         public static Vector<Dependente> getAll() throws Exception{
