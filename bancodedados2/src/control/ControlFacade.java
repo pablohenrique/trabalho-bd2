@@ -297,10 +297,10 @@ public class ControlFacade {
      * 
      * @param nome
      * @return Vector<Dependente>
-     * Retorna dependente que possui o nome informado (LIKE)
+     * Retorna dependente que possui o essn informado
      */
-    public Vector<Dependente> buscaNomeDependente(String nome) throws Exception{
-        return dependenteControl.SearchByName(nome);
+    public Vector<Dependente> buscaEssn(String essn) throws Exception{
+        return dependenteControl.SearchByEssn(essn);
     }
     
 
@@ -310,8 +310,8 @@ public class ControlFacade {
      * @throws Exception 
      * apaga dependente com nome informado
      */
-    public void apagarDependente(String nome) throws Exception{
-        dependenteControl.delete(nome);
+    public void apagarDependente(String essn, String nome) throws Exception{
+        dependenteControl.delete(essn,nome);
     }
     
      /**

@@ -4,6 +4,7 @@
  */
 package control;
 
+import DAO.DependenteDAO;
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
 import Model.Dependente;
@@ -53,12 +54,13 @@ public class DependenteControl  {
         }
     }
     
-    public void delete(String nome) throws Exception{
+    public void delete(String essn, String nomedependente) throws Exception{
         FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaDependente(nome) == false){
+        if(f.verificarExistenciaDependente(essn) == false){
             throw new Exception("Erro: dependente informado nao foi encontrado");
         } else{
-            FactoryDAO.getFactory("Dependente").delete(nome);
+            DependenteDAO dependentedao = new DependenteDAO();
+            dependentedao.deleteDep(essn, nomedependente);
         }
     }
     
@@ -76,8 +78,8 @@ public class DependenteControl  {
     }    
 
 
-    public Vector<Dependente> SearchByName(String input) throws Exception {
-       ArrayList<Object> dependenteObject = (ArrayList<Object>) FactoryDAO.getFactory("Departamento").get(input);
+    public Vector<Dependente> SearchByEssn(String input) throws Exception {
+       ArrayList<Object> dependenteObject = (ArrayList<Object>) FactoryDAO.getFactory("Dependente").get(input);
        Vector<Dependente> dependente = new Vector<Dependente>();
                 for(int i = 0 ; i < dependenteObject.size() ; i++)
          {
