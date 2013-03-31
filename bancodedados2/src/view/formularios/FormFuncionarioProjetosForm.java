@@ -68,8 +68,7 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
         }
         
         projetos = new JComboBox();  
-        projetos.setEnabled(false);
-        horas.setEnabled(false);
+        this.setEnable(false);
         
         if (projeto_edit != null)
         {
@@ -167,6 +166,10 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
         return box.getItemCount();
     }
 
+    public void setEnable(boolean value){
+        horas.setEnabled(value);
+        projetos.setEnabled(value);  
+    }          
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -174,10 +177,18 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
         
         if(origem == departamento){
              Departamento dep = (Departamento) departamento.getSelectedItem();
-             //projetos = new JComboBox(Principal.cf.listarProjetosByDep(dep.g));  
-             //horas.setEnabled(true);
+            try {  
+                System.out.println("Depn" + dep.getNumero());
+                projetos.removeAllItems();
+                projetos.setModel(new DefaultComboBoxModel<>(Principal.cf.listarProjetosByNumeroDepto(dep.getNumero())));
+                this.setEnable(true);
+            } catch (Exception ex) {
+                System.err.println("Erro em Funcionarios Projetos: " + ex);
+                projetos.removeAllItems();              
+                this.setEnable(false);
+            }
         }         
-        if(origem == btnOK)
+        else if(origem == btnOK)
         {
             if(projeto_edit == null)//inserir novo elemento
             {/*

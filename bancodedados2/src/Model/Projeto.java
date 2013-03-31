@@ -69,4 +69,12 @@ public class Projeto {
     public void setDepartamento(Departamento departamento) {
         this.departamento = departamento;
     }
+    
+    /**
+     * @return the nome
+     */
+    @Override
+    public String toString() {
+        return this.nome;
+    }    
 }
