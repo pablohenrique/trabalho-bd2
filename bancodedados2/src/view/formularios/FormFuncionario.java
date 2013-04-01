@@ -212,7 +212,6 @@ public class FormFuncionario extends JDialog implements ActionListener
     {
         if(e.getTipoLogin() == 0) 
         {
-            senha.setEnabled(true);
             salario.setEnabled(false);
             ssn.setEnabled(false);
             departamento.setEnabled(false);
@@ -220,9 +219,15 @@ public class FormFuncionario extends JDialog implements ActionListener
         }else if (e.getTipoLogin() == 1){//supervisor e funcionario
             salario.setEnabled(false);
             ssn.setEnabled(false);
+            if(e.getSuperSsn().equals(e.getSsn()))//empregado eh supervisor dele mesmo
+            {
+                departamento.setEnabled(true);
+                supervisor.setEnabled(true);                
+            }
         }
         else if(e.getTipoLogin() == 2){//gerente e funcionario
             salario.setEnabled(true);
+            ssn.setEnabled(true);
         }         
     }
     
