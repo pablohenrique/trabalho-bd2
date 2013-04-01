@@ -215,14 +215,14 @@ public class FormFuncionario extends JDialog implements ActionListener
             senha.setEnabled(true);
             salario.setEnabled(false);
             ssn.setEnabled(false);
-        }else if (e.getTipoLogin() == 1){
+            departamento.setEnabled(false);
+            supervisor.setEnabled(false);
+        }else if (e.getTipoLogin() == 1){//supervisor e funcionario
             salario.setEnabled(false);
-            senha.setEnabled(false);            
             ssn.setEnabled(false);
         }
-        else if(e.getTipoLogin() == 2){
+        else if(e.getTipoLogin() == 2){//gerente e funcionario
             salario.setEnabled(true);
-            senha.setEnabled(false);
         }         
     }
     

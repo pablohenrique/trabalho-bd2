@@ -35,8 +35,6 @@ import javax.swing.table.DefaultTableModel;
 import view.Principal;
 import view.formularios.FormDepartamento;
 import view.formularios.FormDepartamentoProjetos;
-import view.formularios.FormFuncionario;
-import view.formularios.FormFuncionarioProjetos;
 
 public final class PainelDepartamento extends JPanel  implements ActionListener {	
     
@@ -58,6 +56,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
 
+            @Override
             public boolean isCellEditable(int rowIndex, int vColIndex){
                     return false;
             }
@@ -66,13 +65,13 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         colunas = new String [] {"Nome Departamento", "Numero", "Gerente Nome", "Data Inicio", "Ssn", "Sexo",
                                  "Endereco", "Salario", "Data de Nascimento", "Departamento", "Dno", "Supervisor", "SuperSnn"};      
   
-        this.setDataTable();
+        PainelDepartamento.setDataTable();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setGridColor(new Color(220,220,220));     
         
-        this.setSizeColumn();
+        PainelDepartamento.setSizeColumn();
         
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -157,7 +156,6 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
                 }
                 catch (Exception ex){
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-                    return;
                 }
             }
         }

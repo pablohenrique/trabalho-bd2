@@ -18,36 +18,24 @@ public class FactoryWindow
      * @param value integer tipo de usuario
      * @return retorna uma janela JFrame ou nulo como usuario nao especificado
      */
-    public JFrame execute(JFrame login, int value, String user) throws Exception
+    public void execute(JFrame login, int value, String user) throws Exception
     {
         if(value == -1)
-            return null;
+            return;
          
         this.sessao(user, value);                    
         
         if(value == 0)//usuario normal
         {            
             login.dispose();
-            return new WindowFuncionario();                                                                        
+            Principal.janela = new WindowFuncionario();                                                                        
         }
-        else if(value == 1)//supervisor
+        else if(value == 1 || value == 2 || value == 3)//cria um selected e define qual tela
         {
-            login.dispose();
-            return new Window();                                                                        
-        }
-        else if(value == 2)//gerente
-        {
-            login.dispose();
-            return new Window();                                                                        
-        }
-        else if(value == 3)//supervisor e gerente
-        {
-            login.dispose();
-            return new WindowLoginSelect();                                                                        
-        }
-        
-        return null;
-    }
+            login.dispose();            
+            new WindowLoginSelect(value);                                                                                
+        }                        
+    }   
     
     public void sessao(String essn, int value) throws Exception
     {

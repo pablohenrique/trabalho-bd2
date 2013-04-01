@@ -1,44 +1,22 @@
 package view.formularios;
 
 import Model.Departamento;
-import Model.Empregado;
-import control.FuncoesControle;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import static java.awt.Component.TOP_ALIGNMENT;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static java.awt.image.ImageObserver.WIDTH;
-import java.sql.Date;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.MaskFormatter;
-import static view.panel.PainelDependentes.tabela;
 import view.Principal;
 
 public class FormDepartamentoProjetos extends JDialog implements ActionListener
@@ -90,6 +68,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
 
+            @Override
             public boolean isCellEditable(int rowIndex, int vColIndex){
                     return false;
             }
@@ -97,13 +76,13 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
 
         colunas = new String [] { "Nome Projeto", "Numero Projeto", "Carga Horaria Total", "Localizacao"};  
         
-        this.setDataTableFuncionariosProjetos();
+        FormDepartamentoProjetos.setDataTableFuncionariosProjetos();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setGridColor(new Color(220,220,220));        
         
-        this.setSizeColumnFuncionariosProjetos();
+        FormDepartamentoProjetos.setSizeColumnFuncionariosProjetos();
         
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());        

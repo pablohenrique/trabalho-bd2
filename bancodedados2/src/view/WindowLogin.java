@@ -1,13 +1,10 @@
 package view;
 
-import control.ControlFacade;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -97,14 +94,13 @@ public class WindowLogin extends JFrame implements ActionListener
                         value = Principal.cf.login(user, new String (senha.getPassword()));
                                                 
                         FactoryWindow fabrica = new FactoryWindow();
-                        Principal.janela = fabrica.execute(this, value, user);                                        
-                      //  System.out.println("valor " + value + " empregado login " + Principal.user.getNome());
+                        fabrica.execute(this, value, user);                                        
                     }
                     catch(Exception ex){
                         JOptionPane.showMessageDialog(this,"Error: " + ex , "Atenção", JOptionPane.ERROR_MESSAGE);                                    
                     }
                                                      
-                    if(Principal.janela == null)
+                    if(Principal.user == null)
                         JOptionPane.showMessageDialog(this,"Usuário e/ou senha incorretos!", "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
                 }
             }

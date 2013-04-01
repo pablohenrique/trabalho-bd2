@@ -55,6 +55,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
 
+            @Override
             public boolean isCellEditable(int rowIndex, int vColIndex){
                     return false;
             }
@@ -63,12 +64,12 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
                                            "Departamento", "Dno", "Supervisor", "SuperSnn"};  
         
-        this.setDataTable();
+        PainelFuncionarios.setDataTable();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setGridColor(new Color(220,220,220));        
-        this.setSizeColumn();
+        PainelFuncionarios.setSizeColumn();
         
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
@@ -88,9 +89,6 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         txtBusca = new JTextField();
         txtBusca.setPreferredSize(new Dimension(200, 24));
         txtBusca.setMaximumSize(new Dimension(200, 24));
-
-        //contaRegistros = new JLabel();
-        //contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
 
         botoes.add(Box.createHorizontalStrut(5));
         botoes.add(novo);
@@ -157,7 +155,6 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
                 }
                 catch (Exception ex){
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-                    return;
                 }
             }
         }

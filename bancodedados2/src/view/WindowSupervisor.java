@@ -11,9 +11,6 @@ package view;
 import Model.Empregado;
 import view.panel.PainelProjetos;
 import view.panel.PainelFuncionarios;
-import view.panel.PainelDependentes;
-import view.panel.PainelDepartamento;
-import view.formularios.FormFuncionario;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -29,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
+import view.panel.PainelInit;
 
 public class WindowSupervisor extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -37,35 +35,25 @@ public class WindowSupervisor extends JFrame implements ActionListener {
     
     public static Empregado usuario = null;
     
-    private static JMenuItem menuCadastroFuncionarios;
-    private static JMenuItem menuCadastroDepartamento;
-    private static JMenuItem menuCadastroDependentes;   
-    private static JMenuItem menuCadastroProjetos;	
+    private static JMenuItem menuProjetosListar;	
     private static JMenuItem menuFuncionariosListar;
+    private static JMenuItem menuFuncionariosEditar;
     
     private static JMenuItem menuExit;
     private static JMenuItem menuInit;
     private static JMenuItem menuAbout;
 
-    private static JButton btnFunc; 
-    private static JButton btnDep;
-    private static JButton btnDepartamentos;
+    private static JButton btnFuncionarios; 
     private static JButton btnProjetos;
-    private static JButton btnPropagandas;
-    private static JButton btnFinancas;
-    private static JButton btnCargaHoraria;
-    private static JButton btnCalculadora;
     private static CardLayout card;
 
     public WindowSupervisor(){
-            super("Sistema de Gerenciamento");
+            super("Sistema de Gerenciamento - Supervisor");
             //definir todos painel central
             card = new CardLayout();
             painelCentral = new JPanel(card);
-            //painelCentral.add(new PainelInit(), "inicio");           
+            painelCentral.add(new PainelInit(), "inicio");           
             painelCentral.add(new PainelProjetos(), "projeto");            
-            painelCentral.add(new PainelDepartamento(), "departamento");
-            painelCentral.add(new PainelDependentes(), "dependente");
             painelCentral.add(new PainelFuncionarios(), "funcionario");                        
 
             //menu
@@ -78,18 +66,15 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             arquivo.add(menuExit);		
             
             JMenu funcionarios = new JMenu("Funcionarios");		
-            menuCadastroFuncionarios = new JMenuItem("Cadastro de Funcionarios");            
-            menuCadastroDependentes = new JMenuItem("Cadastro de Dependentes");
             menuFuncionariosListar = new  JMenuItem("Listar todos Funcionarios");
-            
-            funcionarios.add(menuCadastroFuncionarios);
-            funcionarios.add(menuCadastroDependentes);
-            funcionarios.add(new JSeparator());
+            menuFuncionariosEditar =  new  JMenuItem("Editar Meu Cadastro");
+           
             funcionarios.add(menuFuncionariosListar);
             
-            //menuCadastroDepartamento = new JMenuItem("Cadastro de Departamentos");
-            //menuCadastroProjetos = new JMenuItem("Cadastro de Projetos");           
-
+            
+            JMenu projetos = new JMenu("Projetos");		
+            menuProjetosListar = new  JMenuItem("Listar todos Funcionarios");
+           
 
             JMenu ajuda = new JMenu("Ajuda");
             menuAbout = new JMenuItem("Sobre");
@@ -97,12 +82,13 @@ public class WindowSupervisor extends JFrame implements ActionListener {
 
             JMenuBar menubar = new JMenuBar();
             menubar.add(arquivo);	
-            menubar.add(funcionarios);	
+            menubar.add(funcionarios);
+            menubar.add(projetos);
             menubar.add(ajuda);
 
             //actions listerns
-            menuCadastroFuncionarios.addActionListener(this);
             menuFuncionariosListar.addActionListener(this);
+            menuFuncionariosEditar.addActionListener(this);
             menuInit.addActionListener(this);
             menuAbout.addActionListener(this);
             menuExit.addActionListener(this);	            
@@ -111,38 +97,13 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             JToolBar barraFerramentas = new JToolBar();
             ArrayList<JButton> botoes = new ArrayList<JButton>();
 
-            btnFunc = new JButton("Funcionarios");
-            btnFunc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/funcionarios.png")));
-            botoes.add(btnFunc);
+            btnFuncionarios = new JButton("Funcionarios");
+            btnFuncionarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/funcionarios.png")));
+            botoes.add(btnFuncionarios);
             
-            btnDep = new JButton("Dependentes");
-            btnDep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/dependentes.png")));
-            botoes.add(btnDep);	
-            
-            btnDepartamentos = new JButton("Departamentos");
-            btnDepartamentos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/departamento.png")));
-            botoes.add(btnDepartamentos);            
-
             btnProjetos = new JButton("Projetos");
             btnProjetos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/projetos.png")));
             botoes.add(btnProjetos); 
-            
-            btnFinancas = new JButton("Financas");
-            btnFinancas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/finanacas.png")));
-            botoes.add(btnFinancas);             
-
-            btnPropagandas = new JButton("Propagandas");
-            btnPropagandas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/propagandas.png")));
-            botoes.add(btnPropagandas);   
-
-            btnCalculadora = new JButton("Calculos Salarios");
-            btnCalculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/max-min.png")));
-            botoes.add(btnCalculadora);
-            
-            
-            btnCargaHoraria = new JButton("Carga Horaria");
-            btnCargaHoraria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/carga-horaria.png")));
-            botoes.add(btnCargaHoraria);
             
             for (JButton botao : botoes){
                     botao.setVerticalTextPosition(JButton.BOTTOM);
@@ -152,14 +113,8 @@ public class WindowSupervisor extends JFrame implements ActionListener {
                     botao.setFocusable(false);
             }
 
-            barraFerramentas.add(btnFunc);
-            barraFerramentas.add(btnDep);
-            barraFerramentas.add(btnDepartamentos);
+            barraFerramentas.add(btnFuncionarios);
             barraFerramentas.add(btnProjetos);
-            barraFerramentas.add(btnFinancas);
-            barraFerramentas.add(btnPropagandas);
-            barraFerramentas.add(btnCalculadora);
-            barraFerramentas.add(btnCargaHoraria);
             
             barraFerramentas.setFloatable(false);
             barraFerramentas.setOpaque(false);		
@@ -181,7 +136,10 @@ public class WindowSupervisor extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
             Object origem = e.getSource();
-
+            int nivel = Principal.user.getTipoLogin();
+            String ssn = Principal.user.getSsn();
+            Empregado em = null;
+            
             if(origem == menuAbout){
                     JOptionPane.showMessageDialog(this,"Grupo:\nCaio Thomás\nPablo Henrique\nYuri Campos","Sobre", JOptionPane.PLAIN_MESSAGE);
             }		
@@ -191,20 +149,11 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             else if (origem == menuInit){
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "inicio");
             }		
-            else if (origem == btnFunc || origem == menuFuncionariosListar){
+            else if (origem == btnFuncionarios || origem == menuFuncionariosListar){
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "funcionario");
-            }
-            else if (origem == btnDep){
-                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "dependente");
-            }  
-            else if( origem == btnDepartamentos){
-                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "departamento");
             }
             else if( origem == btnProjetos){
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
-            }            
-            else if (origem == menuCadastroFuncionarios){
-                    new FormFuncionario(null);
-            }		
+            }       
     }
 }

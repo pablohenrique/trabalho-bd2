@@ -101,7 +101,6 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         empregados.setPreferredSize(new Dimension(320, 24));
         empregados.setMaximumSize(new Dimension(320, 24));
 
-        //if(Principal.user.getTipoLogin() != 0)
         botoes = nivelView(botoes);        
         
         novo.addActionListener(this);
@@ -214,9 +213,9 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         String[][] dados = null;        
 
         try {
-            if(Principal.user.getTipoLogin() == 0)
+            if(Principal.user.getTipoLogin() == 0 || Principal.user.getTipoLogin() == 1)
                 dados = Principal.cf.getDependentesTable(Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
-            else if (Principal.user.getTipoLogin() == 2)
+            else if (Principal.user.getTipoLogin() == 2 || Principal.user.getTipoLogin() == 3)
                 dados = Principal.cf.getDependentesTable(Principal.cf.listarDependentes());
         } catch (Exception ex) {
             System.err.println("Erro listar dependentes: " + ex);

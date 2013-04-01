@@ -9,17 +9,12 @@
  */
 package view.panel;
 
-import Model.Departamento;
-import Model.Empregado;
 import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -34,10 +29,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
-import view.formularios.FormDepartamento;
-import view.formularios.FormDepartamentoProjetos;
-import view.formularios.FormFuncionario;
-import view.formularios.FormFuncionarioProjetos;
 import view.formularios.FormProjetos;
 import view.formularios.FormProjetosFuncionarios;
 
@@ -64,6 +55,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
 
+            @Override
             public boolean isCellEditable(int rowIndex, int vColIndex){
                     return false;
             }
@@ -72,12 +64,12 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         colunas = new String [] {"Nome Projeto", "Numero", "Localizacao", "Qtd. Empregados",
                                  "Carga Horaria Total", "Nome Departamento", "Dno", "Nome Gerente", "Ssn"}; 
   
-        this.setDataTable();
+        PainelProjetos.setDataTable();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setGridColor(new Color(220,220,220));        
-        this.setSizeColumn();
+        PainelProjetos.setSizeColumn();
         
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());

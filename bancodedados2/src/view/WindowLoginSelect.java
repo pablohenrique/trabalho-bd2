@@ -1,6 +1,5 @@
 package view;
 
-import control.ControlFacade;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -13,13 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
 
-public class WindowLoginSelect extends JFrame implements ActionListener
+public final class WindowLoginSelect extends JFrame implements ActionListener
 {
     private static final long serialVersionUID = 1L;
     private JComboBox select;
@@ -27,7 +23,7 @@ public class WindowLoginSelect extends JFrame implements ActionListener
     private JButton btnOK;
     private int value = -1;
 
-    public WindowLoginSelect()
+    public WindowLoginSelect(int nivel)
     {		
         super("Bem-vindo ao Sistema de Gerenciamento");
 
@@ -38,8 +34,9 @@ public class WindowLoginSelect extends JFrame implements ActionListener
         btnSair.addActionListener(this);
         
         select = new JComboBox<String>();
-        select.addItem("Gerente");
-        select.addItem("Supervisor");   
+        
+        this.nivel(nivel);
+        
         select.addActionListener(this);
         
         select.setPreferredSize(new Dimension(50, 25));
@@ -80,15 +77,46 @@ public class WindowLoginSelect extends JFrame implements ActionListener
         this.setVisible(true);
     }
 
+    public void nivel(int nivel)
+    {  
+        //nivel 1 eh supervisor e funcionario
+        if(nivel == 1){
+            select.addItem("Funcionario");        
+            select.addItem("Supervisor");             
+        } else if (nivel == 2){ // gerente e funcionario
+            select.addItem("Funcionario");        
+            select.addItem("Gerente");            
+        } else if (nivel == 3) {//supervisor, gerente e funcionario
+            select.addItem("Funcionario");        
+            select.addItem("Supervisor");                         
+            select.addItem("Gerente");                        
+        }            
+    }
+        
+    public int getValue(){
+        return value;
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e){	
         
         if(e.getSource() == btnOK){
-
+            this.dispose();
+            
+            if(select.getSelectedItem().equals("Funcionario"))
+                Principal.janela = new WindowFuncionario();
+            else if(select.getSelectedItem().equals("Supervisor"))
+                Principal.janela = new WindowSupervisor();
+            else if(select.getSelectedItem().equals("Gerente"))
+                Principal.janela = new Window();         
+            else {
+                Principal.janela = null;               
+                System.exit(0);
+            }
         }
 
         if(e.getSource() == btnSair)
-                System.exit(0);
+            System.exit(0);
     }
     
 
