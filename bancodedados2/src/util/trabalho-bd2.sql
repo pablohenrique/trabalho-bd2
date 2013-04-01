@@ -245,7 +245,7 @@ DECLARE
 BEGIN
     SELECT COUNT(DISTINCT ssn) as qtdusuario, ssn, senha, superssn, gerssn
     INTO userInfo 
-    FROM login 
+    FROM cia.login 
     WHERE ssn = argssn AND senha = argsenha
     GROUP BY ssn,senha,superssn,gerssn;
     

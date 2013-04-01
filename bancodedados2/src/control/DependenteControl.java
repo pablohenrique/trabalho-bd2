@@ -48,6 +48,8 @@ public class DependenteControl  {
         dependente.setDataNascimento(datanascimento);
         dependente.setParentesco(parentesco);
 
+        System.out.println("----- essn " + dependente.getEssn().getSsn() + " nome" + dependente.getNome() +" sexp" +  dependente.getSexo() + " data "+  dependente.getDataNascimentoString() + " parentescop" + dependente.getParentesco());
+        
         FactoryDAO.getFactory("Dependente").update(dependente);  
     }
     
@@ -71,15 +73,15 @@ public class DependenteControl  {
 
 
     public Vector<Dependente> SearchByEssn(String input) throws Exception {
-       ArrayList<Object> dependenteObject = (ArrayList<Object>) FactoryDAO.getFactory("Dependente").get(input);
-       Vector<Dependente> dependente = new Vector<Dependente>();
-                for(int i = 0 ; i < dependenteObject.size() ; i++)
-         {
-             Dependente d = (Dependente) dependenteObject.get(i);             
-             dependente.add(d);
-         }
-         
-         return dependente;
+        ArrayList<Object> dependenteObject = (ArrayList<Object>) FactoryDAO.getFactory("Dependente").get(input);
+        Vector<Dependente> dependente = new Vector<Dependente>();
+        for(int i = 0 ; i < dependenteObject.size() ; i++)
+        {
+            Dependente d = (Dependente) dependenteObject.get(i);             
+            dependente.add(d);
+        }
+
+        return dependente;
     } 
     
     

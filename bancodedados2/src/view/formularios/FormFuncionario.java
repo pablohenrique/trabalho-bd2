@@ -34,9 +34,9 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import view.PainelFuncionarios;
-import static view.PainelFuncionarios.modelo;
-import static view.PainelFuncionarios.tabela;
+import view.panel.PainelFuncionarios;
+import static view.panel.PainelFuncionarios.modelo;
+import static view.panel.PainelFuncionarios.tabela;
 import view.Principal;
 
 public class FormFuncionario extends JDialog implements ActionListener
@@ -58,7 +58,7 @@ public class FormFuncionario extends JDialog implements ActionListener
     private static JButton btnCancelar;
     private Empregado emp_edit = null;
     
-    public FormFuncionario(Empregado emp, boolean logado)
+    public FormFuncionario(Empregado emp)
     {
         super(Principal.janela,"Cadastro de Empregado", true);
         emp_edit = emp;
@@ -153,12 +153,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         botoes.add(btnCancelar);
         botoes.add(Box.createVerticalStrut(45));
         botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));
-
-        //this.setTestes();
-        
-        if(emp != null && logado == false)
-            senha.setEnabled(false);
-        
+  
         this.add(painel, BorderLayout.CENTER);
         this.add(botoes, BorderLayout.SOUTH);
         this.setSize(550, 510);
@@ -182,7 +177,8 @@ public class FormFuncionario extends JDialog implements ActionListener
         senha.setText(e.getSenha());
         sexo.setSelectedItem(e.getSexo());
         departamento.setSelectedIndex(this.selecionarComboBoxDep(e.getDepartamento().getNumero(), departamento));
-        
+               
+        this.nivelUser(e);
         
         System.out.println("ssn" + e.getSuperSsn().getSsn());
 
@@ -212,16 +208,23 @@ public class FormFuncionario extends JDialog implements ActionListener
         return box.getItemCount();
     }
     
-    public void setTestes()
+    public void nivelUser(Empregado e)
     {
-        nome.setText("PABLO HENRIQUE");
-        endereco.setText("RUA ALEGRIA");
-        dataNasc.setText("02/11/1998");
-        salario.setText("123.0");
-        ssn.setText("1111124");
-        senha.setText("SENHA");              
-    }    
-
+        if(e.getTipoLogin() == 0) 
+        {
+            senha.setEnabled(true);
+            salario.setEnabled(false);
+            ssn.setEnabled(false);
+        }else if (e.getTipoLogin() == 1){
+            salario.setEnabled(false);
+            senha.setEnabled(false);            
+            ssn.setEnabled(false);
+        }
+        else if(e.getTipoLogin() == 2){
+            salario.setEnabled(true);
+            senha.setEnabled(false);
+        }         
+    }
     
     @Override
     public void actionPerformed(ActionEvent e)
@@ -263,7 +266,9 @@ public class FormFuncionario extends JDialog implements ActionListener
                                                     superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();
+                    
+                    if(Principal.user.getTipoLogin() == 2)
+                        PainelFuncionarios.setDataTable();                     
                     this.dispose();
                 }
                 catch(Exception ex)

@@ -21,7 +21,8 @@ public class Empregado {
     private float salario;
     private Date dataNascimento;
     private Departamento departamento;
-
+    private int tipoLogin = -1;
+    
     /**
      * @return the ssn
      */
@@ -167,5 +168,19 @@ public class Empregado {
     public String toString()
     {
         return nome;
+    }
+
+    /**
+     * @return the tipoLogin
+     */
+    public int getTipoLogin() {
+        return tipoLogin;
+    }
+
+    /**
+     * @param tipoLogin the tipoLogin to set
+     */
+    public void setTipoLogin(int tipoLogin) {
+        this.tipoLogin = tipoLogin;
     }
 }

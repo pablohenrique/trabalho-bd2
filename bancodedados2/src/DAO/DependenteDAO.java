@@ -26,7 +26,7 @@ public class DependenteDAO implements IObjectDAO{
     private final String SQL_UPDATE = "UPDATE cia.dependentes SET sexo = cia.sexoToBd(?), datanasc = ?, parentesco = ? WHERE essn = ? AND nome_dependente = ? ;";
     private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
     private final String SQL_GET_DEPENDENTE = BEFORECOND + " WHERE d.essn = ? AND d.nome_dependente = ?" + AFTERCOND;
-    private final String SQL_GET = BEFORECOND + " WHERE d.essn = ? AND " + AFTERCOND;
+    private final String SQL_GET = BEFORECOND + " WHERE d.essn = ? " + AFTERCOND;
     private final String SQL_READ = BEFORECOND +  " WHERE d.nome LIKE ?" + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE d.essn = e.ssn ORDER BY d.nome_dependente ASC";
     private final String SQL_DELETE_DEPENDENTE = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
@@ -109,7 +109,7 @@ public class DependenteDAO implements IObjectDAO{
             
             System.gc();
             
-            if(this.ps.executeUpdate() == 0)
+           if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");
             
         } catch (Exception e) {

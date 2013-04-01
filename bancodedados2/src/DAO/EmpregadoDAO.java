@@ -25,7 +25,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO cia.empregado VALUES(?,?,cia.sexoToBd(?),?,?,?,?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanasc = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
-    private final String SQL_LOGIN = "SELECT cia.login(?,?);";
+    private final String SQL_LOGIN = " SELECT cia.login(?,?); ";
     private final String SQL_GET = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.ssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN" +

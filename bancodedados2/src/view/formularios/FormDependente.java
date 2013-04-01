@@ -35,10 +35,10 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import view.PainelDependentes;
-import view.PainelFuncionarios;
-import static view.PainelFuncionarios.modelo;
-import static view.PainelFuncionarios.tabela;
+import view.panel.PainelDependentes;
+import view.panel.PainelFuncionarios;
+import static view.panel.PainelFuncionarios.modelo;
+import static view.panel.PainelFuncionarios.tabela;
 import view.Principal;
 
 public class FormDependente extends JDialog implements ActionListener

@@ -7,7 +7,7 @@
  * - Mostra todos dependentes, faz pesquisa, edita, insere, exclui.
  * 
  */
-package view;
+package view.panel;
 
 import Model.Dependente;
 import Model.Empregado;
@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -33,6 +34,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import view.Principal;
 import view.formularios.FormDependente;
 import view.formularios.FormFuncionario;
 
@@ -42,8 +44,6 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     private static JButton novo;
     private static JButton editar;
     private static JButton excluir;    
-    private static JTextField txtBusca;
-    private static JButton btnBusca;
     private static JLabel contaRegistros =  new JLabel();
     private static JComboBox empregados;
             
@@ -86,9 +86,12 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         
         Empregado em = new Empregado();
         em.setNome("Todos Empregados");
-        
+        em.setSsn("-1");
         try {
-            empregados = new JComboBox(Principal.cf.listarEmpregados());
+            if(Principal.user.getTipoLogin() == 2)
+                empregados = new JComboBox(Principal.cf.listarEmpregados());
+            else
+                throw new Exception();
         } catch (Exception ex) {
             empregados = new JComboBox();
         }
@@ -98,30 +101,42 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         empregados.setPreferredSize(new Dimension(320, 24));
         empregados.setMaximumSize(new Dimension(320, 24));
 
-        //contaRegistros = new JLabel();
-        //contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
-
-        botoes.add(Box.createHorizontalStrut(5));
-        botoes.add(novo);
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(editar);
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(excluir);
-        botoes.add(Box.createVerticalStrut(45));
-        botoes.add(Box.createHorizontalGlue());
-        botoes.add(contaRegistros);
-        botoes.add(Box.createHorizontalGlue());
-        botoes.add(empregados);
-        botoes.add(Box.createHorizontalStrut(7));
-
+        //if(Principal.user.getTipoLogin() != 0)
+        botoes = nivelView(botoes);        
+        
         novo.addActionListener(this);
         editar.addActionListener(this);
         excluir.addActionListener(this);        
-
+        empregados.addActionListener(this);
+        
         this.setLayout(new BorderLayout());
-        this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));
+        this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));         
         this.add(botoes, BorderLayout.SOUTH);
         this.add(scrollPane, BorderLayout.CENTER);		
+    }
+    
+    public JPanel nivelView(JPanel botoes){                
+        botoes.add(Box.createHorizontalStrut(5));
+        
+        if(Principal.user.getTipoLogin() == 2){
+            botoes.add(novo);
+            botoes.add(Box.createHorizontalStrut(3));
+            botoes.add(editar);
+            botoes.add(Box.createHorizontalStrut(3));
+            botoes.add(excluir);        
+            botoes.add(Box.createHorizontalGlue());            
+            botoes.add(contaRegistros);
+            botoes.add(Box.createHorizontalGlue());
+            botoes.add(empregados);
+            botoes.add(Box.createHorizontalStrut(7));        
+        } else if(Principal.user.getTipoLogin() == 0) {
+            botoes.add(Box.createHorizontalGlue());        
+            botoes.add(contaRegistros);                                 
+        }
+        
+        botoes.add(Box.createVerticalStrut(45));
+        
+        return botoes;
     }
 
     @Override
@@ -163,17 +178,25 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
                 }
             }
         }
-        /*
-        else if (origem == btnBusca)
-        {
-                String filtro = txtBusca.getText().trim().toLowerCase();
-                modelo = new DefaultTableModel(ControleAluno.vetorAlunos(filtro),
-                                colunas);
-                tabela.setModel(modelo);
-                contaRegistros.setText(tabela.getRowCount()
-                                + " registro(s) encontrado(s)");
-                                * setSizeColumn()
-        }*/
+        else if (origem == empregados){
+            Empregado emp = (Empregado) empregados.getSelectedItem();
+            
+            if(!emp.getSsn().equals("-1")){
+                String[][] dados = null;        
+
+                try {
+                    dados = Principal.cf.getDependentesTable(Principal.cf.DependenteBuscaByEssn(emp.getSsn()));
+                } catch (Exception ex) {
+                    System.err.println("Erro listar dependentes: " + ex);
+                }
+
+                PainelDependentes.modelo = new DefaultTableModel(dados, PainelDependentes.colunas);
+                PainelDependentes.tabela.setModel(PainelDependentes.modelo);                    
+                PainelDependentes.contaRegistros.setText(PainelDependentes.tabela.getRowCount() + " registro(s) encontrado(s)");                    
+                PainelDependentes.setSizeColumn();     
+            } else
+                PainelDependentes.setDataTable();
+        }
         
     }
     
@@ -191,11 +214,14 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         String[][] dados = null;        
 
         try {
-            dados = Principal.cf.getDependentesTable(Principal.cf.listarDependentes());
+            if(Principal.user.getTipoLogin() == 0)
+                dados = Principal.cf.getDependentesTable(Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
+            else if (Principal.user.getTipoLogin() == 2)
+                dados = Principal.cf.getDependentesTable(Principal.cf.listarDependentes());
         } catch (Exception ex) {
             System.err.println("Erro listar dependentes: " + ex);
         }
-
+        
         PainelDependentes.modelo = new DefaultTableModel(dados, PainelDependentes.colunas);
         PainelDependentes.tabela.setModel(PainelDependentes.modelo);                    
         PainelDependentes.contaRegistros.setText(PainelDependentes.tabela.getRowCount() + " registro(s) encontrado(s)");                    

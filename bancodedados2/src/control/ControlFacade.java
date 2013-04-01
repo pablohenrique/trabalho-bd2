@@ -299,7 +299,7 @@ public class ControlFacade {
      * @return Vector<Dependente>
      * Retorna dependente que possui o essn informado
      */
-    public Vector<Dependente> buscaEssn(String essn) throws Exception{
+    public Vector<Dependente> DependenteBuscaByEssn(String essn) throws Exception {
         return dependenteControl.SearchByEssn(essn);
     }
     

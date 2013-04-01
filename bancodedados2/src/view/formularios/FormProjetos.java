@@ -35,10 +35,10 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import view.PainelFuncionarios;
-import static view.PainelFuncionarios.modelo;
-import static view.PainelFuncionarios.tabela;
-import view.PainelProjetos;
+import view.panel.PainelFuncionarios;
+import static view.panel.PainelFuncionarios.modelo;
+import static view.panel.PainelFuncionarios.tabela;
+import view.panel.PainelProjetos;
 import view.Principal;
 
 public class FormProjetos extends JDialog implements ActionListener

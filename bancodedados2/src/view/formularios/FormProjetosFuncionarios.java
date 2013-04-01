@@ -39,7 +39,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import static view.PainelDependentes.tabela;
+import static view.panel.PainelDependentes.tabela;
 import view.Principal;
 
 public class FormProjetosFuncionarios extends JDialog implements ActionListener

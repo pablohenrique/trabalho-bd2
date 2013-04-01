@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -18,7 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
-public class Window_Login extends JFrame implements ActionListener
+public class WindowLogin extends JFrame implements ActionListener
 {
     private static final long serialVersionUID = 1L;
     private JTextField usuario;
@@ -27,13 +29,14 @@ public class Window_Login extends JFrame implements ActionListener
     private JButton btnSair;    
     private int value = -1;
 
-    public Window_Login()
+    public WindowLogin()
     {		
         super("Bem-vindo ao Sistema de Gerenciamento");
 
         usuario = new JTextField();
-        usuario.setText("");
+        usuario.setText("11024");
         senha = new JPasswordField();
+        senha.setText("a");
         senha.requestFocus();
         btnOK = new JButton("Iniciar sessão");
         btnSair = new JButton("Sair");
@@ -78,41 +81,35 @@ public class Window_Login extends JFrame implements ActionListener
     }
 
     @Override
-    public void actionPerformed(ActionEvent e)
-    {	
-        if(e.getSource() == btnOK)
-        {
+    public void actionPerformed(ActionEvent e){	
+        
+        if(e.getSource() == btnOK){
             String user = usuario.getText();
 
             if(user.equals(""))
                     JOptionPane.showMessageDialog(this,"Por favor, digite um nome de usuário.", "Atenção", JOptionPane.ERROR_MESSAGE);
-            else
-            {
-                if(new String (senha.getPassword()).equals(""))
-                {
+            else{
+                if(new String (senha.getPassword()).equals("")){
                     JOptionPane.showMessageDialog(this,"Por favor, digite uma senha.", "Atenção", JOptionPane.ERROR_MESSAGE);
                     return;
                 }                 
-                    try
-                    {
+                    try{
                         value = Principal.cf.login(user, new String (senha.getPassword()));
-                        System.out.println("valor " + value);
+                                                
+                        FactoryWindow fabrica = new FactoryWindow();
+                        Principal.janela = fabrica.execute(this, value, user);                                        
+                      //  System.out.println("valor " + value + " empregado login " + Principal.user.getNome());
                     }
-                    catch(Exception ex)
-                    {
+                    catch(Exception ex){
                         JOptionPane.showMessageDialog(this,"Error: " + ex , "Atenção", JOptionPane.ERROR_MESSAGE);                                    
                     }
-                    
-                    FactoryWindow fabrica = new FactoryWindow();
-                    Principal.janela = fabrica.execute(this, value);
-                                                 
+                                                     
                     if(Principal.janela == null)
                         JOptionPane.showMessageDialog(this,"Usuário e/ou senha incorretos!", "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
                 }
             }
 
-            if(e.getSource() == btnSair)
-            {
+            if(e.getSource() == btnSair){
                     System.exit(0);
             }
     }

@@ -30,7 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 
-public class Window extends JFrame implements ActionListener {
+public class WindowSupervisor extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
 
     private static JPanel painelCentral;
@@ -57,7 +57,7 @@ public class Window extends JFrame implements ActionListener {
     private static JButton btnCalculadora;
     private static CardLayout card;
 
-    public Window(){
+    public WindowSupervisor(){
             super("Sistema de Gerenciamento");
             //definir todos painel central
             card = new CardLayout();
@@ -189,19 +189,19 @@ public class Window extends JFrame implements ActionListener {
                     System.exit(0);
             }
             else if (origem == menuInit){
-                    Window.card.show(Window.painelCentral, "inicio");
+                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "inicio");
             }		
             else if (origem == btnFunc || origem == menuFuncionariosListar){
-                    Window.card.show(Window.painelCentral, "funcionario");
+                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "funcionario");
             }
             else if (origem == btnDep){
-                    Window.card.show(Window.painelCentral, "dependente");
+                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "dependente");
             }  
             else if( origem == btnDepartamentos){
-                    Window.card.show(Window.painelCentral, "departamento");
+                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "departamento");
             }
             else if( origem == btnProjetos){
-                    Window.card.show(Window.painelCentral, "projeto");
+                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
             }            
             else if (origem == menuCadastroFuncionarios){
                     new FormFuncionario(null);

@@ -11,16 +11,14 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class Principal
-{
+public class Principal{
     final static String osName = System.getProperty("os.name").toLowerCase();
-    public static Window_Login login;
+    public static JFrame login;
     public static JFrame janela;
     public static Empregado user;
     public static ControlFacade cf = new ControlFacade();
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args){
          Principal.initLookAndFeel();
          /*
          Departamento p = new Departamento();
@@ -62,16 +60,14 @@ public class Principal
          for(int i=0; i<em.size(); i++)
             System.out.println(em.get(i).toString());
          */
-         janela = new Window();
+         login = new WindowLogin();
+         //janela = new WindowFuncionario();
     }
 
-
-    private static void initLookAndFeel()
-    {		 
+    private static void initLookAndFeel(){		 
         String lookAndFeel = null;
 
-        if (osName != null)
-        {
+        if (osName != null){
             if (osName.equals("Metal"))
                 lookAndFeel = UIManager.getCrossPlatformLookAndFeelClassName();
             else if (osName.equals("Motif"))
@@ -85,37 +81,30 @@ public class Principal
             else
                 lookAndFeel = UIManager.getSystemLookAndFeelClassName();	                
 
-            try
-            {
+            try{
                 UIManager.setLookAndFeel(lookAndFeel);
             } 	            
-            catch (ClassNotFoundException e)
-            {
+            catch (ClassNotFoundException e){
                 System.err.println("Couldn't find class for specified look and feel:"  + lookAndFeel);                
             } 	            
-            catch (UnsupportedLookAndFeelException e)
-            {
+            catch (UnsupportedLookAndFeelException e){
                 System.err.println("Couldn't find class for specified look and feel:"  + lookAndFeel);	            
             } 	            
-            catch (Exception e)
-            {
+            catch (Exception e){
                 System.err.println("Couldn't find class for specified look and feel:"  + lookAndFeel);
             }
         }
     }
 
-    public static boolean isWindows()
-    {		
+    public static boolean isWindows(){		
             return (osName.indexOf("win") >= 0); 
     }
 
-    public static boolean isMac()
-    { 
+    public static boolean isMac(){ 
             return (osName.indexOf("mac") >= 0); 
     }
 
-    public static boolean isUnix()
-    {
+    public static boolean isUnix(){
             return (osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0 || osName.indexOf("aix") > 0 ); 
     }	 
 }

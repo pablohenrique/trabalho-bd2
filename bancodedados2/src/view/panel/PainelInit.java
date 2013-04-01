@@ -7,7 +7,7 @@
  * - Pagina incial.
  * 
  */
-package view;
+package view.panel;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,6 +17,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import view.Principal;
 
 public class PainelInit extends JPanel
 {
@@ -31,7 +32,7 @@ public class PainelInit extends JPanel
         JLabel l1 = new JLabel("Bem-vindo ao Sistema de Gerenciamento!");
         l1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JLabel l2 = new JLabel("Ola fulano.");
+        JLabel l2 = new JLabel("Olá " + Principal.user.getNome() + ".");
         l2.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));	
 
         l1.setFont(new Font("", 1, 16));

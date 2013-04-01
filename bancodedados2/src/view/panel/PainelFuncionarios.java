@@ -1,17 +1,15 @@
 /*
- * Painel Projetos
+ * PainelFuncionarios
  * ---------------------------------------
  * 
  * - Esta classe representa a visao de dentro do programa
  * - Eh uma extensao de JPanel.
- * - Mostra todos projetos.
+ * - Mostra todos funcionarios, faz pesquisa, edita, insere, exclui.
  * 
  */
-package view;
+package view.panel;
 
-import Model.Departamento;
 import Model.Empregado;
-import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,29 +31,26 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import view.formularios.FormDepartamento;
-import view.formularios.FormDepartamentoProjetos;
+import view.Principal;
 import view.formularios.FormFuncionario;
 import view.formularios.FormFuncionarioProjetos;
-import view.formularios.FormProjetos;
-import view.formularios.FormProjetosFuncionarios;
 
-public final class PainelProjetos extends JPanel  implements ActionListener {	
+public final class PainelFuncionarios extends JPanel  implements ActionListener {	
     
     private static final long serialVersionUID = 1L;
     private static JButton novo;
     private static JButton editar;
     private static JButton excluir;    
-    private static JButton empregados;    
+    private static JButton projetos;    
     private static JTextField txtBusca;
     private static JButton btnBusca;
-    private static JLabel contaRegistros;
+    private static JLabel contaRegistros = new JLabel();
     
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
     
-    public PainelProjetos(){			
+    public PainelFuncionarios(){			
         
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
@@ -65,9 +60,9 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             }
         };
 
-        colunas = new String [] {"Nome Projeto", "Numero", "Localizacao", "Qtd. Empregados",
-                                 "Carga Horaria Total", "Nome Departamento", "Dno", "Nome Gerente", "Ssn"}; 
-  
+        colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
+                                           "Departamento", "Dno", "Supervisor", "SuperSnn"};  
+        
         this.setDataTable();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -88,14 +83,14 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         novo = new JButton("Novo");
         editar = new JButton("Editar");
         excluir = new JButton("Excluir");
-        empregados = new JButton("Empregados");
+        projetos = new JButton("Projetos");
         btnBusca = new JButton("Pesquisar");
         txtBusca = new JTextField();
         txtBusca.setPreferredSize(new Dimension(200, 24));
         txtBusca.setMaximumSize(new Dimension(200, 24));
 
-        contaRegistros = new JLabel();
-        contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
+        //contaRegistros = new JLabel();
+        //contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
 
         botoes.add(Box.createHorizontalStrut(5));
         botoes.add(novo);
@@ -104,7 +99,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(excluir);
         botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(empregados);         
+        botoes.add(projetos);         
         botoes.add(Box.createVerticalStrut(45));
         botoes.add(Box.createHorizontalGlue());
         botoes.add(contaRegistros);
@@ -120,7 +115,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         editar.addActionListener(this);
         btnBusca.addActionListener(this);
         excluir.addActionListener(this);        
-        empregados.addActionListener(this);
+        projetos.addActionListener(this);
         
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));
@@ -134,26 +129,29 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormProjetos(null, false);
+                new FormFuncionario(null);
         else if (origem == editar && (item != -1)){
-            String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
-            Projeto p = null;
+            
+            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+            
+            System.out.println("SSN " + ssn);            
+            Empregado em;
             try {
-                p = Principal.cf.getProjetoByNumero(Integer.parseInt(numero));
-                new FormProjetos(p, true);
+                em = Principal.cf.getEmpregadoBySsn(ssn);
+                new FormFuncionario(em);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-            }             
+            }            
+            
         }         
         else if (origem == excluir  && (item != -1)) {
-            String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
-            String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Projeto"));
             
-            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover projeto "+nome+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
+            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover empregado com Ssn "+ssn.trim()+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
             
             if(opcao == JOptionPane.YES_OPTION) {
                 try {
-                    Principal.cf.apagarProjeto(Integer.parseInt(numero));
+                    Principal.cf.apagarEmpregado(ssn);
                     modelo.removeRow(item);
                     contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
                 }
@@ -163,17 +161,15 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
                 }
             }
         }
-        else if (origem == empregados) {//&& (item != -1)
-                new FormProjetosFuncionarios(null);
-            /*
+        else if (origem == projetos && (item != -1)) {
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
             Empregado em;
             try {
                 em = Principal.cf.getEmpregadoBySsn(ssn);
-                new FormDepartamentoProjetos(em);
+                new FormFuncionarioProjetos(em);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-            }*/
+            }
         }
         /*
         else if (origem == btnBusca)
@@ -187,31 +183,34 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
                                 * setSizeColumn()
         }*/
         
-    }   
-     
-    public static void setSizeColumn(){
-        tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(50);
-        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(120);
-        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(50);
-        tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(80);
     }
     
-    public static void setDataTable(){       
-        String[][] dados = null;
+    public static void setSizeColumn(){
+        tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(35);
+        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(30);
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(35);
+        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(35);        
+    }
+    
+    public static void setDataTable(){
         
-        try {        
-            dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
+        String[][] dados = null;                         
+        
+        try {
+            dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());
         } catch (Exception ex) {
-            System.err.println("Erro Painel Projetos: " + ex);
+            System.err.println("Erro em Painel Funcionario: " + ex);
         }
         
-        PainelProjetos.modelo = new DefaultTableModel(dados, PainelProjetos.colunas);
-        PainelProjetos.tabela.setModel(PainelProjetos.modelo);                    
-        PainelProjetos.setSizeColumn();        
+        PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);
+        PainelFuncionarios.tabela.setModel(PainelFuncionarios.modelo);                    
+        PainelFuncionarios.contaRegistros.setText(PainelFuncionarios.tabela.getRowCount() + " registro(s) encontrado(s)");                    
+        PainelFuncionarios.setSizeColumn();        
     }
 }
