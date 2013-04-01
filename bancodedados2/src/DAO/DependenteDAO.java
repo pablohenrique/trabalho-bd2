@@ -103,8 +103,9 @@ public class DependenteDAO implements IObjectDAO{
             this.ps.setString(1,aux.getSexo());
             this.ps.setDate(2,aux.getDataNascimento());
             this.ps.setString(3,aux.getParentesco());
-            this.ps.setString(4,aux.getNome());
-            this.ps.setString(5,aux.getEssn().getSsn());
+            this.ps.setString(4,aux.getEssn().getSsn());
+            this.ps.setString(5,aux.getNome());
+
             
             System.gc();
             
