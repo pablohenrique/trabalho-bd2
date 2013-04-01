@@ -139,6 +139,23 @@ public class EmpregadoControl
         
         return empregados;
     } 
+    
+ 
+            
+      public Vector<Empregado> SearchBySuperSnn(String superssn)
+    {
+        EmpregadoDAO dao = new EmpregadoDAO();
+        ArrayList<Object> empregadosObject = (ArrayList<Object>) dao.readbySuperssn(superssn);
+        Vector<Empregado> empregados = new Vector<Empregado>();
+        
+        for(int i = 0 ; i < empregadosObject.size() ; i++)
+        {
+            Empregado e = (Empregado) empregadosObject.get(i);
+            empregados.add(e);
+        }
+        
+        return empregados;
+    }
 
 
     public int login(String usuario, String senha)

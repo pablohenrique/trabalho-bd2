@@ -154,6 +154,17 @@ public class ControlFacade {
         return empregadoControl.SearchByName(nome);
     }
     
+
+    /**
+     * 
+     * @param superssn
+     * @return Vector<Empregado>
+     * retorna empregados de um superssn informado
+     */     
+    public Vector<Empregado> buscaSuperSnn(String superssn) {
+        return empregadoControl.SearchBySuperSnn(superssn);
+    }
+    
      /**
      * Funcoes de departamento
      */

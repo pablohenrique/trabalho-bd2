@@ -28,6 +28,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_LOGIN = " SELECT cia.login(?,?); ";
     private final String SQL_GET = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.ssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE ? AND e.superssn = s.ssn AND e.dno = d.numero;";
+    private final String SQL_READ_SUPERSSN = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.superssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN" +
 " cia.departamento AS d ON e.dno = d.numero)" +
 " LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn)" +
@@ -162,6 +163,30 @@ public class EmpregadoDAO implements IObjectDAO{
             
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
+            
+            ArrayList<Empregado> output = new ArrayList<>();
+            
+            this.rs = this.ps.executeQuery();
+            while(rs.next()){
+                output.add((Empregado) this.useObjectTemplate("e_"));
+            }
+            
+            if(output.isEmpty())
+                throw new ArrayStoreException("Nao houve objetos encontrados.");
+            
+            return output;
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+        public Object readbySuperssn(String superssn) {
+        try {
+
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ_SUPERSSN);
+            this.ps.setString(1,superssn);
             
             ArrayList<Empregado> output = new ArrayList<>();
             
