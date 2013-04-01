@@ -37,21 +37,18 @@ public class DependenteControl  {
 
 
     public void update(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception {
-        FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaEmpregado(essn) == false)
-            throw new Exception("Erro: empregado informado nao foi encontrado");
-        else{
-            Empregado empregado = (Empregado) FactoryDAO.getFactory("Empregado").read(essn);
-            
-            Dependente dependente = new Dependente();
-            dependente.setNome(nome);
-            dependente.setEssn(empregado);
-            dependente.setSexo(sexo);
-            dependente.setDataNascimento(datanascimento);
-            dependente.setParentesco(parentesco);
-            
-            FactoryDAO.getFactory("Dependente").update(dependente);  
-        }
+        
+        Empregado empregado = new Empregado();
+        empregado.setSsn(essn);
+        
+        Dependente dependente = new Dependente();
+        dependente.setNome(nome);
+        dependente.setEssn(empregado);
+        dependente.setSexo(sexo);
+        dependente.setDataNascimento(datanascimento);
+        dependente.setParentesco(parentesco);
+
+        FactoryDAO.getFactory("Dependente").update(dependente);  
     }
     
     public void delete(String essn, String nomedependente) throws Exception{

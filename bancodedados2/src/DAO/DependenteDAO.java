@@ -19,7 +19,7 @@ public class DependenteDAO implements IObjectDAO{
     private final String BEFORECOND = 
 "SELECT d.nome_dependente AS d_nomedependente, d.essn AS d_essn, cia.sexo(d.sexo) AS d_sexo, d.datanasc AS d_datanascimento, d.parentesco AS d_parentesco,"+
 " e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha"+
-" FROM cia.dependentes AS d, cia.empregado AS e";
+" FROM cia.dependentes AS d, cia.empregado AS e ";
     private final String AFTERCOND = " AND d.essn = e.ssn ORDER BY d.nome_dependente ASC";
     
     private final String SQL_POST = "INSERT INTO cia.dependentes VALUES(?,?,cia.sexoToBd(?),?,?);";
@@ -139,7 +139,8 @@ public class DependenteDAO implements IObjectDAO{
             this.ps.setString(2,nome);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
+            
+            return this.getAllTemplate().get(0);
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );

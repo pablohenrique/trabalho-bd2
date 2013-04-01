@@ -312,7 +312,7 @@ public class ControlFacade {
      * @throws Exception 
      * retorna dependente com essn e nome informado
      */
-    public Dependente buscaEssnNome(String essn, String nome) throws Exception{
+    public Dependente buscaDependenteEssnNome(String essn, String nome) throws Exception{
         return dependenteControl.SearchByEssnNome(essn,nome);
     }
     

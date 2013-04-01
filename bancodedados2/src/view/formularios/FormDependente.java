@@ -91,13 +91,15 @@ public class FormDependente extends JDialog implements ActionListener
         {
             try
             {
-              //  this.editarEmpregado(dep);
+              this.setEnable(true);
+              this.editar(dep);
             }
             catch (Exception ex)
             {
                  JOptionPane.showMessageDialog(this,"Erro Dependente: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
             }
-        }
+        } else
+             this.setEnable(false);
         
         btnOK = new JButton("OK");
         btnCancelar = new JButton("Cancelar");
@@ -106,9 +108,7 @@ public class FormDependente extends JDialog implements ActionListener
 
         btnOK.addActionListener(this);
         btnCancelar.addActionListener(this);
-        empregado.addActionListener(this);
-        
-        this.setEnable(false);
+        empregado.addActionListener(this);               
         
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
@@ -148,35 +148,21 @@ public class FormDependente extends JDialog implements ActionListener
     }
 
     
-    public void editar(Dependente e) throws Exception
-    {
-        /*
-        nome.setText(e.getNome());
-        endereco.setText(e.getEndereco());
-        dataNasc.setText(e.getDataNascimentoString());
-        salario.setText(e.getSalarioString());
-        ssn.setText(e.getSsn());
-        senha.setText(e.getSenha());
-        sexo.setSelectedItem(e.getSexo());
-        departamento.setSelectedIndex(this.selecionarComboBoxDep(e.getDepartamento().getNumero(), departamento));
-        
-        
-        System.out.println("ssn" + e.getSuperSsn().getSsn());
-
-        if(e.getSuperSsn().getSsn() != null)
-            supervisor.setSelectedIndex(this.selecionarComboBoxSup(e.getSuperSsn(), supervisor));
+    public void editar(Dependente d) throws Exception
+    {        
+        nome.setText(d.getNome());
+        dataNasc.setText(d.getDataNascimentoString());
+        sexo.setSelectedItem(d.getSexo());
+        parentesco.setSelectedItem(d.getParentesco());
+                
+        if(d.getEssn() != null)
+            empregado.setSelectedIndex(this.selecionarComboBoxSup(d.getEssn(), empregado));
         else
-            supervisor.setSelectedIndex(supervisor.getItemCount()-1);
-        */
+            empregado.setSelectedIndex(empregado.getItemCount()-1);
+        
         this.setTitle("Editar Dependente");
     }    
-    
-    public int selecionarComboBoxDep(int id, JComboBox<Departamento> box){
-        for(int i=0; i < box.getItemCount(); i++)   
-            if (id == box.getItemAt(i).getNumero())
-                    return i;        
-        return -1;                
-    }
+
 
     public int selecionarComboBoxSup(Empregado e, JComboBox<Empregado> box){
         if(e == null)
@@ -228,11 +214,13 @@ public class FormDependente extends JDialog implements ActionListener
             else {
                try {                
                     Empregado emp = (Empregado) empregado.getSelectedItem();
+                    
+                    System.out.println("essn " + emp.getSsn() + " nome" + nome.getText() +" sexp" +  sexo.getItemAt(sexo.getSelectedIndex()) + " data "+  dataNasc.getText() + " parentescop" + parentesco.getItemAt(parentesco.getSelectedIndex()));
 
                     Principal.cf.atualizarDependente(nome.getText(), emp.getSsn(), sexo.getItemAt(sexo.getSelectedIndex()), dataNasc.getText(),  parentesco.getItemAt(parentesco.getSelectedIndex()));                              
 
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();
+                    PainelDependentes.setDataTable();
                     this.dispose();
                 }
                 catch(Exception ex)
