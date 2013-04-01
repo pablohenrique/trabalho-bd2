@@ -210,15 +210,14 @@ public class FormFuncionario extends JDialog implements ActionListener
     
     public void nivelUser(Empregado e)
     {
+        salario.setEnabled(false);
+        ssn.setEnabled(false);        
+        
         if(e.getTipoLogin() == 0) 
         {
-            salario.setEnabled(false);
-            ssn.setEnabled(false);
             departamento.setEnabled(false);
             supervisor.setEnabled(false);
-        }else if (e.getTipoLogin() == 1){//supervisor e funcionario
-            salario.setEnabled(false);
-            ssn.setEnabled(false);
+        }else if (e.getTipoLogin() == 1){//supervisor e funcionario            
             if(e.getSuperSsn().equals(e.getSsn()))//empregado eh supervisor dele mesmo
             {
                 departamento.setEnabled(true);

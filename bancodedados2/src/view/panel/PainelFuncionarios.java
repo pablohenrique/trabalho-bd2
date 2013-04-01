@@ -200,9 +200,9 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         String[][] dados = null;                         
         
         try {
-            //if(Principal.user.getTipoLogin() == 1)
-                //dados = Principal.cf.getDependentesTable(Principal.cf.(Principal.user.getSsn()));            
-            //else
+            if(Principal.user.getTipoLogin() == 1)
+                dados = Principal.cf.getEmpregadosTable(Principal.cf.buscaSuperSnn(Principal.user.getSsn()));            
+            else
                 dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());
         } catch (Exception ex) {
             System.err.println("Erro em Painel Funcionario: " + ex);
