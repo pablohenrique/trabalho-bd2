@@ -84,6 +84,18 @@ public class EmpregadoDAO implements IObjectDAO{
         return emp;
     }
     
+    public ArrayList<Object> getAllTemplate() throws SQLException{
+        ArrayList<Object> output = new ArrayList<>();
+        while(rs.next()){
+            output.add((Empregado) this.useObjectTemplate("e_"));
+        }
+
+        if(output.isEmpty())
+            throw new ArrayStoreException("Nao houve objetos encontrados.");
+
+        return output;
+    }
+    
     @Override
     public void post(Object input) throws Exception {
         try {
@@ -158,23 +170,13 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public Object read(Object input) {
         try {
-            String aux = (String) input;
-            aux = "'%"+aux+"%'";
+            String aux = "'%"+(String) input+"%'";
             
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
-            
-            ArrayList<Empregado> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(rs.next()){
-                output.add((Empregado) this.useObjectTemplate("e_"));
-            }
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            
-            return output;
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -187,18 +189,9 @@ public class EmpregadoDAO implements IObjectDAO{
 
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ_SUPERSSN);
             this.ps.setString(1,superssn);
-            
-            ArrayList<Empregado> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(rs.next()){
-                output.add((Empregado) this.useObjectTemplate("e_"));
-            }
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            
-            return output;
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -210,17 +203,9 @@ public class EmpregadoDAO implements IObjectDAO{
     public ArrayList<Object> getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Object> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(rs.next()){
-                output.add((Empregado) this.useObjectTemplate("e_"));  
-            }
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            
-            return output;
+            return this.getAllTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
