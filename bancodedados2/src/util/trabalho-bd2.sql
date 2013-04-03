@@ -315,7 +315,7 @@ $$ language 'plpgsql';
 ---
 
 CREATE OR REPLACE FUNCTION trigger_emp_salario()
-    RETURNS trigger AS
+  RETURNS trigger AS
 $BODY$
 BEGIN
     IF NEW.salario < 100 THEN
@@ -323,13 +323,16 @@ BEGIN
     END IF;
 
     IF NEW.salario != OLD.salario THEN
-        INSERT INTO emp_audit VALUES('M',now(),OLD.ssn,OLD.superssn,NEW.salario);
+        INSERT INTO auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
     END IF;
 
     RETURN NEW;
 END;
 $BODY$
-    LANGUAGE plpgsql;
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION cia.trigger_emp_salario()
+  OWNER TO postgres;
 
 CREATE TRIGGER trigger_emp_salario BEFORE INSERT OR UPDATE ON empregado
 FOR EACH ROW EXECUTE PROCEDURE trigger_emp_salario();
