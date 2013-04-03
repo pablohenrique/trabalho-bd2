@@ -48,70 +48,26 @@ public class EmpregadoControl
     }
     
     public void post(String ssn, String nome, String sexo, String endereco, String salario, String datanasc, int dno, String superssn, String senha) throws Exception{
-        FactoryDAO.getFactory("Empregado").post(this.createObject(ssn, nome, sexo, endereco, salario, datanasc, dno, superssn, senha));
+        this.dao.post(this.createObject(ssn, nome, sexo, endereco, salario, datanasc, dno, superssn, senha));
     }    
     
 
     public void update(String ssn, String nome, String sexo, String endereco, String salario, String datanasc, int dno, String superssn, String senha) throws Exception {
-        
-        FactoryDAO.getFactory("Empregado").update(this.createObject(ssn, nome, sexo, endereco, salario, datanasc, dno, superssn, senha));
-        
-        /*
-        Empregado gerente = new Empregado();
-        gerente.setSsn(superssn);
-
-        Departamento dep = new Departamento();
-        dep.setNumero(dno);
-
-        Empregado empregadoVerifica = (Empregado) FactoryDAO.getFactory("Empregado").get(ssn);
-
-        float salarioAtual = empregadoVerifica.getSalario();   
-        float salarioEmp = Float.parseFloat(salario);
-
-        //IObjectDAO dao0 = FactoryDAO.getFactory("Empregado"); 
-        //Empregado gerente = (Empregado) dao0.get(superssn);            
-
-        Empregado empregado = new Empregado();    
-        empregado.setSsn(ssn);
-        empregado.setNome(nome);
-        empregado.setSexo(sexo);
-        empregado.setEndereco(endereco);
-        empregado.setSalario(salario);
-        empregado.setDataNascimento(datanasc);
-        empregado.setDepartamento(dep);
-        empregado.setSuperSsn(gerente);
-        empregado.setSenha(senha);
-
-        System.out.println("empregado atualizado!");            
-        FactoryDAO.getFactory("Empregado").update(empregado); 
-
-        if(salarioAtual !=  salarioEmp)
-        {
-            Auditoria auditoria = new Auditoria();
-            auditoria.setAntigosalario(salarioAtual);
-            auditoria.setNovosalario(salarioEmp);
-            auditoria.setEssn(empregadoVerifica);
-            //AQUI GERENTE
-            auditoria.setGerssn(gerente);
-            Date data = new Date(System.currentTimeMillis()); 
-            auditoria.setDatamodificacao(data);
-            //FALTA INSERIR NO BANCO    
-        } 
-        */
+        this.dao.update(this.createObject(ssn, nome, sexo, endereco, salario, datanasc, dno, superssn, senha));
     }
     
     public void delete(String input) throws Exception{
-        FactoryDAO.getFactory("Empregado").delete(input);
+        this.dao.delete(input);
     }
     
     public Empregado getById(String input) throws Exception{
-        return (Empregado) FactoryDAO.getFactory("Empregado").get(input);
+        return (Empregado) this.dao.get(input);
     }
   
     public Vector<Empregado> getAll() throws Exception {
         Vector<Empregado> empregados = new Vector<Empregado>();
         
-        for(Object aux : (ArrayList<Object>) FactoryDAO.getFactory("Empregado").getAll())
+        for(Object aux : this.dao.getAll())
             empregados.add((Empregado) aux);
         
         return empregados;
@@ -120,7 +76,7 @@ public class EmpregadoControl
     public Vector<Empregado> SearchByName(String input){
         Vector<Empregado> empregados = new Vector<Empregado>();
         
-        for(Object aux : (ArrayList<Object>) FactoryDAO.getFactory("Empregado").read(input))
+        for(Object aux : (ArrayList<Object>) this.dao.read(input))
             empregados.add((Empregado) aux);
         
         return empregados;

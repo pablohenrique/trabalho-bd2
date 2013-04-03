@@ -24,7 +24,7 @@ public class DependenteControl  {
         this.dao = (DependenteDAO) FactoryDAO.getFactory("Dependente");
     }
     
-    private Dependente createObject(String nome, String essn, String sexo, String datanascimento, String parentesco){
+    private Dependente createObjectTemplate(String nome, String essn, String sexo, String datanascimento, String parentesco){
         Empregado empregado = new Empregado();
         empregado.setSsn(essn);
         
@@ -39,11 +39,11 @@ public class DependenteControl  {
     }
     
     public void post(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception {
-        FactoryDAO.getFactory("Dependente").post(this.createObject(nome, essn, sexo, datanascimento, parentesco));
+        this.dao.post(this.createObjectTemplate(nome, essn, sexo, datanascimento, parentesco));
     }
 
     public void update(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception {
-        FactoryDAO.getFactory("Dependente").update(this.createObject(nome, essn, sexo, datanascimento, parentesco));
+        this.dao.update(this.createObjectTemplate(nome, essn, sexo, datanascimento, parentesco));
     }
     
     public void delete(String essn, String nomedependente) throws Exception{
@@ -51,39 +51,26 @@ public class DependenteControl  {
         dependentedao.deleteDep(essn, nomedependente);
     }
     
-        public static Vector<Dependente> getAll() throws Exception{
-         ArrayList<Object> dependenteObject = (ArrayList<Object>) FactoryDAO.getFactory("Dependente").getAll();
-         Vector<Dependente> dependente = new Vector<Dependente>();
-         
-         for(int i = 0 ; i < dependenteObject.size() ; i++)
-         {
-             Dependente d = (Dependente) dependenteObject.get(i);             
-             dependente.add(d);
-         }
-         
-         return dependente;
+    public Vector<Dependente> getAll() throws Exception{
+        Vector<Dependente> dependente = new Vector<Dependente>();
+
+        for(Object aux : (ArrayList<Object>) this.dao.getAll())
+            dependente.add((Dependente) aux);
+
+        return dependente;
     }    
 
-
     public Vector<Dependente> SearchByEssn(String input) throws Exception {
-        ArrayList<Object> dependenteObject = (ArrayList<Object>) FactoryDAO.getFactory("Dependente").get(input);
         Vector<Dependente> dependente = new Vector<Dependente>();
-        for(int i = 0 ; i < dependenteObject.size() ; i++)
-        {
-            Dependente d = (Dependente) dependenteObject.get(i);             
-            dependente.add(d);
-        }
+
+        for(Object aux : (ArrayList<Object>) this.dao.get(input))
+            dependente.add((Dependente) aux);
 
         return dependente;
     } 
     
-    
     public Dependente SearchByEssnNome(String essn, String nome) throws Exception{
-        DependenteDAO dao = new DependenteDAO();
-        Dependente dependente = (Dependente) dao.getDependente(essn, nome);
-        return dependente;
-        
+        return (Dependente) this.dao.getDependente(essn, nome);
     }
-
     
 }

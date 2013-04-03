@@ -19,125 +19,85 @@ import java.util.Vector;
  */
 public class ProjetoControl  {
 
-
-    public void post(String nome, String localizacao, int dnumero) throws Exception {
-        
-        Departamento dep = new Departamento();
-        dep.setNumero(dnumero);
-        
+    private ProjetoDAO dao;
+    
+    public ProjetoControl(){
+        this.dao = (ProjetoDAO) FactoryDAO.getFactory("Projeto");
+    }
+    
+    private Projeto creteObjectTemplate(String nome, String localizacao, int dnumero){
         Projeto projeto = new Projeto();
         projeto.setNome(nome);
         projeto.setLocalizacao(localizacao);
-        projeto.setDepartamento(dep);
-        
-        FactoryDAO.getFactory("Projeto").post(projeto);
+        projeto.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").read(dnumero));
+        return projeto;
+    }
+
+    public void post(String nome, String localizacao, int dnumero) throws Exception {
+        this.dao.post(this.creteObjectTemplate(nome, localizacao, dnumero));
     }
     
 
-    public void update(int numero, String nome, String localizacao, int dnumero) 
-            throws Exception
-    {   
+    public void update(int numero, String nome, String localizacao, int dnumero) throws Exception{   
         FuncoesControle f = new FuncoesControle();
         
         if(f.verificarExistenciaDepartamento(dnumero) == false)
-        {
             throw new Exception("Erro: departamento informado nao foi encontrado");
-        }
         else
-        {
-            Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
-            Projeto projeto = new Projeto();
-            projeto.setNumero(numero);
-            projeto.setNome(nome);
-            projeto.setLocalizacao(localizacao);
-            projeto.setDepartamento(departamento);
-            FactoryDAO.getFactory("Projeto").update(projeto); 
-        }
-
+            this.dao.update(this.creteObjectTemplate(nome, localizacao, dnumero));
     }
     
     public void delete(int numero) throws Exception{
-        FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaProjeto(numero) == false){
-            throw new Exception("Erro: projeto informado nao foi encontrado");
-        } else{
-            FactoryDAO.getFactory("Projeto").delete(numero);
-        }
+        this.dao.delete(numero);
     }
 
-    public Projeto getById(int input) throws Exception 
-    {
-        return (Projeto) FactoryDAO.getFactory("Projeto").get(input);
+    public Projeto getById(int input) throws Exception {
+        return (Projeto) this.dao.get(input);
     }
          
-    public static Vector<Projeto> getAll() throws Exception {
-         ArrayList<Object> projetoObject = (ArrayList<Object>) FactoryDAO.getFactory("Projeto").getAll();
-         Vector<Projeto> projeto = new Vector<Projeto>();
-         
-         for(int i = 0 ; i < projetoObject.size() ; i++){
-             Projeto p = (Projeto) projetoObject.get(i);             
-             projeto.add(p);
-         }
-         
-         return projeto;
+    public Vector<Projeto> getAll() throws Exception {
+        Vector<Projeto> projeto = new Vector<Projeto>();
+        
+        for(Object aux : this.dao.getAll())
+            projeto.add((Projeto) aux);
+
+        return projeto;
     }    
         
-        public static Vector<Projeto> getAllByDepNome(String nomeDepto)  throws Exception{
-        ProjetoDAO dao = new ProjetoDAO();
-        
-        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllDep(nomeDepto);
+    public Vector<Projeto> getAllByDepNome(String nomeDepto)  throws Exception{
         Vector<Projeto> projeto = new Vector<Projeto>();
-         
-        for(int i = 0 ; i < projetoObject.size() ; i++){
-            Projeto p = (Projeto) projetoObject.get(i);             
-            projeto.add(p);
-         }
-        
+
+        for(Object aux : this.dao.getAllDep(nomeDepto))
+            projeto.add((Projeto) aux);
+
         return projeto;
     }   
         
-    public static Vector<Projeto> getAllByDepNumero(int depnumero)  throws Exception{
-        ProjetoDAO dao = new ProjetoDAO();
-
-        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllDep(depnumero);
+    public Vector<Projeto> getAllByDepNumero(int depnumero)  throws Exception{
         Vector<Projeto> projeto = new Vector<Projeto>();
 
-        for (int i = 0; i < projetoObject.size(); i++) {
-            Projeto p = (Projeto) projetoObject.get(i);
-            projeto.add(p);
-        }
+        for(Object aux : this.dao.getAllDep(depnumero))
+            projeto.add((Projeto) aux);
 
         return projeto;
     }
-   
-
-        
-    public static Vector<Projeto> getAllByEmp(String ssn) throws Exception {
-        ProjetoDAO dao = new ProjetoDAO();
-        
-        ArrayList<Object> projetoObject = (ArrayList<Object>) dao.getAllEmp(ssn);
+    
+    public Vector<Projeto> getAllByEmp(String ssn) throws Exception {
         Vector<Projeto> projeto = new Vector<Projeto>();
          
-        for(int i = 0 ; i < projetoObject.size() ; i++){
-            Projeto p = (Projeto) projetoObject.get(i);             
-            projeto.add(p);
-         }
+        for(Object aux : this.dao.getAllEmp(ssn))
+            projeto.add((Projeto) aux);
         
         return projeto;
-    }    
-        
+    }
 
     public Vector<Projeto> SearchByName(String input) throws Exception {
+        Vector<Projeto> projeto = new Vector<Projeto>();
+        
+        for(Object aux : (ArrayList<Object>) this.dao.get(input))
+            projeto.add((Projeto) aux);
 
-       ArrayList<Object> projetoObject = (ArrayList<Object>) FactoryDAO.getFactory("Projeto").get(input);
-       Vector<Projeto> projeto = new Vector<Projeto>();
-                for(int i = 0 ; i < projetoObject.size() ; i++)
-         {
-             Projeto p = (Projeto) projetoObject.get(i);             
-             projeto.add(p);
-         }
-         
-         return projeto;
+        return projeto;
     }  
     
 }

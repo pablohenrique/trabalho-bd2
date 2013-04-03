@@ -11,8 +11,9 @@ package DAO;
 public class FactoryDAO {
     private static String factoryInUse = "";
     private static IObjectDAO instance;
+    
     public static IObjectDAO getFactory(String dao){
-        if(!dao.equals(factoryInUse) || factoryInUse.equals(""))
+        if(!dao.equals(factoryInUse) || factoryInUse.equals("")) {
             switch(dao){
                 case("Departamento"):
                     factoryInUse = "Departamento";
@@ -43,6 +44,7 @@ public class FactoryDAO {
                     instance = null;
                     break;
             }
+        }
         return instance;
     }
     

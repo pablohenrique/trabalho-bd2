@@ -6,6 +6,7 @@ package control;
 
 import DAO.FactoryDAO;
 import DAO.IObjectDAO;
+import DAO.LocalizacaoDAO;
 import Model.Departamento;
 import Model.Localizacao;
 import java.util.ArrayList;
@@ -17,74 +18,59 @@ import java.util.Vector;
  */
 public class Localizacoes {
     
-        
-    public void post(int dnumero, String nome) throws Exception {
-        FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaDepartamento(dnumero) == false){
-            throw new Exception("Erro: departamento informado nao foi encontrado");
-        }else{
+    private LocalizacaoDAO dao;
+    
+    public Localizacoes(){
+        this.dao = (LocalizacaoDAO) FactoryDAO.getFactory("Departamento");
+    }
+    
+    private Localizacao createObject(int dnumero, String nome){
         Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
         Localizacao localizacao = new Localizacao();
         localizacao.setDepartamento(departamento);
         localizacao.setNome(nome);
-        FactoryDAO.getFactory("Localizacao").post(departamento);
-        }
-
-
+        return localizacao;
     }
-
+    
+    public void post(int dnumero, String nome) throws Exception {
+        FuncoesControle f = new FuncoesControle();
+        
+        if(f.verificarExistenciaDepartamento(dnumero) == false)
+            throw new Exception("Erro: departamento informado nao foi encontrado");
+        else
+            this.dao.post(this.createObject(dnumero, nome));
+        
+    }
 
     public void update(int dnumero, String nome) throws Exception {
         FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaDepartamento(dnumero) == false){
+        
+        if(f.verificarExistenciaDepartamento(dnumero) == false)
            throw new Exception("Erro: departamento informado nao foi encontrado"); 
-        }else{
-        Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
-        Localizacao localizacao = new Localizacao();
-        localizacao.setDepartamento(departamento);
-        localizacao.setNome(nome);
-        FactoryDAO.getFactory("Localizacao").update(departamento);
-        }
+        else
+            this.dao.post(this.createObject(dnumero, nome));
     }
     
-    
     public Vector<Localizacao>  getAll() throws Exception {
-        ArrayList<Object> localizacaoObject = (ArrayList<Object>) FactoryDAO.getFactory("Localizacao").getAll();
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         
-        for(int i = 0 ; i < localizacaoObject.size() ; i++)
-        {
-            Localizacao l = (Localizacao) localizacaoObject.get(i);
-            localizacao.add(l);
-        }
-        
-        return localizacao;
-    } 
-        
-        public void delete(String localizacao) throws Exception{
-            FuncoesControle f = new FuncoesControle();
-            if(f.verificarExistenciaLocalizacao(localizacao) == false){
-                throw new Exception("Erro: localizacao informado nao foi encontrado"); 
-            } else{
-                FactoryDAO.getFactory("Localizacao").delete(localizacao);
-            }
-        }
-
-
-    
-            public Vector<Localizacao>  SearchByName(String input)
-    {
-        ArrayList<Object> localizacaoObject = (ArrayList<Object>) FactoryDAO.getFactory("Localizacao").read(input);
-        Vector<Localizacao> localizacao = new Vector<Localizacao>();
-        
-        for(int i = 0 ; i < localizacaoObject.size() ; i++)
-        {
-            Localizacao l = (Localizacao) localizacaoObject.get(i);
-            localizacao.add(l);
-        }
+        for(Object aux : this.dao.getAll())
+            localizacao.add((Localizacao) aux);
         
         return localizacao;
     } 
     
+    public Vector<Localizacao>  SearchByName(String input){
+        Vector<Localizacao> localizacao = new Vector<Localizacao>();
+        
+        for(Object aux : (ArrayList<Object>) this.dao.read(input))
+            localizacao.add((Localizacao) aux);
+        
+        return localizacao;
+    } 
+    
+    public void delete(String localizacao) throws Exception{
+        this.dao.delete(localizacao);
+    }
     
 }
