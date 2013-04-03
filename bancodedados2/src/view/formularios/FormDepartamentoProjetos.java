@@ -24,7 +24,6 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     private static final long serialVersionUID = 1L;    
     
     private static JButton btnOK;
-    private static JButton btnCancelar;
     
     private static JTable tabela;
     private static DefaultTableModel modelo;
@@ -35,14 +34,11 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     {
         super(Principal.janela,"Todos Projetos de Departamentos", true);
                                
-        btnOK = new JButton("OK");
-        btnCancelar = new JButton("Cancelar");
+        btnOK = new JButton("OK");       
         btnOK.setPreferredSize(new Dimension(100, 25));
-        btnCancelar.setPreferredSize(new Dimension(100, 25));
-        dep = d;
+        btnOK.addActionListener(this);        
         
-        btnOK.addActionListener(this);
-        btnCancelar.addActionListener(this);
+        dep = d;                
 
         JLabel nome = new JLabel("Departamento: ");         
         
@@ -60,8 +56,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         
         JPanel botoes = new JPanel();
 
-        botoes.add(btnOK);
-        botoes.add(btnCancelar);        
+        botoes.add(btnOK);       
         botoes.add(Box.createVerticalStrut(45));
         botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));        
                 
@@ -111,14 +106,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         Object origem = e.getSource();
 
         if(origem == btnOK)
-        {
-                                     
-        }
-
-        if (origem == btnCancelar)
-        {
-                this.dispose();
-        } 
+            this.dispose();
     }
     
     public static void setSizeColumnFuncionariosProjetos(){

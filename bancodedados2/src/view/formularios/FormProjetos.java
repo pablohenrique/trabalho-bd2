@@ -52,7 +52,7 @@ public class FormProjetos extends JDialog implements ActionListener
     private static JButton btnCancelar;
     private Projeto p_edit = null;
     
-    public FormProjetos(Projeto p, boolean logado)
+    public FormProjetos(Projeto p)
     {
         super(Principal.janela,"Cadastro de Projetos", true);
         p_edit = p;

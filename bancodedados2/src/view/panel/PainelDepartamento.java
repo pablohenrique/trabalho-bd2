@@ -130,13 +130,13 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormDepartamento(null, false);
+                new FormDepartamento(null);
         else if (origem == editar && (item != -1)){            
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             Departamento dep;
             try {
                 dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));
-                new FormDepartamento(dep, true);
+                new FormDepartamento(dep);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }

@@ -55,7 +55,7 @@ public class FormDependente extends JDialog implements ActionListener
     private static JButton btnCancelar;
     private Dependente dep_edit = null;
     
-    public FormDependente(Dependente dep, boolean logado)
+    public FormDependente(Dependente dep)
     {
         super(Principal.janela,"Cadastro de Dependente", true);
         dep_edit = dep;

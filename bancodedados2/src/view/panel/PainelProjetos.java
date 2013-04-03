@@ -113,7 +113,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
 
     public JPanel nivelView(JPanel botoes, JLabel imagem)
     {        
-        if(Principal.user.getTipoLogin() == 1){          
+        if(Principal.user.getTipoLogin() >= 1){          
             botoes.add(Box.createHorizontalStrut(5));
             botoes.add(novo);
             botoes.add(Box.createHorizontalStrut(3));
@@ -126,8 +126,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             botoes.add(contaRegistros);
             botoes.add(Box.createHorizontalGlue());            
         }            
-
-        if(Principal.user.getTipoLogin() == 0){          
+        else if(Principal.user.getTipoLogin() == 0){          
             botoes.add(Box.createHorizontalStrut(5));
             botoes.add(informacoes);        
             botoes.add(Box.createHorizontalStrut(3));
@@ -157,13 +156,13 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormProjetos(null, false);
+                new FormProjetos(null);
         else if (origem == editar && (item != -1)){
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             Projeto p = null;
             try {
                 p = Principal.cf.getProjetoByNumero(Integer.parseInt(numero));
-                new FormProjetos(p, true);
+                new FormProjetos(p);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }             

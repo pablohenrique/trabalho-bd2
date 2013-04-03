@@ -52,7 +52,7 @@ public class FormDepartamento extends JDialog implements ActionListener
     private static JButton btnCancelar;
     private Departamento dep_edit = null;
     
-    public FormDepartamento(Departamento emp, boolean logado)
+    public FormDepartamento(Departamento emp)
     {
         super(Principal.janela,"Cadastro de Departamento", true);
         dep_edit = emp;

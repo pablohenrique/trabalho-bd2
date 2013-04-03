@@ -103,13 +103,16 @@ public final class WindowLoginSelect extends JFrame implements ActionListener
         if(e.getSource() == btnOK){
             this.dispose();
             
-            if(select.getSelectedItem().equals("Funcionario"))
-                Principal.janela = new WindowFuncionario();
-            else if(select.getSelectedItem().equals("Supervisor"))
-                Principal.janela = new WindowSupervisor();
-            else if(select.getSelectedItem().equals("Gerente"))
-                Principal.janela = new Window();         
-            else {
+            if(select.getSelectedItem().equals("Funcionario")){
+                Principal.user.setTipoLogin(0);                
+                Principal.janela = new WindowFuncionario();                
+            }else if(select.getSelectedItem().equals("Supervisor")){
+                Principal.user.setTipoLogin(1);
+                Principal.janela = new WindowSupervisor();                
+            }else if(select.getSelectedItem().equals("Gerente")){
+                Principal.user.setTipoLogin(2);                
+                Principal.janela = new WindowGerente();         
+            }else {
                 Principal.janela = null;               
                 System.exit(0);
             }

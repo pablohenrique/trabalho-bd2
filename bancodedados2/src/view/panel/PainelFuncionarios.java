@@ -91,11 +91,13 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         txtBusca.setMaximumSize(new Dimension(200, 24));
 
         botoes.add(Box.createHorizontalStrut(5));
-        botoes.add(novo);
+        if(Principal.user.getTipoLogin() != 1)
+            botoes.add(novo);
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(editar);
         botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(excluir);
+        if(Principal.user.getTipoLogin() != 1)
+            botoes.add(excluir);
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(projetos);         
         botoes.add(Box.createVerticalStrut(45));

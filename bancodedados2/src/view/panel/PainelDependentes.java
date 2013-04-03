@@ -122,7 +122,8 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             botoes.add(Box.createHorizontalStrut(3));
             botoes.add(editar);
             botoes.add(Box.createHorizontalStrut(3));
-            botoes.add(excluir);        
+            botoes.add(excluir); 
+            botoes.add(Box.createVerticalStrut(45));
             botoes.add(Box.createHorizontalGlue());            
             botoes.add(contaRegistros);
             botoes.add(Box.createHorizontalGlue());
@@ -131,9 +132,8 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         } else if(Principal.user.getTipoLogin() == 0) {
             botoes.add(Box.createHorizontalGlue());        
             botoes.add(contaRegistros);                                 
-        }
-        
-        botoes.add(Box.createVerticalStrut(45));
+            botoes.add(Box.createVerticalStrut(45));
+        }                
         
         return botoes;
     }
@@ -144,7 +144,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormDependente(null, false);
+                new FormDependente(null);
         else if (origem == editar && (item != -1)){
             
             String essn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
@@ -152,7 +152,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             Dependente dep = null;
             try {
                 dep = Principal.cf.buscaDependenteEssnNome(essn, nome);
-                new FormDependente(dep, true);
+                new FormDependente(dep);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }            
@@ -215,7 +215,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         try {
             if(Principal.user.getTipoLogin() == 0 || Principal.user.getTipoLogin() == 1)
                 dados = Principal.cf.getDependentesTable(Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
-            else if (Principal.user.getTipoLogin() == 2 || Principal.user.getTipoLogin() == 3)
+            else if (Principal.user.getTipoLogin() == 2)
                 dados = Principal.cf.getDependentesTable(Principal.cf.listarDependentes());
         } catch (Exception ex) {
             System.err.println("Erro listar dependentes: " + ex);

@@ -143,6 +143,8 @@ public class FormFuncionario extends JDialog implements ActionListener
         grid.add(new JLabel("Supervisor: "));
         grid.add(supervisor);           
         
+        comboEnableSupervisor();
+        
         nome.setPreferredSize(new Dimension(250, 25));
 
         JPanel painel = new JPanel();
@@ -223,11 +225,21 @@ public class FormFuncionario extends JDialog implements ActionListener
                 departamento.setEnabled(true);
                 supervisor.setEnabled(true);                
             }
+        }       
+    }
+    
+    public void comboEnableSupervisor()
+    {
+        if(Principal.user.getTipoLogin() == 1)//supervisor
+        {
+            supervisor.setEnabled(false);
+            departamento.setEnabled(false);
+            senha.setEnabled(false);
         }
-        else if(e.getTipoLogin() == 2){//gerente e funcionario
+        if(Principal.user.getTipoLogin() == 2){
             salario.setEnabled(true);
-            ssn.setEnabled(true);
-        }         
+            ssn.setEnabled(true);               
+        }
     }
     
     @Override
@@ -271,7 +283,7 @@ public class FormFuncionario extends JDialog implements ActionListener
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     
-                    if(Principal.user.getTipoLogin() == 2)
+                    if(Principal.user.getTipoLogin() == 2 || Principal.user.getTipoLogin() == 1)
                         PainelFuncionarios.setDataTable();                     
                     this.dispose();
                 }
