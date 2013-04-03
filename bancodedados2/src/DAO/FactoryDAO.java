@@ -9,24 +9,41 @@ package DAO;
  * @author pablohenrique
  */
 public class FactoryDAO {
-    
+    private static String factoryInUse = "";
+    private static IObjectDAO instance;
     public static IObjectDAO getFactory(String dao){
-        switch(dao){
-            case("Departamento"):
-                return new DepartamentoDAO();
-            case("Dependente"):
-                return new DependenteDAO();
-            case("Empregado"):
-                return new EmpregadoDAO();               
-            case("Projeto"):
-                return new ProjetoDAO();
-            case("Trabalha"):
-                return new TrabalhaDAO();
-            case("Localizacao"):
-                return new LocalizacaoDAO();
-            default:
-                return null;
-        }
+        if(!dao.equals(factoryInUse) || factoryInUse.equals(""))
+            switch(dao){
+                case("Departamento"):
+                    factoryInUse = "Departamento";
+                    instance = new DepartamentoDAO();
+                    break;
+                case("Dependente"):
+                    factoryInUse = "Dependente";
+                    instance = new DependenteDAO();
+                    break;
+                case("Empregado"):
+                    factoryInUse = "Empregado";
+                    instance = new EmpregadoDAO();
+                    break;
+                case("Projeto"):
+                    factoryInUse = "Projeto";
+                    instance = new ProjetoDAO();
+                    break;
+                case("Trabalha"):
+                    factoryInUse = "Trabalha";
+                    instance = new TrabalhaDAO();
+                    break;
+                case("Localizacao"):
+                    factoryInUse = "Localizacao";
+                    instance = new LocalizacaoDAO();
+                    break;
+                default:
+                    factoryInUse = "";
+                    instance = null;
+                    break;
+            }
+        return instance;
     }
     
 }

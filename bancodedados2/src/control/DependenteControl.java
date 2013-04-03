@@ -18,39 +18,32 @@ import java.util.Vector;
  * @author yuricampos
  */
 public class DependenteControl  {
-
+    private DependenteDAO dao;
+    
+    public DependenteControl(){
+        this.dao = (DependenteDAO) FactoryDAO.getFactory("Dependente");
+    }
+    
+    private Dependente createObject(String nome, String essn, String sexo, String datanascimento, String parentesco){
+        Empregado empregado = new Empregado();
+        empregado.setSsn(essn);
+        
+        Dependente dependente = new Dependente();
+        dependente.setNome(nome);
+        dependente.setEssn(empregado);
+        dependente.setSexo(sexo);
+        dependente.setDataNascimento(datanascimento);
+        dependente.setParentesco(parentesco);
+        
+        return dependente;
+    }
     
     public void post(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception {
-        
-        Empregado empregado = new Empregado();
-        empregado.setSsn(essn);
-        
-        Dependente dependente = new Dependente();
-        dependente.setNome(nome);
-        dependente.setEssn(empregado);
-        dependente.setSexo(sexo);
-        dependente.setDataNascimento(datanascimento);
-        dependente.setParentesco(parentesco);
-
-        FactoryDAO.getFactory("Dependente").post(dependente);  
+        FactoryDAO.getFactory("Dependente").post(this.createObject(nome, essn, sexo, datanascimento, parentesco));
     }
 
-
     public void update(String nome, String essn, String sexo, String datanascimento, String parentesco) throws Exception {
-        
-        Empregado empregado = new Empregado();
-        empregado.setSsn(essn);
-        
-        Dependente dependente = new Dependente();
-        dependente.setNome(nome);
-        dependente.setEssn(empregado);
-        dependente.setSexo(sexo);
-        dependente.setDataNascimento(datanascimento);
-        dependente.setParentesco(parentesco);
-
-        System.out.println("----- essn " + dependente.getEssn().getSsn() + " nome" + dependente.getNome() +" sexp" +  dependente.getSexo() + " data "+  dependente.getDataNascimentoString() + " parentescop" + dependente.getParentesco());
-        
-        FactoryDAO.getFactory("Dependente").update(dependente);  
+        FactoryDAO.getFactory("Dependente").update(this.createObject(nome, essn, sexo, datanascimento, parentesco));
     }
     
     public void delete(String essn, String nomedependente) throws Exception{

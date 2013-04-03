@@ -6,11 +6,8 @@ package control;
 
 import DAO.DepartamentoDAO;
 import DAO.FactoryDAO;
-import DAO.IObjectDAO;
 import Model.Departamento;
 import Model.Empregado;
-import java.awt.List;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -20,7 +17,13 @@ import java.util.Vector;
  */
 public class DepartamentoControl
 {
-    public void post(String nome, String gerssn, String gerdatainicio) throws Exception {
+    private DepartamentoDAO dao;
+    
+    public DepartamentoControl(){
+        this.dao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
+    }
+    
+    private Departamento createObject(String nome, String gerssn, String gerdatainicio){
         Empregado em = new Empregado();
         em.setSsn(gerssn);
         
@@ -29,20 +32,16 @@ public class DepartamentoControl
         departamento.setGerenteSsn(em);
         departamento.setGerenteDataInicio(gerdatainicio);
         
-        FactoryDAO.getFactory("Departamento").post(departamento);
+        return departamento;
+    }
+    
+    public void post(String nome, String gerssn, String gerdatainicio) throws Exception {
+        FactoryDAO.getFactory("Departamento").post(this.createObject(nome, gerssn, gerdatainicio));
     }
 
 
     public void update(int numero, String nome, String gerssn, String gerdatainicio) throws Exception {
-        Empregado em = new Empregado();
-        em.setSsn(gerssn);
-        
-        Departamento departamento = new Departamento();
-        departamento.setNumero(numero);
-        departamento.setNome(nome);
-        departamento.setGerenteSsn(em);
-        departamento.setGerenteDataInicio(gerdatainicio);
-        FactoryDAO.getFactory("Departamento").update(departamento);        
+        FactoryDAO.getFactory("Departamento").update(this.createObject(nome, gerssn, gerdatainicio));        
     }
     
     public void delete(int numero) throws Exception{
@@ -56,41 +55,31 @@ public class DepartamentoControl
 
 
     public Departamento getById(int numero) throws Exception {
-        Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").get(numero);
-        return departamento;
+        return (Departamento) this.dao.get(numero);
     }
     
-        public Departamento getByGer(String gerssn) throws Exception {
-            DepartamentoDAO dao = new DepartamentoDAO();
-        Departamento departamento = (Departamento) dao.getGer(gerssn);
-        return departamento;
+    public Departamento getByGer(String gerssn) throws Exception {
+        return (Departamento) this.dao.getGer(gerssn);
     }
 
     
     public static Vector<Departamento> getAll() throws Exception {
-         ArrayList<Object> departamentoObject = (ArrayList<Object>) FactoryDAO.getFactory("Departamento").getAll();
          Vector<Departamento> departamento = new Vector<Departamento>();
          
-         for(int i = 0 ; i < departamentoObject.size() ; i++)
-         {
-             Departamento d = (Departamento) departamentoObject.get(i);             
-             departamento.add(d);
-         }
+         for(Object aux : (ArrayList<Object>) FactoryDAO.getFactory("Departamento").getAll())
+             departamento.add((Departamento) aux);
          
          return departamento;
     }    
 
 
     public Vector<Departamento> SearchByName(String input) throws Exception {
-       ArrayList<Object> departamentoObject = (ArrayList<Object>) FactoryDAO.getFactory("Departamento").get(input);
-       Vector<Departamento> departamento = new Vector<Departamento>();
-                for(int i = 0 ; i < departamentoObject.size() ; i++)
-         {
-             Departamento d = (Departamento) departamentoObject.get(i);             
-             departamento.add(d);
-         }
-         
-         return departamento;
+        Vector<Departamento> departamento = new Vector<Departamento>();
+        
+        for(Object aux : (ArrayList<Object>) this.dao.get(input))
+             departamento.add((Departamento) aux);
+        
+        return departamento;
     }  
     
 
