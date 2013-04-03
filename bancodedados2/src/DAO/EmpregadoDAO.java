@@ -84,7 +84,7 @@ public class EmpregadoDAO implements IObjectDAO{
         return emp;
     }
     
-    public ArrayList<Object> getAllTemplate() throws SQLException{
+    private ArrayList<Object> getAllTemplate() throws SQLException{
         ArrayList<Object> output = new ArrayList<>();
         while(rs.next()){
             output.add((Empregado) this.useObjectTemplate("e_"));
@@ -102,7 +102,7 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
             
             Empregado aux = (Empregado) input;
-                        
+            
             this.ps.setString(1,aux.getSsn().trim());               
             this.ps.setString(2,aux.getNome());
             this.ps.setString(3,aux.getSexo());
@@ -111,10 +111,10 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps.setDate(6,aux.getDataNascimento());
             this.ps.setInt(7,aux.getDepartamento().getNumero());
             this.ps.setString(8,aux.getSuperSsn().getSsn());
-            this.ps.setString(9,aux.getSenha());         
-            
+            this.ps.setString(9,aux.getSenha());
+
             System.gc();
-            
+
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
             
@@ -143,6 +143,8 @@ public class EmpregadoDAO implements IObjectDAO{
             
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");
+            
+            //this.insertObjectTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao atualizar o objeto:  " + e.toString() );

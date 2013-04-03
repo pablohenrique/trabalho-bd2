@@ -117,11 +117,10 @@ public class DepartamentoDAO implements IObjectDAO{
     @Override
     public Object get(Object input) {
         try {
-            int aux = (int) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
-            this.ps.setInt(1,aux);
-            
+            this.ps.setInt(1,(int) input);
             this.rs = this.ps.executeQuery();
+            
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
@@ -137,8 +136,8 @@ public class DepartamentoDAO implements IObjectDAO{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
             this.ps.setString(1,gerssn);
-            
             this.rs = this.ps.executeQuery();
+            
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             

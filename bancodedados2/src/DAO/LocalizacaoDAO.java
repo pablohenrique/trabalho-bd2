@@ -101,11 +101,13 @@ public class LocalizacaoDAO implements IObjectDAO{
     @Override
     public Object get(Object input) {
         try {
-            int aux = (int) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
-            this.ps.setInt(1,aux);
-            
+            this.ps.setInt(1,(int) input);
             this.rs = this.ps.executeQuery();
+            
+            if(!this.rs.next())
+                throw new Exception("Departamento nao encontrado.");
+            
             return this.useObjectTemplate();
             
         } catch (Exception e) {

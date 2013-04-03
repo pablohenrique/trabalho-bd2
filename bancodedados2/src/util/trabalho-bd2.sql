@@ -305,6 +305,35 @@ RETURNS VARCHAR AS $$
 $$ language 'plpgsql';
 
 
+
+---
+-- TRIGGERS
+---
+
+---
+-- Confere salario
+---
+
+CREATE OR REPLACE FUNCTION trigger_emp_salario()
+    RETURNS trigger AS
+$BODY$
+BEGIN
+    IF NEW.salario < 100 THEN
+	RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario %', NEW.superssn;
+    END IF;
+
+    IF NEW.salario != OLD.salario THEN
+        INSERT INTO emp_audit VALUES('M',now(),OLD.ssn,OLD.superssn,NEW.salario);
+    END IF;
+
+    RETURN NEW;
+END;
+$BODY$
+    LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_emp_salario BEFORE INSERT OR UPDATE ON empregado
+FOR EACH ROW EXECUTE PROCEDURE trigger_emp_salario();
+
 --
 --CONSULTAS BASICAS
 --

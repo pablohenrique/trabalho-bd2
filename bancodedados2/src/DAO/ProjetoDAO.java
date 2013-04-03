@@ -133,10 +133,13 @@ public class ProjetoDAO implements IObjectDAO{
     @Override
     public Object get(Object input) {
         try {
-            int aux = (int) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
-            this.ps.setInt(1,aux);
+            this.ps.setInt(1,(int) input);
             this.rs = this.ps.executeQuery();
+            
+            if(!this.rs.next())
+                throw new Exception("Departamento nao encontrado.");
+            
             return this.useObjectTemplate();
             
         } catch (Exception e) {
@@ -148,10 +151,13 @@ public class ProjetoDAO implements IObjectDAO{
     @Override
     public Object read(Object input) {
         try {
-            String aux = (String) input;
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            this.ps.setString(1,aux);
+            this.ps.setString(1,(String) input);
             this.rs = this.ps.executeQuery();
+            
+            if(!this.rs.next())
+                throw new Exception("Departamento nao encontrado.");
+            
             return this.useObjectTemplate();
             
         } catch (Exception e) {
