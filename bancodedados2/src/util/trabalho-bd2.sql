@@ -27,7 +27,7 @@ CREATE TABLE departamento (
     numero integer NOT NULL,
     nome character varying(15) NOT NULL,
     gerssn character(9) NOT NULL,
-    gerdatainicio date
+    gerdatainicio date NOT NULL
 );
 
 CREATE TABLE dependentes (
