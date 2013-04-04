@@ -13,6 +13,7 @@ import java.sql.Date;
  */
 public class Departamento {
     private String nome;
+    private String localizacao;
     private int numero;
     private Date gerenteDataInicio;
     private Empregado gerente;
@@ -87,5 +88,19 @@ public class Departamento {
     @Override
     public String toString() {
         return this.nome;
+    }
+
+    /**
+     * @return the localizacao
+     */
+    public String getLocalizacao() {
+        return localizacao;
+    }
+
+    /**
+     * @param localizacao the localizacao to set
+     */
+    public void setLocalizacao(String localizacao) {
+        this.localizacao = localizacao;
     }
 }

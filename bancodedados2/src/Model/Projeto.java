@@ -13,6 +13,7 @@ public class Projeto {
     private String localizacao;
     private int numero;
     private Departamento departamento;
+    private float horas;
 
     /**
      * @return the nome
@@ -77,4 +78,18 @@ public class Projeto {
     public String toString() {
         return this.nome;
     }    
+
+    /**
+     * @return the horas
+     */
+    public float getHoras() {
+        return horas;
+    }
+
+    /**
+     * @param horas the horas to set
+     */
+    public void setHoras(float horas) {
+        this.horas = horas;
+    }
 }
