@@ -24,12 +24,12 @@ public class DependenteDAO implements IObjectDAO{
     
     private final String SQL_POST = "INSERT INTO cia.dependentes VALUES(?,?,cia.sexoToBd(?),?,?);";
     private final String SQL_UPDATE = "UPDATE cia.dependentes SET sexo = cia.sexoToBd(?), datanasc = ?, parentesco = ? WHERE essn = ? AND nome_dependente = ? ;";
-    private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
+    private final String SQL_DELETE = "DELETE FROM cia.dependentes WHERE essn = ?;";
+    private final String SQL_DELETEFULL = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
     private final String SQL_GET_DEPENDENTE = BEFORECOND + " WHERE d.essn = ? AND d.nome_dependente = ?" + AFTERCOND;
     private final String SQL_GET = BEFORECOND + " WHERE d.essn = ? " + AFTERCOND;
     private final String SQL_READ = BEFORECOND +  " WHERE d.nome LIKE ?" + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE d.essn = e.ssn ORDER BY d.nome_dependente ASC";
-    private final String SQL_DELETE_DEPENDENTE = "DELETE FROM cia.dependentes WHERE nome_dependente = ? AND essn = ?;";
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -195,7 +195,7 @@ public class DependenteDAO implements IObjectDAO{
     
     public void deleteDep(String essn, String nomedependente) throws Exception {
         try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETEFULL);
             this.ps.setString(1, nomedependente);
             this.ps.setString(2, essn);
             if (this.ps.executeUpdate() == 0) {

@@ -19,8 +19,9 @@ import java.util.ArrayList;
 public class DepartamentoDAO implements IObjectDAO{
     private final String BEFORECOND = 
 "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio,"+
-" e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha"+
-" FROM cia.departamento AS d, cia.empregado AS e";
+" e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha "+
+" l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero "+
+" FROM cia.departamento AS d, cia.empregado AS e, cia.dept_localizacao ";
     private final String AFTERCOND = " AND d.gerssn = e.ssn;";
           
     private final String SQL_POST = "INSERT INTO cia.departamento(nome, gerssn, gerdatainicio) VALUES(?,?,?);";
@@ -41,6 +42,7 @@ public class DepartamentoDAO implements IObjectDAO{
             output.setNumero(this.rs.getInt(rs.findColumn(column+"numero")));
             output.setNome(this.rs.getString(rs.findColumn(column+"nome")));
             output.setGerenteDataInicio(this.rs.getDate(column+"dataInicio"));
+            output.setLocalizacao(this.rs.getString("l_localizacao"));
             output.setGerenteSsn(null);
             
             EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
@@ -60,10 +62,11 @@ public class DepartamentoDAO implements IObjectDAO{
         }
     }
     
-    public Object createObject(int numero, String nome, Date gerenteInicio, Empregado gerente){
+    public Object createObject(int numero, String nome, String local, Date gerenteInicio, Empregado gerente){
         Departamento dep = new Departamento();
         dep.setNumero(numero);
         dep.setNome(nome);
+        dep.setLocalizacao(local);
         dep.setGerenteDataInicio(gerenteInicio);
         dep.setGerenteSsn(gerente);
         gerente.setDepartamento(dep);
