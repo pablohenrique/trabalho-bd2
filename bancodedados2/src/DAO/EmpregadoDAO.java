@@ -158,7 +158,8 @@ public class EmpregadoDAO implements IObjectDAO{
                         
             this.rs = this.ps.executeQuery();
             
-            this.rs.next();
+            if(!this.rs.next())
+                throw new Exception("Departamento nao encontrado.");
             
             return this.useObjectTemplate("e_");
             
@@ -175,6 +176,9 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
+            
+            if(!this.rs.next())
+                throw new Exception("Departamento nao encontrado.");
             
             return this.getAllTemplate();
             
