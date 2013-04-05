@@ -21,7 +21,7 @@ public class Localizacoes {
     private LocalizacaoDAO dao;
     
     public Localizacoes(){
-        this.dao = (LocalizacaoDAO) FactoryDAO.getFactory("Departamento");
+        this.dao = (LocalizacaoDAO) FactoryDAO.getFactory("Localizacao");
     }
     
     private Localizacao createObject(int dnumero, String nome){
