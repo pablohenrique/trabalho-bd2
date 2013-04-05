@@ -18,10 +18,10 @@ import java.util.ArrayList;
  */
 public class DepartamentoDAO implements IObjectDAO{
     private final String BEFORECOND = 
-"SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio,"+
-" e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha "+
+"SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, "+
+" e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha, "+
 " l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero "+
-" FROM cia.departamento AS d, cia.empregado AS e, cia.dept_localizacao ";
+" FROM cia.departamento AS d, cia.empregado AS e, cia.dept_localizacao AS l ";
     private final String AFTERCOND = " AND d.gerssn = e.ssn;";
           
     private final String SQL_POST = "INSERT INTO cia.departamento(nome, gerssn, gerdatainicio) VALUES(?,?,?);";
