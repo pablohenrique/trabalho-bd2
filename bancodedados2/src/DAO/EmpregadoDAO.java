@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- *
+ * ALTERACAO COMENTARIO SOH PRO PABLO VER
  * @author pablohenrique
  */
 public class EmpregadoDAO implements IObjectDAO{
