@@ -12,7 +12,7 @@ import java.sql.*;
  */
 public class Conexao {
     private static final String url = "jdbc:postgresql://177.71.252.132:5432/bd";
-    //private static final String url = "jdbc:postgresql://localhost:5432/bd";
+    //private static final String url = "jdbc:postgresql://localhost:5432/BD2";
     //private static final String url = "jdbc:postgresql://www.caiothomas.com:5432/bd";
     private static final String user = "postgres";
     //private static final String pass = "postgres";

@@ -88,8 +88,8 @@ public class EmpregadoDAO implements IObjectDAO{
             output.add((Empregado) this.useObjectTemplate("e_"));
         }
 
-        if(output.isEmpty())
-            throw new ArrayStoreException("Nao houve objetos encontrados.");
+        //if(output.isEmpty())
+        //    throw new ArrayStoreException("Nao houve objetos encontrados.");
 
         return output;
     }

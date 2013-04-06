@@ -79,8 +79,8 @@ public class ProjetoDAO implements IObjectDAO{
         while(this.rs.next())
             output.add((Projeto) this.useObjectTemplate());            
 
-        if(output.isEmpty())
-            throw new ArrayStoreException("Nao houve objetos encontrados.");
+        //if(output.isEmpty())
+        //    throw new ArrayStoreException("Nao houve objetos encontrados.");
         
         return output;
     }

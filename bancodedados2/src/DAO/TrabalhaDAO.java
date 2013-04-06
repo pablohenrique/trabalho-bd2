@@ -62,8 +62,8 @@ public class TrabalhaDAO implements IObjectDAO{
         while(rs.next())
             output.add((Trabalha) this.useObjectTemplate());
 
-        if(output.isEmpty())
-            throw new ArrayStoreException("Nao houve objetos encontrados.");
+        //if(output.isEmpty())
+        //    throw new ArrayStoreException("Nao houve objetos encontrados.");
         
         return output;
     }
