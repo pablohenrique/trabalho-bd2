@@ -11,12 +11,12 @@ import java.sql.*;
  * @author pablohenrique
  */
 public class Conexao {
-    private static final String url = "jdbc:postgresql://177.71.252.132:5432/bd";
+    //private static final String url = "jdbc:postgresql://177.71.252.132:5432/bd";
+    private static final String url = "jdbc:postgresql://localhost:5432/bd";
     //private static final String url = "jdbc:postgresql://localhost:5432/bd";
-    //private static final String url = "jdbc:postgresql://www.caiothomas.com:5432/bd";
     private static final String user = "postgres";
-    //private static final String pass = "postgres";
-    private static final String pass = "25081992";
+    private static final String pass = "postgres";
+    //private static final String pass = "25081992";
     private static Conexao instance = null;
     private static Connection connection;
     

@@ -27,7 +27,12 @@ CREATE TABLE departamento (
     numero integer NOT NULL,
     nome character varying(15) NOT NULL,
     gerssn character(9) NOT NULL,
-    gerdatainicio date NOT NULL
+    gerdatainicio date NOT NULL,
+);
+
+CREATE TABLE dept_localizacao (
+    dlocalizacao character varying(15) NOT NULL,
+    departamento_numero integer NOT NULL
 );
 
 CREATE TABLE dependentes (
@@ -37,13 +42,6 @@ CREATE TABLE dependentes (
     datanasc date,
     parentesco character varying(8)
 );
-
-
-CREATE TABLE dept_localizacao (
-    dlocalizacao character varying(15) NOT NULL,
-    departamento_numero integer NOT NULL
-);
-
 
 CREATE TABLE empregado (
     ssn character(9) NOT NULL,
@@ -137,7 +135,9 @@ INSERT INTO trabalha_em VALUES('11013', 2, 8);
 INSERT INTO trabalha_em VALUES('11014', 1, 8);
 INSERT INTO trabalha_em VALUES('11014', 2, 8);
 
-
+INSERT INTO dept_localizacao VALUES('BLOCO A', 1);
+INSERT INTO dept_localizacao VALUES('BLOCO B', 2);
+INSERT INTO dept_localizacao VALUES('BLOCO C', 3);
 --
 -- RESTRICOES PRIMARY KEY
 --
@@ -160,6 +160,10 @@ ALTER TABLE ONLY projeto
 ALTER TABLE ONLY trabalha_em
     ADD CONSTRAINT pk_trabalha_em PRIMARY KEY (essn, pjnumero);
 
+ALTER TABLE ONLY dept_localizacao
+    ADD CONSTRAINT pk_localizacao PRIMARY KEY (dlocalizacao, departamento_numero);
+
+
 --
 -- RESTRICOES UNIQUE
 --
@@ -179,6 +183,12 @@ ALTER TABLE ONLY projeto
 ALTER TABLE ONLY departamento ADD CONSTRAINT fk_empregado_gerencia_dpto
     FOREIGN KEY (gerssn)
     REFERENCES empregado(ssn)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE;
+
+ALTER TABLE dept_localizacao ADD CONSTRAINT fk_departamento_local
+    FOREIGN KEY(departamento_numero)
+    REFERENCES departamento(numero)
     ON DELETE NO ACTION
     ON UPDATE CASCADE;
 
@@ -223,6 +233,7 @@ ALTER TABLE trabalha_em ADD CONSTRAINT  fk_trabalha_em_projeto
     REFERENCES projeto (pnumero)
     ON DELETE NO ACTION --caso remova um projeto nao pode remover o trabalha em, pois tem trabalhadores
     ON UPDATE CASCADE;--caso atualize chave primaria de projeto posso atualizar em trabalha em
+
 
 
 --

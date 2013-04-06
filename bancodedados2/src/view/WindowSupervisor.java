@@ -52,9 +52,7 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             //definir todos painel central
             card = new CardLayout();
             painelCentral = new JPanel(card);
-            painelCentral.add(new PainelInit(), "inicio");           
-            painelCentral.add(new PainelProjetos(), "projeto");            
-            painelCentral.add(new PainelFuncionarios(), "funcionario");                        
+            painelCentral.add(new PainelInit(), "inicio");                           
 
             //menu
             JMenu arquivo = new JMenu("Arquivo");		
@@ -150,10 +148,12 @@ public class WindowSupervisor extends JFrame implements ActionListener {
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "inicio");
             }		
             else if (origem == btnFuncionarios || origem == menuFuncionariosListar){
+                    painelCentral.add(new PainelFuncionarios(), "funcionario");                    
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "funcionario");
             }
             else if( origem == btnProjetos){
+                    painelCentral.add(new PainelProjetos(), "projeto");            
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
-            }       
+            }                   
     }
 }

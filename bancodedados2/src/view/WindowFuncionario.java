@@ -46,8 +46,6 @@ public class WindowFuncionario extends JFrame implements ActionListener {
             card = new CardLayout();
             painelCentral = new JPanel(card);
             painelCentral.add(new PainelInit(), "inicio");           
-            painelCentral.add(new PainelProjetos(), "projeto");            
-            painelCentral.add(new PainelDependentes(), "dependente");
             
             //menu
             JMenu arquivo = new JMenu("Arquivo");		
@@ -151,9 +149,11 @@ public class WindowFuncionario extends JFrame implements ActionListener {
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "inicio");
             }		
             else if (origem == menuDependentesListar || origem == btnDependentes){
+                    painelCentral.add(new PainelDependentes(), "dependente");                
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "dependente");
             }
             else if( origem == btnProjetos || origem == menuProjetosListar){
+                    painelCentral.add(new PainelProjetos(), "projeto");            
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "projeto");
             }            
             else if (origem == menuEditarFuncionario || origem == btnFuncionarios){                

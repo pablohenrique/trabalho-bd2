@@ -88,13 +88,13 @@ public class FormFuncionario extends JDialog implements ActionListener
         superssn.setNome("Nenhum Supervisor");
         
         try {
-            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+                departamento = new JComboBox(Principal.cf.listarDepartamentos());  
         } catch (Exception ex) {
             departamento = new JComboBox();
         }
         
-        try {
-            supervisor = new JComboBox(Principal.cf.listarEmpregados());  
+        try {         
+                supervisor = new JComboBox(Principal.cf.listarEmpregados());  
         } catch (Exception ex) {
             supervisor = new JComboBox();  
         }

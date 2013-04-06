@@ -21,15 +21,15 @@ public class DepartamentoDAO implements IObjectDAO{
 "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, "+
 " e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha, "+
 " l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero "+
-" FROM cia.departamento AS d, cia.empregado AS e, cia.dept_localizacao AS l ";
+" FROM ((cia.empregado AS e LEFT JOIN cia.departamento AS d ON d.gerssn = e.ssn) LEFT JOIN cia.dept_localizacao AS l ON l.departamento_numero = d.numero) ";
     private final String AFTERCOND = " AND d.gerssn = e.ssn;";
           
     private final String SQL_POST = "INSERT INTO cia.departamento(nome, gerssn, gerdatainicio) VALUES(?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.departamento SET nome = ?, gerssn = ?, gerdatainicio = ? WHERE numero = ?";
     private final String SQL_DELETE = "DELETE FROM cia.departamento WHERE numero = ?";
-    private final String SQL_GET = BEFORECOND + " WHERE d.numero = ?" + AFTERCOND;
-    private final String SQL_READ = BEFORECOND + " WHERE d.nome = ?" + AFTERCOND;
-    private final String SQL_GETGER = BEFORECOND + " WHERE d.gerssn = ?" + AFTERCOND;
+    private final String SQL_GET = BEFORECOND + " WHERE d.numero = ?";//+ AFTERCOND;
+    private final String SQL_READ = BEFORECOND + " WHERE d.nome = ?";// + AFTERCOND;
+    private final String SQL_GETGER = BEFORECOND + " WHERE d.gerssn = ?";// + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE d.gerssn = e.ssn;";
     
     private PreparedStatement ps;
