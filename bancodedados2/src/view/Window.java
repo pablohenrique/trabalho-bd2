@@ -9,17 +9,11 @@
 package view;
 
 import Model.Empregado;
-import view.panel.PainelProjetos;
-import view.panel.PainelFuncionarios;
-import view.panel.PainelDependentes;
-import view.panel.PainelDepartamento;
-import view.formularios.FormFuncionario;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -29,6 +23,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
+import view.formularios.FormFuncionario;
+import view.panel.PainelDepartamento;
+import view.panel.PainelDependentes;
+import view.panel.PainelFuncionarios;
+import view.panel.PainelProjetos;
 
 public class Window extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;

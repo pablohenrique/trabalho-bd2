@@ -1,12 +1,6 @@
 package view;
-import DAO.DepartamentoDAO;
-import DAO.EmpregadoDAO;
-import DAO.FactoryDAO;
-import DAO.IObjectDAO;
-import Model.Departamento;
 import Model.Empregado;
 import control.ControlFacade;
-import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -18,50 +12,44 @@ public class Principal{
     public static Empregado user;
     public static ControlFacade cf = new ControlFacade();
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception{
          Principal.initLookAndFeel();
+         //String ssn = "11014";
+         //if((Object) FactoryDAO.getFactory("Empregado").get(ssn) != null)
+         //    System.out.println("foi");
+         
          /*
-         Departamento p = new Departamento();
-         FactoryDAO.getFactory("Departamento");
-         ///*
-         p.setNome("TI");
-         p.setGerenteSsn("11021");
-         p.setNumero(1);
-         p.setGerenteDataInicio(java.sql.Date.valueOf("2013-03-03"));
-         FactoryDAO.getFactory("Departamento").post(p);
-
-         Departamento a = (Departamento) FactoryDAO.getFactory("Departamento").get(1);
-         System.out.println(a.getNumero());
-
-         Departamento b = (Departamento) FactoryDAO.getFactory("Departamento").read("TI");
-         System.out.println(b.getNome());
-
-         p.setNome("T.I.");
-         p.setGerenteSsn("11021bsi");
-         p.setNumero(1);
-         p.setGerenteDataInicio(java.sql.Date.valueOf("2013-05-03"));
-
-         FactoryDAO.getFactory("Departamento").update(p);
-
-         for(Object aux : FactoryDAO.getFactory("Departamento").getAll()){
-             Departamento d = (Departamento) aux;
-             System.out.println(d.getNome());
+         ProjetoDAO prodao = (ProjetoDAO) FactoryDAO.getFactory("Projeto");
+         
+         for(Object aux : prodao.getAll()){
+             Projeto pro = (Projeto) aux;
+             System.out.println(pro.getNome());
          }
-         //*/
-         //FactoryDAO.getFactory("Departamento").delete(1);
-
-
-         //login = new Window_Login();
-         /*
-         EmpregadoDAO va = new EmpregadoDAO();
-         ArrayList<Empregado> em = (ArrayList<Empregado>) va.getAll();
+         ///*
+         for(Object aux : prodao.getAllDep(1)){
+             Projeto pro = (Projeto) aux;
+             System.out.println(pro.getNome());
+         }
          
+         for(Object aux : prodao.getAllDep("PESQUISA")){
+             Projeto pro = (Projeto) aux;
+             System.out.println(pro.getNome());
+         }
          
-         for(int i=0; i<em.size(); i++)
-            System.out.println(em.get(i).toString());
+         for(Object aux : prodao.getAllEmp("11011")){
+             Projeto pro = (Projeto) aux;
+             System.out.println(pro.getNome());
+         }
+         
+         Projeto update = (Projeto) FactoryDAO.getFactory("Projeto").get(1);
+         update.setLocalizacao("NOVALOC");
+         prodao.update(update);
+         
+         update = (Projeto) FactoryDAO.getFactory("Projeto").read("MINERACAO");
+         System.out.println(update.getLocalizacao());
          */
          login = new WindowLogin();
-         //janela = new WindowFuncionario();
+         janela = new WindowFuncionario();
     }
 
     private static void initLookAndFeel(){		 

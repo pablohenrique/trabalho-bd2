@@ -9,14 +9,11 @@
 package view;
 
 import Model.Empregado;
-import view.panel.PainelProjetos;
-import view.panel.PainelFuncionarios;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -26,7 +23,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
+import view.panel.PainelFuncionarios;
 import view.panel.PainelInit;
+import view.panel.PainelProjetos;
 
 public class WindowSupervisor extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;

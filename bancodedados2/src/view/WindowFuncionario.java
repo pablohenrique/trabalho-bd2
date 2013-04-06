@@ -1,14 +1,11 @@
 package view;
 
 import Model.Empregado;
-import view.panel.*;
-import view.formularios.FormFuncionario;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -18,6 +15,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
+import view.PainelDependentes;
+import view.PainelProjetos;
+import view.formularios.FormFuncionario;
 import view.panel.PainelInit;
 
 public class WindowFuncionario extends JFrame implements ActionListener {

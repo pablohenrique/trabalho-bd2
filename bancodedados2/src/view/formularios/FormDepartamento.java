@@ -2,26 +2,17 @@ package view.formularios;
 
 import Model.Departamento;
 import Model.Empregado;
-import control.FuncoesControle;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import static java.awt.Component.TOP_ALIGNMENT;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import static java.awt.image.ImageObserver.WIDTH;
-import java.sql.Date;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -29,16 +20,11 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-import view.panel.PainelDepartamento;
-import view.panel.PainelFuncionarios;
-import static view.panel.PainelFuncionarios.modelo;
-import static view.panel.PainelFuncionarios.tabela;
 import view.Principal;
+import view.panel.PainelDepartamento;
 
 public class FormDepartamento extends JDialog implements ActionListener
 {
