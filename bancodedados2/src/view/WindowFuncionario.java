@@ -15,10 +15,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
-import view.PainelDependentes;
-import view.PainelProjetos;
 import view.formularios.FormFuncionario;
+import view.panel.PainelDependentes;
 import view.panel.PainelInit;
+import view.panel.PainelProjetos;
 
 public class WindowFuncionario extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
