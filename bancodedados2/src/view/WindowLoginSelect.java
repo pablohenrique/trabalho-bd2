@@ -114,7 +114,7 @@ public final class WindowLoginSelect extends JFrame implements ActionListener
             }else {
                 Principal.janela = null;               
                 System.exit(0);
-            }
+            }                       
         }
 
         if(e.getSource() == btnSair)

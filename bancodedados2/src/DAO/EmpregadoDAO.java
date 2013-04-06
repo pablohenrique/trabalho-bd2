@@ -27,7 +27,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_UPDATE = "UPDATE cia.empregado SET nome = ?, sexo = cia.sexoToBd(?), endereco = ?, salario = ?, datanasc = ?, dno = ?, superssn = ?, senha = ? WHERE ssn = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
     private final String SQL_LOGIN = " SELECT cia.login(?,?); ";
-    private final String SQL_GET = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.dept_localizacao AS l WHERE e.ssn = ? AND e.superssn = s.ssn AND e.dno = d.numero AND l.departamento_numero = d.numero;";
+    private final String SQL_GET = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) LEFT JOIN cia.departamento AS d ON e.dno = d.numero) LEFT JOIN cia.dept_localizacao AS l ON l.departamento_numero = d.numero) WHERE  e.ssn=?;";
     private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.dept_localizacao AS l AS d, cia.empregado AS s WHERE e.nome LIKE ? AND e.superssn = s.ssn AND e.dno = d.numero AND l.departamento_numero = d.numero;";
     private final String SQL_READ_SUPERSSN = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.dept_localizacao AS l WHERE e.superssn = ? AND e.superssn = s.ssn AND e.dno = d.numero AND l.departamento_numero = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM ((((cia.empregado AS e LEFT JOIN cia.departamento AS d ON e.dno = d.numero) LEFT JOIN cia.dept_localizacao AS l ON d.numero = l.departamento_numero) LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) ORDER BY e.nome ASC;";
@@ -87,10 +87,6 @@ public class EmpregadoDAO implements IObjectDAO{
         while(rs.next()){
             output.add((Empregado) this.useObjectTemplate("e_"));
         }
-
-        //if(output.isEmpty())
-        //    throw new ArrayStoreException("Nao houve objetos encontrados.");
-
         return output;
     }
     

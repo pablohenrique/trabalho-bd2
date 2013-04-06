@@ -34,7 +34,8 @@ public class FactoryWindow
         {
             login.dispose();            
             new WindowLoginSelect(value);                                                                                
-        }                        
+        } 
+        System.gc();
     }   
     
     public void sessao(String essn, int value) throws Exception

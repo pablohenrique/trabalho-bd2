@@ -65,9 +65,6 @@ public class DependenteDAO implements IObjectDAO{
         ArrayList<Object> output = new ArrayList<>();
         while(this.rs.next())
             output.add((Dependente) this.useObjectTemplate());
-
-        //if(output.isEmpty())
-        //    throw new ArrayStoreException("Nao houve objetos encontrados.");
         
         return output;
     }

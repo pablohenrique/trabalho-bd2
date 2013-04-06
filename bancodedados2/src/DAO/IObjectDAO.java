@@ -38,7 +38,7 @@ public interface IObjectDAO {
      * @param String
      * @return Object
      */
-    public Object read(Object input);
+    public Object read(Object input) throws Exception;
     
     /**
      * Usado para recuperar todos os objetos de um banco de dados

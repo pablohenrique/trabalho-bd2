@@ -30,6 +30,7 @@ import view.formularios.FormProjetos;
 import view.panel.PainelDepartamento;
 import view.panel.PainelDependentes;
 import view.panel.PainelFuncionarios;
+import view.panel.PainelInit;
 import view.panel.PainelProjetos;
 
 public class WindowGerente extends JFrame implements ActionListener {
@@ -67,11 +68,7 @@ public class WindowGerente extends JFrame implements ActionListener {
             //definir todos painel central
             card = new CardLayout();
             painelCentral = new JPanel(card);
-            //painelCentral.add(new PainelInit(), "inicio");           
-            painelCentral.add(new PainelProjetos(), "projeto");            
-            painelCentral.add(new PainelDepartamento(), "departamento");
-            painelCentral.add(new PainelDependentes(), "dependente");
-            painelCentral.add(new PainelFuncionarios(), "funcionario");                        
+            painelCentral.add(new PainelInit(), "inicio");           
 
             //menu
             JMenu arquivo = new JMenu("Arquivo");		
@@ -217,15 +214,19 @@ public class WindowGerente extends JFrame implements ActionListener {
                     WindowGerente.card.show(WindowGerente.painelCentral, "inicio");
             }		
             else if (origem == btnFunc || origem == menuFuncionariosListar){
+                    painelCentral.add(new PainelFuncionarios(), "funcionario");                                                                            
                     WindowGerente.card.show(WindowGerente.painelCentral, "funcionario");
             }
             else if (origem == btnDep || origem == menuDependentesListar){
+                    painelCentral.add(new PainelDependentes(), "dependente");                    
                     WindowGerente.card.show(WindowGerente.painelCentral, "dependente");
             }  
             else if( origem == btnDepartamentos || origem == menuDepartamentoListar){
+                    painelCentral.add(new PainelDepartamento(), "departamento");                
                     WindowGerente.card.show(WindowGerente.painelCentral, "departamento");
             }
             else if( origem == btnProjetos || origem == menuProjetosListar){
+                    painelCentral.add(new PainelProjetos(), "projeto");            
                     WindowGerente.card.show(WindowGerente.painelCentral, "projeto");
             }            
             else if (origem == menuFuncionarioCadastro){
@@ -239,6 +240,6 @@ public class WindowGerente extends JFrame implements ActionListener {
             }            
             else if (origem == menuDependentesCadastro){
                     new FormDependente(null);
-            }            
+            }                                       
     }
 }

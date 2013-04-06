@@ -53,9 +53,6 @@ public class LocalizacaoDAO implements IObjectDAO{
             
         while(this.rs.next())
             output.add((Localizacao) this.useObjectTemplate());
-
-        //if(output.isEmpty())
-        //    throw new ArrayStoreException("Nao houve objetos encontrados.");
         
         return output;
     }

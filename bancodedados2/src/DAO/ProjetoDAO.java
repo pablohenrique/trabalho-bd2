@@ -78,10 +78,7 @@ public class ProjetoDAO implements IObjectDAO{
     private ArrayList<Object> getAllTemplate() throws SQLException {
         ArrayList<Object> output = new ArrayList<>();
         while(this.rs.next())
-            output.add((Projeto) this.useObjectTemplate());            
-
-        //if(output.isEmpty())
-        //    throw new ArrayStoreException("Nao houve objetos encontrados.");
+            output.add((Projeto) this.useObjectTemplate());
         
         return output;
     }
