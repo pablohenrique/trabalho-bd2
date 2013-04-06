@@ -24,7 +24,7 @@ public class Localizacoes {
         this.dao = (LocalizacaoDAO) FactoryDAO.getFactory("Localizacao");
     }
     
-    private Localizacao createObject(int dnumero, String nome){
+    private Localizacao createObject(int dnumero, String nome) throws Exception{
         Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
         Localizacao localizacao = new Localizacao();
         localizacao.setDepartamento(departamento);

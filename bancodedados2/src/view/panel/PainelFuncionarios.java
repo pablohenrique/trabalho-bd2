@@ -49,7 +49,8 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    
+    private static FormFuncionario formFuncionario = null;
+
     public PainelFuncionarios(){			
         
         tabela = new JTable(){
@@ -91,7 +92,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         txtBusca.setMaximumSize(new Dimension(200, 24));
 
         botoes.add(Box.createHorizontalStrut(5));
-        if(Principal.user.getTipoLogin() != 1)
+        if(Principal.user.getTipoLogin() == 2)
             botoes.add(novo);
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(editar);
@@ -129,8 +130,8 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormFuncionario(null);
-        else if (origem == editar && (item != -1)){
+                form_funcionarios(null);
+         if (origem == editar && (item != -1)){
             
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
             
@@ -138,7 +139,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
             Empregado em;
             try {
                 em = Principal.cf.getEmpregadoBySsn(ssn);
-                new FormFuncionario(em);
+                form_funcionarios(em);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }            
@@ -215,4 +216,17 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         PainelFuncionarios.contaRegistros.setText(PainelFuncionarios.tabela.getRowCount() + " registro(s) encontrado(s)");                    
         PainelFuncionarios.setSizeColumn();        
     }
+    
+    public static void form_funcionarios(Empregado e){
+        if(formFuncionario == null)
+            formFuncionario = new FormFuncionario(e);
+        else{
+            try {
+                formFuncionario.editarEmpregado(e);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formFuncionario.setVisible(true);
+        }
+    }    
 }

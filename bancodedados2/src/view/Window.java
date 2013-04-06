@@ -203,7 +203,7 @@ public class Window extends JFrame implements ActionListener {
                     Window.card.show(Window.painelCentral, "projeto");
             }            
             else if (origem == menuCadastroFuncionarios){
-                    new FormFuncionario(null);
+                    //new FormFuncionario(null);
             }		
     }
 }

@@ -25,11 +25,13 @@ public class ProjetoControl  {
         this.dao = (ProjetoDAO) FactoryDAO.getFactory("Projeto");
     }
     
-    private Projeto creteObjectTemplate(String nome, String localizacao, int dnumero){
+    private Projeto creteObjectTemplate(String nome, String localizacao, int dnumero) throws Exception{
         Projeto projeto = new Projeto();
+        Departamento d = new Departamento();
+        d.setNumero(dnumero);
         projeto.setNome(nome);
         projeto.setLocalizacao(localizacao);
-        projeto.setDepartamento((Departamento) FactoryDAO.getFactory("Departamento").read(dnumero));
+        projeto.setDepartamento(d);
         return projeto;
     }
 
@@ -38,13 +40,10 @@ public class ProjetoControl  {
     }
     
 
-    public void update(int numero, String nome, String localizacao, int dnumero) throws Exception{   
-        FuncoesControle f = new FuncoesControle();
-        
-        if(f.verificarExistenciaDepartamento(dnumero) == false)
-            throw new Exception("Erro: departamento informado nao foi encontrado");
-        else
-            this.dao.update(this.creteObjectTemplate(nome, localizacao, dnumero));
+    public void update(int numero, String nome, String localizacao, int dnumero) throws Exception{           
+        Projeto p = this.creteObjectTemplate(nome, localizacao, dnumero);
+        p.setNumero(numero);
+        this.dao.update(p);
     }
     
     public void delete(int numero) throws Exception{

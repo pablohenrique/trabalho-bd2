@@ -26,7 +26,7 @@ public class TrabalhaControl {
         this.dao = (TrabalhaDAO) FactoryDAO.getFactory("Trabalha");
     }
     
-    private Trabalha createObjectTemplate(String ssn, int projetonumero, float horas){
+    private Trabalha createObjectTemplate(String ssn, int projetonumero, float horas) throws Exception{
         Trabalha trabalha = new Trabalha();
         trabalha.setEssn((Empregado) FactoryDAO.getFactory("Empregado").read(ssn));
         trabalha.setProjeto((Projeto) FactoryDAO.getFactory("Projeto").read(projetonumero));

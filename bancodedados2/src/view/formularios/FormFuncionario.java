@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import view.Principal;
@@ -44,7 +45,7 @@ public class FormFuncionario extends JDialog implements ActionListener
     
     private static JButton btnOK;
     private static JButton btnCancelar;
-    private Empregado emp_edit = null;
+    private static Empregado emp_edit = null;
     
     public FormFuncionario(Empregado emp)
     {
@@ -55,8 +56,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         ssn = new JTextField();
         salario = new JTextField();
         dataNasc = new JFormattedTextField();
-                
-        
+                        
         try
         {
             dataNasc.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));  
@@ -92,7 +92,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         {            
             try
             {
-                System.out.println("EMPREGADO "+ emp.getNome());
+                //System.out.println("EMPREGADO "+ emp.getNome());
                 this.editarEmpregado(emp_edit);
             }
             catch (Exception ex)
@@ -153,12 +153,22 @@ public class FormFuncionario extends JDialog implements ActionListener
                                         .getDefaultToolkit().getScreenSize().height / 2)
                                         - (this.getHeight() / 2));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setVisible(true);
+        this.setVisible(true);         
     }
-
-    
+     
+            
     public void editarEmpregado(Empregado e) throws Exception
     {
+        this.nivelUser(Principal.user);
+        
+        if(e == null){
+            emp_edit = null;
+            this.cleanEmpregadoForm();
+            return;
+        }
+        
+        emp_edit = e;
+        
         nome.setText(e.getNome());
         endereco.setText(e.getEndereco());
         dataNasc.setText(e.getDataNascimentoString());
@@ -167,9 +177,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         senha.setText(e.getSenha());
         sexo.setSelectedItem(e.getSexo());
         departamento.setSelectedIndex(this.selecionarComboBoxDep(e.getDepartamento().getNumero(), departamento));
-               
-        this.nivelUser(e);
-        
+                       
         System.out.println("ssn" + e.getSuperSsn().getSsn());
 
         if(e.getSuperSsn().getSsn() != null)
@@ -178,7 +186,22 @@ public class FormFuncionario extends JDialog implements ActionListener
             supervisor.setSelectedIndex(supervisor.getItemCount()-1);
         
         this.setTitle("Editar Empregado");
-    }    
+    }  
+    
+    public void cleanEmpregadoForm(){
+        nome.setText("");
+        endereco.setText("");
+        dataNasc.setText("");
+        salario.setText("");
+        ssn.setText("");
+        senha.setText("");
+        sexo.setSelectedIndex(0);
+        supervisor.setSelectedIndex(0);
+        departamento.setSelectedIndex(0);
+        comboEnableSupervisor();
+        
+        this.setTitle("Cadastro de Empregado");
+    }
     
     public int selecionarComboBoxDep(int id, JComboBox<Departamento> box){
         for(int i=0; i < box.getItemCount(); i++)   
@@ -213,7 +236,10 @@ public class FormFuncionario extends JDialog implements ActionListener
                 departamento.setEnabled(true);
                 supervisor.setEnabled(true);                
             }
-        }       
+        }else if (e.getTipoLogin() == 2){//gerente e funcionario
+            salario.setEnabled(true);
+            ssn.setEnabled(true);    
+        }        
     }
     
     public void comboEnableSupervisor()
@@ -239,10 +265,11 @@ public class FormFuncionario extends JDialog implements ActionListener
         {
             if(emp_edit == null)//inserir novo elemento
             {
+                System.out.println("QUERO CADASTRAR");
                 try
                 {
                     Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
+                    Empregado superssn = (Empregado) supervisor.getSelectedItem();                    
                     
                     Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
                                                   endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
@@ -260,6 +287,7 @@ public class FormFuncionario extends JDialog implements ActionListener
             }
             else
             {
+                System.out.println("QUERO EDITAR");
                try
                 {                
                     Departamento d = (Departamento) departamento.getSelectedItem();  

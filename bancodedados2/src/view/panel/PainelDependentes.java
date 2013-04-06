@@ -50,6 +50,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
+    public static FormDependente formDependente = null;
     
     public PainelDependentes(){			
         
@@ -144,7 +145,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormDependente(null);
+                form_dependente(null);
         else if (origem == editar && (item != -1)){
             
             String essn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
@@ -152,7 +153,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             Dependente dep = null;
             try {
                 dep = Principal.cf.buscaDependenteEssnNome(essn, nome);
-                new FormDependente(dep);
+                form_dependente(dep);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }            
@@ -226,4 +227,17 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         PainelDependentes.contaRegistros.setText(PainelDependentes.tabela.getRowCount() + " registro(s) encontrado(s)");                    
         PainelDependentes.setSizeColumn();        
     }
+    
+    public static void form_dependente(Dependente e){
+        if(formDependente == null)
+            formDependente = new FormDependente(e);
+        else{
+            try {
+                formDependente.editar(e);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formDependente.setVisible(true);
+        }
+    }       
 }

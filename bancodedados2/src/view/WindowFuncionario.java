@@ -6,7 +6,10 @@ import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -38,7 +41,10 @@ public class WindowFuncionario extends JFrame implements ActionListener {
     private static JButton btnDepartamentos;
     private static JButton btnProjetos;
     private static CardLayout card;
-
+    private static JPanel painel_projetos = null;
+    private static JPanel painel_dependentes = null;
+    private static FormFuncionario formFuncionario = null;
+    
     public WindowFuncionario(){
             super("Sistema de Gerenciamento - Funcionario");
             
@@ -149,15 +155,16 @@ public class WindowFuncionario extends JFrame implements ActionListener {
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "inicio");
             }		
             else if (origem == menuDependentesListar || origem == btnDependentes){
-                    painelCentral.add(new PainelDependentes(), "dependente");                
+                    painelCentral.add(painel_dependentes(), "dependente");                
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "dependente");
             }
             else if( origem == btnProjetos || origem == menuProjetosListar){
-                    painelCentral.add(new PainelProjetos(), "projeto");            
+                    painelCentral.add(painel_projetos(), "projeto");            
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "projeto");
             }            
-            else if (origem == menuEditarFuncionario || origem == btnFuncionarios){                
-                new FormFuncionario(Principal.user);
+            else if (origem == menuEditarFuncionario || origem == btnFuncionarios){           
+
+                form_funcionarios(Principal.user);                
                 
                 try {
                     Principal.user = Principal.cf.getEmpregadoBySsn(ssn);
@@ -167,4 +174,32 @@ public class WindowFuncionario extends JFrame implements ActionListener {
                 }                                 
             }		
     }
+    
+    public static JPanel painel_projetos(){
+        if(painel_projetos == null)
+            painel_projetos = new PainelProjetos();      
+        
+        return painel_projetos;
+    }      
+    
+    public static JPanel painel_dependentes(){
+        if(painel_dependentes == null)
+            painel_dependentes = new PainelDependentes();
+                
+        return painel_dependentes;
+    }      
+    
+    public static void form_funcionarios(Empregado e){
+        if(formFuncionario == null)
+            formFuncionario = new FormFuncionario(e);
+        else{
+            try {
+                formFuncionario.editarEmpregado(e);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formFuncionario.setVisible(true);
+        }
+    }
+       
 }

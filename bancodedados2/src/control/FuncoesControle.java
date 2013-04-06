@@ -75,33 +75,32 @@ public class FuncoesControle {
         }
     }                  
 
-    public boolean verificarExistenciaEmpregado(String ssn)
-    {
-        try
-        {
+    public boolean verificarExistenciaEmpregado(String ssn){
+        try{
             FactoryDAO.getFactory("Empregado").get(ssn);
             return true;
         }
-        catch(Exception e)
-        {
+        catch(Exception e){
             return false;
         }
     }
     
     public static String converteData(Date d)
     {  
+        if(d == null)
+            return new String("");
         return new SimpleDateFormat("dd/MM/yyyy").format(d);
     }      
     
-   public static Date coverteStringData(String data)
-   {   
+   public static Date coverteStringData(String data){   
+        if(data.equals(""))
+            return null;
+            
         SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");         
-        try  
-        {  
+        try  {  
             return new java.sql.Date(formatador.parse(data).getTime());    
         }  
-        catch(ParseException ex)  
-        {   
+        catch(ParseException ex)  {   
            System.out.println("Erro conversao de Date!");
            return null;
         }  

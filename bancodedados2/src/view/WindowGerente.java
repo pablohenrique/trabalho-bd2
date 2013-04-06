@@ -62,6 +62,12 @@ public class WindowGerente extends JFrame implements ActionListener {
     private static JButton btnCargaHoraria;
     private static JButton btnCalculadora;
     private static CardLayout card;
+    
+    private static JPanel painel_projetos = null;
+    private static JPanel painel_dependentes = null;
+    private static JPanel painel_departamento = null;
+    private static JPanel painel_funcionarios = null;
+    private static FormFuncionario formFuncionario = null;    
 
     public WindowGerente(){
             super("Sistema de Gerenciamento");
@@ -214,23 +220,23 @@ public class WindowGerente extends JFrame implements ActionListener {
                     WindowGerente.card.show(WindowGerente.painelCentral, "inicio");
             }		
             else if (origem == btnFunc || origem == menuFuncionariosListar){
-                    painelCentral.add(new PainelFuncionarios(), "funcionario");                                                                            
+                    painelCentral.add(painel_funcionarios(), "funcionario");                                                                            
                     WindowGerente.card.show(WindowGerente.painelCentral, "funcionario");
             }
             else if (origem == btnDep || origem == menuDependentesListar){
-                    painelCentral.add(new PainelDependentes(), "dependente");                    
+                    painelCentral.add(painel_dependentes(), "dependente");                                 
                     WindowGerente.card.show(WindowGerente.painelCentral, "dependente");
             }  
             else if( origem == btnDepartamentos || origem == menuDepartamentoListar){
-                    painelCentral.add(new PainelDepartamento(), "departamento");                
+                    painelCentral.add(painel_departamento(), "departamento");                
                     WindowGerente.card.show(WindowGerente.painelCentral, "departamento");
             }
             else if( origem == btnProjetos || origem == menuProjetosListar){
-                    painelCentral.add(new PainelProjetos(), "projeto");            
+                    painelCentral.add(painel_projetos(), "projeto");            
                     WindowGerente.card.show(WindowGerente.painelCentral, "projeto");
             }            
             else if (origem == menuFuncionarioCadastro){
-                    new FormFuncionario(null);
+                    form_funcionarios(null);
             }		
             else if (origem == menuProjetosCadastro){
                     new FormProjetos(null);
@@ -242,4 +248,46 @@ public class WindowGerente extends JFrame implements ActionListener {
                     new FormDependente(null);
             }                                       
     }
+    
+    public static JPanel painel_projetos(){
+        if(painel_projetos == null)
+            painel_projetos = new PainelProjetos();      
+        
+        return painel_projetos;
+    } 
+    
+    public static JPanel painel_funcionarios(){
+        if(painel_funcionarios == null)
+            painel_funcionarios = new PainelFuncionarios();      
+        
+        return painel_funcionarios;
+    } 
+    
+    public static JPanel painel_departamento(){
+        if(painel_departamento == null)
+            painel_departamento = new PainelDependentes();      
+        
+        return painel_projetos;
+    }          
+    
+    public static JPanel painel_dependentes(){
+        if(painel_dependentes == null)
+            painel_dependentes = new PainelDependentes();
+                
+        return painel_dependentes;
+    }  
+    
+    public static void form_funcionarios(Empregado e){
+        if(formFuncionario == null)
+            formFuncionario = new FormFuncionario(e);
+        else{
+            try {
+                formFuncionario.editarEmpregado(e);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formFuncionario.setVisible(true);
+        }
+    }
+          
 }

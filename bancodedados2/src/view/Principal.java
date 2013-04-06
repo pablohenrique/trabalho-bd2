@@ -49,7 +49,7 @@ public class Principal{
          System.out.println(update.getLocalizacao());
          */
          login = new WindowLogin();
-         janela = new WindowFuncionario();
+//         janela = new WindowFuncionario();
     }
 
     private static void initLookAndFeel(){		 

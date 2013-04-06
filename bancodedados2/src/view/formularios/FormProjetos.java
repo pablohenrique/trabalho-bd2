@@ -29,12 +29,12 @@ public class FormProjetos extends JDialog implements ActionListener
     
     private static JButton btnOK;
     private static JButton btnCancelar;
-    private Projeto p_edit = null;
+    private Projeto pEdit = null;
     
     public FormProjetos(Projeto p)
     {
         super(Principal.janela,"Cadastro de Projetos", true);
-        p_edit = p;
+        pEdit = p;
         nome = new JTextField();
         localizacao = new JTextField();                
         
@@ -44,11 +44,11 @@ public class FormProjetos extends JDialog implements ActionListener
             departamento = new JComboBox();  
         }
         
-        if (p_edit != null)
+        if (pEdit != null)
         {
             try
             {
-                this.editar(p_edit);
+                this.editar(pEdit);
             }
             catch (Exception ex)
             {
@@ -98,10 +98,28 @@ public class FormProjetos extends JDialog implements ActionListener
         this.setVisible(true);
     }
 
-    private void editar(Projeto p_edit) throws Exception {
+    public void editar(Projeto p) throws Exception {        
+       if(p == null){
+            pEdit = null;
+            cleanProjetosForm();
+            return;
+        }
+        pEdit = p;
         
-        this.setTitle("Editar Departamento");        
+        nome.setText(p.getNome());
+        localizacao.setText(p.getLocalizacao());
+        departamento.setSelectedIndex(this.selecionarComboBoxDep(p.getDepartamento().getNumero(), departamento));                
+           
+        this.setTitle("Editar Projeto");        
     }
+    
+    public void cleanProjetosForm(){
+        nome.setText("");
+        localizacao.setText("");
+        departamento.setSelectedIndex(0);
+        
+        this.setTitle("Cadastro de Projeto");
+    }    
     
     public int selecionarComboBoxDep(int id, JComboBox<Departamento> box){
         for(int i=0; i < box.getItemCount(); i++)   
@@ -117,12 +135,12 @@ public class FormProjetos extends JDialog implements ActionListener
 
         if(origem == btnOK)
         {
-            if(p_edit == null)//inserir novo elemento
+            if(pEdit == null)//inserir novo elemento
             {
                 try
                 {
                     Departamento d = (Departamento) departamento.getSelectedItem();                      
-                    
+                    System.out.println(nome.getText()+ " - "+ localizacao.getText()+ " - "+ d.getNumero());
                     Principal.cf.inserirProjeto(nome.getText(), localizacao.getText(), d.getNumero());
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
@@ -135,27 +153,23 @@ public class FormProjetos extends JDialog implements ActionListener
                 }
                 
             }
-         /*   else
+            else
             {
-               try
-                {                
-                    Departamento d = (Departamento) departamento.getSelectedItem();  
-                    Empregado superssn = (Empregado) supervisor.getSelectedItem();
+                try
+                {
+                    Departamento d = (Departamento) departamento.getSelectedItem();                      
+
+                    Principal.cf.atualizarProjeto(pEdit.getNumero(), nome.getText(), localizacao.getText(), d.getNumero());
                     
-                    Principal.cf.atualizarEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                    endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
-                                                    superssn.getSsn(), new String (senha.getPassword()));                                           
-                    
-                    JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();
+                    JOptionPane.showMessageDialog(this,"Atualizacao realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
+                    PainelProjetos.setDataTable();
                     this.dispose();
                 }
                 catch(Exception ex)
                 {
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
-                }                    
+                }                
             }
-                */                     
         }
 
         if (origem == btnCancelar)

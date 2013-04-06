@@ -49,6 +49,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
+    private static FormProjetos formprojetos = null;
     
     public PainelProjetos(){			
         
@@ -156,13 +157,13 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormProjetos(null);
+                formProjeto(null);
         else if (origem == editar && (item != -1)){
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             Projeto p = null;
             try {
                 p = Principal.cf.getProjetoByNumero(Integer.parseInt(numero));
-                new FormProjetos(p);
+                formProjeto(p);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }             
@@ -239,4 +240,18 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         PainelProjetos.tabela.setModel(PainelProjetos.modelo);                    
         PainelProjetos.setSizeColumn();        
     }
+    
+    
+    public static void formProjeto(Projeto p){
+        if(formprojetos == null)
+            formprojetos = new FormProjetos(p);
+        else{
+            try {
+                formprojetos.editar(p);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formprojetos.setVisible(true);
+        }
+    }       
 }

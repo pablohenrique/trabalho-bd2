@@ -135,6 +135,13 @@ public class FormDependente extends JDialog implements ActionListener
     
     public void editar(Dependente d) throws Exception
     {        
+        if(d == null){
+            dep_edit = null;
+            this.cleanDependente();
+            return;
+        }
+        dep_edit = d;
+        
         nome.setText(d.getNome());
         dataNasc.setText(d.getDataNascimentoString());
         sexo.setSelectedItem(d.getSexo());
@@ -145,9 +152,23 @@ public class FormDependente extends JDialog implements ActionListener
         else
             empregado.setSelectedIndex(empregado.getItemCount()-1);
         
+        nome.setEnabled(false);
+        empregado.setEnabled(false);
+        
         this.setTitle("Editar Dependente");
     }    
 
+    public void cleanDependente(){
+
+        empregado.setEnabled(true);
+        nome.setText("");
+        dataNasc.setText("");
+        sexo.setSelectedIndex(0);
+        parentesco.setSelectedIndex(0);
+        empregado.setSelectedIndex(0);       
+        
+        this.setTitle("Cadastro de Dependente");
+    }
 
     public int selecionarComboBoxSup(Empregado e, JComboBox<Empregado> box){
         if(e == null)

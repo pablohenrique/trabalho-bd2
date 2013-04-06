@@ -45,6 +45,9 @@ public class WindowSupervisor extends JFrame implements ActionListener {
     private static JButton btnFuncionarios; 
     private static JButton btnProjetos;
     private static CardLayout card;
+    
+    private static JPanel painel_funcionario = null;
+    private static JPanel painel_projetos = null;
 
     public WindowSupervisor(){
             super("Sistema de Gerenciamento - Supervisor");
@@ -52,7 +55,7 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             card = new CardLayout();
             painelCentral = new JPanel(card);
             painelCentral.add(new PainelInit(), "inicio");                           
-
+            
             //menu
             JMenu arquivo = new JMenu("Arquivo");		
             
@@ -147,12 +150,31 @@ public class WindowSupervisor extends JFrame implements ActionListener {
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "inicio");
             }		
             else if (origem == btnFuncionarios || origem == menuFuncionariosListar){
-                    painelCentral.add(new PainelFuncionarios(), "funcionario");                    
-                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "funcionario");
+                painelCentral.add(painel_funcionario(), "funcionario");                     
+                WindowSupervisor.card.show(WindowSupervisor.painelCentral, "funcionario");
             }
             else if( origem == btnProjetos){
-                    painelCentral.add(new PainelProjetos(), "projeto");            
-                    WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
+                painelCentral.add(painel_projetos(), "projeto"); 
+                WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
             }                   
+    }
+    
+    /**
+     * Singleton JPanel
+     */
+    public static JPanel painel_funcionario(){
+        if(painel_funcionario == null){
+            painel_funcionario = new PainelFuncionarios();                
+        }
+        return painel_funcionario;
+    }
+    
+    
+    public static JPanel painel_projetos(){
+        if(painel_projetos == null){
+            painel_projetos = new PainelProjetos();
+        }
+        
+        return painel_projetos;
     }
 }
