@@ -42,6 +42,7 @@ public class ProjetoDAO implements IObjectDAO{
     private final String SQL_GETALLDEPNUMERO = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.numero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero AND l.departamento_numero = e.dno;";
     private final String SQL_GETALLEMP = "SELECT " + BEFORECOND + " WHERE e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero AND e.ssn = ? AND l.departamento_numero = e.dno ORDER BY t.horas ASC;";
     private final String SQL_COUNTHOURS = "SELECT SUM(horas) FROM trabalha_em;";
+    private final String SQL_COUNTHOURSEMP = "SELECT SUM(horas) FROM trabalha_em WHERE essn = ?;";
     private final String SQL_COUNTEMP = "SELECT COUNT( DISTINCT(essn) ) FROM trabalha_em;";
     private final String SQL_PROJECTBYEMP = "SELECT COUNT(*) FROM trabalha_em WHERE essn = ?;";
     
@@ -239,34 +240,53 @@ public class ProjetoDAO implements IObjectDAO{
         }
     }
     
-    public int getCount(int input) throws SQLException{
+    public int getCount() throws SQLException{
         try {
-            String EXIT;
-            if(input == 0)
-                EXIT = SQL_COUNTHOURS;
-            else
-                EXIT = SQL_COUNTEMP;
-            
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(EXIT);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_COUNTEMP);
             this.rs = this.ps.executeQuery();
             
             return this.rs.getInt(1);
             
         } catch (Exception e) {
-            throw new SQLException("Erro contar projetos objeto:  " + e.toString());            
+            throw new SQLException("Erro contar empregados em todos os projetos:  " + e.toString());            
         }
     }
     
     public int getCount(String ssn) throws SQLException{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_PROJECTBYEMP);
-            this.ps.setString(1,(String) ssn);
+            this.ps.setString(1,ssn);
             this.rs = this.ps.executeQuery();
             
             return this.rs.getInt(1);
             
         } catch (Exception e) {
             throw new SQLException("Erro contar projetos por empregado objeto:  " + e.toString());            
+        }
+    }
+    
+    public float getHours() throws SQLException{
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_COUNTHOURS);
+            this.rs = this.ps.executeQuery();
+            
+            return this.rs.getFloat(1);
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar quantidade de horas: " + e.toString());
+            return -1;
+        }
+    }
+    
+    public float getHours(String ssn) throws SQLException{
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_COUNTHOURSEMP);
+            this.ps.setString(1,ssn);
+            this.rs = this.ps.executeQuery();
+            
+            return this.rs.getFloat(1);
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar quantidade de horas por funcionario: " + e.toString());
+            return -1;
         }
     }
     
