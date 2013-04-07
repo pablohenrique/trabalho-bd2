@@ -56,11 +56,7 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(6, 2, 5, 5));
         grid.add(nome);
-        grid.add(new JLabel("RESTRICOES XML"));
-        grid.add(new JLabel("Carga Horaria Total: "));
-        grid.add(new JLabel("90"));    
-        grid.add(new JLabel("Qtd. Empregados: "));
-        grid.add(new JLabel("10"));        
+        grid.add(new JLabel("RESTRICOES XML"));      
         grid.add(new JLabel("Localizacao Projeto: "));
         grid.add(new JLabel("FACOM "));        
         grid.add(new JLabel("Departamento: "));

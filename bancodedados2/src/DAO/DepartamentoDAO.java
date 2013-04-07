@@ -135,17 +135,21 @@ public class DepartamentoDAO implements IObjectDAO{
         }
     }
     
-    public Object getGer(String gerssn) {
+    public ArrayList<Object> getGer(String gerssn) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
             this.ps.setString(1,gerssn);
+            ArrayList<Object> output = new ArrayList<>();
+            
             this.rs = this.ps.executeQuery();
+            while(this.rs.next()){
+                output.add((Departamento) this.useObjectTemplate());
+            }
             
-            if(!this.rs.next())
-                throw new Exception("Departamento nao encontrado.");
+            if(output.isEmpty())
+                throw new ArrayStoreException("Nao houve objetos encontrados.");
             
-            return this.useObjectTemplate();
-            
+            return output;                
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
             return null;

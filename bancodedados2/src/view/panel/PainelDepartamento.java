@@ -191,7 +191,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         String[][] dados = null;
         
         try {        
-            dados = Principal.cf.getDepartamentosTable(Principal.cf.listarDepartamentos());
+            dados = Principal.cf.getDepartamentosTable(Principal.cf.getDepartamentoByGerente(Principal.user.getSsn()));
         } catch (Exception ex) {
             System.err.println("Erro Painel Departamentos: " + ex);
         }

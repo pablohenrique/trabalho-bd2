@@ -243,9 +243,8 @@ public class ControlFacade {
      * @throws Exception 
      * retorna departamento que possui gerente com ssn informado
      */
-    public Departamento getDepartamentoByGerente(String gerssn) throws Exception{
-        Departamento departamento = departamentoControl.getByGer(gerssn);
-        return departamento;
+    public Vector<Departamento> getDepartamentoByGerente(String gerssn) throws Exception{
+        return departamentoControl.getByGer(gerssn);
     }
       
     public String[][] getDepartamentosTable(Vector<Departamento> list) {
@@ -447,7 +446,7 @@ public class ControlFacade {
             Projeto p = list.get(i);
             Departamento d = list.get(i).getDepartamento();
             Empregado e = d.getGerenteSsn();
-            dados[i] = new String[] {p.getNome(), String.valueOf(p.getNumero()), p.getLocalizacao(), "0", "0", d.getNome(), String.valueOf(d.getNumero()), e.getNome(), e.getSsn()}; 
+            dados[i] = new String[] {p.getNome(), String.valueOf(p.getNumero()), p.getLocalizacao(), d.getNome(), String.valueOf(d.getNumero()), e.getNome(), e.getSsn()}; 
         }
 
         return dados;                 

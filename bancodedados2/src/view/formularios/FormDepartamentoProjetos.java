@@ -69,7 +69,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
             }
         };
 
-        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Carga Horaria Total", "Localizacao"};  
+        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Localizacao"};  
         
         FormDepartamentoProjetos.setDataTableFuncionariosProjetos();
         

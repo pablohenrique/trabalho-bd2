@@ -62,8 +62,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             }
         };
 
-        colunas = new String [] {"Nome Projeto", "Numero", "Localizacao", "Qtd. Empregados",
-                                 "Carga Horaria Total", "Nome Departamento", "Dno", "Nome Gerente", "Ssn"}; 
+        colunas = new String [] {"Nome Projeto", "Numero", "Nome Departamento", "Dno", "Nome Gerente", "Ssn"}; 
   
         PainelProjetos.setDataTable();
         
@@ -211,17 +210,14 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         }*/
         
     }   
-     
+    
     public static void setSizeColumn(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(50);
         tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(120);
-        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(50);
-        tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(80);
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(100);
     }
     
     public static void setDataTable(){       
