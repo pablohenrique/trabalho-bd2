@@ -1,6 +1,7 @@
 package view.formularios;
 
 import Model.Departamento;
+import Model.Localizacao;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,18 +13,23 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
+import static view.panel.PainelDepartamento.modelo;
+import static view.panel.PainelDepartamento.tabela;
 
-public class FormDepartamentoProjetos extends JDialog implements ActionListener
+public class FormDepartamentoLocal extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
     private static JButton btnOK;
+    private static JButton btnNovo;
+    private static JButton btnRemover;
     
     private static JTable tabela;
     private static DefaultTableModel modelo;
@@ -32,15 +38,21 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     private JLabel gerente = new JLabel();
     private JLabel dataInicio = new JLabel();
     private JPanel grid = new JPanel();
+    private FormDepartamentoLocalForm formDepartmanetosLocalizacao = null;
+    private Departamento depAtual = null;
     
-    public FormDepartamentoProjetos(Departamento d)
+    public FormDepartamentoLocal(Departamento d)
     {
-        super(Principal.janela,"Todos Projetos de Departamentos", true);
-                               
+        super(Principal.janela,"Localizacao dos Departamentos", true);
+        
+        depAtual = d;
+        btnNovo = new JButton("Novo");          
+        btnRemover = new JButton("Remover");       
         btnOK = new JButton("OK");       
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnOK.addActionListener(this);                     
-
+        btnNovo.addActionListener(this);                     
+        
         JLabel nomeLabel = new JLabel("Departamento: ");         
         
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
@@ -55,7 +67,9 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         nomeLabel.setPreferredSize(new Dimension(250, 25));
         
         JPanel botoes = new JPanel();
-
+        
+        botoes.add(btnNovo);
+        botoes.add(btnRemover);
         botoes.add(btnOK);       
         botoes.add(Box.createVerticalStrut(45));
         botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));        
@@ -69,7 +83,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
             }
         };
 
-        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Localizacao"};  
+        colunas = new String [] { "Local", "Numero Departamento"};  
         
         editar(d);
         
@@ -101,7 +115,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         gerente.setText(d.getGerenteSsn().getNome());
         dataInicio.setText(d.getGerenteDataInicioString());
         
-        FormDepartamentoProjetos.setDataTableFuncionariosProjetos(d);
+        FormDepartamentoLocal.setDataTableDepLocal(d);
     }
  
         
@@ -109,26 +123,56 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     public void actionPerformed(ActionEvent e)
     {
         Object origem = e.getSource();
+        int item = tabela.getSelectedRow();
 
         if(origem == btnOK)
             this.dispose();
+        else if(origem == btnNovo)
+            formLocalizacao(depAtual);
+        else if(origem == btnRemover && (item != -1)) {
+            String local = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Local"));            
+
+            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover a localizacao "+nome+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
+            
+            if(opcao == JOptionPane.YES_OPTION) {
+                try {
+                    Principal.cf.apagarLocalizacao(local);
+                    modelo.removeRow(item);                   
+                }
+                catch (Exception ex){
+                    JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+                }
+            }            
+        }
     }
     
-    public static void setSizeColumnFuncionariosProjetos(){
-        tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(80);
-        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(200);       
+    public static void setSizeColumnFuncionariosLocal(){
+        tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(350);
+        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(250);       
     }
     
-    public static void setDataTableFuncionariosProjetos(Departamento d){
+    public static void setDataTableDepLocal(Departamento d){
         String[][] dados = null;
         try {        
             dados = Principal.cf.getProjetoByDepartamentos(Principal.cf.listarProjetosByNumeroDepto(d.getNumero()));
         } catch (Exception ex) {
             System.err.println("Erro listar projetos de Departamento: " + ex);
         }
-        FormDepartamentoProjetos.modelo = new DefaultTableModel(dados, FormDepartamentoProjetos.colunas);
-        FormDepartamentoProjetos.tabela.setModel(FormDepartamentoProjetos.modelo);                    
-        FormDepartamentoProjetos.setSizeColumnFuncionariosProjetos();        
-    }    
+        FormDepartamentoLocal.modelo = new DefaultTableModel(null, FormDepartamentoLocal.colunas);
+        FormDepartamentoLocal.tabela.setModel(FormDepartamentoLocal.modelo);                    
+        FormDepartamentoLocal.setSizeColumnFuncionariosLocal();        
+    }
+    
+    public void formLocalizacao(Departamento d){
+        if(formDepartmanetosLocalizacao == null)
+            formDepartmanetosLocalizacao = new FormDepartamentoLocalForm(depAtual);
+        else{
+            try {
+                formDepartmanetosLocalizacao.execute(depAtual);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Departamento: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formDepartmanetosLocalizacao.setVisible(true);
+        }
+    }      
 }

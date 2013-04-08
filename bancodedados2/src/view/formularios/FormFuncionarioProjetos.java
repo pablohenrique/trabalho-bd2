@@ -25,70 +25,51 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private static JButton novo;
-    private static JButton editarHora;
-    private static JButton excluir;
-    
     private static JButton btnOK;
-    private static JButton btnCancelar;
     
     private static JTable tabela;
     private static DefaultTableModel modelo;
     private static String[] colunas;
     private static Empregado emp;
+    private JLabel nomel = new JLabel();
+    private JLabel ssn = new JLabel();
+    private JLabel dep = new JLabel();
+    private JLabel sssn = new JLabel();
     
     public FormFuncionarioProjetos(Empregado e)
     {
         super(Principal.janela,"Todos Projetos do Empregado", true);
-                               
+        
         btnOK = new JButton("OK");
-        btnCancelar = new JButton("Cancelar");
-        btnOK.setPreferredSize(new Dimension(100, 25));
-        btnCancelar.setPreferredSize(new Dimension(100, 25));
-        emp = e;                
+        btnOK.setPreferredSize(new Dimension(100, 25));             
         
         btnOK.addActionListener(this);
-        btnCancelar.addActionListener(this);
-
-        JLabel nome = new JLabel("Nome: ");
-         
+        
+        JLabel nome = new JLabel("Nome: ");        
         
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(4, 2, 5, 5));
         grid.add(nome);
-        grid.add(new JLabel(e.getNome()));
+        grid.add(nomel);
         grid.add(new JLabel("Seguridade Social: "));
-        grid.add(new JLabel(e.getSsn()));     
+        grid.add(ssn);     
         grid.add(new JLabel("Departamento: "));
-        grid.add(new JLabel(e.getDepartamento().getNome()));
+        grid.add(dep);
         grid.add(new JLabel("Supervisor: "));
-        grid.add(new JLabel(e.getSuperSsn().getNome()));
+        grid.add(sssn);
         
         nome.setPreferredSize(new Dimension(250, 25));
         
         JPanel botoes = new JPanel();
         botoes.setLayout(new BoxLayout(botoes, BoxLayout.X_AXIS));
         botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));
-
-        novo = new JButton("Add Projeto");
-        editarHora = new JButton("Editar Hora");
-        excluir = new JButton("Excluir");                
-
+        
         botoes.add(Box.createHorizontalStrut(5));
-        botoes.add(novo);
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(editarHora);
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(excluir);
         botoes.add(Box.createVerticalStrut(45));
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(btnOK);
-        botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(btnCancelar);        
+        botoes.add(btnOK);   
         botoes.add(Box.createHorizontalStrut(5));
         
-        novo.addActionListener(this);
                 
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
@@ -98,8 +79,10 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
             }
         };
 
-        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Carga Horaria", "Localizacao", "Departamento", "Numero Departamento"};  
-        
+        colunas = new String [] { "Nome Projeto", "Numero Projeto", "Localizacao", "Departamento", "Numero Departamento"};  
+       
+        this.setEmpregado(e);        
+                
         this.setDataTableFuncionariosProjetos();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -110,7 +93,6 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());        
-
         
         JPanel painel = new JPanel();
         painel.add(grid);              
@@ -132,19 +114,8 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
-        Object origem = e.getSource();
-
-        if(origem == novo)
-            new FormFuncionarioProjetosForm(null, emp, false);        
-        if(origem == btnOK)
-        {
-                                     
-        }
-
-        if (origem == btnCancelar)
-        {
+        if (e.getSource() == btnOK)
                 this.dispose();
-        } 
     }
     
     public static void setSizeColumnFuncionariosProjetos(){
@@ -153,7 +124,6 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(200);
         tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(200);        
         tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(200);        
-        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(50);        
     }
     
     public static void setDataTableFuncionariosProjetos(){
@@ -169,4 +139,13 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
         FormFuncionarioProjetos.tabela.setModel(FormFuncionarioProjetos.modelo);                    
         FormFuncionarioProjetos.setSizeColumnFuncionariosProjetos();        
     }    
+
+    public void setEmpregado(Empregado e) {
+        emp = e;
+        sssn.setText(e.getSuperSsn().getNome());
+        nomel.setText(e.getNome());
+        ssn.setText(e.getSsn());
+        dep.setText(e.getDepartamento().getNome());
+        FormFuncionarioProjetos.setDataTableFuncionariosProjetos();
+    }
 }

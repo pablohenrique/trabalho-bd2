@@ -34,6 +34,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
 import view.formularios.FormDepartamento;
+import view.formularios.FormDepartamentoLocal;
 import view.formularios.FormDepartamentoProjetos;
 
 public final class PainelDepartamento extends JPanel  implements ActionListener {	
@@ -42,9 +43,8 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
     private static JButton novo;
     private static JButton editar;
     private static JButton excluir;    
-    private static JButton projetos;    
-    private static JTextField txtBusca;
-    private static JButton btnBusca;
+    private static JButton projetos;   
+    private static JButton localizacao;    
     private static JLabel contaRegistros;
     
     public static JTable tabela;
@@ -52,6 +52,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
     public static String[] colunas;
     public static FormDepartamento formDepartmanetos = null;
     public static FormDepartamentoProjetos formDepartmanetosProjetos = null;
+    public static FormDepartamentoLocal formDepartmanetosLocalizacao = null;
 
     public PainelDepartamento(){			
         
@@ -89,13 +90,8 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         editar = new JButton("Editar");
         excluir = new JButton("Excluir");
         projetos = new JButton("Projetos");
-        
-        btnBusca = new JButton("Pesquisar");
-        txtBusca = new JTextField();
-        txtBusca.setPreferredSize(new Dimension(200, 24));
-        txtBusca.setMaximumSize(new Dimension(200, 24));
-
-        
+        localizacao = new JButton("Localização");
+                                
         botoes.add(Box.createHorizontalStrut(5));
         botoes.add(novo);
         botoes.add(Box.createHorizontalStrut(3));
@@ -104,21 +100,18 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         botoes.add(excluir);
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(projetos);         
+        botoes.add(Box.createHorizontalStrut(3));
+        botoes.add(localizacao);        
         botoes.add(Box.createVerticalStrut(45));
         botoes.add(Box.createHorizontalGlue());
         botoes.add(contaRegistros);
-        //botoes.add(Box.createHorizontalGlue());
-        //botoes.add(imagem);
-        //botoes.add(Box.createHorizontalStrut(5));
-        //botoes.add(txtBusca);
-        //botoes.add(Box.createHorizontalStrut(5));
-        //botoes.add(btnBusca);
         botoes.add(Box.createHorizontalStrut(7));
 
         novo.addActionListener(this);
         editar.addActionListener(this);
         excluir.addActionListener(this);        
         projetos.addActionListener(this);
+        localizacao.addActionListener(this);
         
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));
@@ -172,7 +165,17 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
             }
             
         }
-    }
+        else if (origem == localizacao && (item != -1)) {
+            String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+            Departamento dep;
+            try {
+                dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));
+                formLocalizacao(dep);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+            }            
+        }                
+    }   
     
     public static void setSizeColumn(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
@@ -229,5 +232,18 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
             }
             formDepartmanetosProjetos.setVisible(true);
         }
-    }       
+    } 
+    
+    public static void formLocalizacao(Departamento d){
+        if(formDepartmanetosLocalizacao == null)
+            formDepartmanetosLocalizacao = new FormDepartamentoLocal(d);
+        else{
+            try {
+                formDepartmanetosLocalizacao.editar(d);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Departamento: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formDepartmanetosLocalizacao.setVisible(true);
+        }
+    }    
 }
