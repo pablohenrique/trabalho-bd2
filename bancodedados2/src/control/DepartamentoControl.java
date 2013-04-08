@@ -36,8 +36,15 @@ public class DepartamentoControl
         return departamento;
     }
     
-    public void post(int numero, String nome, String gerssn, String gerdatainicio) throws Exception {
-        this.dao.post(this.createObjectTemplate(numero,nome, gerssn, gerdatainicio));
+    public void post(String nome, String gerssn, String gerdatainicio) throws Exception {
+        Empregado em = new Empregado();
+        em.setSsn(gerssn);
+        
+        Departamento departamento = new Departamento();
+        departamento.setNome(nome);
+        departamento.setGerenteSsn(em);
+        departamento.setGerenteDataInicio(gerdatainicio);
+        this.dao.post(departamento);
     }
 
     public void update(int numero, String nome, String gerssn, String gerdatainicio) throws Exception {
