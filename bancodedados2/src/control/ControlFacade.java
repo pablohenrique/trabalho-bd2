@@ -528,6 +528,17 @@ public class ControlFacade {
     public void apagarLocalizacao(String localizacao) throws Exception{
         localizacoesControl.delete(localizacao);
     }
+    
+    /**
+     * 
+     * @param deptoid
+     * @return
+     * @throws Exception 
+     * retorna todas as localizoes de um departamento
+     */
+    public Vector<Localizacao> listarLocalizacaoPorDep(int deptoid) throws Exception{
+        return localizacoesControl.getAllByDep(deptoid);
+    }
 
 
      /**

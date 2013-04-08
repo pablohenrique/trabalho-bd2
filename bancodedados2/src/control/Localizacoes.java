@@ -60,6 +60,15 @@ public class Localizacoes {
         return localizacao;
     } 
     
+        public Vector<Localizacao>  getAllByDep(int depid) throws Exception {
+        Vector<Localizacao> localizacao = new Vector<Localizacao>();
+        
+        for(Object aux : this.dao.getAllByDept(depid))
+            localizacao.add((Localizacao) aux);
+        
+        return localizacao;
+    } 
+    
     public Vector<Localizacao>  SearchByName(String input){
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         
