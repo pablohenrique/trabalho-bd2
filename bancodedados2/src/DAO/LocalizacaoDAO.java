@@ -28,6 +28,7 @@ public class LocalizacaoDAO implements IObjectDAO{
     private final String SQL_GET = BEFORECOND + " WHERE d.numero = ? " + AFTERCOND;
     private final String SQL_READ = BEFORECOND + " WHERE l.dlocalizacao LIKE ? " + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE " + AFTERCOND;
+    private final String SQL_GETALL_BYDEP = BEFORECOND + " WHERE l.departamento_numero = ? + AFTERCOND";
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -134,6 +135,20 @@ public class LocalizacaoDAO implements IObjectDAO{
     public ArrayList<Object> getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
+            this.rs = this.ps.executeQuery();
+            
+            return this.getAllTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [GETALL] o objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+        public ArrayList<Object> getAllByDept(int deptID) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL_BYDEP);
+            this.ps.setInt(1,deptID);
             this.rs = this.ps.executeQuery();
             
             return this.getAllTemplate();
