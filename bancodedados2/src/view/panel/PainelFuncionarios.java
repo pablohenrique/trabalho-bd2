@@ -49,8 +49,9 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    private static FormFuncionario formFuncionario = null;
-
+    private FormFuncionario formFuncionario = null;
+    private FormFuncionarioProjetos formProjetos = null;
+    
     public PainelFuncionarios(){			
         
         tabela = new JTable(){
@@ -166,7 +167,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
             Empregado em;
             try {
                 em = Principal.cf.getEmpregadoBySsn(ssn);
-                new FormFuncionarioProjetos(em);
+                form_projetos(em);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }
@@ -217,7 +218,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         PainelFuncionarios.setSizeColumn();        
     }
     
-    public static void form_funcionarios(Empregado e){
+    public void form_funcionarios(Empregado e){
         if(formFuncionario == null)
             formFuncionario = new FormFuncionario(e);
         else{
@@ -227,6 +228,19 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
                  JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
             }
             formFuncionario.setVisible(true);
+        }
+    }    
+    
+    public void form_projetos(Empregado e){
+        if(formProjetos == null)
+            formProjetos = new FormFuncionarioProjetos(e);
+        else{
+            try {
+                formProjetos.setEmpregado(e);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formProjetos.setVisible(true);
         }
     }    
 }

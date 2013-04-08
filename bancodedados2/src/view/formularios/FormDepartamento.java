@@ -174,6 +174,7 @@ public class FormDepartamento extends JDialog implements ActionListener
                try{                
                     Empregado gerssn = (Empregado) gerente.getSelectedItem();
                     
+                    System.out.println(depEdit.getNumero()+ " - " + nome.getText()+ " - " +gerssn.getSsn()+ " - " +dataInicio.getText());
                     Principal.cf.atualizarDepartamento(depEdit.getNumero(), nome.getText(), gerssn.getSsn(), dataInicio.getText());
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        

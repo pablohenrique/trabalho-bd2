@@ -138,9 +138,8 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             botoes.add(contaRegistros);      ;            
             botoes.add(Box.createHorizontalGlue());
         }
-        
-        if(Principal.user.getTipoLogin() == 2){
-            botoes.add(Box.createVerticalStrut(45));                       
+        botoes.add(Box.createVerticalStrut(45));  
+        if(Principal.user.getTipoLogin() == 2){                     
             botoes.add(imagem);
             botoes.add(Box.createHorizontalStrut(5));
             botoes.add(txtBusca);
