@@ -50,7 +50,9 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    
+    public static FormDepartamento formDepartmanetos = null;
+    public static FormDepartamentoProjetos formDepartmanetosProjetos = null;
+
     public PainelDepartamento(){			
         
         tabela = new JTable(){
@@ -130,13 +132,13 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         int item = tabela.getSelectedRow();
                 
         if (origem == novo)
-                new FormDepartamento(null);
+               formDepartamentos(null);
         else if (origem == editar && (item != -1)){            
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             Departamento dep;
             try {
                 dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));
-                new FormDepartamento(dep);
+                formDepartamentos(dep);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }
@@ -164,7 +166,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
             Departamento dep;
             try {
                 dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));
-                new FormDepartamentoProjetos(dep);
+                formProjetos(dep);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }
@@ -191,7 +193,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         String[][] dados = null;
         
         try {        
-            dados = Principal.cf.getDepartamentosTable(Principal.cf.getDepartamentoByGerente(Principal.user.getSsn()));
+            dados = Principal.cf.getDepartamentosTable(Principal.cf.listarDepartamentos());
         } catch (Exception ex) {
             System.err.println("Erro Painel Departamentos: " + ex);
         }
@@ -202,4 +204,30 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         PainelDepartamento.contaRegistros = new JLabel();
         PainelDepartamento.contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
     }
+    
+    public static void formDepartamentos(Departamento d){
+        if(formDepartmanetos == null)
+            formDepartmanetos = new FormDepartamento(d);
+        else{
+            try {
+                formDepartmanetos.editar(d);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Departamento: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formDepartmanetos.setVisible(true);
+        }
+    }    
+    
+    public static void formProjetos(Departamento d){
+        if(formDepartmanetosProjetos == null)
+            formDepartmanetosProjetos = new FormDepartamentoProjetos(d);
+        else{
+            try {
+                formDepartmanetosProjetos.editar(d);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Departamento: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formDepartmanetosProjetos.setVisible(true);
+        }
+    }       
 }

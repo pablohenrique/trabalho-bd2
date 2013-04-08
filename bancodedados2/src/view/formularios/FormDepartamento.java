@@ -36,12 +36,12 @@ public class FormDepartamento extends JDialog implements ActionListener
     
     private static JButton btnOK;
     private static JButton btnCancelar;
-    private Departamento dep_edit = null;
+    private Departamento depEdit = null;
     
     public FormDepartamento(Departamento emp)
     {
         super(Principal.janela,"Cadastro de Departamento", true);
-        dep_edit = emp;
+        depEdit = emp;
         nome = new JTextField();
         dataInicio = new JFormattedTextField();
                 
@@ -61,11 +61,11 @@ public class FormDepartamento extends JDialog implements ActionListener
             gerente = new JComboBox();
         }
         
-        if (dep_edit != null)
+        if (depEdit != null)
         {
             try
             {
-                this.editar(dep_edit);
+                this.editar(depEdit);
             }
             catch (Exception ex)
             {
@@ -117,7 +117,13 @@ public class FormDepartamento extends JDialog implements ActionListener
     
     public void editar(Departamento dep) throws Exception
     {
-
+       if(dep == null){
+            depEdit = null;
+            cleanProjetosForm();
+            return;
+        }
+        depEdit = dep;
+        
         nome.setText(dep.getNome());
         dataInicio.setText(dep.getGerenteDataInicioString());
         
@@ -126,6 +132,12 @@ public class FormDepartamento extends JDialog implements ActionListener
             
         this.setTitle("Editar Departamento");
     }    
+    
+    private void cleanProjetosForm() {
+        nome.setText("");
+        dataInicio.setText("");
+        gerente.setSelectedIndex(0);
+    }
     
     public int selecionarComboBoxSup(Empregado e, JComboBox<Empregado> box){
         if(e == null)
@@ -143,7 +155,7 @@ public class FormDepartamento extends JDialog implements ActionListener
         Object origem = e.getSource();
 
         if(origem == btnOK){
-            if(dep_edit == null){
+            if(depEdit == null){
                 try{                    
                     Empregado gerssn = (Empregado) gerente.getSelectedItem();
                     
@@ -162,7 +174,7 @@ public class FormDepartamento extends JDialog implements ActionListener
                try{                
                     Empregado gerssn = (Empregado) gerente.getSelectedItem();
                     
-                    Principal.cf.atualizarDepartamento(dep_edit.getNumero(), nome.getText(), gerssn.getSsn(), dataInicio.getText());
+                    Principal.cf.atualizarDepartamento(depEdit.getNumero(), nome.getText(), gerssn.getSsn(), dataInicio.getText());
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     PainelDepartamento.setDataTable();

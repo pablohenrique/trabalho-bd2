@@ -55,11 +55,11 @@ public class DepartamentoControl
     public Departamento getById(int numero) throws Exception {
         return (Departamento) this.dao.get(numero);
     }
-        
+            
     public Vector<Departamento> getByGer(String gerssn) throws Exception {
          Vector<Departamento> departamento = new Vector<Departamento>();
          
-         for(Object aux : (ArrayList<Object>)  this.dao.getGer(gerssn));
+         for(Object aux : (ArrayList<Object>)  this.dao.getGer(gerssn))
              departamento.add((Departamento) aux);
          
          return departamento;

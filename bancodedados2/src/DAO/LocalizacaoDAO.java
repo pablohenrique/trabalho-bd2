@@ -37,7 +37,7 @@ public class LocalizacaoDAO implements IObjectDAO{
             
             Localizacao output = new Localizacao();
             output.setNome(this.rs.getString("l_localizacao"));
-            output.setDepartamento((Departamento) depdao.createObject(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getString("l_localizacao"), this.rs.getDate("d_dataInicio"), (Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("d_gerssn"))));
+            output.setDepartamento((Departamento) depdao.createObject(this.rs.getInt("d_numero"), this.rs.getString("d_nome"),this.rs.getDate("d_dataInicio"), (Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("d_gerssn"))));
             
             System.gc();
             return output;

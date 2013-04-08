@@ -433,7 +433,7 @@ public class ControlFacade {
                         
         for(int i=0; i<list.size(); i++){             
             Projeto p = list.get(i);
-            dados[i] = new String[] {p.getNome(), String.valueOf(p.getNumero()), "0", p.getLocalizacao()}; 
+            dados[i] = new String[] {p.getNome(), String.valueOf(p.getNumero()), p.getLocalizacao()}; 
         }
 
         return dados; 

@@ -137,15 +137,17 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             botoes.add(Box.createHorizontalGlue());          
             botoes.add(contaRegistros);      ;            
             botoes.add(Box.createHorizontalGlue());
-        }     
+        }
         
-        botoes.add(Box.createVerticalStrut(45));                       
-        botoes.add(imagem);
-        botoes.add(Box.createHorizontalStrut(5));
-        botoes.add(txtBusca);
-        botoes.add(Box.createHorizontalStrut(5));
-        botoes.add(btnBusca);
-        botoes.add(Box.createHorizontalStrut(7));            
+        if(Principal.user.getTipoLogin() == 2){
+            botoes.add(Box.createVerticalStrut(45));                       
+            botoes.add(imagem);
+            botoes.add(Box.createHorizontalStrut(5));
+            botoes.add(txtBusca);
+            botoes.add(Box.createHorizontalStrut(5));
+            botoes.add(btnBusca);
+            botoes.add(Box.createHorizontalStrut(7));            
+        }
         
         return botoes;
     }

@@ -265,9 +265,9 @@ public class WindowGerente extends JFrame implements ActionListener {
     
     public static JPanel painel_departamento(){
         if(painel_departamento == null)
-            painel_departamento = new PainelDependentes();      
+            painel_departamento = new PainelDepartamento();      
         
-        return painel_projetos;
+        return painel_departamento;
     }          
     
     public static JPanel painel_dependentes(){

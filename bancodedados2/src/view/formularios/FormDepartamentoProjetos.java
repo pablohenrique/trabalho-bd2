@@ -29,6 +29,9 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     private static DefaultTableModel modelo;
     private static String[] colunas;
     private static Departamento dep;
+    private JLabel nome = new JLabel();
+    private JLabel gerente = new JLabel();
+    private JLabel dataInicio = new JLabel();
     
     public FormDepartamentoProjetos(Departamento d)
     {
@@ -40,19 +43,19 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         
         dep = d;                
 
-        JLabel nome = new JLabel("Departamento: ");         
+        JLabel nomeLabel = new JLabel("Departamento: ");         
         
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(4, 2, 5, 5));
+        grid.add(nomeLabel);
         grid.add(nome);
-        grid.add(new JLabel(dep.getNome()));
         grid.add(new JLabel("Gerente: "));
-        grid.add(new JLabel(dep.getGerenteSsn().getNome()));     
+        grid.add(gerente);     
         grid.add(new JLabel("Data Inicio: "));
-        grid.add(new JLabel(dep.getGerenteDataInicioString()));
+        grid.add(dataInicio);
         
-        nome.setPreferredSize(new Dimension(250, 25));
+        nomeLabel.setPreferredSize(new Dimension(250, 25));
         
         JPanel botoes = new JPanel();
 
@@ -76,12 +79,9 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setGridColor(new Color(220,220,220));        
-        
-        FormDepartamentoProjetos.setSizeColumnFuncionariosProjetos();
-        
+                
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());        
-
         
         JPanel painel = new JPanel();
         painel.add(grid);              
@@ -98,6 +98,14 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setVisible(true);
     }
+    
+    public void editar(Departamento d){
+        nome.setText(d.getNome());
+        gerente.setText(d.getGerenteSsn().getNome());
+        dataInicio.setText(d.getGerenteDataInicioString());
+        
+        FormDepartamentoProjetos.setDataTableFuncionariosProjetos();
+    }
  
         
     @Override
@@ -112,8 +120,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     public static void setSizeColumnFuncionariosProjetos(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(80);
-        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(200);
-        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(200);        
+        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(200);       
     }
     
     public static void setDataTableFuncionariosProjetos(){
