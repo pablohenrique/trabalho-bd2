@@ -23,11 +23,12 @@ public class DepartamentoControl
         this.dao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
     }
     
-    private Departamento createObjectTemplate(String nome, String gerssn, String gerdatainicio){
+    private Departamento createObjectTemplate(int numero, String nome, String gerssn, String gerdatainicio){
         Empregado em = new Empregado();
         em.setSsn(gerssn);
         
-        Departamento departamento = new Departamento();        
+        Departamento departamento = new Departamento();
+        departamento.setNumero(numero);
         departamento.setNome(nome);
         departamento.setGerenteSsn(em);
         departamento.setGerenteDataInicio(gerdatainicio);
@@ -35,12 +36,12 @@ public class DepartamentoControl
         return departamento;
     }
     
-    public void post(String nome, String gerssn, String gerdatainicio) throws Exception {
-        this.dao.post(this.createObjectTemplate(nome, gerssn, gerdatainicio));
+    public void post(int numero, String nome, String gerssn, String gerdatainicio) throws Exception {
+        this.dao.post(this.createObjectTemplate(numero,nome, gerssn, gerdatainicio));
     }
 
     public void update(int numero, String nome, String gerssn, String gerdatainicio) throws Exception {
-        this.dao.update(this.createObjectTemplate(nome, gerssn, gerdatainicio));        
+        this.dao.update(this.createObjectTemplate(numero,nome, gerssn, gerdatainicio));        
     }
     
     public void delete(int numero) throws Exception{

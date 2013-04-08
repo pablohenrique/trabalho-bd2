@@ -178,8 +178,8 @@ public class ControlFacade {
      * @throws Exception 
      * Realiza insercao no departamento
      */
-    public void inserirDepartamento(String nome, String gerssn, String gerdatainicio) throws Exception{
-        departamentoControl.post(nome, gerssn, gerdatainicio);
+    public void inserirDepartamento(int numero,String nome, String gerssn, String gerdatainicio) throws Exception{
+        departamentoControl.post(numero,nome, gerssn, gerdatainicio);
     }
     
     /**
