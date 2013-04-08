@@ -27,9 +27,9 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private static JButton btnOK;
-    private static JButton btnNovo;
-    private static JButton btnRemover;
+    private JButton btnOK;
+    private JButton btnNovo;
+    private JButton btnRemover;
     
     private static JTable tabela;
     private static DefaultTableModel modelo;
@@ -52,6 +52,7 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnOK.addActionListener(this);                     
         btnNovo.addActionListener(this);                     
+        btnRemover.addActionListener(this);                     
         
         JLabel nomeLabel = new JLabel("Departamento: ");         
         
@@ -83,7 +84,7 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
             }
         };
 
-        colunas = new String [] { "Local", "Numero Departamento"};  
+        colunas = new String [] { "Local", "Nome Departamento"};  
         
         editar(d);
         
@@ -132,7 +133,7 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
         else if(origem == btnRemover && (item != -1)) {
             String local = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Local"));            
 
-            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover a localizacao "+nome+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
+            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover a localizacao "+local+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
             
             if(opcao == JOptionPane.YES_OPTION) {
                 try {
@@ -154,11 +155,11 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
     public static void setDataTableDepLocal(Departamento d){
         String[][] dados = null;
         try {        
-            dados = Principal.cf.getProjetoByDepartamentos(Principal.cf.listarProjetosByNumeroDepto(d.getNumero()));
+            dados = Principal.cf.getLocalizacaoPorDep(Principal.cf.listarLocalizacaoPorDep(d.getNumero()));
         } catch (Exception ex) {
             System.err.println("Erro listar projetos de Departamento: " + ex);
         }
-        FormDepartamentoLocal.modelo = new DefaultTableModel(null, FormDepartamentoLocal.colunas);
+        FormDepartamentoLocal.modelo = new DefaultTableModel(dados, FormDepartamentoLocal.colunas);
         FormDepartamentoLocal.tabela.setModel(FormDepartamentoLocal.modelo);                    
         FormDepartamentoLocal.setSizeColumnFuncionariosLocal();        
     }

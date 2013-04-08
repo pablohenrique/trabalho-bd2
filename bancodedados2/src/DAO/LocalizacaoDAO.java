@@ -18,17 +18,17 @@ import java.util.ArrayList;
  */
 public class LocalizacaoDAO implements IObjectDAO{
     private final String BEFORECOND = 
-"SELECT l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero,"+
-" d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio"+
-" FROM cia.dept_localizacao AS l, cia.departamento AS d";
-    private final String AFTERCOND = "l.departamento_numero = d.numero;";
-    private final String SQL_POST = "INSERT INTO dept_localizacao VALUES(?,?);";
+"SELECT l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero, "+
+" d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio "+
+" FROM cia.dept_localizacao AS l, cia.departamento AS d ";
+    private final String AFTERCOND = " l.departamento_numero = d.numero;";
+    private final String SQL_POST = "INSERT INTO cia.dept_localizacao VALUES(?,?);";
     private final String SQL_UPDATE = "UPDATE dept_localizacao SET dlocalizacao = ? WHERE departamento_numero = ?;";
-    private final String SQL_DELETE = "DELETE FROM dept_localizacao WHERE dlocalizacao = ?;";
+    private final String SQL_DELETE = "DELETE FROM cia.dept_localizacao WHERE dlocalizacao = ?;";
     private final String SQL_GET = BEFORECOND + " WHERE d.numero = ? " + AFTERCOND;
     private final String SQL_READ = BEFORECOND + " WHERE l.dlocalizacao LIKE ? " + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE " + AFTERCOND;
-    private final String SQL_GETALL_BYDEP = BEFORECOND + " WHERE l.departamento_numero = ? + AFTERCOND";
+    private final String SQL_GETALL_BYDEP = BEFORECOND + " WHERE l.departamento_numero = ? AND " + AFTERCOND;
     private PreparedStatement ps;
     private ResultSet rs;
     
@@ -64,8 +64,8 @@ public class LocalizacaoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
             
             Localizacao aux = (Localizacao) input;
-            this.ps.setInt(1,aux.getDepartamento().getNumero());
-            this.ps.setString(2,aux.getNome());
+            this.ps.setInt(2,aux.getDepartamento().getNumero());
+            this.ps.setString(1,aux.getNome());
             
             System.gc();
             

@@ -29,15 +29,15 @@ import view.panel.PainelDependentes;
 public class FormDependente extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
-    private static JTextField nome;
-    private static JFormattedTextField dataNasc;  
+    private JTextField nome;
+    private JFormattedTextField dataNasc;  
 
-    private static JComboBox<String> sexo;
-    private static JComboBox<String> parentesco;
-    private static JComboBox empregado;
+    private JComboBox<String> sexo;
+    private JComboBox<String> parentesco;
+    private JComboBox empregado;
     
-    private static JButton btnOK;
-    private static JButton btnCancelar;
+    private JButton btnOK;
+    private JButton btnCancelar;
     private Dependente dep_edit = null;
     
     public FormDependente(Dependente dep)

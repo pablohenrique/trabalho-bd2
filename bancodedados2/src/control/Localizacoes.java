@@ -25,23 +25,19 @@ public class Localizacoes {
     }
     
     private Localizacao createObject(int dnumero, String nome) throws Exception{
-        Departamento departamento = (Departamento) FactoryDAO.getFactory("Departamento").read(dnumero);
+        Departamento dep = new Departamento();
+        dep.setNumero(dnumero);
         Localizacao localizacao = new Localizacao();
-        localizacao.setDepartamento(departamento);
+        localizacao.setDepartamento(dep);
         localizacao.setNome(nome);
         return localizacao;
     }
     
-    public void post(int dnumero, String nome) throws Exception {
-        FuncoesControle f = new FuncoesControle();
-        
-        if(f.verificarExistenciaDepartamento(dnumero) == false)
-            throw new Exception("Erro: departamento informado nao foi encontrado");
-        else
-            this.dao.post(this.createObject(dnumero, nome));
-        
+    public void post(int dnumero, String nome) throws Exception {        
+        this.dao.post(this.createObject(dnumero, nome));        
     }
 
+    //remove essa funcao
     public void update(int dnumero, String nome) throws Exception {
         FuncoesControle f = new FuncoesControle();
         
@@ -51,6 +47,7 @@ public class Localizacoes {
             this.dao.post(this.createObject(dnumero, nome));
     }
     
+    //remove essa funcao
     public Vector<Localizacao>  getAll() throws Exception {
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         
@@ -60,7 +57,7 @@ public class Localizacoes {
         return localizacao;
     } 
     
-        public Vector<Localizacao>  getAllByDep(int depid) throws Exception {
+    public Vector<Localizacao>  getAllByDep(int depid) throws Exception {
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         
         for(Object aux : this.dao.getAllByDept(depid))
@@ -69,6 +66,7 @@ public class Localizacoes {
         return localizacao;
     } 
     
+    //remove essa funcao
     public Vector<Localizacao>  SearchByName(String input){
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         

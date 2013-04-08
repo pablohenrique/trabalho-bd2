@@ -23,7 +23,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private static JButton btnOK;
+    private JButton btnOK;
     
     private static JTable tabela;
     private static DefaultTableModel modelo;

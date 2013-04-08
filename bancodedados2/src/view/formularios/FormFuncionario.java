@@ -31,20 +31,20 @@ import view.panel.PainelFuncionarios;
 public class FormFuncionario extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
-    private static JTextField nome;
-    private static JTextField ssn;
-    private static JTextField endereco;
-    private static JTextField salario;
-    private static JFormattedTextField dataNasc;  
+    private JTextField nome;
+    private JTextField ssn;
+    private JTextField endereco;
+    private JTextField salario;
+    private JFormattedTextField dataNasc;  
 
-    private static JComboBox<String> sexo;
-    private static JComboBox departamento;
-    private static JComboBox supervisor;
+    private JComboBox<String> sexo;
+    private  JComboBox departamento;
+    private JComboBox supervisor;
     
-    private static JPasswordField senha;
+    private JPasswordField senha;
     
-    private static JButton btnOK;
-    private static JButton btnCancelar;
+    private JButton btnOK;
+    private JButton btnCancelar;
     private static Empregado emp_edit = null;
     
     public FormFuncionario(Empregado emp)

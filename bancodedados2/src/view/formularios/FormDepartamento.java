@@ -34,8 +34,12 @@ public class FormDepartamento extends JDialog implements ActionListener
     private static JFormattedTextField dataInicio;  
     private static JComboBox gerente;
     
-    private static JButton btnOK;
-    private static JButton btnCancelar;
+    private JButton btnOK = new JButton("OK");
+    private JButton btnCancelar = new JButton("Cancelar");
+    private JPanel botoes = new JPanel();
+    private JPanel painel = new JPanel();
+    private JPanel grid = new JPanel();
+    
     private Departamento depEdit = null;
     
     public FormDepartamento(Departamento emp)
@@ -44,14 +48,11 @@ public class FormDepartamento extends JDialog implements ActionListener
         depEdit = emp;
         nome = new JTextField();
         dataInicio = new JFormattedTextField();
-                
-        
-        try
-        {
+                    
+        try{
             dataInicio.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));  
         }
-        catch (ParseException ex)
-        {
+        catch (ParseException ex){
             Logger.getLogger(FormDepartamento.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Erro mascara! " + ex);
         }
@@ -61,10 +62,8 @@ public class FormDepartamento extends JDialog implements ActionListener
             gerente = new JComboBox();
         }
         
-        if (depEdit != null)
-        {
-            try
-            {
+        if (depEdit != null){
+            try{
                 this.editar(depEdit);
             }
             catch (Exception ex)
@@ -73,15 +72,12 @@ public class FormDepartamento extends JDialog implements ActionListener
             }
         }
         
-        btnOK = new JButton("OK");
-        btnCancelar = new JButton("Cancelar");
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnCancelar.setPreferredSize(new Dimension(100, 25));
 
         btnOK.addActionListener(this);
         btnCancelar.addActionListener(this);
 
-        JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(3, 2, 5, 5));
         grid.add(new JLabel("Nome Departamento: "));
@@ -93,10 +89,8 @@ public class FormDepartamento extends JDialog implements ActionListener
         
         nome.setPreferredSize(new Dimension(250, 25));
 
-        JPanel painel = new JPanel();
         painel.add(grid);
 
-        JPanel botoes = new JPanel();
         botoes.add(btnOK);
         botoes.add(btnCancelar);
         botoes.add(Box.createVerticalStrut(45));

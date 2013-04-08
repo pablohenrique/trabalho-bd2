@@ -494,7 +494,7 @@ public class ControlFacade {
      * @param departamento
      * @param nome
      * @throws Exception 
-     * atualiza um dept_localizacao
+     * atualiza um dept_localizacao YURI REMOVE NAO EXISTE ESSA FUNCAO, COMO AGENTE TINHA CONVERSADO
      */
     public void atualizarLocalizacoes(int departamento, String nome) throws Exception{
         localizacoesControl.update(departamento, nome);
@@ -540,6 +540,20 @@ public class ControlFacade {
         return localizacoesControl.getAllByDep(deptoid);
     }
 
+    
+          
+    public String[][] getLocalizacaoPorDep(Vector<Localizacao> list){     
+        String[][] dados = new String[list.size()][];  
+                        
+        for(int i=0; i<list.size(); i++){                           
+            Localizacao l = list.get(i);
+            if(l != null)
+                dados[i] = new String[] {l.getNome(), l.getDepartamento().getNome()}; 
+        }
+
+        return dados; 
+    } 
+    
 
      /**
      * Funcoes de trabalha_em

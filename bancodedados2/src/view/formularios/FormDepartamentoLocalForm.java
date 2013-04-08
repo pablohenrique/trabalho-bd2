@@ -25,10 +25,10 @@ import view.Principal;
 public class FormDepartamentoLocalForm extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
-    private static JTextField nomeLocal = new JTextField();
+    private JTextField nomeLocal = new JTextField();
        
-    private static JButton btnOK;
-    private static JButton btnCancelar;
+    private JButton btnOK;
+    private JButton btnCancelar;
     private Departamento dEdit = null;
     
     public FormDepartamentoLocalForm(Departamento d){       
@@ -63,7 +63,7 @@ public class FormDepartamentoLocalForm extends JDialog implements ActionListener
        
         this.add(painel, BorderLayout.CENTER);
         this.add(botoes, BorderLayout.SOUTH);
-        this.setSize(440, 200);
+        this.setSize(440, 150);
         this.setLocation((java.awt.Toolkit.getDefaultToolkit()
                                         .getScreenSize().width / 2)
                                         - (this.getWidth() / 2), (java.awt.Toolkit
