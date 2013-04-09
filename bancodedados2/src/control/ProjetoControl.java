@@ -93,7 +93,7 @@ public class ProjetoControl  {
     public Vector<Projeto> SearchByName(String input) throws Exception {
         Vector<Projeto> projeto = new Vector<Projeto>();
         
-        for(Object aux : (ArrayList<Object>) this.dao.get(input))
+        for(Object aux : (ArrayList<Object>) this.dao.getAllDep(input))
             projeto.add((Projeto) aux);
 
         return projeto;

@@ -20,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -35,16 +36,17 @@ import view.formularios.FormProjetosFuncionarios;
 public final class PainelProjetos extends JPanel  implements ActionListener {	
     
     private static final long serialVersionUID = 1L;
-    private static JButton novo;    
-    private static JButton editar;
-    private static JButton excluir;    
-    private static JButton empregados;    
-    private static JButton informacoes;
-    private static JButton financeiro;
-    private static JButton publicidade;
-    private static JTextField txtBusca;
-    private static JButton btnBusca;
-    private static JLabel contaRegistros;
+    private JButton novo = new JButton("Novo"); 
+    private JButton editar = new JButton("Editar");
+    private JButton excluir = new JButton("Excluir");
+    private JButton empregados = new JButton("Empregados");
+    private JButton informacoes = new JButton("Informacoes");
+    private JButton financeiro =  new JButton("Financeiro");
+    private JButton publicidade =  new JButton("Publicidade");
+    private JTextField txtBusca  = new JTextField();
+    private JButton btnBusca  = new JButton("Pesquisar");
+    private JComboBox<String> comboBusca = new JComboBox<String>();
+    private JLabel contaRegistros;
     
     public static JTable tabela;
     public static DefaultTableModel modelo;
@@ -81,18 +83,15 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         JLabel imagem = new JLabel();
         imagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/busca.png")));
 
-        novo = new JButton("Novo");
-        informacoes = new JButton("Informacoes");
-        financeiro =  new JButton("Financeiro");
-        publicidade =  new JButton("Publicidade");
-        editar = new JButton("Editar");
-        excluir = new JButton("Excluir");
-        empregados = new JButton("Empregados");
-        btnBusca = new JButton("Pesquisar");
-        txtBusca = new JTextField();
         txtBusca.setPreferredSize(new Dimension(200, 24));
         txtBusca.setMaximumSize(new Dimension(200, 24));
-
+        
+        comboBusca.addItem("Nome");
+        comboBusca.addItem("Numero");
+        comboBusca.addItem("Todos Projetos");
+        comboBusca.setPreferredSize(new Dimension(100, 24));
+        comboBusca.setMaximumSize(new Dimension(100, 24));
+        
         contaRegistros = new JLabel();
         contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
 
@@ -134,7 +133,6 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             botoes.add(Box.createHorizontalStrut(3));
             botoes.add(financeiro);                    
             botoes.add(Box.createHorizontalGlue());          
-            botoes.add(Box.createHorizontalGlue());          
             botoes.add(contaRegistros);      ;            
             botoes.add(Box.createHorizontalGlue());
         }
@@ -143,6 +141,8 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             botoes.add(imagem);
             botoes.add(Box.createHorizontalStrut(5));
             botoes.add(txtBusca);
+            botoes.add(Box.createHorizontalStrut(5));
+            botoes.add(comboBusca);
             botoes.add(Box.createHorizontalStrut(5));
             botoes.add(btnBusca);
             botoes.add(Box.createHorizontalStrut(7));            
@@ -198,18 +198,27 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }*/
         }
-        /*
-        else if (origem == btnBusca)
-        {
-                String filtro = txtBusca.getText().trim().toLowerCase();
-                modelo = new DefaultTableModel(ControleAluno.vetorAlunos(filtro),
-                                colunas);
-                tabela.setModel(modelo);
-                contaRegistros.setText(tabela.getRowCount()
-                                + " registro(s) encontrado(s)");
-                                * setSizeColumn()
-        }*/
-        
+        else if (origem == btnBusca){
+            String[][] dados = null;
+
+            try {        
+                if(comboBusca.getSelectedIndex() == 0)//busca nome
+                    dados = Principal.cf.getProjetosTable(Principal.cf.buscaNomeProjeto(txtBusca.getText()));
+                /*
+                else if(comboBusca.getSelectedIndex() == 2)//busca numero
+                    dados = Principal.cf.getProjetosTable(Principal.cf.getProjetoByNumero(Integer.parseInt(txtBusca.getText())));*/
+                else 
+                    dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
+            } catch (Exception ex) {
+                System.err.println("Erro Painel Projetos: " + ex);
+            }
+
+            PainelProjetos.modelo = new DefaultTableModel(dados, PainelProjetos.colunas);
+            PainelProjetos.tabela.setModel(PainelProjetos.modelo);                    
+            PainelProjetos.setSizeColumn();     
+            contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
+
+        }        
     }   
     
     public static void setSizeColumn(){

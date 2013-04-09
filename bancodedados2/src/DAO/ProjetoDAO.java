@@ -16,20 +16,14 @@ import java.sql.SQLException;
  * @author pablohenrique
  */
 public class ProjetoDAO implements IObjectDAO{
-    private final String BEFORECOND = 
-"p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, " +
-"d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, " +
-"e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha, " +
-"t.essn as t_essn, t.pjnumero AS t_numero, t.horas AS t_horas, " +
-" l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero "+
-" FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t, cia.dept_localizacao as l";
-        private final String BEFORECOND_JOIN = 
-" p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, " +
-" d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, " +
-" e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha, " +
-" t.essn as t_essn, t.pjnumero AS t_numero, t.horas AS t_horas, "+
-" l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero ";
-
+   
+    private final String SELECT_PRJETO = "p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao "; 
+    private final String SELECT_DEP = "d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio ";
+    private final String SELECT_EMP = "e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha ";
+    private final String SELECT_TRB = "t.essn as t_essn, t.pjnumero AS t_numero, t.horas AS t_horas ";
+    private final String BEFORECOND = SELECT_PRJETO + ", "  + SELECT_DEP + ", " + SELECT_EMP + ", " + SELECT_TRB + " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
+    
+    
     private final String SQL_POST = "INSERT INTO cia.projeto(pjnome, plocalizacao, dnum) VALUES(?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.projeto SET pjnome = ?, plocalizacao = ?, dnum = ? WHERE pnumero = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.projeto WHERE pnumero = ?;";
@@ -37,8 +31,8 @@ public class ProjetoDAO implements IObjectDAO{
     private final String SQL_READ = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE p.pjnome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero AND l.departamento_numero = e.dno;";
     //private final String SQL_GETALL_JOIN = "SELECT DISTINCT(p.pnumero)," + BEFORECOND_JOIN + " FROM ((((cia.projeto as p LEFT OUTER JOIN cia.departamento AS d ON d.numero = p.dnum) LEFT OUTER JOIN cia.dept_localizacao AS l ON d.numero = l.departamento_numero) LEFT OUTER JOIN cia.empregado AS e ON d.gerssn = e.ssn) LEFT OUTER JOIN cia.trabalha_em AS t ON t.pjnumero = p.pnumero);";
     //private final String SQL_GETALL_JOIN = "SELECT DISTINCT(p.pnumero),p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao,d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio,e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha,t.essn as t_essn, t.pjnumero AS t_numero, t.horas AS t_horas,l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero FROM ((((cia.projeto as p LEFT OUTER JOIN cia.departamento AS d ON d.numero = p.dnum) LEFT OUTER JOIN cia.dept_localizacao AS l ON d.numero = l.departamento_numero) LEFT OUTER JOIN cia.empregado AS e ON d.gerssn = e.ssn) LEFT OUTER JOIN cia.trabalha_em AS t ON t.pjnumero = p.pnumero);";
-    private final String SQL_GETALL_JOIN = "SELECT p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao,d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio,e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha,t.essn as t_essn, t.pjnumero AS t_numero, t.horas AS t_horas,l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero FROM ((((cia.projeto as p LEFT OUTER JOIN cia.departamento AS d ON d.numero = p.dnum) LEFT OUTER JOIN cia.dept_localizacao AS l ON d.numero = l.departamento_numero) LEFT OUTER JOIN cia.empregado AS e ON d.gerssn = e.ssn) LEFT OUTER JOIN cia.trabalha_em AS t ON t.essn = e.ssn);";
-    private final String SQL_GETALLDEPNOME = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.nome = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero AND l.departamento_numero = e.dno;";
+    private final String SQL_GETALL_JOIN = "SELECT p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao,d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio,e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha,t.essn as t_essn, t.pjnumero AS t_numero, t.horas AS t_horas FROM (((cia.projeto as p LEFT OUTER JOIN cia.departamento AS d ON d.numero = p.dnum) LEFT OUTER JOIN cia.empregado AS e ON d.gerssn = e.ssn) LEFT OUTER JOIN cia.trabalha_em AS t ON t.essn = e.ssn);";
+    private final String SQL_GETALLDEPNOME = "SELECT " + SELECT_PRJETO + ", "  + SELECT_DEP + ", " + SELECT_EMP + "  FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d WHERE UPPER(p.pjnome) LIKE UPPER('%?%') AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_GETALLDEPNUMERO = "SELECT DISTINCT(p.pnumero)," + BEFORECOND + " WHERE d.numero = ? AND t.pjnumero = p.pnumero AND d.gerssn = e.ssn AND p.dnum = d.numero AND l.departamento_numero = e.dno;";
     private final String SQL_GETALLEMP = "SELECT " + BEFORECOND + " WHERE e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero AND e.ssn = ? AND l.departamento_numero = e.dno ORDER BY t.horas ASC;";
     private final String SQL_COUNTHOURS = "SELECT SUM(horas) FROM trabalha_em;";

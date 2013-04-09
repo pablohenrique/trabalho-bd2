@@ -30,9 +30,9 @@ public class FormDepartamento extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private static JTextField nome;
-    private static JFormattedTextField dataInicio;  
-    private static JComboBox gerente;
+    private JTextField nome;
+    private JFormattedTextField dataInicio;  
+    private JComboBox gerente;
     
     private JButton btnOK = new JButton("OK");
     private JButton btnCancelar = new JButton("Cancelar");
