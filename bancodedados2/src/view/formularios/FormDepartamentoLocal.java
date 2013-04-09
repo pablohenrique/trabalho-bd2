@@ -114,7 +114,7 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
     public void editar(Departamento d){
         nome.setText(d.getNome());
         gerente.setText(d.getGerenteSsn().getNome());
-        dataInicio.setText(d.getGerenteDataInicioString());
+        //dataInicio.setText(Principal.cf.converteDataString(d.getGerenteDataInicioString()));
         
         FormDepartamentoLocal.setDataTableDepLocal(d);
     }

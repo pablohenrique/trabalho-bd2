@@ -24,12 +24,12 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private static JButton novo;
-    private static JButton editarHora;
-    private static JButton excluir;
+    private static JButton novo  = new JButton("Add Empregado");
+    private static JButton editarHora  = new JButton("Editar Hora");
+    private static JButton excluir = new JButton("Excluir");   
     
-    private static JButton btnOK;
-    private static JButton btnCancelar;
+    private static JButton btnOK = new JButton("OK");
+    private static JButton btnCancelar  = new JButton("Cancelar");
     
     private static JTable tabela;
     private static DefaultTableModel modelo;
@@ -40,8 +40,6 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     {
         super(Principal.janela,"Todos Empregados do Projeto", true);
                                
-        btnOK = new JButton("OK");
-        btnCancelar = new JButton("Cancelar");
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnCancelar.setPreferredSize(new Dimension(100, 25));
         proj = p;
@@ -68,11 +66,7 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         
         JPanel botoes = new JPanel();
         botoes.setLayout(new BoxLayout(botoes, BoxLayout.X_AXIS));
-        botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));
-
-        novo = new JButton("Add Empregado");
-        editarHora = new JButton("Editar Hora");
-        excluir = new JButton("Excluir");                
+        botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));                
 
         botoes.add(Box.createHorizontalStrut(5));
         botoes.add(novo);

@@ -38,14 +38,14 @@ import view.formularios.FormFuncionarioProjetos;
 public final class PainelFuncionarios extends JPanel  implements ActionListener {	
     
     private static final long serialVersionUID = 1L;
-    private static JButton novo;
-    private static JButton editar;
-    private static JButton excluir;    
-    private static JButton projetos;    
-    private static JTextField txtBusca;
-    private static JButton btnBusca;
-    private static JLabel contaRegistros = new JLabel();
+    private JButton novo = new JButton("Novo");
+    private JButton editar  = new JButton("Editar");
+    private JButton excluir = new JButton("Excluir");
+    private JButton projetos = new JButton("Projetos");
+    private JTextField txtBusca  = new JTextField();   
+    private JButton btnBusca = new JButton("Pesquisar");
     
+    public static JLabel contaRegistros = new JLabel();    
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
@@ -83,12 +83,6 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         JLabel imagem = new JLabel();
         imagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/busca.png")));
 
-        novo = new JButton("Novo");
-        editar = new JButton("Editar");
-        excluir = new JButton("Excluir");
-        projetos = new JButton("Projetos");
-        btnBusca = new JButton("Pesquisar");
-        txtBusca = new JTextField();
         txtBusca.setPreferredSize(new Dimension(200, 24));
         txtBusca.setMaximumSize(new Dimension(200, 24));
 
@@ -202,7 +196,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     public static void setDataTable(){
         
         String[][] dados = null;                         
-        
+       /* 
         try {
             if(Principal.user.getTipoLogin() == 1)
                 dados = Principal.cf.getEmpregadosTable(Principal.cf.buscaSuperSnn(Principal.user.getSsn()));            
@@ -211,7 +205,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         } catch (Exception ex) {
             System.err.println("Erro em Painel Funcionario: " + ex);
         }
-        
+        */
         PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);
         PainelFuncionarios.tabela.setModel(PainelFuncionarios.modelo);                    
         PainelFuncionarios.contaRegistros.setText(PainelFuncionarios.tabela.getRowCount() + " registro(s) encontrado(s)");                    

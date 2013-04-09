@@ -28,18 +28,18 @@ public class WindowFuncionario extends JFrame implements ActionListener {
 
     private static JPanel painelCentral;
 
-    private static JMenuItem menuEditarFuncionario;
-    private static JMenuItem menuProjetosListar;   
-    private static JMenuItem menuDependentesListar;
+    private JMenuItem menuEditarFuncionario = new JMenuItem("Editar dados");    
+    private JMenuItem menuProjetosListar  = new JMenuItem("Informacoes de Projetos");
+    private JMenuItem menuDependentesListar = new  JMenuItem("Listar todos Dependentes");
     
-    private static JMenuItem menuExit;
-    private static JMenuItem menuInit;
-    private static JMenuItem menuAbout;
+    private JMenuItem menuExit = new JMenuItem("Sair");
+    private JMenuItem menuInit = new JMenuItem("Inicio");
+    private JMenuItem menuAbout = new JMenuItem("Sobre");
 
-    private static JButton btnFuncionarios; 
-    private static JButton btnDependentes;
-    private static JButton btnDepartamentos;
-    private static JButton btnProjetos;
+    private JButton btnFuncionarios; 
+    private JButton btnDependentes;
+    private JButton btnDepartamentos;
+    private JButton btnProjetos;
     private static CardLayout card;
     private static JPanel painel_projetos = null;
     private static JPanel painel_dependentes = null;
@@ -54,30 +54,22 @@ public class WindowFuncionario extends JFrame implements ActionListener {
             painelCentral.add(new PainelInit(), "inicio");           
             
             //menu
-            JMenu arquivo = new JMenu("Arquivo");		
-            
-            menuExit = new JMenuItem("Sair");
-            menuInit = new JMenuItem("Inicio");
+            JMenu arquivo = new JMenu("Arquivo");		            
+
             arquivo.add(menuInit);
             arquivo.add(new JSeparator());
             arquivo.add(menuExit);		
             
             JMenu funcionarios = new JMenu("Funcionario");		
-            menuEditarFuncionario = new JMenuItem("Editar dados");            
-            menuDependentesListar = new  JMenuItem("Listar todos Dependentes");
-            
+
             funcionarios.add(menuEditarFuncionario);
             funcionarios.add(new JSeparator());
             funcionarios.add(menuDependentesListar);
             
-            JMenu projetos = new JMenu("Projetos");
-            
-            menuProjetosListar = new JMenuItem("Informacoes de Projetos");
-            
+            JMenu projetos = new JMenu("Projetos");                        
             projetos.add(menuProjetosListar);
 
             JMenu ajuda = new JMenu("Ajuda");
-            menuAbout = new JMenuItem("Sobre");
             ajuda.add(menuAbout);
 
             JMenuBar menubar = new JMenuBar();
@@ -175,21 +167,21 @@ public class WindowFuncionario extends JFrame implements ActionListener {
             }		
     }
     
-    public static JPanel painel_projetos(){
+    public JPanel painel_projetos(){
         if(painel_projetos == null)
             painel_projetos = new PainelProjetos();      
         
         return painel_projetos;
     }      
     
-    public static JPanel painel_dependentes(){
+    public JPanel painel_dependentes(){
         if(painel_dependentes == null)
             painel_dependentes = new PainelDependentes();
                 
         return painel_dependentes;
     }      
     
-    public static void form_funcionarios(Empregado e){
+    public void form_funcionarios(Empregado e){
         if(formFuncionario == null)
             formFuncionario = new FormFuncionario(e);
         else{

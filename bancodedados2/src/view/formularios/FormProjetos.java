@@ -39,7 +39,8 @@ public class FormProjetos extends JDialog implements ActionListener
         localizacao = new JTextField();                
         
         try {
-            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+            departamento = new JComboBox();  
+            //departamento = new JComboBox(Principal.cf.listarDepartamentos());  
         } catch (Exception ex) {
             departamento = new JComboBox();  
         }

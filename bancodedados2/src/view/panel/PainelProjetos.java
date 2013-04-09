@@ -231,7 +231,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     
     public static void setDataTable(){       
         String[][] dados = null;
-        
+        /*
         try {        
             if(Principal.user.getTipoLogin() != 0)//supervisor (verificar gerente se pode crud projetos)
                 dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
@@ -239,7 +239,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
                 dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));
         } catch (Exception ex) {
             System.err.println("Erro Painel Projetos: " + ex);
-        }
+        }*/
         
         PainelProjetos.modelo = new DefaultTableModel(dados, PainelProjetos.colunas);
         PainelProjetos.tabela.setModel(PainelProjetos.modelo);                    

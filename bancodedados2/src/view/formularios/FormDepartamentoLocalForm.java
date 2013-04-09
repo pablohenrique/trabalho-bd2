@@ -27,16 +27,14 @@ public class FormDepartamentoLocalForm extends JDialog implements ActionListener
     private static final long serialVersionUID = 1L;    
     private JTextField nomeLocal = new JTextField();
        
-    private JButton btnOK;
-    private JButton btnCancelar;
+    private JButton btnOK = new JButton("OK");
+    private JButton btnCancelar = new JButton("Cancelar");
     private Departamento dEdit = null;
     
     public FormDepartamentoLocalForm(Departamento d){       
         super(Principal.janela,"Inserir Empregado em Projeto", true);
         
         dEdit = d;
-        btnOK = new JButton("OK");
-        btnCancelar = new JButton("Cancelar");
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnCancelar.setPreferredSize(new Dimension(100, 25));
 

@@ -29,8 +29,8 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
     private static JComboBox departamento;
     private static JComboBox projetos;
        
-    private static JButton btnOK;
-    private static JButton btnCancelar;
+    private static JButton btnOK = new JButton("OK");
+    private static JButton btnCancelar = new JButton("Cancelar");
     private Projeto projeto_edit = null;
     
     public FormFuncionarioProjetosForm(Projeto p, Empregado emp, boolean logado)
@@ -43,7 +43,8 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
         projeto_edit = p;
         horas = new JTextField();
         try {
-            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+            departamento = new JComboBox();  
+            //departamento = new JComboBox(Principal.cf.listarDepartamentos());  
         } catch (Exception ex) {
             departamento = new JComboBox();  
         }
@@ -63,8 +64,6 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
             }
         }
         
-        btnOK = new JButton("OK");
-        btnCancelar = new JButton("Cancelar");
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnCancelar.setPreferredSize(new Dimension(100, 25));
 

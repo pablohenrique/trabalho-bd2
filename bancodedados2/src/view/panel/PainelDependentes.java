@@ -41,12 +41,12 @@ import view.formularios.FormFuncionario;
 public final class PainelDependentes extends JPanel  implements ActionListener {	
     
     private static final long serialVersionUID = 1L;
-    private static JButton novo;
-    private static JButton editar;
-    private static JButton excluir;    
+    private static JButton novo  = new JButton("Novo");
+    private static JButton editar = new JButton("Editar");
+    private static JButton excluir = new JButton("Excluir"); 
     private static JLabel contaRegistros =  new JLabel();
-    private static JComboBox empregados;
-            
+    private static JComboBox empregados;             
+        
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
@@ -81,17 +81,15 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         JLabel imagem = new JLabel();
         imagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/busca.png")));
 
-        novo = new JButton("Novo");
-        editar = new JButton("Editar");
-        excluir = new JButton("Excluir");
-        
         Empregado em = new Empregado();
         em.setNome("Todos Empregados");
         em.setSsn("-1");
+        
         try {
-            if(Principal.user.getTipoLogin() == 2)
-                empregados = new JComboBox(Principal.cf.listarEmpregados());
-            else
+            if(Principal.user.getTipoLogin() == 2){
+                 empregados = new JComboBox();
+             //   empregados = new JComboBox(Principal.cf.listarEmpregados());
+            }else
                 throw new Exception();
         } catch (Exception ex) {
             empregados = new JComboBox();
@@ -212,7 +210,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     
     public static void setDataTable(){
         String[][] dados = null;        
-
+        /*
         try {
             if(Principal.user.getTipoLogin() == 0 || Principal.user.getTipoLogin() == 1)
                 dados = Principal.cf.getDependentesTable(Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
@@ -221,6 +219,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         } catch (Exception ex) {
             System.err.println("Erro listar dependentes: " + ex);
         }
+        */
         
         PainelDependentes.modelo = new DefaultTableModel(dados, PainelDependentes.colunas);
         PainelDependentes.tabela.setModel(PainelDependentes.modelo);                    

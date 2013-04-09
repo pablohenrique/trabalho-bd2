@@ -40,11 +40,11 @@ import view.formularios.FormDepartamentoProjetos;
 public final class PainelDepartamento extends JPanel  implements ActionListener {	
     
     private static final long serialVersionUID = 1L;
-    private static JButton novo;
-    private static JButton editar;
-    private static JButton excluir;    
-    private static JButton projetos;   
-    private static JButton localizacao;    
+    private JButton novo = new JButton("Novo");
+    private JButton editar  = new JButton("Editar");
+    private JButton excluir  = new JButton("Excluir");  
+    private JButton projetos  = new JButton("Projetos");
+    private JButton localizacao  = new JButton("Localização");
     private static JLabel contaRegistros;
     
     public static JTable tabela;
@@ -86,12 +86,6 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         JLabel imagem = new JLabel();
         imagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/busca.png")));
 
-        novo = new JButton("Novo");
-        editar = new JButton("Editar");
-        excluir = new JButton("Excluir");
-        projetos = new JButton("Projetos");
-        localizacao = new JButton("Localização");
-                                
         botoes.add(Box.createHorizontalStrut(5));
         botoes.add(novo);
         botoes.add(Box.createHorizontalStrut(3));
@@ -194,12 +188,12 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
     
     public static void setDataTable(){
         String[][] dados = null;
-        
+        /*
         try {        
             dados = Principal.cf.getDepartamentosTable(Principal.cf.listarDepartamentos());
         } catch (Exception ex) {
             System.err.println("Erro Painel Departamentos: " + ex);
-        }
+        }*/
         
         PainelDepartamento.modelo = new DefaultTableModel(dados, PainelDepartamento.colunas);
         PainelDepartamento.tabela.setModel(PainelDepartamento.modelo);                    

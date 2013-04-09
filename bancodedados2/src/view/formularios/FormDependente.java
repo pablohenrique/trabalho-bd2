@@ -67,7 +67,8 @@ public class FormDependente extends JDialog implements ActionListener
         parentesco.addItem("Nao sei");
         
         try {
-            empregado = new JComboBox(Principal.cf.listarEmpregados());  
+             empregado = new JComboBox();
+            //empregado = new JComboBox(Principal.cf.listarEmpregados());  
         } catch (Exception ex) {
             empregado = new JComboBox();
         }
@@ -143,7 +144,7 @@ public class FormDependente extends JDialog implements ActionListener
         dep_edit = d;
         
         nome.setText(d.getNome());
-        dataNasc.setText(d.getDataNascimentoString());
+        //dataNasc.setText(Principal.cf.converteDataString(d.getDataNascimentoString()));
         sexo.setSelectedItem(d.getSexo());
         parentesco.setSelectedItem(d.getParentesco());
                 

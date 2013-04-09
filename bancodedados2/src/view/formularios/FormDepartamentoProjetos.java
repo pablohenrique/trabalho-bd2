@@ -23,7 +23,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private JButton btnOK;
+    private JButton btnOK  = new JButton("OK");       
     
     private static JTable tabela;
     private static DefaultTableModel modelo;
@@ -37,7 +37,6 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     {
         super(Principal.janela,"Todos Projetos de Departamentos", true);
                                
-        btnOK = new JButton("OK");       
         btnOK.setPreferredSize(new Dimension(100, 25));
         btnOK.addActionListener(this);                     
 
@@ -99,7 +98,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     public void editar(Departamento d){
         nome.setText(d.getNome());
         gerente.setText(d.getGerenteSsn().getNome());
-        dataInicio.setText(d.getGerenteDataInicioString());
+        //dataInicio.setText(Principal.cf.converteDataString(d.getGerenteDataInicioString()));
         
         FormDepartamentoProjetos.setDataTableFuncionariosProjetos(d);
     }

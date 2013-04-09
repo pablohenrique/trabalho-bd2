@@ -57,7 +57,8 @@ public class FormDepartamento extends JDialog implements ActionListener
             System.out.println("Erro mascara! " + ex);
         }
         try {
-            gerente = new JComboBox(Principal.cf.listarEmpregados());  
+            gerente = new JComboBox();
+            //gerente = new JComboBox(Principal.cf.listarEmpregados());  
         } catch (Exception ex) {
             gerente = new JComboBox();
         }
@@ -119,7 +120,7 @@ public class FormDepartamento extends JDialog implements ActionListener
         depEdit = dep;
         
         nome.setText(dep.getNome());
-        dataInicio.setText(dep.getGerenteDataInicioString());
+        //dataInicio.setText(Principal.cf.converteDataString(dep.getGerenteDataInicioString()));
         
         if(dep.getGerenteSsn().getSuperSsn().getSsn() != null)
             gerente.setSelectedIndex(this.selecionarComboBoxSup(dep.getGerenteSsn(), gerente));

@@ -76,13 +76,15 @@ public class FormFuncionario extends JDialog implements ActionListener
         superssn.setNome("Nenhum Supervisor");
         
         try {
-                departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+            departamento = new JComboBox();
+            //    departamento = new JComboBox(Principal.cf.listarDepartamentos());  
         } catch (Exception ex) {
             departamento = new JComboBox();
         }
         
-        try {         
-                supervisor = new JComboBox(Principal.cf.listarEmpregados());  
+        try { 
+            supervisor = new JComboBox();  
+            //supervisor = new JComboBox(Principal.cf.listarEmpregados());  
         } catch (Exception ex) {
             supervisor = new JComboBox();  
         }
@@ -171,7 +173,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         
         nome.setText(e.getNome());
         endereco.setText(e.getEndereco());
-        dataNasc.setText(e.getDataNascimentoString());
+        //Principal.cf.converteDataString(dataNasc.setText(e.getDataNascimentoString()));
         salario.setText(e.getSalarioString());
         ssn.setText(e.getSsn());
         senha.setText(e.getSenha());

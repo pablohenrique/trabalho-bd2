@@ -25,7 +25,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private static JButton btnOK;
+    private static JButton btnOK = new JButton("OK");
     
     private static JTable tabela;
     private static DefaultTableModel modelo;
@@ -40,7 +40,6 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     {
         super(Principal.janela,"Todos Projetos do Empregado", true);
         
-        btnOK = new JButton("OK");
         btnOK.setPreferredSize(new Dimension(100, 25));             
         
         btnOK.addActionListener(this);
