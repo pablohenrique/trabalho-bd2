@@ -130,7 +130,7 @@ public class DependenteDAO implements IObjectDAO{
         }
     }
     
-        public Object getDependente(String essn, String nome) {
+    public Object getDependente(String essn, String nome) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET_DEPENDENTE);
             this.ps.setString(1,essn);
@@ -145,8 +145,6 @@ public class DependenteDAO implements IObjectDAO{
             return null;
         }
     }
-    
-   
     
     @Override
     public Object read(Object input) {
