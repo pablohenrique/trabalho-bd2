@@ -28,18 +28,19 @@ public class EmpregadoControl
     
     private Empregado createObject(String ssn, String nome, String sexo, String endereco, String salario, String datanasc, int dno, String superssn, String senha){
         Empregado gerente = new Empregado();
+        FuncoesControle f = new FuncoesControle();
         gerente.setSsn(superssn);
 
         Departamento dep = new Departamento();
         dep.setNumero(dno);
-
+        
         Empregado empregado = new Empregado();
         empregado.setSsn(ssn.trim());
         empregado.setNome(nome);
         empregado.setSexo(sexo);
         empregado.setEndereco(endereco);
         empregado.setSalario(salario);
-        empregado.setDataNascimento(datanasc);
+        empregado.setDataNascimento(f.coverteStringData(datanasc));
         empregado.setDepartamento(dep);
         empregado.setSuperSsn(gerente);
         empregado.setSenha(senha);

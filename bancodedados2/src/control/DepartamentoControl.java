@@ -26,12 +26,12 @@ public class DepartamentoControl
     private Departamento createObjectTemplate(int numero, String nome, String gerssn, String gerdatainicio){
         Empregado em = new Empregado();
         em.setSsn(gerssn);
-        
+        FuncoesControle f = new FuncoesControle();
         Departamento departamento = new Departamento();
         departamento.setNumero(numero);
         departamento.setNome(nome);
         departamento.setGerenteSsn(em);
-        departamento.setGerenteDataInicio(gerdatainicio);
+        departamento.setGerenteDataInicio(f.coverteStringData(gerdatainicio));
         
         return departamento;
     }
@@ -39,11 +39,11 @@ public class DepartamentoControl
     public void post(String nome, String gerssn, String gerdatainicio) throws Exception {
         Empregado em = new Empregado();
         em.setSsn(gerssn);
-        
+        FuncoesControle f = new FuncoesControle();
         Departamento departamento = new Departamento();
         departamento.setNome(nome);
         departamento.setGerenteSsn(em);
-        departamento.setGerenteDataInicio(gerdatainicio);
+        departamento.setGerenteDataInicio(f.coverteStringData(gerdatainicio));
         this.dao.post(departamento);
     }
 
