@@ -16,13 +16,7 @@ import java.util.ArrayList;
  *
  * @author pablohenrique
  */
-public class DepartamentoDAO implements IObjectDAO{
-    private final String BEFORECOND2 = 
-"SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, "+
-" e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha, "+
-" l.dlocalizacao AS l_localizacao, l.departamento_numero AS l_numero "+
-" FROM ((cia.empregado AS e LEFT JOIN cia.departamento AS d ON d.gerssn = e.ssn) LEFT JOIN cia.dept_localizacao AS l ON l.departamento_numero = d.numero) ";
-    
+public class DepartamentoDAO implements IObjectDAO{    
     private final String BEFORECOND = 
 " SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, " +
 " e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha "+
