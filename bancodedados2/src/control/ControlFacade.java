@@ -413,7 +413,7 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorna todos os projetos de acordo com o numero do departamento 
      */
-    public Vector<Projeto> listarProjetosByNumeroDepto(int numero) throws Exception {
+    public Vector<Projeto> buscarProjetosByNumeroDepto(int numero) throws Exception {
         return projetoControl.getAllByDepNumero(numero);
     }
 
@@ -458,7 +458,7 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorna projeto que possui  o nome informado (Like)
      */
-     public Vector<Projeto> buscaNomeProjeto(String nome) throws Exception{
+     public Vector<Projeto> buscaProjetosByNome(String nome) throws Exception{
          return projetoControl.SearchByName(nome);
      }
      

@@ -203,10 +203,9 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
 
             try {        
                 if(comboBusca.getSelectedIndex() == 0)//busca nome
-                    dados = Principal.cf.getProjetosTable(Principal.cf.buscaNomeProjeto(txtBusca.getText()));
-                /*
+                    dados = Principal.cf.getProjetosTable(Principal.cf.buscaProjetosByNome(txtBusca.getText()));
                 else if(comboBusca.getSelectedIndex() == 2)//busca numero
-                    dados = Principal.cf.getProjetosTable(Principal.cf.getProjetoByNumero(Integer.parseInt(txtBusca.getText())));*/
+                    dados = Principal.cf.getProjetosTable(Principal.cf.buscarProjetosByNumeroDepto(Integer.parseInt(txtBusca.getText())));
                 else 
                     dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
             } catch (Exception ex) {

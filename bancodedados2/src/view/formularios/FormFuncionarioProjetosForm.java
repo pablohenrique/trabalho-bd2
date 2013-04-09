@@ -161,7 +161,7 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
             try {  
                 System.out.println("Depn" + dep.getNumero());
                 projetos.removeAllItems();
-                projetos.setModel(new DefaultComboBoxModel<>(Principal.cf.listarProjetosByNumeroDepto(dep.getNumero())));
+                projetos.setModel(new DefaultComboBoxModel<>(Principal.cf.buscarProjetosByNumeroDepto(dep.getNumero())));
                 this.setEnable(true);
             } catch (Exception ex) {
                 System.err.println("Erro em Funcionarios Projetos: " + ex);

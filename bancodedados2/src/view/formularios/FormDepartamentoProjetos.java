@@ -123,7 +123,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     public static void setDataTableFuncionariosProjetos(Departamento d){
         String[][] dados = null;
         try {        
-            dados = Principal.cf.getProjetoByDepartamentos(Principal.cf.listarProjetosByNumeroDepto(d.getNumero()));
+            dados = Principal.cf.getProjetoByDepartamentos(Principal.cf.buscarProjetosByNumeroDepto(d.getNumero()));
         } catch (Exception ex) {
             System.err.println("Erro listar projetos de Departamento: " + ex);
         }
