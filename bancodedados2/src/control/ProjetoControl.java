@@ -53,6 +53,12 @@ public class ProjetoControl  {
     public Projeto getById(int input) throws Exception {
         return (Projeto) this.dao.get(input);
     }
+    
+    public Vector<Projeto> getByIdVector(int input){
+        Vector<Projeto> projeto = new Vector<Projeto>();
+        projeto.add((Projeto) this.dao.get(input));
+        return projeto;
+    }
          
     public Vector<Projeto> getAll() throws Exception {
         Vector<Projeto> projeto = new Vector<Projeto>();

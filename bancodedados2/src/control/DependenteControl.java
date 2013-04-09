@@ -73,4 +73,10 @@ public class DependenteControl  {
         return (Dependente) this.dao.getDependente(essn, nome);
     }
     
+    public Vector<Dependente> SearchByEssnNomeVector(String essn, String nome){
+        Vector<Dependente> dependente = new Vector<Dependente>();
+        dependente.add((Dependente) this.dao.getDependente(essn, nome));
+        return dependente;
+    }
+    
 }

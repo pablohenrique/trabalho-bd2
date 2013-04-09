@@ -63,6 +63,12 @@ public class DepartamentoControl
     public Departamento getById(int numero) throws Exception {
         return (Departamento) this.dao.get(numero);
     }
+    
+    public Vector<Departamento> getByIdVector(int numero) throws Exception{
+        Vector<Departamento> departamento = new Vector<Departamento>();
+        departamento.add((Departamento)this.dao.get(numero));
+        return departamento;
+    }
             
     public Vector<Departamento> getByGer(String gerssn) throws Exception {
          Vector<Departamento> departamento = new Vector<Departamento>();

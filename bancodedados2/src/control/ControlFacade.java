@@ -208,6 +208,18 @@ public class ControlFacade {
     
     /**
      * 
+     * @param numero
+     * @return Vector<Departamento>
+     * @throws Exception 
+     * retorna departamento com número informado em um vetor
+     */
+    public Vector<Departamento> getDepartamentoByNumeroVector(int numero) throws Exception{
+        Vector<Departamento> departamento = departamentoControl.getByIdVector(numero);
+        return departamento;
+    }
+    
+    /**
+     * 
      * @return Vector<Departamento>
      * retorna todos os departamentos cadastrados
      */
@@ -326,6 +338,17 @@ public class ControlFacade {
         return dependenteControl.SearchByEssnNome(essn,nome);
     }
     
+    /**
+     * 
+     * @param essn
+     * @param nome
+     * @return Vector<Dependente> 
+     * retorna dependente com ssn e nome informado em vetor
+     */
+    public Vector<Dependente> buscaDependenteEssnNomeVector(String essn, String nome){
+        return dependenteControl.SearchByEssnNomeVector(essn, nome);
+    }
+    
 
     /**
      * 
@@ -375,6 +398,16 @@ public class ControlFacade {
      */
     public Projeto getProjetoByNumero(int numero) throws Exception {
         return projetoControl.getById(numero);
+    }
+    
+    /**
+     * 
+     * @param numero
+     * @return Vector<Projeto>
+     * retorna projeto que possui numero informado em vetor
+     */
+    public Vector<Projeto> getProjetoByNumeroVector(int numero){
+        return projetoControl.getByIdVector(numero);
     }
     
     
