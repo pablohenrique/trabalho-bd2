@@ -149,15 +149,6 @@ public class Empregado {
     public Date getDataNascimento() {
         return dataNascimento;
     }
-    
-    public String getDataNascimentoString(){
-        return FuncoesControle.converteData(dataNascimento);
-    }
-    
-    public void setDataNascimento(String d){
-        dataNascimento = FuncoesControle.coverteStringData(d);
-    }
-
     /**
      * @param dataNascimento the dataNascimento to set
      */

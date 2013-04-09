@@ -79,22 +79,13 @@ public class Dependente {
     public Date getDataNascimento() {
         return datanascimento;
     }
-
-    public String getDataNascimentoString(){
-        return FuncoesControle.converteData(datanascimento);
-    }
     
     /**
      * @param datanascimento the datanascimento to set
      */
     public void setDataNascimento(Date datanascimento) {
         this.datanascimento = datanascimento;
-    }
-
-    public void setDataNascimento(String d) 
-    {
-        datanascimento = FuncoesControle.coverteStringData(d);
-    }    
+    } 
 
 
 }

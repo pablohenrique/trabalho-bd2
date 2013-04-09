@@ -6,6 +6,8 @@ package Model;
 
 import control.FuncoesControle;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -13,7 +15,7 @@ import java.sql.Date;
  */
 public class Departamento {
     private String nome;
-    private int numero;
+    private int numero = -1;
     private Date gerenteDataInicio;
     private Empregado gerente;
 
@@ -49,23 +51,15 @@ public class Departamento {
      * @return the gerenteDataInicio
      */
     public Date getGerenteDataInicio() {
-        return gerenteDataInicio;
-    }
-    
-    public String getGerenteDataInicioString() {
-        return FuncoesControle.converteData(gerenteDataInicio);
-    }    
+        return this.gerenteDataInicio;
+    } 
 
     /**
      * @param gerenteDataInicio the gerenteDataInicio to set
      */
     public void setGerenteDataInicio(Date gerenteDataInicio) {
         this.gerenteDataInicio = gerenteDataInicio;
-    }
-    
-    public void setGerenteDataInicio(String d) {
-        this.gerenteDataInicio = FuncoesControle.coverteStringData(d);
-    }    
+    }  
     
     /**
      * @return the gerente
