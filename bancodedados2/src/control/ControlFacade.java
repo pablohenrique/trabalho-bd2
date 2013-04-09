@@ -10,6 +10,7 @@ import Model.Localizacao;
 import Model.Empregado;
 import Model.Projeto;
 import Model.Trabalha;
+import java.sql.Date;
 import java.util.Vector;
 
 
@@ -632,5 +633,19 @@ public class ControlFacade {
       */
      public void deletaTrabalha(String ssn) throws Exception{
          trabalhaControl.delete(ssn);
-     }   
+     }  
+     
+     /**
+      * Fachada para funcoes de controle
+      */
+     
+     /**
+      * 
+      * @param date
+      * @return String
+      * recebe uma data (DATE) e converte para String
+      */
+     public String converteDataString(Date date){
+         return FuncoesControle.converteData(date);
+     }
 }
