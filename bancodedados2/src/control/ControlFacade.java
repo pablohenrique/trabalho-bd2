@@ -10,10 +10,8 @@ import Model.Localizacao;
 import Model.Empregado;
 import Model.Projeto;
 import Model.Trabalha;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Vector;
-import javax.swing.ComboBoxModel;
+
 
 /**
  *
@@ -115,7 +113,7 @@ public class ControlFacade {
     public String[][] getEmpregadosTable(Vector<Empregado> list)
     {
         String[][] dados = new String[list.size()][];  
-        
+        FuncoesControle f = new FuncoesControle();
         for(int i=0; i<list.size(); i++)
         {
             String dno = String.valueOf(list.get(i).getDepartamento().getNumero());
@@ -124,7 +122,7 @@ public class ControlFacade {
             String sssn = list.get(i).getSuperSsn().getSsn();            
             
             dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSsn(), list.get(i).getSexo(),
-                                     list.get(i).getEndereco(), list.get(i).getSalarioString(), list.get(i).getDataNascimentoString(),
+                                     list.get(i).getEndereco(), list.get(i).getSalarioString(), f.converteData(list.get(i).getDataNascimento()),
                                      departamentoNome,dno,supervisorNome,sssn}; 
         }
         
@@ -133,12 +131,12 @@ public class ControlFacade {
     
     public String[][] getDependentesTable(Vector<Dependente> list) {
         String[][] dados = new String[list.size()][];  
-        
+        FuncoesControle f = new FuncoesControle();
         for(int i=0; i<list.size(); i++)
         {
             Empregado empregado = list.get(i).getEssn();
             
-            dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSexo(),list.get(i).getDataNascimentoString(), list.get(i).getParentesco(), empregado.getNome(), empregado.getSsn(), empregado.getDepartamento().getNome() }; 
+            dados[i] = new String[] {list.get(i).getNome(), list.get(i).getSexo(),f.converteData(list.get(i).getDataNascimento()), list.get(i).getParentesco(), empregado.getNome(), empregado.getSsn(), empregado.getDepartamento().getNome() }; 
         }
         
         return dados;         
@@ -261,13 +259,13 @@ public class ControlFacade {
       
     public String[][] getDepartamentosTable(Vector<Departamento> list) {
         String[][] dados = new String[list.size()][];  
-        
+        FuncoesControle f = new FuncoesControle();
         for(int i=0; i<list.size(); i++){
             Departamento dep = list.get(i);
             Empregado emp = list.get(i).getGerenteSsn();
             
-            dados[i] = new String[] {dep.getNome(), Integer.toString(dep.getNumero()), emp.getNome(), dep.getGerenteDataInicioString(), emp.getSsn(),
-                                     emp.getSexo(), emp.getEndereco(), emp.getSalarioString(), emp.getDataNascimentoString(), emp.getDepartamento().getNome(), Integer.toString(emp.getDepartamento().getNumero()), emp.getSuperSsn().getNome(), emp.getSuperSsn().getSsn()}; 
+            dados[i] = new String[] {dep.getNome(), Integer.toString(dep.getNumero()), emp.getNome(), f.converteData(dep.getGerenteDataInicio()), emp.getSsn(),
+                                     emp.getSexo(), emp.getEndereco(), emp.getSalarioString(), f.converteData(emp.getDataNascimento()), emp.getDepartamento().getNome(), Integer.toString(emp.getDepartamento().getNumero()), emp.getSuperSsn().getNome(), emp.getSuperSsn().getSsn()}; 
         }
         
         return dados;         

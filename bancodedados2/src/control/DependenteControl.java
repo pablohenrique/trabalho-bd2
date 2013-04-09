@@ -27,12 +27,12 @@ public class DependenteControl  {
     private Dependente createObjectTemplate(String nome, String essn, String sexo, String datanascimento, String parentesco){
         Empregado empregado = new Empregado();
         empregado.setSsn(essn);
-        
+        FuncoesControle f = new FuncoesControle();
         Dependente dependente = new Dependente();
         dependente.setNome(nome);
         dependente.setEssn(empregado);
         dependente.setSexo(sexo);
-        dependente.setDataNascimento(datanascimento);
+        dependente.setDataNascimento(f.coverteStringData(datanascimento));
         dependente.setParentesco(parentesco);
         
         return dependente;
