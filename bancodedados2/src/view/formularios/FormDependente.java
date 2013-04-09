@@ -144,7 +144,7 @@ public class FormDependente extends JDialog implements ActionListener
         dep_edit = d;
         
         nome.setText(d.getNome());
-        //dataNasc.setText(Principal.cf.converteDataString(d.getDataNascimentoString()));
+        dataNasc.setText(Principal.cf.converteDataString(d.getDataNascimento()));
         sexo.setSelectedItem(d.getSexo());
         parentesco.setSelectedItem(d.getParentesco());
                 

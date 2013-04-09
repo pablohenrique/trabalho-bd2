@@ -120,7 +120,7 @@ public class FormDepartamento extends JDialog implements ActionListener
         depEdit = dep;
         
         nome.setText(dep.getNome());
-        //dataInicio.setText(Principal.cf.converteDataString(dep.getGerenteDataInicioString()));
+        dataInicio.setText(Principal.cf.converteDataString(dep.getGerenteDataInicio()));
         
         if(dep.getGerenteSsn().getSuperSsn().getSsn() != null)
             gerente.setSelectedIndex(this.selecionarComboBoxSup(dep.getGerenteSsn(), gerente));
