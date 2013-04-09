@@ -173,7 +173,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         
         nome.setText(e.getNome());
         endereco.setText(e.getEndereco());
-        //Principal.cf.converteDataString(dataNasc.setText(e.getDataNascimentoString()));
+        dataNasc.setText(Principal.cf.converteDataString(e.getDataNascimento()));
         salario.setText(e.getSalarioString());
         ssn.setText(e.getSsn());
         senha.setText(e.getSenha());
