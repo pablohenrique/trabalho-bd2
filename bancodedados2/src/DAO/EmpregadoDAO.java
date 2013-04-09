@@ -51,7 +51,7 @@ public class EmpregadoDAO implements IObjectDAO{
                 output.setSuperSsn((Empregado) useObjectTemplate("s_"));
             
             DepartamentoDAO dao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
-            output.setDepartamento((Departamento) dao.createObject(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getDate("d_gerdatainicio"), output));
+            output.setDepartamento((Departamento) dao.createObject(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getDate("d_gerdatainicio"), null));
             
             System.gc();
             return output;
@@ -73,8 +73,8 @@ public class EmpregadoDAO implements IObjectDAO{
         emp.setSenha(senha);
         emp.setSuperSsn(superssn);
         emp.setDepartamento(departamento);
-        if(departamento.getGerenteSsn() == null)
-            departamento.setGerenteSsn(emp);
+        //if(departamento.getGerenteSsn() == null)
+        //    departamento.setGerenteSsn(emp);
         
         System.gc();
         return emp;

@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
  */
 public class Departamento {
     private String nome;
-    private int numero = -1;
+    private int numero;
     private Date gerenteDataInicio;
     private Empregado gerente;
 
