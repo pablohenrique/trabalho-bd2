@@ -56,9 +56,8 @@ public class FormDepartamento extends JDialog implements ActionListener
             Logger.getLogger(FormDepartamento.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Erro mascara! " + ex);
         }
-        try {
-            gerente = new JComboBox();
-            //gerente = new JComboBox(Principal.cf.listarEmpregados());  
+        try {            
+            gerente = new JComboBox(Principal.cf.listarEmpregados());  
         } catch (Exception ex) {
             gerente = new JComboBox();
         }

@@ -41,16 +41,16 @@ import view.formularios.FormFuncionario;
 public final class PainelDependentes extends JPanel  implements ActionListener {	
     
     private static final long serialVersionUID = 1L;
-    private static JButton novo  = new JButton("Novo");
-    private static JButton editar = new JButton("Editar");
-    private static JButton excluir = new JButton("Excluir"); 
+    private JButton novo  = new JButton("Novo");
+    private JButton editar = new JButton("Editar");
+    private JButton excluir = new JButton("Excluir"); 
     private static JLabel contaRegistros =  new JLabel();
-    private static JComboBox empregados;             
+    private JComboBox empregados;             
         
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    public static FormDependente formDependente = null;
+    public FormDependente formDependente = null;
     
     public PainelDependentes(){			
         
@@ -86,10 +86,9 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         em.setSsn("-1");
         
         try {
-            if(Principal.user.getTipoLogin() == 2){
-                 empregados = new JComboBox();
-             //   empregados = new JComboBox(Principal.cf.listarEmpregados());
-            }else
+            if(Principal.user.getTipoLogin() == 2)
+                empregados = new JComboBox(Principal.cf.listarEmpregados());
+            else
                 throw new Exception();
         } catch (Exception ex) {
             empregados = new JComboBox();
@@ -150,8 +149,8 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome"));
             Dependente dep = null;
             try {
-                dep = Principal.cf.buscaDependenteEssnNome(essn, nome);
-                form_dependente(dep);
+                //dep = Principal.cf.buscaDependenteEssnNome(essn, nome);
+                form_dependente(dadosItem(item));
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }            
@@ -210,7 +209,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     
     public static void setDataTable(){
         String[][] dados = null;        
-        /*
+
         try {
             if(Principal.user.getTipoLogin() == 0 || Principal.user.getTipoLogin() == 1)
                 dados = Principal.cf.getDependentesTable(Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
@@ -219,7 +218,6 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         } catch (Exception ex) {
             System.err.println("Erro listar dependentes: " + ex);
         }
-        */
         
         PainelDependentes.modelo = new DefaultTableModel(dados, PainelDependentes.colunas);
         PainelDependentes.tabela.setModel(PainelDependentes.modelo);                    
@@ -227,7 +225,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         PainelDependentes.setSizeColumn();        
     }
     
-    public static void form_dependente(Dependente e){
+    public void form_dependente(Dependente e){
         if(formDependente == null)
             formDependente = new FormDependente(e);
         else{
@@ -238,5 +236,28 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             }
             formDependente.setVisible(true);
         }
-    }       
+    }
+    
+    
+    public Dependente dadosItem(int item){                
+        String essn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+        String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome"));
+        String sexo = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Sexo"));
+        String data = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Data de Nascimento"));
+        String parentesco = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Parentesco"));
+        String nomeEmp = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Empregado"));
+        
+        Dependente dep = new Dependente();
+        dep.setNome(nome);
+        dep.setParentesco(parentesco);
+        dep.setSexo(sexo);
+        dep.setDataNascimento(Principal.cf.coverteStringData(data));
+        
+        Empregado e = new Empregado();
+        e.setNome(nomeEmp);
+        e.setSsn(essn);
+        
+        dep.setEssn(e);
+        return dep;
+    }
 }

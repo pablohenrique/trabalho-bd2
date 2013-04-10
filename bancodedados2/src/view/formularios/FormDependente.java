@@ -67,8 +67,7 @@ public class FormDependente extends JDialog implements ActionListener
         parentesco.addItem("Nao sei");
         
         try {
-             empregado = new JComboBox();
-            //empregado = new JComboBox(Principal.cf.listarEmpregados());  
+            empregado = new JComboBox(Principal.cf.listarEmpregados());  
         } catch (Exception ex) {
             empregado = new JComboBox();
         }
