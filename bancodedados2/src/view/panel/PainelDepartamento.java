@@ -51,7 +51,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    public FormDepartamento formDepartmanetos = null;
+    public static FormDepartamento formDepartmanetos = null;
     public FormDepartamentoProjetos formDepartmanetosProjetos = null;
     public FormDepartamentoLocal formDepartmanetosLocalizacao = null;
 
@@ -67,7 +67,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         };
 
         colunas = new String [] {"Nome Departamento", "Numero", "Gerente Nome", "Data Inicio", "Ssn", "Sexo",
-                                 "Endereco", "Salario", "Data de Nascimento", "Departamento", "Dno", "Supervisor", "SuperSnn"};      
+                                 "Endereco", "Salario", "Data de Nascimento", "Departamento", "Dno"};      
   
         PainelDepartamento.setDataTable();
         
@@ -182,9 +182,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(50);
         tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(250);        
-        tabela.getTableHeader().getColumnModel().getColumn(10).setMinWidth(250);        
-        tabela.getTableHeader().getColumnModel().getColumn(11).setMinWidth(250);        
+        tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(250);              
     }
     
     public static void setDataTable(){
@@ -203,7 +201,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         PainelDepartamento.contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
     }
     
-    public void formDepartamentos(Departamento d){
+    public static void formDepartamentos(Departamento d){
         if(formDepartmanetos == null)
             formDepartmanetos = new FormDepartamento(d);
         else{

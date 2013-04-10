@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -27,6 +28,8 @@ import view.formularios.FormDepartamento;
 import view.formularios.FormDependente;
 import view.formularios.FormFuncionario;
 import view.formularios.FormProjetos;
+import view.formularios.FormProjetosDepartamento;
+import view.formularios.FormSalario;
 import view.panel.PainelDepartamento;
 import view.panel.PainelDependentes;
 import view.panel.PainelFuncionarios;
@@ -61,14 +64,16 @@ public class WindowGerente extends JFrame implements ActionListener {
     private static JButton btnFinancas;
     private static JButton btnCargaHoraria;
     private static JButton btnCalculadora;
+    private static JButton btnProjetosDepatamento;
     private static CardLayout card;
     
     private static JPanel painel_projetos = null;
     private static JPanel painel_dependentes = null;
     private static JPanel painel_departamento = null;
     private static JPanel painel_funcionarios = null;
-    private static FormFuncionario formFuncionario = null;    
-
+    private static FormSalario formSalario = null;
+    private static FormProjetosDepartamento formDepProjetos = null;
+    
     public WindowGerente(){
             super("Sistema de Gerenciamento");
             //definir todos painel central
@@ -171,6 +176,14 @@ public class WindowGerente extends JFrame implements ActionListener {
             btnCargaHoraria = new JButton("Carga Horaria");
             btnCargaHoraria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/carga-horaria.png")));
             botoes.add(btnCargaHoraria);
+
+            btnCargaHoraria = new JButton("Carga Horaria");
+            btnCargaHoraria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/carga-horaria.png")));
+            botoes.add(btnCargaHoraria);
+            
+            btnProjetosDepatamento = new JButton("Trabalha Projetos");
+            btnProjetosDepatamento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/projetosDep.png")));
+            botoes.add(btnProjetosDepatamento);
             
             for (JButton botao : botoes){
                     botao.setVerticalTextPosition(JButton.BOTTOM);
@@ -188,6 +201,7 @@ public class WindowGerente extends JFrame implements ActionListener {
             barraFerramentas.add(btnPropagandas);
             barraFerramentas.add(btnCalculadora);
             barraFerramentas.add(btnCargaHoraria);
+            barraFerramentas.add(btnProjetosDepatamento);
             
             barraFerramentas.setFloatable(false);
             barraFerramentas.setOpaque(false);		
@@ -208,45 +222,39 @@ public class WindowGerente extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e){
-            Object origem = e.getSource();
+        Object origem = e.getSource();
 
-            if(origem == menuAbout){
-                    JOptionPane.showMessageDialog(this,"Grupo:\nCaio Thomás\nPablo Henrique\nYuri Campos","Sobre", JOptionPane.PLAIN_MESSAGE);
-            }		
-            else if(origem == menuExit){
-                    System.exit(0);
-            }
-            else if (origem == menuInit){
-                    WindowGerente.card.show(WindowGerente.painelCentral, "inicio");
-            }		
-            else if (origem == btnFunc || origem == menuFuncionariosListar){
-                    painelCentral.add(painel_funcionarios(), "funcionario");                                                                            
-                    WindowGerente.card.show(WindowGerente.painelCentral, "funcionario");
-            }
-            else if (origem == btnDep || origem == menuDependentesListar){
-                    painelCentral.add(painel_dependentes(), "dependente");                                 
-                    WindowGerente.card.show(WindowGerente.painelCentral, "dependente");
-            }  
-            else if( origem == btnDepartamentos || origem == menuDepartamentoListar){
-                    painelCentral.add(painel_departamento(), "departamento");                
-                    WindowGerente.card.show(WindowGerente.painelCentral, "departamento");
-            }
-            else if( origem == btnProjetos || origem == menuProjetosListar){
-                    painelCentral.add(painel_projetos(), "projeto");            
-                    WindowGerente.card.show(WindowGerente.painelCentral, "projeto");
-            }            
-            else if (origem == menuFuncionarioCadastro){
-                    form_funcionarios(null);
-            }		
-            else if (origem == menuProjetosCadastro){
-                    new FormProjetos(null);
-            }            
-            else if (origem == menuDepartamentoCadastro){
-                    new FormDepartamento(null);
-            }            
-            else if (origem == menuDependentesCadastro){
-                    new FormDependente(null);
-            }                                       
+        if(origem == menuAbout){
+            JOptionPane.showMessageDialog(this,"Grupo:\nCaio Thomás\nPablo Henrique\nYuri Campos","Sobre", JOptionPane.PLAIN_MESSAGE);
+        }		
+        else if(origem == menuExit)
+            System.exit(0);
+        else if (origem == menuInit)
+            WindowGerente.card.show(WindowGerente.painelCentral, "inicio");		
+        else if (origem == btnFunc || origem == menuFuncionariosListar){
+                painelCentral.add(painel_funcionarios(), "funcionario");                                                                            
+                WindowGerente.card.show(WindowGerente.painelCentral, "funcionario");
+        } else if (origem == btnDep || origem == menuDependentesListar){
+                painelCentral.add(painel_dependentes(), "dependente");                                 
+                WindowGerente.card.show(WindowGerente.painelCentral, "dependente");
+        } else if( origem == btnDepartamentos || origem == menuDepartamentoListar){
+                painelCentral.add(painel_departamento(), "departamento");                
+                WindowGerente.card.show(WindowGerente.painelCentral, "departamento");
+        } else if( origem == btnProjetos || origem == menuProjetosListar){
+                painelCentral.add(painel_projetos(), "projeto");            
+                WindowGerente.card.show(WindowGerente.painelCentral, "projeto");
+        } else if (origem == menuFuncionarioCadastro)
+                PainelFuncionarios.form_funcionarios(null);
+        else if (origem == menuProjetosCadastro)
+                PainelProjetos.formProjeto(null);
+        else if (origem == menuDepartamentoCadastro)
+                PainelDepartamento.formDepartamentos(null);
+        else if (origem == menuDependentesCadastro)
+                PainelDependentes.form_dependente(null);
+        else if (origem == btnCalculadora)
+            WindowGerente.form_Salario();    
+        else if (origem == btnProjetosDepatamento)
+            WindowGerente.formProjetosDepartamentos();    
     }
     
     public static JPanel painel_projetos(){
@@ -276,18 +284,22 @@ public class WindowGerente extends JFrame implements ActionListener {
                 
         return painel_dependentes;
     }  
-    
-    public static void form_funcionarios(Empregado e){
-        if(formFuncionario == null)
-            formFuncionario = new FormFuncionario(e);
-        else{
-            try {
-                formFuncionario.editarEmpregado(e);
-            } catch (Exception ex) {
-                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
-            }
-            formFuncionario.setVisible(true);
+
+    public static FormSalario form_Salario(){
+        if(formSalario == null)
+            formSalario = new FormSalario();
+        else {
+            formSalario.execute();
         }
-    }
-          
+        return formSalario;
+    }     
+        
+    public static FormProjetosDepartamento formProjetosDepartamentos(){
+        if(formDepProjetos == null)
+            formDepProjetos = new FormProjetosDepartamento();
+        else {
+            formDepProjetos.execute();
+        }
+        return formDepProjetos;
+    }       
 }

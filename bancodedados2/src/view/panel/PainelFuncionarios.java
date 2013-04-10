@@ -52,7 +52,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    private FormFuncionario formFuncionario = null;
+    private static FormFuncionario formFuncionario = null;
     private FormFuncionarioProjetos formProjetos = null;
     
     public PainelFuncionarios(){			
@@ -226,7 +226,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         PainelFuncionarios.setSizeColumn();        
     }
     
-    public void form_funcionarios(Empregado e){
+    public static void form_funcionarios(Empregado e){
         if(formFuncionario == null)
             formFuncionario = new FormFuncionario(e);
         else{

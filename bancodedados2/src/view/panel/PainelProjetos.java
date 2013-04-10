@@ -54,8 +54,8 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     public static DefaultTableModel modelo;
     public static String[] colunas;
     
-    private FormProjetos formprojetos = null;
-    private FormProjetosFuncionarios formFuncionarios = null; 
+    private static FormProjetos formprojetos = null;
+    private static FormProjetosFuncionarios formFuncionarios = null; 
     
     public PainelProjetos(){			
         
@@ -240,7 +240,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     }
     
     
-    public void formProjeto(Projeto p){
+    public static void formProjeto(Projeto p){
         if(formprojetos == null)
             formprojetos = new FormProjetos(p);
         else{
@@ -253,7 +253,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         }
     }       
     
-    public void formFuncinarios(Projeto p){
+    public static void formFuncinarios(Projeto p){
         if(formFuncionarios == null)
             formFuncionarios = new FormProjetosFuncionarios(p);
         else{

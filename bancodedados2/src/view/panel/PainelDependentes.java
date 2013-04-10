@@ -50,7 +50,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    public FormDependente formDependente = null;
+    public static FormDependente formDependente = null;
     
     public PainelDependentes(){			
         
@@ -225,7 +225,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         PainelDependentes.setSizeColumn();        
     }
     
-    public void form_dependente(Dependente e){
+    public static void form_dependente(Dependente e){
         if(formDependente == null)
             formDependente = new FormDependente(e);
         else{

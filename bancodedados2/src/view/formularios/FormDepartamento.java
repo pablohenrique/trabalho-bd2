@@ -121,7 +121,7 @@ public class FormDepartamento extends JDialog implements ActionListener
         nome.setText(dep.getNome());
         dataInicio.setText(Principal.cf.converteDataString(dep.getGerenteDataInicio()));
         
-        if(dep.getGerenteSsn().getSuperSsn().getSsn() != null)
+        if(dep.getGerenteSsn().getSsn() != null)
             gerente.setSelectedIndex(this.selecionarComboBoxSup(dep.getGerenteSsn(), gerente));
             
         this.setTitle("Editar Departamento");
