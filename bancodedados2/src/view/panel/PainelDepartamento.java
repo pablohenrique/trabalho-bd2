@@ -16,6 +16,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,9 +51,9 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    public static FormDepartamento formDepartmanetos = null;
-    public static FormDepartamentoProjetos formDepartmanetosProjetos = null;
-    public static FormDepartamentoLocal formDepartmanetosLocalizacao = null;
+    public FormDepartamento formDepartmanetos = null;
+    public FormDepartamentoProjetos formDepartmanetosProjetos = null;
+    public FormDepartamentoLocal formDepartmanetosLocalizacao = null;
 
     public PainelDepartamento(){			
         
@@ -124,8 +125,8 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             Departamento dep;
             try {
-                dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));
-                formDepartamentos(dep);
+                //dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));                
+                formDepartamentos(dadosLista(item));
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }
@@ -188,12 +189,12 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
     
     public static void setDataTable(){
         String[][] dados = null;
-        /*
+        
         try {        
             dados = Principal.cf.getDepartamentosTable(Principal.cf.listarDepartamentos());
         } catch (Exception ex) {
             System.err.println("Erro Painel Departamentos: " + ex);
-        }*/
+        }
         
         PainelDepartamento.modelo = new DefaultTableModel(dados, PainelDepartamento.colunas);
         PainelDepartamento.tabela.setModel(PainelDepartamento.modelo);                    
@@ -202,7 +203,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         PainelDepartamento.contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");
     }
     
-    public static void formDepartamentos(Departamento d){
+    public void formDepartamentos(Departamento d){
         if(formDepartmanetos == null)
             formDepartmanetos = new FormDepartamento(d);
         else{
@@ -215,7 +216,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         }
     }    
     
-    public static void formProjetos(Departamento d){
+    public void formProjetos(Departamento d){
         if(formDepartmanetosProjetos == null)
             formDepartmanetosProjetos = new FormDepartamentoProjetos(d);
         else{
@@ -228,7 +229,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         }
     } 
     
-    public static void formLocalizacao(Departamento d){
+    public void formLocalizacao(Departamento d){
         if(formDepartmanetosLocalizacao == null)
             formDepartmanetosLocalizacao = new FormDepartamentoLocal(d);
         else{
@@ -240,4 +241,26 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
             formDepartmanetosLocalizacao.setVisible(true);
         }
     }    
+
+    public Departamento dadosLista(int item){
+        String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Departamento"));
+        String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+        String dataInicio = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Data Inicio"));
+        String gerNome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Gerente Nome"));
+        String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+
+        Departamento dep = new Departamento();
+        dep.setNome(nome);
+        dep.setNumero(Integer.parseInt(numero));
+        dep.setGerenteDataInicio(Principal.cf.coverteStringData(dataInicio));      
+        
+        Empregado em = new Empregado();
+        em.setNome(gerNome);
+        em.setSsn(ssn);
+
+        dep.setGerenteSsn(em);
+
+        return dep;
+    }
+    
 }

@@ -9,6 +9,7 @@
  */
 package view.panel;
 
+import Model.Departamento;
 import Model.Empregado;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,6 +24,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -44,7 +46,8 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     private JButton projetos = new JButton("Projetos");
     private JTextField txtBusca  = new JTextField();   
     private JButton btnBusca = new JButton("Pesquisar");
-    
+    private JComboBox<String> comboBusca = new JComboBox<String>();
+
     public static JLabel contaRegistros = new JLabel();    
     public static JTable tabela;
     public static DefaultTableModel modelo;
@@ -63,6 +66,14 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
             }
         };
 
+        comboBusca.addItem("Nome");
+        comboBusca.addItem("Ssn");
+        comboBusca.addItem("X");
+        comboBusca.addItem("Y");
+        comboBusca.addItem("Todos Empregados");
+        comboBusca.setPreferredSize(new Dimension(100, 24));
+        comboBusca.setMaximumSize(new Dimension(100, 24));
+        
         colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
                                            "Departamento", "Dno", "Supervisor", "SuperSnn"};  
         
@@ -92,21 +103,24 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(editar);
         botoes.add(Box.createHorizontalStrut(3));
-        if(Principal.user.getTipoLogin() != 1)
+        if(Principal.user.getTipoLogin() == 2)
             botoes.add(excluir);
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(projetos);         
         botoes.add(Box.createVerticalStrut(45));
         botoes.add(Box.createHorizontalGlue());
         botoes.add(contaRegistros);
-        botoes.add(Box.createHorizontalGlue());
-        botoes.add(imagem);
-        botoes.add(Box.createHorizontalStrut(5));
-        botoes.add(txtBusca);
-        botoes.add(Box.createHorizontalStrut(5));
-        botoes.add(btnBusca);
-        botoes.add(Box.createHorizontalStrut(7));
-
+        if(Principal.user.getTipoLogin() == 2){        
+            botoes.add(Box.createHorizontalGlue());
+            botoes.add(imagem);
+            botoes.add(Box.createHorizontalStrut(5));
+            botoes.add(txtBusca);
+            botoes.add(Box.createHorizontalStrut(5));
+            botoes.add(comboBusca);
+            botoes.add(Box.createHorizontalStrut(5));
+            botoes.add(btnBusca);
+            botoes.add(Box.createHorizontalStrut(7));
+        }
         novo.addActionListener(this);
         editar.addActionListener(this);
         btnBusca.addActionListener(this);
@@ -196,7 +210,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     public static void setDataTable(){
         
         String[][] dados = null;                         
-       /* 
+
         try {
             if(Principal.user.getTipoLogin() == 1)
                 dados = Principal.cf.getEmpregadosTable(Principal.cf.buscaSuperSnn(Principal.user.getSsn()));            
@@ -205,7 +219,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         } catch (Exception ex) {
             System.err.println("Erro em Painel Funcionario: " + ex);
         }
-        */
+
         PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);
         PainelFuncionarios.tabela.setModel(PainelFuncionarios.modelo);                    
         PainelFuncionarios.contaRegistros.setText(PainelFuncionarios.tabela.getRowCount() + " registro(s) encontrado(s)");                    
@@ -236,5 +250,39 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
             }
             formProjetos.setVisible(true);
         }
-    }    
+    }
+        
+    public Empregado dadosListar(int item){        
+        String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome"));
+        String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+        String sexo = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Sexo"));
+        String end = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Endereco"));
+        String salario = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Salario"));
+        String data = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Data de Nascimento"));
+        String dep = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Departamento"));
+        String dno = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Dno"));
+        String superNome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Supervisor"));
+        String sssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("SuperSnn"));
+        
+        
+        Empregado em = new Empregado();
+        em.setSsn(ssn);
+        em.setNome(nome);
+        em.setSexo(sexo);
+        em.setEndereco(end);
+        em.setSalario(salario);
+        em.setDataNascimento(Principal.cf.coverteStringData(data));
+        
+        Departamento d = new Departamento();
+        d.setNome(nome);
+        d.setNumero(Integer.parseInt(dno));
+        
+        Empregado s = new Empregado();
+        s.setSsn(sssn);
+        s.setNome(superNome);
+        
+        em.setSuperSsn(s);
+        
+        return em;
+    }
 }

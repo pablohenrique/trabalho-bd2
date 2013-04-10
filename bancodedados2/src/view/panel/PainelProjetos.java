@@ -9,6 +9,8 @@
  */
 package view.panel;
 
+import Model.Departamento;
+import Model.Empregado;
 import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -51,7 +53,9 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
-    private static FormProjetos formprojetos = null;
+    
+    private FormProjetos formprojetos = null;
+    private FormProjetosFuncionarios formFuncionarios = null; 
     
     public PainelProjetos(){			
         
@@ -64,7 +68,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             }
         };
 
-        colunas = new String [] {"Nome Projeto", "Numero", "Nome Departamento", "Dno", "Nome Gerente", "Ssn"}; 
+        colunas = new String [] {"Nome Projeto", "Numero", "Localizacao Projeto", "Nome Departamento", "Dno", "Nome Gerente", "Ssn"}; 
   
         PainelProjetos.setDataTable();
         
@@ -112,7 +116,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
 
     public JPanel nivelView(JPanel botoes, JLabel imagem)
     {        
-        if(Principal.user.getTipoLogin() >= 1){          
+        if(Principal.user.getTipoLogin() == 1){          
             botoes.add(Box.createHorizontalStrut(5));
             botoes.add(novo);
             botoes.add(Box.createHorizontalStrut(3));
@@ -162,13 +166,12 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             Projeto p = null;
             try {
-                p = Principal.cf.getProjetoByNumero(Integer.parseInt(numero));
-                formProjeto(p);
+                //p = Principal.cf.getProjetoByNumero(Integer.parseInt(numero));
+                formProjeto(dadosLista(item));
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }             
-        }         
-        else if (origem == excluir  && (item != -1)) {
+        } else if (origem == excluir  && (item != -1)) {
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Projeto"));
             
@@ -185,28 +188,17 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
                     return;
                 }
             }
-        }
-        else if (origem == empregados) {//&& (item != -1)
-                new FormProjetosFuncionarios(null);
-            /*
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            Empregado em;
-            try {
-                em = Principal.cf.getEmpregadoBySsn(ssn);
-                new FormDepartamentoProjetos(em);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-            }*/
-        }
-        else if (origem == btnBusca){
+        } else if (origem == empregados && (item != -1)){                
+                formFuncinarios(dadosLista(item));
+        } else if (origem == btnBusca){
             String[][] dados = null;
 
-            try {        
+            try {   
                 if(comboBusca.getSelectedIndex() == 0)//busca nome
                     dados = Principal.cf.getProjetosTable(Principal.cf.buscaProjetosByNome(txtBusca.getText()));
-                else if(comboBusca.getSelectedIndex() == 2)//busca numero
+                else if(comboBusca.getSelectedIndex() == 1)//busca numero
                     dados = Principal.cf.getProjetosTable(Principal.cf.buscarProjetosByNumeroDepto(Integer.parseInt(txtBusca.getText())));
-                else 
+                else
                     dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
             } catch (Exception ex) {
                 System.err.println("Erro Painel Projetos: " + ex);
@@ -222,16 +214,17 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     
     public static void setSizeColumn(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(50);
+        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(80);
         tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(80);
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(50);
     }
     
     public static void setDataTable(){       
         String[][] dados = null;
-        /*
+
         try {        
             if(Principal.user.getTipoLogin() != 0)//supervisor (verificar gerente se pode crud projetos)
                 dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
@@ -239,7 +232,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
                 dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));
         } catch (Exception ex) {
             System.err.println("Erro Painel Projetos: " + ex);
-        }*/
+        }
         
         PainelProjetos.modelo = new DefaultTableModel(dados, PainelProjetos.colunas);
         PainelProjetos.tabela.setModel(PainelProjetos.modelo);                    
@@ -247,7 +240,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     }
     
     
-    public static void formProjeto(Projeto p){
+    public void formProjeto(Projeto p){
         if(formprojetos == null)
             formprojetos = new FormProjetos(p);
         else{
@@ -259,4 +252,45 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             formprojetos.setVisible(true);
         }
     }       
+    
+    public void formFuncinarios(Projeto p){
+        if(formFuncionarios == null)
+            formFuncionarios = new FormProjetosFuncionarios(p);
+        else{
+            try {
+                formFuncionarios.editar(p);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formFuncionarios.setVisible(true);
+        }
+    } 
+    
+    public Projeto dadosLista(int item){
+        String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+        String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Projeto"));
+        String local = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Localizacao Projeto"));
+        String dep = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Departamento"));
+        String depNum = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Dno"));
+        String gerente = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Gerente"));
+        String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
+
+        Projeto p = new Projeto();
+        p.setNumero(Integer.parseInt(numero));
+        p.setNome(nome);
+        p.setLocalizacao(local);
+        
+        Departamento d = new Departamento();
+        d.setNome(dep);
+        d.setNumero(Integer.parseInt(depNum));
+        
+        Empregado em = new Empregado();
+        em.setNome(gerente);
+        em.setSsn(ssn);
+        
+        d.setGerenteSsn(em);
+        p.setDepartamento(d);        
+        
+        return p;
+    }
 }

@@ -24,17 +24,22 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private static JButton novo  = new JButton("Add Empregado");
-    private static JButton editarHora  = new JButton("Editar Hora");
-    private static JButton excluir = new JButton("Excluir");   
+    private JButton novo  = new JButton("Add Empregado");
+    private JButton editarHora  = new JButton("Editar Hora");
+    private JButton excluir = new JButton("Excluir");   
+    private JLabel nomeProjeto = new JLabel();
+    private JLabel localProjeto = new JLabel();
+    private JLabel depProjeto = new JLabel();
+    private JLabel superProjeto = new JLabel();
     
-    private static JButton btnOK = new JButton("OK");
-    private static JButton btnCancelar  = new JButton("Cancelar");
+    private JButton btnOK = new JButton("OK");
+    private JButton btnCancelar  = new JButton("Cancelar");
     
     private static JTable tabela;
     private static DefaultTableModel modelo;
     private static String[] colunas;
-    private static Projeto proj;
+
+    private Projeto proj;    
     
     public FormProjetosFuncionarios(Projeto p)
     {
@@ -54,13 +59,13 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(6, 2, 5, 5));
         grid.add(nome);
-        grid.add(new JLabel("RESTRICOES XML"));      
+        grid.add(nomeProjeto);      
         grid.add(new JLabel("Localizacao Projeto: "));
-        grid.add(new JLabel("FACOM "));        
+        grid.add(localProjeto);        
         grid.add(new JLabel("Departamento: "));
-        grid.add(new JLabel("BANCO DE DADOS"));
+        grid.add(depProjeto);
         grid.add(new JLabel("Supervisor Departamento: "));
-        grid.add(new JLabel("BRUNO "));
+        grid.add(superProjeto);
         
         nome.setPreferredSize(new Dimension(250, 25));
         
@@ -103,7 +108,8 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());        
-
+        
+        editar(proj);
         
         JPanel painel = new JPanel();
         painel.add(grid);              
@@ -121,7 +127,17 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         this.setVisible(true);
     }
  
+    public void editar(Projeto p){
+        proj = p;
         
+        nomeProjeto.setText(p.getNome());
+        localProjeto.setText(p.getLocalizacao());
+        superProjeto.setText(p.getDepartamento().getGerenteSsn().getNome());
+        depProjeto.setText(p.getDepartamento().getNome());
+        
+        FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -150,7 +166,9 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     }
     
     public static void setDataTableFuncionariosProjetos(){
-        //String[][] dados = Principal.cf.getProjetoBySsn(Principal.cf.listarProjetosBy(emp.getSsn()));        
+        String[][] dados = null;
+        
+        //Principal.cf.getEmpregadosTable(Principal.cf.listar(proj));        
         FormProjetosFuncionarios.modelo = new DefaultTableModel(null, FormProjetosFuncionarios.colunas);
         FormProjetosFuncionarios.tabela.setModel(FormProjetosFuncionarios.modelo);                    
         FormProjetosFuncionarios.setSizeColumnFuncionariosProjetos();        
