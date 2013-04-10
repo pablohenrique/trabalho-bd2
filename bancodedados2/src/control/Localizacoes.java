@@ -41,9 +41,7 @@ public class Localizacoes {
     public void update(int dnumero, String nome) throws Exception {
         FuncoesControle f = new FuncoesControle();
         
-        if(f.verificarExistenciaDepartamento(dnumero) == false)
-           throw new Exception("Erro: departamento informado nao foi encontrado"); 
-        else
+
             this.dao.post(this.createObject(dnumero, nome));
     }
     

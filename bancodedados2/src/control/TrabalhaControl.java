@@ -36,26 +36,18 @@ public class TrabalhaControl {
     
     public void post(String ssn, int projetonumero, float horas) throws Exception {
         FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaProjeto(projetonumero) == false){
-            throw new Exception("Erro: projeto informado nao foi encontrado");
-        }else if(f.verificarExistenciaEmpregado(ssn) == false){
-         throw new Exception("Erro: empregado informado nao foi encontrado");
-     } else{
+
         this.dao.post(this.createObjectTemplate(ssn, projetonumero, horas));
-        }
+        
 
     }
 
 
     public void update(String ssn, int projetonumero, float horas) throws Exception {
         FuncoesControle f = new FuncoesControle();
-        if(f.verificarExistenciaProjeto(projetonumero) == false){
-            throw new Exception("Erro: projeto informado nao foi encontrado");
-        }else if(f.verificarExistenciaEmpregado(ssn) == false){
-         throw new Exception("Erro: empregado informado nao foi encontrado");
-     } else{
+
         this.dao.update(this.createObjectTemplate(ssn, projetonumero, horas));
-        }
+        
     }
     
     public void delete(String ssn) throws Exception{

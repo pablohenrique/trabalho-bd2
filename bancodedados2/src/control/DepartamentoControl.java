@@ -54,9 +54,6 @@ public class DepartamentoControl
     public void delete(int numero) throws Exception{
         FuncoesControle f = new FuncoesControle();
         
-        if(f.verificarExistenciaDepartamento(numero) == false)
-            throw new Exception("Erro: departamento informado nao foi encontrado");
-        else
             this.dao.delete(numero);
     }
 
