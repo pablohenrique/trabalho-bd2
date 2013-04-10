@@ -648,4 +648,14 @@ public class ControlFacade {
      public String converteDataString(Date date){
          return FuncoesControle.converteData(date);
      }
+     
+     /**
+      * 
+      * @param data
+      * @return Date
+      * retorna Date com string data
+      */
+     public Date coverteStringData(String data){
+         return FuncoesControle.coverteStringData(data);
+     }
 }
