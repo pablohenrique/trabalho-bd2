@@ -33,7 +33,7 @@ public class DependenteDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object useObjectTemplate(){
+    private Object criarObjetoTemplate(){
         try {
             String column = "d_";
                         
@@ -43,7 +43,7 @@ public class DependenteDAO implements IObjectDAO{
             Departamento dep = (Departamento) depdao.get(this.rs.getInt("e_dno"));
             
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
-            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
+            Empregado emp = (Empregado) empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
             
             Dependente output = new Dependente();
             output.setNome(this.rs.getString(column+"nomedependente"));
@@ -61,10 +61,10 @@ public class DependenteDAO implements IObjectDAO{
         }
     }
     
-    private ArrayList<Object> getAllTemplate() throws SQLException{
+    private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
         ArrayList<Object> output = new ArrayList<>();
         while(this.rs.next())
-            output.add((Dependente) this.useObjectTemplate());
+            output.add((Dependente) this.criarObjetoTemplate());
         
         return output;
     }
@@ -82,7 +82,6 @@ public class DependenteDAO implements IObjectDAO{
             this.ps.setString(5,aux.getParentesco());
             
             System.gc();
-            
             if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi gravado.");
             
@@ -95,17 +94,15 @@ public class DependenteDAO implements IObjectDAO{
     public void update(Object input) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-            Dependente aux = (Dependente) input;
             
+            Dependente aux = (Dependente) input;
             this.ps.setString(1,aux.getSexo());
             this.ps.setDate(2,aux.getDataNascimento());
             this.ps.setString(3,aux.getParentesco());
             this.ps.setString(4,aux.getEssn().getSsn());
             this.ps.setString(5,aux.getNome());
-
             
             System.gc();
-            
            if(this.ps.executeUpdate() != 1)
                 throw new SQLException("Objeto nao foi atualizado.");
             
@@ -122,23 +119,7 @@ public class DependenteDAO implements IObjectDAO{
             this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
-            return null;
-        }
-    }
-    
-    public Object getDependente(String essn, String nome) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET_DEPENDENTE);
-            this.ps.setString(1,essn);
-            this.ps.setString(2,nome);
-            this.rs = this.ps.executeQuery();
-            
-            
-            return this.getAllTemplate().get(0);
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -153,7 +134,7 @@ public class DependenteDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
             
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -167,7 +148,7 @@ public class DependenteDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             throw new Exception("Erro ao recuperar todos os objeto:  " + e.toString() );
@@ -188,14 +169,29 @@ public class DependenteDAO implements IObjectDAO{
         }
     }
     
-    public void deleteDep(String essn, String nomedependente) throws Exception {
+    public Object buscarDependente(String essn, String nome) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET_DEPENDENTE);
+            this.ps.setString(1,essn);
+            this.ps.setString(2,nome);
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate().get(0);
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public void deletarDependente(String essn, String nomedependente) throws Exception {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETEFULL);
             this.ps.setString(1, nomedependente);
             this.ps.setString(2, essn);
-            if (this.ps.executeUpdate() == 0) {
+            
+            if (this.ps.executeUpdate() == 0)
                 throw new SQLException("Restricao de integridade de empregado.");
-            }
 
         } catch (Exception e) {
            throw new SQLException("Erro ao apagar dependente:  " + e.toString());

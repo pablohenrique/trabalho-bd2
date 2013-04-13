@@ -32,13 +32,13 @@ public class LocalizacaoDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object useObjectTemplate(){
+    private Object criarObjetoTemplate(){
         try {
             DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
             
             Localizacao output = new Localizacao();
             output.setNome(this.rs.getString("l_localizacao"));
-            output.setDepartamento((Departamento) depdao.createObject(this.rs.getInt("d_numero"), this.rs.getString("d_nome"),this.rs.getDate("d_dataInicio"), (Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("d_gerssn"))));
+            output.setDepartamento((Departamento) depdao.gerarObjeto(this.rs.getInt("d_numero"), this.rs.getString("d_nome"),this.rs.getDate("d_dataInicio"), (Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("d_gerssn"))));
             
             System.gc();
             return output;
@@ -49,11 +49,11 @@ public class LocalizacaoDAO implements IObjectDAO{
         }
     }
     
-    private ArrayList<Object> getAllTemplate() throws SQLException{
+    private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
         ArrayList<Object> output = new ArrayList<>();
             
         while(this.rs.next())
-            output.add((Localizacao) this.useObjectTemplate());
+            output.add((Localizacao) this.criarObjetoTemplate());
         
         return output;
     }
@@ -107,7 +107,7 @@ public class LocalizacaoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate();
+            return this.criarObjetoTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -123,7 +123,7 @@ public class LocalizacaoDAO implements IObjectDAO{
             this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -137,21 +137,7 @@ public class LocalizacaoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [GETALL] o objeto:  " + e.toString() );
-            return null;
-        }
-    }
-    
-        public ArrayList<Object> getAllByDept(int deptID) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL_BYDEP);
-            this.ps.setInt(1,deptID);
-            this.rs = this.ps.executeQuery();
-            
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GETALL] o objeto:  " + e.toString() );
@@ -170,6 +156,20 @@ public class LocalizacaoDAO implements IObjectDAO{
             
         } catch (Exception e) {
             System.err.println("Erro ao deletar objeto:  " + e.toString() );
+        }
+    }
+    
+    public ArrayList<Object> buscarDepartamentos(int deptID) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL_BYDEP);
+            this.ps.setInt(1,deptID);
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [GETALL] o objeto:  " + e.toString() );
+            return null;
         }
     }
     

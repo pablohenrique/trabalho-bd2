@@ -30,11 +30,13 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_READ_SUPERSSN = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.superssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN cia.departamento AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) ORDER BY e.nome ASC;";
     private final String SQL_COUNTEMP = "SELECT COUNT(ssn) FROM empregado;";
+    private final String SQL_GETBIRTH = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.empregado AS s WHERE e.datanasc = ?";
+    private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?)";
     
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object useObjectTemplate(String column){
+    private Object criarObjetoTemplate(String column){
         try {
             Empregado output = new Empregado();
             output.setSsn(this.rs.getString(column+"ssn"));
@@ -45,13 +47,10 @@ public class EmpregadoDAO implements IObjectDAO{
             output.setDataNascimento(this.rs.getDate(column+"datanasc"));
             output.setSenha(this.rs.getString(column+"senha"));
             
-            if(column.equals("s_") || this.rs.getString(column+"ssn") == this.rs.getString("s_ssn"))
-                output.setSuperSsn(null);
-            else
-                output.setSuperSsn((Empregado) useObjectTemplate("s_"));
-            
             DepartamentoDAO dao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
-            output.setDepartamento((Departamento) dao.createObject(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getDate("d_gerdatainicio"), null));
+            output.setDepartamento((Departamento) dao.gerarObjeto(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getDate("d_gerdatainicio"), null));
+            
+            output.setSuperSsn((Empregado) this.gerarObjeto(this.rs.getString("s_ssn"), this.rs.getString("s_nome"), this.rs.getString("s_sexo"), this.rs.getString("s_endereco"), this.rs.getFloat("s_salario"), this.rs.getDate("s_datanasc"), this.rs.getString("s_senha"), null, null));
             
             System.gc();
             return output;
@@ -62,7 +61,7 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public Object createObject(String ssn, String nome, String sexo, String endereco, Float salario, Date datanascimento, String senha, Empregado superssn, Departamento departamento){
+    public Object gerarObjeto(String ssn, String nome, String sexo, String endereco, Float salario, Date datanascimento, String senha, Empregado superssn, Departamento departamento){
         Empregado emp = new Empregado();
         emp.setSsn(ssn);
         emp.setNome(nome);
@@ -73,18 +72,15 @@ public class EmpregadoDAO implements IObjectDAO{
         emp.setSenha(senha);
         emp.setSuperSsn(superssn);
         emp.setDepartamento(departamento);
-        //if(departamento.getGerenteSsn() == null)
-        //    departamento.setGerenteSsn(emp);
         
         System.gc();
         return emp;
     }
     
-    private ArrayList<Object> getAllTemplate() throws SQLException{
+    private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
         ArrayList<Object> output = new ArrayList<>();
-        while(rs.next()){
-            output.add((Empregado) this.useObjectTemplate("e_"));
-        }
+        while(rs.next())
+            output.add((Empregado) this.criarObjetoTemplate("e_"));
         return output;
     }
     
@@ -155,7 +151,7 @@ public class EmpregadoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate("e_");
+            return this.criarObjetoTemplate("e_");
             
         } catch (Exception e) {
              throw new Exception(e.toString());
@@ -174,22 +170,7 @@ public class EmpregadoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.getAllTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
-            return null;
-        }
-    }
-    
-        public Object readbySuperssn(String superssn) {
-        try {
-
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ_SUPERSSN);
-            this.ps.setString(1,superssn);
-            this.rs = this.ps.executeQuery();
-            
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -203,7 +184,7 @@ public class EmpregadoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
@@ -225,7 +206,7 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public int access(String user, String password){
+    public int acessar(String user, String password){
         try{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_LOGIN);
             this.ps.setString(1, user);
@@ -245,7 +226,22 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public int countEmp(){
+    public Object buscarSupervisor(String superssn) {
+        try {
+
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ_SUPERSSN);
+            this.ps.setString(1,superssn);
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public int contarEmpregados(){
         try{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_COUNTEMP);
             this.rs = this.ps.executeQuery();
@@ -255,6 +251,32 @@ public class EmpregadoDAO implements IObjectDAO{
         catch (Exception e){
             System.err.println("Erro ao contar empregados:  " + e.toString() );
             return -1;
+        }
+    }
+    
+    public ArrayList<Object> buscarEmpregadoNascimento() {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETBIRTH);
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public ArrayList<Object> buscarEmpregadoSexo() {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGENDER);
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
         }
     }
 }

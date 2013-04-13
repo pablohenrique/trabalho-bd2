@@ -38,7 +38,7 @@ public class ProjetoDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
            
-    private Object useObjectTemplate(){
+    private Object criarObjetoTemplate(){
         try {
             String column = "p_";
             Projeto output = new Projeto();
@@ -54,7 +54,7 @@ public class ProjetoDAO implements IObjectDAO{
             output.setDepartamento(dep);
             
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
-            empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
+            empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
             
             System.gc();
             return output;
@@ -65,10 +65,10 @@ public class ProjetoDAO implements IObjectDAO{
         }
     }
     
-    private ArrayList<Object> getAllTemplate() throws SQLException {
+    private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException {
         ArrayList<Object> output = new ArrayList<>();
         while(this.rs.next())
-            output.add((Projeto) this.useObjectTemplate());
+            output.add((Projeto) this.criarObjetoTemplate());
         
         return output;
     }
@@ -136,7 +136,7 @@ public class ProjetoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate();
+            return this.criarObjetoTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -154,7 +154,7 @@ public class ProjetoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate();
+            return this.criarObjetoTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -168,50 +168,11 @@ public class ProjetoDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL_JOIN);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
             return null;
-        }
-    }
-    
-    public ArrayList<Object> getAllDep(int numero)  throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLDEPNUMERO);
-            this.ps.setInt(1, numero);
-            this.rs = this.ps.executeQuery();
-            
-            return this.getAllTemplate();
-            
-        } catch (Exception e) {
-            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
-        }
-    }
-    
-    public ArrayList<Object> getAllDep(String nome) throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLDEPNOME);
-            this.ps.setString(1, nome);
-            this.rs = this.ps.executeQuery();
-
-            return this.getAllTemplate();
-            
-        } catch (Exception e) {
-            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
-        }
-    }
-    
-    public ArrayList<Object> getAllEmp(String ssn) throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLEMP);
-            this.ps.setString(1, ssn);
-            this.rs = this.ps.executeQuery();
-
-            return this.getAllTemplate();
-            
-        } catch (Exception e) {
-            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
         }
     }
 
@@ -226,6 +187,45 @@ public class ProjetoDAO implements IObjectDAO{
             
         } catch (Exception e) {
             throw new SQLException("Erro deletar objeto:  " + e.toString());            
+        }
+    }
+    
+    public ArrayList<Object> buscarNumeroDepartamento(int numero)  throws Exception {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLDEPNUMERO);
+            this.ps.setInt(1, numero);
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
+        }
+    }
+    
+    public ArrayList<Object> buscarNomeDepartamento(String nome) throws Exception {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLDEPNOME);
+            this.ps.setString(1, nome);
+            this.rs = this.ps.executeQuery();
+
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
+        }
+    }
+    
+    public ArrayList<Object> buscarEmpregado(String ssn) throws Exception {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALLEMP);
+            this.ps.setString(1, ssn);
+            this.rs = this.ps.executeQuery();
+
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            throw new SQLException("Erro ao recuperar todos os objeto:  " + e.toString());            
         }
     }
     

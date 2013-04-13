@@ -38,23 +38,14 @@ public class DepartamentoDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    public Object useObjectTemplate(){
+    public Object criarObjetoTemplate(){
         try {
             String column = "d_";
             Departamento output = new Departamento();
             output.setNumero(this.rs.getInt(column+"numero"));
             output.setNome(this.rs.getString(column+"nome"));
             output.setGerenteDataInicio(this.rs.getDate(column+"dataInicio"));
-            output.setGerenteSsn(null);
-            
-            EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
-            Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
-            
-            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, null);
-            
-            //if(output.getGerenteSsn() == null)
-            output.setGerenteSsn(emp);
-            
+            output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("e_superssn")));
             System.gc();
             return output;
             
@@ -64,7 +55,7 @@ public class DepartamentoDAO implements IObjectDAO{
         }
     }
     
-    public Object createObject(int numero, String nome, Date gerenteInicio, Empregado gerente){
+    public Object gerarObjeto(int numero, String nome, Date gerenteInicio, Empregado gerente){
         Departamento dep = new Departamento();
         dep.setNumero(numero);
         dep.setNome(nome);
@@ -128,29 +119,8 @@ public class DepartamentoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate();
+            return this.criarObjetoTemplate();
             
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
-            return null;
-        }
-    }
-    
-    public ArrayList<Object> getGer(String gerssn) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
-            this.ps.setString(1,gerssn);
-            ArrayList<Object> output = new ArrayList<>();
-            
-            this.rs = this.ps.executeQuery();
-            while(this.rs.next()){
-                output.add((Departamento) this.useObjectTemplate());
-            }
-            
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            
-            return output;                
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
             return null;
@@ -168,7 +138,7 @@ public class DepartamentoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Departamento nao encontrado.");
             
-            return this.useObjectTemplate();
+            return this.criarObjetoTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -183,9 +153,8 @@ public class DepartamentoDAO implements IObjectDAO{
             ArrayList<Object> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
-            while(this.rs.next()){
-                output.add((Departamento) this.useObjectTemplate());
-            }
+            while(this.rs.next())
+                output.add((Departamento) this.criarObjetoTemplate());
             
             if(output.isEmpty())
                 throw new ArrayStoreException("Nao houve objetos encontrados.");
@@ -208,6 +177,26 @@ public class DepartamentoDAO implements IObjectDAO{
             
         } catch (Exception e) {
             System.err.println("Erro ao deletar objeto:  " + e.toString() );
+        }
+    }
+    
+    public ArrayList<Object> buscarGerente(String gerssn) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
+            this.ps.setString(1,gerssn);
+            ArrayList<Object> output = new ArrayList<>();
+            
+            this.rs = this.ps.executeQuery();
+            while(this.rs.next())
+                output.add((Departamento) this.criarObjetoTemplate());
+            
+            if(output.isEmpty())
+                throw new ArrayStoreException("Nao houve objetos encontrados.");
+            
+            return output;                
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
+            return null;
         }
     }
     

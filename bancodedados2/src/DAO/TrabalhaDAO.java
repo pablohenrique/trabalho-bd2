@@ -34,7 +34,7 @@ public class TrabalhaDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object useObjectTemplate(){
+    private Object criarObjetoTemplate(){
         try {
             EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
             DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
@@ -43,7 +43,7 @@ public class TrabalhaDAO implements IObjectDAO{
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
             Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));
             
-            Empregado emp = (Empregado) empdao.createObject(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, dep);
+            Empregado emp = (Empregado) empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, dep);
             Projeto pro = (Projeto) prodao.createObject(this.rs.getInt("p_numero"), this.rs.getString("p_nome"), this.rs.getString("p_localizacao"), dep);
             
             Trabalha output = new Trabalha();
@@ -60,10 +60,10 @@ public class TrabalhaDAO implements IObjectDAO{
         }
     }
     
-    private ArrayList<Object> getAllTemplate() throws SQLException{
+    private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
         ArrayList<Object> output = new ArrayList<>();
         while(rs.next())
-            output.add((Trabalha) this.useObjectTemplate());
+            output.add((Trabalha) this.criarObjetoTemplate());
         
         return output;
     }
@@ -116,7 +116,7 @@ public class TrabalhaDAO implements IObjectDAO{
             this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
@@ -132,7 +132,7 @@ public class TrabalhaDAO implements IObjectDAO{
             this.ps.setInt(1,aux);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -146,7 +146,7 @@ public class TrabalhaDAO implements IObjectDAO{
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
             this.rs = this.ps.executeQuery();
             
-            return this.getAllTemplate();
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GETALL] o objeto:  " + e.toString() );
@@ -168,7 +168,7 @@ public class TrabalhaDAO implements IObjectDAO{
         }
     }
     
-    public float getHours() throws SQLException{
+    public float somarHoras() throws SQLException{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_COUNTHOURS);
             this.rs = this.ps.executeQuery();
@@ -180,7 +180,7 @@ public class TrabalhaDAO implements IObjectDAO{
         }
     }
     
-    public float getHours(String ssn) throws SQLException{
+    public float somarHorasEmpregado(String ssn) throws SQLException{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_COUNTHOURSEMP);
             this.ps.setString(1,ssn);
@@ -193,9 +193,9 @@ public class TrabalhaDAO implements IObjectDAO{
         }
     }
     
-    public int getCount() throws SQLException{
+    public int buscarQuantidadeEmpregados() throws SQLException{
         try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_COUNTEMP);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_PROJECTBYEMP);
             this.rs = this.ps.executeQuery();
             
             return this.rs.getInt(1);
@@ -205,9 +205,9 @@ public class TrabalhaDAO implements IObjectDAO{
         }
     }
     
-    public int getCount(String ssn) throws SQLException{
+    public int buscarProjetoEmpregado(String ssn) throws SQLException{
         try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_PROJECTBYEMP);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_COUNTEMP);
             this.ps.setString(1,ssn);
             this.rs = this.ps.executeQuery();
             
