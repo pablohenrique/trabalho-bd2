@@ -26,7 +26,8 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
     private final String SQL_LOGIN = " SELECT cia.login(?,?); ";
     private final String SQL_GET = BEFORECOND + " FROM ((cia.empregado AS e LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) LEFT JOIN cia.departamento AS d ON e.dno = d.numero) WHERE  e.ssn=?;";
-    private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE UPPER('%'|| ? ||'%') AND e.superssn = s.ssn AND e.dno = d.numero;";
+    //private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE UPPER('%'|| ? ||'%') AND e.superssn = s.ssn AND e.dno = d.numero;";
+    private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE UPPER(?) AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_READ_SUPERSSN = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.superssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN cia.departamento AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) ORDER BY e.nome ASC;";
     private final String SQL_COUNTEMP = "SELECT COUNT(ssn) FROM empregado;";
@@ -149,7 +150,7 @@ public class EmpregadoDAO implements IObjectDAO{
             this.rs = this.ps.executeQuery();
             
             if(!this.rs.next())
-                throw new Exception("Departamento nao encontrado.");
+                throw new Exception("Empregado nao encontrado.");
             
             return this.criarObjetoTemplate("e_");
             
@@ -161,16 +162,15 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public Object read(Object input) {
         try {
-            String aux = "'%"+(String) input+"%'";
-            
+            String aux = "'%" + (String) input + "%'";
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            this.ps.setString(1,(String) input);
+            this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
             
-            if(!this.rs.next())
-                throw new Exception("Departamento nao encontrado.");
-            
-            return this.buscarVariosObjetosTemplate();
+            if(this.rs.isLast())
+                return this.criarObjetoTemplate("e_");
+            else
+                return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
