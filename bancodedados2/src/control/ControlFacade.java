@@ -136,6 +136,16 @@ public class ControlFacade {
         return empregadoControl.buscarEmpregadoSexo(sexo);
     }
     
+    /**
+     * 
+     * @param numero
+     * @return  Vector<Empregado> 
+     * dado projeto retorna empregados
+     */
+    public Vector<Empregado> buscarEmpregadoProjeto(int numero){
+        return empregadoControl.buscarEmpregadoProjeto(numero);
+    }
+    
     public String[][] getEmpregadosTable(Vector<Empregado> list)
     {
         String[][] dados = new String[list.size()][];  
