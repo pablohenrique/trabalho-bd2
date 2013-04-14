@@ -79,7 +79,7 @@ public class EmpregadoDAO implements IObjectDAO{
     
     private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
         ArrayList<Object> output = new ArrayList<>();
-        while(rs.next())
+        while(this.rs.next())
             output.add((Empregado) this.criarObjetoTemplate("e_"));
         return output;
     }
@@ -278,6 +278,37 @@ public class EmpregadoDAO implements IObjectDAO{
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public ArrayList<Object> getAllSimple() throws SQLException{
+        try {
+            String column = "e_";
+            ArrayList<Object> output = new ArrayList<>();
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
+            this.rs = this.ps.executeQuery();
+            
+            while(this.rs.next()){
+                Empregado emp = new Empregado();
+                emp.setSsn(this.rs.getString(column+"ssn"));
+                emp.setNome(this.rs.getString(column+"nome"));
+                emp.setSexo(this.rs.getString(column+"sexo"));
+                emp.setEndereco(this.rs.getString(column+"endereco"));
+                emp.setSalario(this.rs.getFloat(column+"salario"));
+                emp.setDataNascimento(this.rs.getDate(column+"datanasc"));
+                emp.setSenha(this.rs.getString(column+"senha"));
+
+                emp.setDepartamento(null);
+                emp.setSuperSsn(null);
+                output.add(emp);
+            }
+            
+            System.gc();
+            return output;
+            
+        } catch (Exception e) {
+            System.err.println("Erro [EMPR] useObjectTemplate:  " + e.toString() );
             return null;
         }
     }
