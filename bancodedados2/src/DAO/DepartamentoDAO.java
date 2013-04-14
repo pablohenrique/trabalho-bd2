@@ -60,25 +60,6 @@ public class DepartamentoDAO implements IObjectDAO{
             return null;
         }
     }
-    /*
-    public ArrayList<Object> criarObjetoSimples(){
-        try {
-            String column = "d_";
-            Departamento output = new Departamento();
-            output.setNumero(this.rs.getInt(column+"numero"));
-            output.setNome(this.rs.getString(column+"nome"));
-            output.setGerenteDataInicio(this.rs.getDate(column+"dataInicio"));
-            Empregado emp = 
-            output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("e_superssn")));
-            System.gc();
-            return output;
-            
-        } catch (Exception e) {
-            System.err.println("Erro [DEPA] useObjectTemplate:  " + e.toString() );
-            return null;
-        }
-    }
-    */
     
     public Object gerarObjeto(int numero, String nome, Date gerenteInicio, Empregado gerente){
         Departamento dep = new Departamento();
