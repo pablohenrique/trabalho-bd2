@@ -496,19 +496,19 @@ public class ControlFacade {
 
         return dados; 
     }
-    
+
     public String[][] getProjetosTable(Vector<Projeto> list) {                
         String[][] dados = new String[list.size()][];  
                         
         for(int i=0; i<list.size(); i++){             
             Projeto p = list.get(i);
             Departamento d = list.get(i).getDepartamento();
-            Empregado e = d.getGerenteSsn();
-            dados[i] = new String[] {p.getNome(), String.valueOf(p.getNumero()), p.getLocalizacao(), d.getNome(), String.valueOf(d.getNumero()), e.getNome(), e.getSsn()}; 
+            dados[i] = new String[] {p.getNome(), String.valueOf(p.getNumero()), p.getLocalizacao(), d.getNome(), String.valueOf(d.getNumero())}; 
         }
 
         return dados;                 
-    }    
+    } 
+    
     /**
      * 
      * @param nome
