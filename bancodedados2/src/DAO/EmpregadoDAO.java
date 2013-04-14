@@ -162,7 +162,7 @@ public class EmpregadoDAO implements IObjectDAO{
     @Override
     public Object read(Object input) {
         try {
-            String aux = "'%" + (String) input + "%'";
+            String aux = "%" + (String) input + "%";
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
