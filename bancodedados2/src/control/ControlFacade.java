@@ -105,11 +105,6 @@ public class ControlFacade {
     public Vector<Empregado> listarEmpregados() throws Exception
     {
        return empregadoControl.getAll();
-    }    
-    
-    
-    public Vector<Empregado> listarEmpregadosSimples() throws SQLException{
-        return empregadoControl.getAllSimple();
     }
     
     /**

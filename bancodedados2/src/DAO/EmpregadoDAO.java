@@ -164,7 +164,7 @@ public class EmpregadoDAO implements IObjectDAO{
             String aux = "'%"+(String) input+"%'";
             
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            this.ps.setString(1,aux);
+            this.ps.setString(1,(String) input);
             this.rs = this.ps.executeQuery();
             
             if(!this.rs.next())

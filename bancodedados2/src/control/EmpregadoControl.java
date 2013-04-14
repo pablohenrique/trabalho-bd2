@@ -126,19 +126,4 @@ public class EmpregadoControl
         return empregados;
 
     }
-    
-    public Vector<Empregado> getAllSimple() throws SQLException{
-        Vector<Empregado> empregados = new Vector<Empregado>();
-        
-        for (Object aux : (ArrayList<Object>) this.dao.getAllSimple())
-            empregados.add((Empregado) aux);
-        
-        return empregados;
-       
-        
-    }
-    
-    
-    
-
 }
