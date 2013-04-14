@@ -22,8 +22,9 @@ public class TrabalhaDAO implements IObjectDAO{
 " FROM cia.trabalha_em AS t, cia.empregado AS e, cia.projeto AS p, cia.departamento AS d";
     
     private final String SQL_POST = "INSERT INTO trabalha_em VALUES(?,?,?);";
-    private final String SQL_UPDATE = "UPDATE trabalha_em SET pnumero = ?, horas = ? WHERE essn = ?;";
+    private final String SQL_UPDATERIGHT = "UPDATE trabalha_em SET horas = ? WHERE essn = ? AND pnumero = ?;";
     private final String SQL_DELETE = "DELETE FROM trabalha_em WHERE essn = ?;";
+    private final String SQL_DELETERIGHT = "DELETE FROM trabalha_em WHERE essn = ? AND pnumero = ?;";
     private final String SQL_GET = BEFORECOND + " WHERE t.essn = ? AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
     private final String SQL_READ = BEFORECOND + " WHERE t.pjnumero = ?  AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " WHERE t.essn = e.ssn" + " AND t.pjnumero = p.pnumero" + " AND p.dnum = d.numero;";
@@ -91,12 +92,12 @@ public class TrabalhaDAO implements IObjectDAO{
     @Override
     public void update(Object input) {
         try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATERIGHT);
             
             Trabalha aux = (Trabalha) input;
-            this.ps.setInt(1,aux.getProjeto().getNumero());
-            this.ps.setFloat(2,aux.getHoras());
-            this.ps.setString(3,aux.getEssn().getSsn());
+            this.ps.setFloat(1,aux.getHoras());
+            this.ps.setString(2,aux.getEssn().getSsn());
+            this.ps.setInt(3,aux.getProjeto().getNumero());
             
             System.gc();
             
@@ -159,6 +160,20 @@ public class TrabalhaDAO implements IObjectDAO{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
             this.ps.setString(1,(String) input);
+            
+            if(this.ps.executeUpdate() == 0)
+                throw new SQLException("Objeto nao foi deletado.");
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao deletar objeto:  " + e.toString() );
+        }
+    }
+    
+    public void deletarEmpregadoProjeto(String ssn, int numero){
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETERIGHT);
+            this.ps.setString(1, ssn);
+            this.ps.setInt(2, numero);
             
             if(this.ps.executeUpdate() == 0)
                 throw new SQLException("Objeto nao foi deletado.");
