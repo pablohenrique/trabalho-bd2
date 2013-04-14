@@ -48,7 +48,7 @@ public class DependenteControl  {
     
     public void delete(String essn, String nomedependente) throws Exception{
         DependenteDAO dependentedao = new DependenteDAO();
-        dependentedao.deleteDep(essn, nomedependente);
+     //   dependentedao.deleteDep(essn, nomedependente);
     }
     
     public Vector<Dependente> getAll() throws Exception{
@@ -70,12 +70,12 @@ public class DependenteControl  {
     } 
     
     public Dependente SearchByEssnNome(String essn, String nome) throws Exception{
-        return (Dependente) this.dao.getDependente(essn, nome);
+        return (Dependente) this.dao.buscarDependente(essn, nome);
     }
     
     public Vector<Dependente> SearchByEssnNomeVector(String essn, String nome){
         Vector<Dependente> dependente = new Vector<Dependente>();
-        dependente.add((Dependente) this.dao.getDependente(essn, nome));
+        dependente.add((Dependente) this.dao.buscarDependente(essn, nome));
         return dependente;
     }
     

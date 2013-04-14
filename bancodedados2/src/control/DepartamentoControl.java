@@ -70,7 +70,7 @@ public class DepartamentoControl
     public Vector<Departamento> getByGer(String gerssn) throws Exception {
          Vector<Departamento> departamento = new Vector<Departamento>();
          
-         for(Object aux : (ArrayList<Object>)  this.dao.getGer(gerssn))
+         for(Object aux : (ArrayList<Object>)  this.dao.buscarGerente(gerssn))
              departamento.add((Departamento) aux);
          
          return departamento;
@@ -94,5 +94,7 @@ public class DepartamentoControl
         
         return departamento;
     }  
+    
+
     
 }

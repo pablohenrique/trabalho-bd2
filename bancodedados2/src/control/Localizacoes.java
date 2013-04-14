@@ -58,7 +58,7 @@ public class Localizacoes {
     public Vector<Localizacao>  getAllByDep(int depid) throws Exception {
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         
-        for(Object aux : this.dao.getAllByDept(depid))
+        for(Object aux : this.dao.buscarDepartamentos(depid))
             localizacao.add((Localizacao) aux);
         
         return localizacao;

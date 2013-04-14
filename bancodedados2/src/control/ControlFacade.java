@@ -11,6 +11,7 @@ import Model.Empregado;
 import Model.Projeto;
 import Model.Trabalha;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Vector;
 
 
@@ -109,7 +110,27 @@ public class ControlFacade {
      */
     public void apagarEmpregado(String ssn) throws Exception{
         empregadoControl.delete(ssn);
-    }    
+    } 
+    
+    /**
+     * 
+     * @param dataNasc
+     * @return Vector<Empregado> 
+     * retorna empregados com nascimento informado
+     */
+    public Vector<Empregado> buscarEmpregadoNascimento(String dataNasc){
+        return empregadoControl.buscarEmpregadoNascimento(dataNasc);
+    }
+    
+    /**
+     * 
+     * @param sexo
+     * @return Vector<Empregado> 
+     * retorna empregado com sexo informado
+     */
+    public Vector<Empregado> buscarEmpregadoSexo(String sexo){
+        return empregadoControl.buscarEmpregadoSexo(sexo);
+    }
     
     public String[][] getEmpregadosTable(Vector<Empregado> list)
     {
@@ -636,6 +657,46 @@ public class ControlFacade {
      public void deletaTrabalha(String ssn) throws Exception{
          trabalhaControl.delete(ssn);
      }  
+     
+     /**
+      * 
+      * @return float
+      * @throws SQLException 
+      */
+     public float somarHoras() throws SQLException{
+         return trabalhaControl.somarHoras();
+     }
+     
+     /**
+      * 
+      * @param ssn
+      * @return float
+      * @throws SQLException 
+      */
+     public float somarHorasEmpregado(String ssn) throws SQLException{
+         return trabalhaControl.somarHorasEmpregado(ssn);
+     }
+     
+     /**
+      * 
+      * @return int
+      * @throws SQLException 
+      */
+     public int buscarQuantidadeEmpregados() throws SQLException{
+         return trabalhaControl.buscarQuantidadeEmpregados();
+     }
+     
+     /**
+      * 
+      * @param ssn
+      * @return int
+      * @throws SQLException 
+      */
+     public int buscarProjetoEmpregado(String ssn) throws SQLException{
+         return trabalhaControl.buscarProjetoEmpregado(ssn);
+     }
+     
+     
      
      /**
       * Fachada para funcoes de controle

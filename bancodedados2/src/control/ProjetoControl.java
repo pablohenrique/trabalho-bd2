@@ -72,7 +72,7 @@ public class ProjetoControl  {
     public Vector<Projeto> getAllByDepNome(String nomeDepto)  throws Exception{
         Vector<Projeto> projeto = new Vector<Projeto>();
 
-        for(Object aux : this.dao.getAllDep(nomeDepto))
+        for(Object aux : this.dao.buscarNomeDepartamento(nomeDepto))
             projeto.add((Projeto) aux);
 
         return projeto;
@@ -81,7 +81,7 @@ public class ProjetoControl  {
     public Vector<Projeto> getAllByDepNumero(int depnumero)  throws Exception{
         Vector<Projeto> projeto = new Vector<Projeto>();
 
-        for(Object aux : this.dao.getAllDep(depnumero))
+        for(Object aux : this.dao.buscarNumeroDepartamento(depnumero))
             projeto.add((Projeto) aux);
 
         return projeto;
@@ -90,7 +90,7 @@ public class ProjetoControl  {
     public Vector<Projeto> getAllByEmp(String ssn) throws Exception {
         Vector<Projeto> projeto = new Vector<Projeto>();
          
-        for(Object aux : this.dao.getAllEmp(ssn))
+        for(Object aux : this.dao.buscarEmpregado(ssn))
             projeto.add((Projeto) aux);
         
         return projeto;
@@ -99,7 +99,7 @@ public class ProjetoControl  {
     public Vector<Projeto> SearchByName(String input) throws Exception {
         Vector<Projeto> projeto = new Vector<Projeto>();
         
-        for(Object aux : (ArrayList<Object>) this.dao.getAllDep(input))
+        for(Object aux : (ArrayList<Object>) this.dao.read(input))
             projeto.add((Projeto) aux);
 
         return projeto;

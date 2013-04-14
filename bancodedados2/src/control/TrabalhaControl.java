@@ -6,11 +6,11 @@ package control;
 
 
 import DAO.FactoryDAO;
-import DAO.IObjectDAO;
 import DAO.TrabalhaDAO;
 import Model.Empregado;
 import Model.Projeto;
 import Model.Trabalha;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -80,6 +80,23 @@ public class TrabalhaControl {
         
         return trabalha;
     }
+
+    public float somarHoras() throws SQLException {
+        return this.dao.somarHoras();
+    }
+    
+    public float somarHorasEmpregado(String ssn) throws SQLException{
+        return this.dao.somarHorasEmpregado(ssn);
+    }
+    
+    public int buscarQuantidadeEmpregados() throws SQLException{
+        return this.dao.buscarQuantidadeEmpregados();
+    }
+    
+    public int buscarProjetoEmpregado(String ssn) throws SQLException{
+        return this.dao.buscarProjetoEmpregado(ssn);
+    }
+    
 
 
 
