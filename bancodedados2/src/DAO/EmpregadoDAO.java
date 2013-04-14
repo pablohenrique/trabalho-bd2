@@ -31,8 +31,8 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_READ_SUPERSSN = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.superssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN cia.departamento AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) ORDER BY e.nome ASC;";
     private final String SQL_COUNTEMP = "SELECT COUNT(ssn) FROM empregado;";
-    private final String SQL_GETBIRTH = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.datanasc = ?";
-    private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?)";
+    private final String SQL_GETADDRESS = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.endereco LIKE UPPER(?)";
+    private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
     
     private PreparedStatement ps;
     private ResultSet rs;
@@ -254,13 +254,17 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public ArrayList<Object> buscarEmpregadoNascimento(Date datanasc) {
+    public Object buscarEmpregadoEndereco(String endereco) {
         try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETBIRTH);
-            this.ps.setDate(1,datanasc);
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETADDRESS);
+            String aux = "%" + endereco + "%";
+            this.ps.setString(1,aux);
             this.rs = this.ps.executeQuery();
             
-            return this.buscarVariosObjetosTemplate();
+            if(this.rs.isLast())
+                return this.criarObjetoTemplate("e_");
+            else
+                return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
