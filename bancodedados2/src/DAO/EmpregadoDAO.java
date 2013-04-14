@@ -26,7 +26,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
     private final String SQL_LOGIN = " SELECT cia.login(?,?); ";
     private final String SQL_GET = BEFORECOND + " FROM ((cia.empregado AS e LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) LEFT JOIN cia.departamento AS d ON e.dno = d.numero) WHERE  e.ssn=?;";
-    private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.empregado AS s WHERE e.nome LIKE ? AND e.superssn = s.ssn AND e.dno = d.numero;";
+    private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE UPPER('%'|| ? ||'%') AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_READ_SUPERSSN = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.superssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN cia.departamento AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) ORDER BY e.nome ASC;";
     private final String SQL_COUNTEMP = "SELECT COUNT(ssn) FROM empregado;";
@@ -282,34 +282,4 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public ArrayList<Object> getAllSimple() throws SQLException{
-        try {
-            String column = "e_";
-            ArrayList<Object> output = new ArrayList<>();
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            this.rs = this.ps.executeQuery();
-            
-            while(this.rs.next()){
-                Empregado emp = new Empregado();
-                emp.setSsn(this.rs.getString(column+"ssn"));
-                emp.setNome(this.rs.getString(column+"nome"));
-                emp.setSexo(this.rs.getString(column+"sexo"));
-                emp.setEndereco(this.rs.getString(column+"endereco"));
-                emp.setSalario(this.rs.getFloat(column+"salario"));
-                emp.setDataNascimento(this.rs.getDate(column+"datanasc"));
-                emp.setSenha(this.rs.getString(column+"senha"));
-
-                emp.setDepartamento(null);
-                emp.setSuperSsn(null);
-                output.add(emp);
-            }
-            
-            System.gc();
-            return output;
-            
-        } catch (Exception e) {
-            System.err.println("Erro [EMPR] useObjectTemplate:  " + e.toString() );
-            return null;
-        }
-    }
 }
