@@ -50,11 +50,11 @@ public class ProjetoDAO implements IObjectDAO{
             EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
             DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
             
-            Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));            
-            output.setDepartamento(dep);
+            //Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));            
+            output.setDepartamento( (Departamento) depdao.gerarObjeto(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getDate("d_gerdatainicio"), null) );
             
-            Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
-            empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
+            //Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
+            empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), null, null);
             
             System.gc();
             return output;

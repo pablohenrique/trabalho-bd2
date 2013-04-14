@@ -34,6 +34,7 @@ public class DepartamentoDAO implements IObjectDAO{
     private final String SQL_READ = BEFORECOND + " WHERE d.nome = ? AND d.gerssn = e.ssn;";
     private final String SQL_GETGER = BEFORECOND3 + " WHERE d.gerssn = ? AND d.gerssn = e.ssn;";
     private final String SQL_GETALL = BEFORECOND3 + " WHERE d.gerssn = e.ssn;";
+    private final String SQL_EDITAR = "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio FROM departamento;";
     
     private PreparedStatement ps;
     private ResultSet rs;
@@ -45,6 +46,29 @@ public class DepartamentoDAO implements IObjectDAO{
             output.setNumero(this.rs.getInt(column+"numero"));
             output.setNome(this.rs.getString(column+"nome"));
             output.setGerenteDataInicio(this.rs.getDate(column+"dataInicio"));
+            
+            EmpregadoDAO dao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
+            Empregado emp = (Empregado) dao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), null, null);
+            
+            //output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("e_superssn")));
+            output.setGerenteSsn(emp);
+            System.gc();
+            return output;
+            
+        } catch (Exception e) {
+            System.err.println("Erro [DEPA] useObjectTemplate:  " + e.toString() );
+            return null;
+        }
+    }
+    /*
+    public ArrayList<Object> criarObjetoSimples(){
+        try {
+            String column = "d_";
+            Departamento output = new Departamento();
+            output.setNumero(this.rs.getInt(column+"numero"));
+            output.setNome(this.rs.getString(column+"nome"));
+            output.setGerenteDataInicio(this.rs.getDate(column+"dataInicio"));
+            Empregado emp = 
             output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("e_superssn")));
             System.gc();
             return output;
@@ -54,6 +78,7 @@ public class DepartamentoDAO implements IObjectDAO{
             return null;
         }
     }
+    */
     
     public Object gerarObjeto(int numero, String nome, Date gerenteInicio, Empregado gerente){
         Departamento dep = new Departamento();
@@ -184,6 +209,25 @@ public class DepartamentoDAO implements IObjectDAO{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
             this.ps.setString(1,gerssn);
+            ArrayList<Object> output = new ArrayList<>();
+            
+            this.rs = this.ps.executeQuery();
+            while(this.rs.next())
+                output.add((Departamento) this.criarObjetoTemplate());
+            
+            if(output.isEmpty())
+                throw new ArrayStoreException("Nao houve objetos encontrados.");
+            
+            return output;                
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public ArrayList<Object> buscarEmpregados(){
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_EDITAR);
             ArrayList<Object> output = new ArrayList<>();
             
             this.rs = this.ps.executeQuery();
