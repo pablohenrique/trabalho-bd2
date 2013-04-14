@@ -254,9 +254,10 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public ArrayList<Object> buscarEmpregadoNascimento() {
+    public ArrayList<Object> buscarEmpregadoNascimento(Date datanasc) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETBIRTH);
+            this.ps.setDate(1,datanasc);
             this.rs = this.ps.executeQuery();
             
             return this.buscarVariosObjetosTemplate();
@@ -267,9 +268,10 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public ArrayList<Object> buscarEmpregadoSexo() {
+    public ArrayList<Object> buscarEmpregadoSexo(String sexo) {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGENDER);
+            this.ps.setString(1,sexo);
             this.rs = this.ps.executeQuery();
             
             return this.buscarVariosObjetosTemplate();
