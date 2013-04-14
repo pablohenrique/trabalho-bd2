@@ -28,8 +28,8 @@ public class TrabalhaControl {
     
     private Trabalha createObjectTemplate(String ssn, int projetonumero, float horas) throws Exception{
         Trabalha trabalha = new Trabalha();
-        trabalha.setEssn((Empregado) FactoryDAO.getFactory("Empregado").read(ssn));
-        trabalha.setProjeto((Projeto) FactoryDAO.getFactory("Projeto").read(projetonumero));
+        trabalha.setEssn((Empregado) FactoryDAO.getFactory("Empregado").get(ssn));
+        trabalha.setProjeto((Projeto) FactoryDAO.getFactory("Projeto").get(projetonumero));
         trabalha.setHoras(horas);
         return trabalha;
     }
@@ -44,8 +44,6 @@ public class TrabalhaControl {
 
 
     public void update(String ssn, int projetonumero, float horas) throws Exception {
-        FuncoesControle f = new FuncoesControle();
-
         this.dao.update(this.createObjectTemplate(ssn, projetonumero, horas));
         
     }
