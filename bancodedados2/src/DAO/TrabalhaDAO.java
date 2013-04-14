@@ -21,17 +21,17 @@ public class TrabalhaDAO implements IObjectDAO{
 " d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_gerdatainicio"+
 " FROM cia.trabalha_em AS t, cia.empregado AS e, cia.projeto AS p, cia.departamento AS d";
     
-    private final String SQL_POST = "INSERT INTO trabalha_em VALUES(?,?,?);";
-    private final String SQL_UPDATERIGHT = "UPDATE trabalha_em SET horas = ? WHERE essn = ? AND pnumero = ?;";
-    private final String SQL_DELETE = "DELETE FROM trabalha_em WHERE essn = ?;";
-    private final String SQL_DELETERIGHT = "DELETE FROM trabalha_em WHERE essn = ? AND pnumero = ?;";
+    private final String SQL_POST = "INSERT INTO cia.trabalha_em VALUES(?,?,?);";
+    private final String SQL_UPDATERIGHT = "UPDATE cia.trabalha_em SET horas = ? WHERE essn = ? AND pnumero = ?;";
+    private final String SQL_DELETE = "DELETE FROM cia.trabalha_em WHERE essn = ?;";
+    private final String SQL_DELETERIGHT = "DELETE FROM cia.trabalha_em WHERE essn = ? AND pnumero = ?;";
     private final String SQL_GET = BEFORECOND + " WHERE t.essn = ? AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
     private final String SQL_READ = BEFORECOND + " WHERE t.pjnumero = ?  AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " WHERE t.essn = e.ssn" + " AND t.pjnumero = p.pnumero" + " AND p.dnum = d.numero;";
-    private final String SQL_COUNTHOURS = "SELECT SUM(horas) FROM trabalha_em;";
-    private final String SQL_COUNTHOURSEMP = "SELECT SUM(horas) FROM trabalha_em WHERE essn = ?;";
-    private final String SQL_COUNTEMP = "SELECT COUNT( DISTINCT(essn) ) FROM trabalha_em;";
-    private final String SQL_PROJECTBYEMP = "SELECT COUNT(*) FROM trabalha_em WHERE essn = ?;";
+    private final String SQL_COUNTHOURS = "SELECT SUM(horas) FROM cia.trabalha_em;";
+    private final String SQL_COUNTHOURSEMP = "SELECT SUM(horas) FROM cia.trabalha_em WHERE essn = ?;";
+    private final String SQL_COUNTEMP = "SELECT COUNT( DISTINCT(essn) ) FROM cia.trabalha_em;";
+    private final String SQL_PROJECTBYEMP = "SELECT COUNT(*) FROM cia.trabalha_em WHERE essn = ?;";
     private PreparedStatement ps;
     private ResultSet rs;
     
