@@ -33,6 +33,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_COUNTEMP = "SELECT COUNT(ssn) FROM empregado;";
     private final String SQL_GETADDRESS = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.endereco LIKE UPPER(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
     private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
+    private final String SQL_GETPROJECT = BEFORECOND + " FROM trabalha_em as t, empregado as e, empregado as s, departamento as d WHERE t.pjnumero = ? AND t.essn = e.ssn AND e.superssn = s.ssn and e.dno = d.numero;";
     
     private PreparedStatement ps;
     private ResultSet rs;
@@ -276,6 +277,20 @@ public class EmpregadoDAO implements IObjectDAO{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGENDER);
             this.ps.setString(1,sexo);
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public ArrayList<Object> buscarEmpregadoProjeto(int numero) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETPROJECT);
+            this.ps.setInt(1,numero);
             this.rs = this.ps.executeQuery();
             
             return this.buscarVariosObjetosTemplate();
