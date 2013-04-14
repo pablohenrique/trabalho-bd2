@@ -65,6 +65,15 @@ public class EmpregadoControl
     public Empregado getById(String input) throws Exception{
         return (Empregado) this.dao.get(input);
     }
+    
+    public Vector<Empregado> getByIdVector(String input) throws Exception{
+        Vector<Empregado> empregados = new Vector<Empregado>();
+        empregados.add((Empregado) this.dao.get(input));
+        return empregados;
+        
+    }
+    
+    
   
     public Vector<Empregado> getAll() throws Exception {
         Vector<Empregado> empregados = new Vector<Empregado>();
