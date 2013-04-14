@@ -25,12 +25,12 @@ import view.panel.PainelProjetos;
 public class FormProjetos extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
-    private static JTextField nome;
-    private static JTextField localizacao; 
-    private static JComboBox departamento;    
+    private JTextField nome;
+    private JTextField localizacao; 
+    private JComboBox departamento;    
     
-    private static JButton btnOK;
-    private static JButton btnCancelar;
+    private JButton btnOK;
+    private JButton btnCancelar;
     private Projeto pEdit = null;
     
     public FormProjetos(Projeto p)
@@ -46,14 +46,11 @@ public class FormProjetos extends JDialog implements ActionListener
             departamento = new JComboBox();  
         }
         
-        if (pEdit != null)
-        {
-            try
-            {
+        if (pEdit != null){
+            try{
                 this.editar(pEdit);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex){
                  JOptionPane.showMessageDialog(this,"Erro Projetos: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
             }
         }
@@ -107,7 +104,7 @@ public class FormProjetos extends JDialog implements ActionListener
             return;
         }
         pEdit = p;
-        
+        departamento.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosDapartamentos")));
         nome.setText(p.getNome());
         localizacao.setText(p.getLocalizacao());
         departamento.setSelectedIndex(this.selecionarComboBoxDep(p.getDepartamento().getNumero(), departamento));                
@@ -135,12 +132,9 @@ public class FormProjetos extends JDialog implements ActionListener
     {
         Object origem = e.getSource();
 
-        if(origem == btnOK)
-        {
-            if(pEdit == null)//inserir novo elemento
-            {
-                try
-                {
+        if(origem == btnOK){
+            if(pEdit == null){
+                try{
                     Departamento d = (Departamento) departamento.getSelectedItem();                      
                     System.out.println(nome.getText()+ " - "+ localizacao.getText()+ " - "+ d.getNumero());
                     Principal.cf.inserirProjeto(nome.getText(), localizacao.getText(), d.getNumero());
@@ -149,16 +143,12 @@ public class FormProjetos extends JDialog implements ActionListener
                     PainelProjetos.setDataTable();
                     this.dispose();
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }
                 
-            }
-            else
-            {
-                try
-                {
+            } else{
+                try {
                     Departamento d = (Departamento) departamento.getSelectedItem();                      
 
                     Principal.cf.atualizarProjeto(pEdit.getNumero(), nome.getText(), localizacao.getText(), d.getNumero());
@@ -167,17 +157,14 @@ public class FormProjetos extends JDialog implements ActionListener
                     PainelProjetos.setDataTable();
                     this.dispose();
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex) {
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }                
             }
         }
 
         if (origem == btnCancelar)
-        {
-                this.dispose();
-        } 
+            this.dispose();
     }
 
 }

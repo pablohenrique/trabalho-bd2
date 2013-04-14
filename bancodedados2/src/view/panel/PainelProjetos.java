@@ -161,11 +161,11 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     public void actionPerformed(ActionEvent e){
         Object origem = e.getSource();	
         int item = tabela.getSelectedRow();
-        String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));                
         
         if (origem == novo)
                 formProjeto(null);
         else if (origem == editar && (item != -1)){           
+                //String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));                
                 formProjeto(dadosLista(item));        
         } else if (origem == excluir  && (item != -1)) {
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
@@ -190,9 +190,9 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             String[][] dados = null;
 
             try {   
-                if(comboBusca.getSelectedIndex() == 0)//busca nome
+                if(comboBusca.getSelectedIndex() == 0 && !txtBusca.getText().equals(""))//busca nome
                     dados = Principal.cf.getProjetosTable(Principal.cf.buscaProjetosByNome(txtBusca.getText()));
-                else if(comboBusca.getSelectedIndex() == 1)//busca numero
+                else if(comboBusca.getSelectedIndex() == 1 && !txtBusca.getText().equals(""))//busca numero
                     dados = Principal.cf.getProjetosTable(Principal.cf.getProjetoByNumeroVector(Integer.parseInt(txtBusca.getText())));
                 else
                     dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());

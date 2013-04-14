@@ -48,22 +48,19 @@ public class FormDependente extends JDialog implements ActionListener
         dep_edit = dep;
         nome = new JTextField();
         dataNasc = new JFormattedTextField();                
-        try
-        {
+        
+        try{
             dataNasc.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));  
         }
-        catch (ParseException ex)
-        {
-            Logger.getLogger(FormDependente.class.getName()).log(Level.SEVERE, null, ex);
+        catch (ParseException ex){
             System.out.println("Erro mascara! " + ex);
-        }
+        }        
         
-        
-        sexo = new JComboBox<String>();
+        sexo = new JComboBox<>();
         sexo.addItem("Masculino");
         sexo.addItem("Feminino");
         
-        parentesco = new JComboBox<String>();
+        parentesco = new JComboBox<>();
         parentesco.addItem("Filho(a)");
         parentesco.addItem("Conjugue");
         parentesco.addItem("Nao sei");
@@ -74,15 +71,12 @@ public class FormDependente extends JDialog implements ActionListener
             empregado = new JComboBox();
         }
         
-        if (dep != null)
-        {
-            try
-            {
+        if (dep != null){
+            try{
               this.setEnable(true);
               this.editar(dep);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex){
                  JOptionPane.showMessageDialog(this,"Erro Dependente: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
             }
         } else
@@ -142,6 +136,7 @@ public class FormDependente extends JDialog implements ActionListener
             this.cleanDependente();
             return;
         }
+        empregado.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosEmpregados")));
         dep_edit = d;
         
         nome.setText(d.getNome());
@@ -199,10 +194,8 @@ public class FormDependente extends JDialog implements ActionListener
         if(origem == empregado)
             this.setEnable(true);
         
-        if(origem == btnOK)
-        {
-            if(dep_edit == null)//inserir novo elemento
-            {
+        if(origem == btnOK){
+            if(dep_edit == null){
                 try
                 {
                     Empregado emp = (Empregado) empregado.getSelectedItem();
@@ -213,8 +206,7 @@ public class FormDependente extends JDialog implements ActionListener
                     PainelDependentes.setDataTable();
                     this.dispose();
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }
                 
@@ -231,8 +223,7 @@ public class FormDependente extends JDialog implements ActionListener
                     PainelDependentes.setDataTable();
                     this.dispose();
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }                    
             }
@@ -240,8 +231,6 @@ public class FormDependente extends JDialog implements ActionListener
         }
 
         if (origem == btnCancelar)
-        {
                 this.dispose();
-        } 
     }
 }

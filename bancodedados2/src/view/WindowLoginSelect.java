@@ -86,8 +86,8 @@ public final class WindowLoginSelect extends JFrame implements ActionListener
             select.addItem("Funcionario");        
             select.addItem("Gerente");            
         } else if (nivel == 3) {//supervisor, gerente e funcionario
-            select.addItem("Funcionario");        
             select.addItem("Supervisor");                         
+            select.addItem("Funcionario");                    
             select.addItem("Gerente");                        
         }            
     }
@@ -119,7 +119,5 @@ public final class WindowLoginSelect extends JFrame implements ActionListener
 
         if(e.getSource() == btnSair)
             System.exit(0);
-    }
-    
-
+    }   
 }

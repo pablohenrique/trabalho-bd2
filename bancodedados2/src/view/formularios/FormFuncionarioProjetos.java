@@ -36,8 +36,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     private JLabel dep = new JLabel();
     private JLabel sssn = new JLabel();
     
-    public FormFuncionarioProjetos(Empregado e)
-    {
+    public FormFuncionarioProjetos(Empregado e){
         super(Principal.janela,"Todos Projetos do Empregado", true);
         
         btnOK.setPreferredSize(new Dimension(100, 25));             
@@ -111,8 +110,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
  
         
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e){
         if (e.getSource() == btnOK)
                 this.dispose();
     }

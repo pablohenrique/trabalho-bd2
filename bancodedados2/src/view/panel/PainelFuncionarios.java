@@ -265,38 +265,4 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
             formProjetos.setVisible(true);
         }
     }
-        
-    public Empregado dadosListar(int item){        
-        String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome"));
-        String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-        String sexo = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Sexo"));
-        String end = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Endereco"));
-        String salario = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Salario"));
-        String data = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Data de Nascimento"));
-        String dep = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Departamento"));
-        String dno = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Dno"));
-        String superNome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Supervisor"));
-        String sssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("SuperSnn"));
-        
-        
-        Empregado em = new Empregado();
-        em.setSsn(ssn);
-        em.setNome(nome);
-        em.setSexo(sexo);
-        em.setEndereco(end);
-        em.setSalario(salario);
-        em.setDataNascimento(Principal.cf.coverteStringData(data));
-        
-        Departamento d = new Departamento();
-        d.setNome(nome);
-        d.setNumero(Integer.parseInt(dno));
-        
-        Empregado s = new Empregado();
-        s.setSsn(sssn);
-        s.setNome(superNome);
-        
-        em.setSuperSsn(s);
-        
-        return em;
-    }
 }

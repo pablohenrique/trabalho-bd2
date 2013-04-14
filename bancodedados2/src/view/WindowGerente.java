@@ -232,17 +232,17 @@ public class WindowGerente extends JFrame implements ActionListener {
         else if (origem == menuInit)
             WindowGerente.card.show(WindowGerente.painelCentral, "inicio");		
         else if (origem == btnFunc || origem == menuFuncionariosListar){
-                painelCentral.add(painel_funcionarios(), "funcionario");                                                                            
-                WindowGerente.card.show(WindowGerente.painelCentral, "funcionario");
+            painelCentral.add(painel_funcionarios(), "funcionario");                                                                            
+            WindowGerente.card.show(WindowGerente.painelCentral, "funcionario");
         } else if (origem == btnDep || origem == menuDependentesListar){
-                painelCentral.add(painel_dependentes(), "dependente");                                 
-                WindowGerente.card.show(WindowGerente.painelCentral, "dependente");
+            painelCentral.add(painel_dependentes(), "dependente");                                 
+            WindowGerente.card.show(WindowGerente.painelCentral, "dependente");
         } else if( origem == btnDepartamentos || origem == menuDepartamentoListar){
-                painelCentral.add(painel_departamento(), "departamento");                
-                WindowGerente.card.show(WindowGerente.painelCentral, "departamento");
+            painelCentral.add(painel_departamento(), "departamento");                
+            WindowGerente.card.show(WindowGerente.painelCentral, "departamento");
         } else if( origem == btnProjetos || origem == menuProjetosListar){
-                painelCentral.add(painel_projetos(), "projeto");            
-                WindowGerente.card.show(WindowGerente.painelCentral, "projeto");
+            painelCentral.add(painel_projetos(), "projeto");            
+            WindowGerente.card.show(WindowGerente.painelCentral, "projeto");
         } else if (origem == menuFuncionarioCadastro)
                 PainelFuncionarios.form_funcionarios(null);
         else if (origem == menuProjetosCadastro)

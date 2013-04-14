@@ -33,8 +33,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
     private JLabel dataInicio = new JLabel();
     private JPanel grid = new JPanel();
     
-    public FormDepartamentoProjetos(Departamento d)
-    {
+    public FormDepartamentoProjetos(Departamento d){
         super(Principal.janela,"Todos Projetos de Departamentos", true);
                                
         btnOK.setPreferredSize(new Dimension(100, 25));
@@ -105,8 +104,7 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
  
         
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e){
         Object origem = e.getSource();
 
         if(origem == btnOK)

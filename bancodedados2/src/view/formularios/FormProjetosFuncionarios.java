@@ -1,12 +1,15 @@
 package view.formularios;
 
 import Model.Projeto;
+import Model.Trabalha;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -37,11 +40,10 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     private static JTable tabela;
     private static DefaultTableModel modelo;
     private static String[] colunas;
-
+    private static FormProjetosFuncionariosEditPro editFormProj = null;
     private Projeto proj;    
     
-    public FormProjetosFuncionarios(Projeto p)
-    {
+    public FormProjetosFuncionarios(Projeto p){
         super(Principal.janela,"Todos Empregados do Projeto", true);
                                
         btnOK.setPreferredSize(new Dimension(100, 25));
@@ -52,8 +54,7 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         btnCancelar.addActionListener(this);
 
         JLabel nome = new JLabel("Nome: ");
-         
-        
+                 
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(3, 2, 5, 5));
@@ -135,21 +136,27 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     }
     
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e){
         Object origem = e.getSource();
 
-        if(origem == novo)
-            //new FormFuncionarioProjetosForm(null, proj, false);        
-        if(origem == btnOK)
-        {
+        if(origem == novo){
+            
+            Trabalha t = new Trabalha();
+            t.setProjeto(proj);
+            t.setEssn(null);
+            
+            try {
+                FormFuncionarioProjetosForm(t);
+            } catch (Exception ex) {
+                System.err.println("Erro: " + ex);
+            }
+            
+        } else if(origem == btnOK){
                                      
         }
 
         if (origem == btnCancelar)
-        {
-                this.dispose();
-        } 
+            this.dispose();
     }
 
     public static void setSizeColumnFuncionariosProjetos(){
@@ -164,9 +171,18 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     public static void setDataTableFuncionariosProjetos(){
         String[][] dados = null;
         
-        //Principal.cf.getEmpregadosTable(Principal.cf.listar(proj));        
+        //Principal.cf.getEmpregadosTable(Principal.cf.buscaSuperSnn(proj));        
         FormProjetosFuncionarios.modelo = new DefaultTableModel(null, FormProjetosFuncionarios.colunas);
         FormProjetosFuncionarios.tabela.setModel(FormProjetosFuncionarios.modelo);                    
         FormProjetosFuncionarios.setSizeColumnFuncionariosProjetos();        
-    }    
+    }
+    
+    public static FormProjetosFuncionariosEditPro FormFuncionarioProjetosForm(Trabalha e) throws Exception{
+        if(editFormProj == null)
+            editFormProj = new FormProjetosFuncionariosEditPro(e);
+        else
+           editFormProj.editar(e);        
+        
+        return editFormProj;
+    }     
 }

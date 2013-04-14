@@ -17,8 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import view.Principal;
 
-public class FormSalario extends JDialog implements ActionListener
-{
+public class FormSalario extends JDialog implements ActionListener{
     private static final long serialVersionUID = 1L;    
         
     private static Empregado emp;
@@ -28,8 +27,7 @@ public class FormSalario extends JDialog implements ActionListener
     private JComboBox tipo = new JComboBox();
     private JButton btnOK = new JButton("OK");
     
-    public FormSalario()
-    {
+    public FormSalario(){
         super(Principal.janela,"Salarios dos Empregado", true);
         
         btnOK.setPreferredSize(new Dimension(100, 25));             
@@ -82,9 +80,7 @@ public class FormSalario extends JDialog implements ActionListener
  
         
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        
+    public void actionPerformed(ActionEvent e){        
         if (e.getSource() == tipo){
             System.out.println(tipo.getSelectedItem());
         }

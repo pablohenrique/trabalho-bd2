@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -15,6 +16,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import view.Principal;
+import view.ViewObjectPool;
 
 public class FormProjetosDepartamento extends JDialog implements ActionListener
 {
@@ -27,8 +29,7 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
     private JComboBox departamento = new JComboBox();
     private JButton btnOK = new JButton("OK");
     
-    public FormProjetosDepartamento()
-    {
+    public FormProjetosDepartamento(){
         super(Principal.janela,"O empregado que trabalha em mais projetos de um Detartamento", true);
         
         btnOK.setPreferredSize(new Dimension(100, 25));             
@@ -36,7 +37,11 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
         btnOK.addActionListener(this);
         departamento.addActionListener(this);
         
-        departamento.addItem("LISTAR DEPARTAMENTOS");
+        try {
+            departamento = new JComboBox((Vector<Object>) ViewObjectPool.get("todosDapartamentos"));  
+        } catch (Exception ex) {
+            departamento = new JComboBox();  
+        }
         
         JLabel busca = new JLabel("Departamento: ");        
         
@@ -79,8 +84,7 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
  
         
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e){
         
         if (e.getSource() == departamento){
             System.out.println(departamento.getSelectedItem());
@@ -92,6 +96,7 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
 
     public void setEmpregado(Empregado e) {
         emp = e;
+        departamento.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosDapartamentos")));
         departamentoNome.setText(e.getDepartamento().getNome());
         nome.setText(e.getNome());
         ssn.setText(e.getSsn());        

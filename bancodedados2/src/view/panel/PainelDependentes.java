@@ -41,9 +41,10 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     private JButton novo  = new JButton("Novo");
     private JButton editar = new JButton("Editar");
     private JButton excluir = new JButton("Excluir"); 
-    private static JLabel contaRegistros =  new JLabel();
-    private JComboBox empregados;             
-        
+    public static JComboBox empregados = null;                 
+    public static Empregado emp = new Empregado();
+    
+    private static JLabel contaRegistros =  new JLabel();            
     public static JTable tabela;
     public static DefaultTableModel modelo;
     public static String[] colunas;
@@ -78,21 +79,20 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         JLabel imagem = new JLabel();
         imagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/busca.png")));
 
-        Empregado em = new Empregado();
-        em.setNome("Todos Empregados");
-        em.setSsn("-1");
+        emp.setNome("Todos Empregados");
+        emp.setSsn("-1");
         
         try {
             if(Principal.user.getTipoLogin() == 2)
-                empregados = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));
+                empregados = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));  
             else
                 throw new Exception();
         } catch (Exception ex) {
             empregados = new JComboBox();
         }
         
-        empregados.addItem(em);
-        empregados.setSelectedItem(em);
+        empregados.addItem(emp);
+        empregados.setSelectedItem(emp);
         empregados.setPreferredSize(new Dimension(320, 24));
         empregados.setMaximumSize(new Dimension(320, 24));
 

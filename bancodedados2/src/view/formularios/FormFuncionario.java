@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -28,6 +29,8 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import view.Principal;
 import view.ViewObjectPool;
+import view.panel.PainelDepartamento;
+import view.panel.PainelDependentes;
 import view.panel.PainelFuncionarios;
 
 public class FormFuncionario extends JDialog implements ActionListener
@@ -40,8 +43,8 @@ public class FormFuncionario extends JDialog implements ActionListener
     private JFormattedTextField dataNasc;  
 
     private JComboBox<String> sexo;
-    private  JComboBox departamento;
-    private JComboBox supervisor;
+    public JComboBox departamento;
+    public JComboBox supervisor;
     
     private JPasswordField senha;
     
@@ -168,7 +171,8 @@ public class FormFuncionario extends JDialog implements ActionListener
             this.cleanEmpregadoForm();
             return;
         }
-        
+        supervisor.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosEmpregados")));        
+        departamento.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosDapartamentos")));        
         emp_edit = e;
         
         nome.setText(e.getNome());
@@ -223,18 +227,15 @@ public class FormFuncionario extends JDialog implements ActionListener
         return box.getItemCount();
     }
     
-    public void nivelUser(Empregado e)
-    {
+    public void nivelUser(Empregado e){
         salario.setEnabled(false);
         ssn.setEnabled(false);        
         
-        if(e.getTipoLogin() == 0) 
-        {
+        if(e.getTipoLogin() == 0) {
             departamento.setEnabled(false);
             supervisor.setEnabled(false);
         }else if (e.getTipoLogin() == 1){//supervisor e funcionario            
-            if(e.getSuperSsn().equals(e.getSsn()))//empregado eh supervisor dele mesmo
-            {
+            if(e.getSuperSsn().equals(e.getSsn())){//empregado eh supervisor dele mesmo
                 departamento.setEnabled(true);
                 supervisor.setEnabled(true);                
             }
@@ -244,10 +245,8 @@ public class FormFuncionario extends JDialog implements ActionListener
         }        
     }
     
-    public void comboEnableSupervisor()
-    {
-        if(Principal.user.getTipoLogin() == 1)//supervisor
-        {
+    public void comboEnableSupervisor(){
+        if(Principal.user.getTipoLogin() == 1){//supervisor
             supervisor.setEnabled(false);
             departamento.setEnabled(false);
             senha.setEnabled(false);
@@ -259,17 +258,12 @@ public class FormFuncionario extends JDialog implements ActionListener
     }
     
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e){
         Object origem = e.getSource();
 
-        if(origem == btnOK)
-        {
-            if(emp_edit == null)//inserir novo elemento
-            {
-                System.out.println("QUERO CADASTRAR");
-                try
-                {
+        if(origem == btnOK){
+            if(emp_edit == null){
+                try{
                     Departamento d = (Departamento) departamento.getSelectedItem();  
                     Empregado superssn = (Empregado) supervisor.getSelectedItem();                    
                     
@@ -278,20 +272,16 @@ public class FormFuncionario extends JDialog implements ActionListener
                                                  superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();
-                    this.dispose();
+                    PainelFuncionarios.setDataTable();                    
+                    this.updatePool();
+                    this.dispose();                    
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }
                 
-            }
-            else
-            {
-                System.out.println("QUERO EDITAR");
-               try
-                {                
+            }else{
+               try{                
                     Departamento d = (Departamento) departamento.getSelectedItem();  
                     Empregado superssn = (Empregado) supervisor.getSelectedItem();
                     
@@ -300,22 +290,29 @@ public class FormFuncionario extends JDialog implements ActionListener
                                                     superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    
+                                       
                     if(Principal.user.getTipoLogin() == 2 || Principal.user.getTipoLogin() == 1)
                         PainelFuncionarios.setDataTable();                     
-                    this.dispose();
+                    this.updatePool();
+                    this.dispose();                    
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }                    
-            }
-                                     
+            }                                     
         }
 
         if (origem == btnCancelar)
-        {
-                this.dispose();
-        } 
+            this.dispose();
+    }    
+    
+    public void updatePool() throws Exception{
+        //ViewObjectPool.set("todosEmpregados", Principal.cf.listarEmpregados());
+        //nao tem como tirar, sempre que inserir um funcionario, no painel de dependentes tem que atualizar o combo box
+        if(PainelDependentes.empregados != null){
+            PainelDependentes.empregados.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosEmpregados")));       
+            PainelDependentes.empregados.addItem(PainelDependentes.emp);
+            PainelDependentes.empregados.setSelectedItem(PainelDependentes.emp);
+        }
     }
 }
