@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -24,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import view.Principal;
+import view.ViewObjectPool;
 import view.panel.PainelDependentes;
 
 public class FormDependente extends JDialog implements ActionListener
@@ -67,7 +69,7 @@ public class FormDependente extends JDialog implements ActionListener
         parentesco.addItem("Nao sei");
         
         try {
-            empregado = new JComboBox(Principal.cf.listarEmpregados());  
+            empregado = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));  
         } catch (Exception ex) {
             empregado = new JComboBox();
         }

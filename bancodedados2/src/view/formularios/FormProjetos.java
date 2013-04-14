@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -18,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import view.Principal;
+import view.ViewObjectPool;
 import view.panel.PainelProjetos;
 
 public class FormProjetos extends JDialog implements ActionListener
@@ -39,7 +41,7 @@ public class FormProjetos extends JDialog implements ActionListener
         localizacao = new JTextField();                
         
         try {
-            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+            departamento = new JComboBox((Vector<Object>) ViewObjectPool.get("todosDapartamentos"));  
         } catch (Exception ex) {
             departamento = new JComboBox();  
         }

@@ -17,13 +17,11 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -31,12 +29,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
+import view.ViewObjectPool;
 import view.formularios.FormDependente;
-import view.formularios.FormFuncionario;
 
 public final class PainelDependentes extends JPanel  implements ActionListener {	
     
@@ -87,7 +84,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         
         try {
             if(Principal.user.getTipoLogin() == 2)
-                empregados = new JComboBox(Principal.cf.listarEmpregados());
+                empregados = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));
             else
                 throw new Exception();
         } catch (Exception ex) {

@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
-import view.formularios.FormFuncionario;
 import view.panel.PainelDepartamento;
 import view.panel.PainelDependentes;
 import view.panel.PainelFuncionarios;

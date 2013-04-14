@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultComboBoxModel;
@@ -20,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import view.Principal;
+import view.ViewObjectPool;
 
 public class FormFuncionarioProjetosForm extends JDialog implements ActionListener
 {
@@ -43,7 +45,7 @@ public class FormFuncionarioProjetosForm extends JDialog implements ActionListen
         projeto_edit = p;
         horas = new JTextField();
         try {
-            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+            departamento = new JComboBox((Vector<Object>) ViewObjectPool.get("todosDapartamentos"));  
         } catch (Exception ex) {
             departamento = new JComboBox();  
         }

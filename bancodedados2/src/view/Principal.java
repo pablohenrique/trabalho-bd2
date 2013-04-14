@@ -48,6 +48,8 @@ public class Principal{
          update = (Projeto) FactoryDAO.getFactory("Projeto").read("MINERACAO");
          System.out.println(update.getLocalizacao());
          */
+         ViewObjectPool.set("todosEmpregados", Principal.cf.listarEmpregados());
+         ViewObjectPool.set("todosDapartamentos", Principal.cf.listarDepartamentos());         
          login = new WindowLogin();
 //         janela = new WindowFuncionario();
     }

@@ -1,7 +1,6 @@
 package view.formularios;
 
 import Model.Departamento;
-import Model.Localizacao;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,8 +19,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
-import static view.panel.PainelDepartamento.modelo;
-import static view.panel.PainelDepartamento.tabela;
 
 public class FormDepartamentoLocal extends JDialog implements ActionListener
 {

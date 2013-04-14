@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -26,6 +27,7 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import view.Principal;
+import view.ViewObjectPool;
 import view.panel.PainelFuncionarios;
 
 public class FormFuncionario extends JDialog implements ActionListener
@@ -76,13 +78,13 @@ public class FormFuncionario extends JDialog implements ActionListener
         superssn.setNome("Nenhum Supervisor");
         
         try {
-            departamento = new JComboBox(Principal.cf.listarDepartamentos());  
+            departamento = new JComboBox((Vector<Object>) ViewObjectPool.get("todosDapartamentos"));  
         } catch (Exception ex) {
             departamento = new JComboBox();
         }
         
         try { 
-            supervisor = new JComboBox(Principal.cf.listarEmpregados());  
+            supervisor = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));  
         } catch (Exception ex) {
             supervisor = new JComboBox();  
         }

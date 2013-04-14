@@ -16,9 +16,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -68,8 +65,9 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
 
         comboBusca.addItem("Nome");
         comboBusca.addItem("Ssn");
-        comboBusca.addItem("X");
-        comboBusca.addItem("Y");
+        comboBusca.addItem("Masculino");
+        comboBusca.addItem("Feminino");
+        comboBusca.addItem("Endereco");
         comboBusca.addItem("Todos Empregados");
         comboBusca.setPreferredSize(new Dimension(100, 24));
         comboBusca.setMaximumSize(new Dimension(100, 24));
@@ -180,17 +178,33 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }
         }
-        /*
         else if (origem == btnBusca)
-        {
-                String filtro = txtBusca.getText().trim().toLowerCase();
-                modelo = new DefaultTableModel(ControleAluno.vetorAlunos(filtro),
-                                colunas);
-                tabela.setModel(modelo);
-                contaRegistros.setText(tabela.getRowCount()
-                                + " registro(s) encontrado(s)");
-                                * setSizeColumn()
-        }*/
+        {            
+            String[][] dados = null;
+                        
+            try {   
+                if(comboBusca.getSelectedIndex() == 0 && !txtBusca.getText().equals(""))//busca nome
+                    dados = Principal.cf.getEmpregadosTable(Principal.cf.buscaNomeEmpregado(txtBusca.getText()));
+                else if(comboBusca.getSelectedIndex() == 1 && !txtBusca.getText().equals(""))//busca ssn
+                    dados = Principal.cf.getEmpregadosTable(Principal.cf.buscaSnnEmpregado(txtBusca.getText()));
+                else if(comboBusca.getSelectedIndex() == 2)//busca ssn
+                    dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoSexo("masculino"));                
+                else if(comboBusca.getSelectedIndex() == 3)//busca ssn
+                    dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoSexo("feminino"));                                
+                else if(comboBusca.getSelectedIndex() == 4 && !txtBusca.getText().equals(""))//busca endereco
+                    dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoEndereco(txtBusca.getText()));                                                         
+                else
+                    dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());                    
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+                System.err.println("Erro Painel Projetos: " + ex);
+            }
+
+            PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);
+            PainelFuncionarios.tabela.setModel(PainelFuncionarios.modelo);                    
+            PainelFuncionarios.contaRegistros.setText(PainelFuncionarios.tabela.getRowCount() + " registro(s) encontrado(s)");                    
+            PainelFuncionarios.setSizeColumn();                       
+        }
         
     }
     

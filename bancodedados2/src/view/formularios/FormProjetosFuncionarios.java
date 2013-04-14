@@ -30,8 +30,7 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     private JLabel nomeProjeto = new JLabel();
     private JLabel localProjeto = new JLabel();
     private JLabel depProjeto = new JLabel();
-    private JLabel superProjeto = new JLabel();
-    
+
     private JButton btnOK = new JButton("OK");
     private JButton btnCancelar  = new JButton("Cancelar");
     
@@ -57,15 +56,13 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        grid.setLayout(new GridLayout(6, 2, 5, 5));
+        grid.setLayout(new GridLayout(3, 2, 5, 5));
         grid.add(nome);
         grid.add(nomeProjeto);      
         grid.add(new JLabel("Localizacao Projeto: "));
         grid.add(localProjeto);        
         grid.add(new JLabel("Departamento: "));
         grid.add(depProjeto);
-        grid.add(new JLabel("Supervisor Departamento: "));
-        grid.add(superProjeto);
         
         nome.setPreferredSize(new Dimension(250, 25));
         
@@ -132,7 +129,6 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         
         nomeProjeto.setText(p.getNome());
         localProjeto.setText(p.getLocalizacao());
-        superProjeto.setText(p.getDepartamento().getGerenteSsn().getNome());
         depProjeto.setText(p.getDepartamento().getNome());
         
         FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
