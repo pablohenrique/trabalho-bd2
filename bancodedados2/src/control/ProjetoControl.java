@@ -6,7 +6,6 @@ package control;
 
 
 import DAO.FactoryDAO;
-import DAO.IObjectDAO;
 import DAO.ProjetoDAO;
 import Model.Departamento;
 import Model.Projeto;

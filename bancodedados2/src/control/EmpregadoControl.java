@@ -6,12 +6,8 @@ package control;
 
 import DAO.EmpregadoDAO;
 import DAO.FactoryDAO;
-import DAO.IObjectDAO;
-import Model.Auditoria;
 import Model.Departamento;
 import Model.Empregado;
-import java.sql.Date;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 

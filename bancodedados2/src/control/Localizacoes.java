@@ -5,7 +5,6 @@
 package control;
 
 import DAO.FactoryDAO;
-import DAO.IObjectDAO;
 import DAO.LocalizacaoDAO;
 import Model.Departamento;
 import Model.Localizacao;
