@@ -92,6 +92,10 @@ public class ControlFacade {
         return empregadoControl.getById(ssn);
     }
     
+    public Vector<Empregado> buscaSnnEmpregado(String ssn) throws Exception{
+        return empregadoControl.getByIdVector(ssn);
+    }
+    
         
     /**
      * Funcao que retorna todos empregados
