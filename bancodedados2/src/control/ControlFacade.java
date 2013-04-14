@@ -103,6 +103,11 @@ public class ControlFacade {
        return empregadoControl.getAll();
     }    
     
+    
+    public Vector<Empregado> listarEmpregadosSimples() throws SQLException{
+        return empregadoControl.getAllSimple();
+    }
+    
     /**
      * 
      * @param ssn 

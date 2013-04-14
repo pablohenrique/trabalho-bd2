@@ -11,6 +11,7 @@ import Model.Auditoria;
 import Model.Departamento;
 import Model.Empregado;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -110,12 +111,22 @@ public class EmpregadoControl
     public Vector<Empregado> buscarEmpregadoSexo(String sexo) {
         Vector<Empregado> empregados = new Vector<Empregado>();
 
-        for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoSexo(sexo)) {
+        for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoSexo(sexo)) 
             empregados.add((Empregado) aux);
-        }
 
         return empregados;
 
+    }
+    
+    public Vector<Empregado> getAllSimple() throws SQLException{
+        Vector<Empregado> empregados = new Vector<Empregado>();
+        
+        for (Object aux : (ArrayList<Object>) this.dao.getAllSimple())
+            empregados.add((Empregado) aux);
+        
+        return empregados;
+       
+        
     }
     
     
