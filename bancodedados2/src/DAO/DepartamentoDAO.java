@@ -31,7 +31,7 @@ public class DepartamentoDAO implements IObjectDAO{
     private final String SQL_UPDATE = "UPDATE cia.departamento SET nome = ?, gerssn = ?, gerdatainicio = ? WHERE numero = ?";
     private final String SQL_DELETE = "DELETE FROM cia.departamento WHERE numero = ?";
     private final String SQL_GET = BEFORECOND + " WHERE d.numero = ? AND d.gerssn = e.ssn;";
-    private final String SQL_READ = BEFORECOND + " WHERE d.nome = ? AND d.gerssn = e.ssn;";
+    private final String SQL_READ = BEFORECOND + " WHERE d.nome LIKE UPPER(?) AND d.gerssn = e.ssn;";
     private final String SQL_GETGER = BEFORECOND3 + " WHERE d.gerssn = ? AND d.gerssn = e.ssn;";
     private final String SQL_GETALL = BEFORECOND3 + " WHERE d.gerssn = e.ssn;";
     private final String SQL_EDITAR = "SELECT d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio FROM departamento;";
@@ -72,6 +72,14 @@ public class DepartamentoDAO implements IObjectDAO{
         System.gc();
         
         return dep;
+    }
+    
+    public ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
+        ArrayList<Object> output = new ArrayList<>();
+        while(this.rs.next())
+            output.add((Departamento) this.criarObjetoTemplate());
+        
+        return output;
     }
     
     @Override
@@ -136,15 +144,15 @@ public class DepartamentoDAO implements IObjectDAO{
     @Override
     public Object read(Object input) {
         try {
-            String aux = (String) input;
+            String aux = "%" + (String) input + "%";
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
             this.ps.setString(1,aux);
-            
             this.rs = this.ps.executeQuery();
-            if(!this.rs.next())
-                throw new Exception("Departamento nao encontrado.");
             
-            return this.criarObjetoTemplate();
+            if(this.rs.isLast())
+                return this.criarObjetoTemplate();
+            else
+                return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
@@ -156,15 +164,9 @@ public class DepartamentoDAO implements IObjectDAO{
     public ArrayList<Object> getAll() {
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            ArrayList<Object> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(this.rs.next())
-                output.add((Departamento) this.criarObjetoTemplate());
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
-            return output;
+            return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
@@ -190,16 +192,10 @@ public class DepartamentoDAO implements IObjectDAO{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
             this.ps.setString(1,gerssn);
-            ArrayList<Object> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(this.rs.next())
-                output.add((Departamento) this.criarObjetoTemplate());
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
+            return this.buscarVariosObjetosTemplate();
             
-            return output;                
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
             return null;
@@ -209,16 +205,10 @@ public class DepartamentoDAO implements IObjectDAO{
     public ArrayList<Object> buscarEmpregados(){
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_EDITAR);
-            ArrayList<Object> output = new ArrayList<>();
-            
             this.rs = this.ps.executeQuery();
-            while(this.rs.next())
-                output.add((Departamento) this.criarObjetoTemplate());
             
-            if(output.isEmpty())
-                throw new ArrayStoreException("Nao houve objetos encontrados.");
+            return this.buscarVariosObjetosTemplate();
             
-            return output;                
         } catch (Exception e) {
             System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
             return null;
