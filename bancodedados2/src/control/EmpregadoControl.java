@@ -106,16 +106,16 @@ public class EmpregadoControl
        return this.dao.acessar(usuario, senha);
     }
     
-    public Vector<Empregado> buscarEmpregadoNascimento(String dataNasc){
+    public Vector<Empregado> buscarEndereco(String endereco){
         Vector<Empregado> empregados = new Vector<Empregado>();
-        FuncoesControle f = new FuncoesControle();
-        Date data = f.coverteStringData(dataNasc);
-        for(Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoNascimento(data))
+        for(Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoEndereco(endereco))
             empregados.add((Empregado) aux);
         
         return empregados;
        
     }
+    
+    
     
     public Vector<Empregado> buscarEmpregadoSexo(String sexo) {
         Vector<Empregado> empregados = new Vector<Empregado>();

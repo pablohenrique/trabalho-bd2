@@ -118,12 +118,12 @@ public class ControlFacade {
     
     /**
      * 
-     * @param dataNasc
+     * @param endereco
      * @return Vector<Empregado> 
-     * retorna empregados com nascimento informado
+     * retorna empregados com endereco informado
      */
-    public Vector<Empregado> buscarEmpregadoNascimento(String dataNasc){
-        return empregadoControl.buscarEmpregadoNascimento(dataNasc);
+    public Vector<Empregado> buscarEmpregadoNascimento(String endereco){
+        return empregadoControl.buscarEndereco(endereco);
     }
     
     /**
