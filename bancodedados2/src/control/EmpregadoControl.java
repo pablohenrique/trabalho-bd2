@@ -122,4 +122,16 @@ public class EmpregadoControl
         return empregados;
 
     }
+    
+    public Vector<Empregado> buscarEmpregadoProjeto(int numero){
+        Vector<Empregado> empregados = new Vector<Empregado>();
+        
+        for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoProjeto(numero))
+        empregados.add((Empregado) aux);
+        
+        return empregados;
+        
+     
+        
+    }
 }
