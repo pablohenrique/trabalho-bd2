@@ -67,7 +67,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         };
 
         colunas = new String [] {"Nome Departamento", "Numero", "Gerente Nome", "Data Inicio", "Ssn", "Sexo",
-                                 "Endereco", "Salario", "Data de Nascimento", "Departamento", "Dno"};      
+                                 "Endereco", "Salario", "Data de Nascimento"};      
   
         PainelDepartamento.setDataTable();
         
@@ -172,6 +172,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         }                
     }   
     
+        
     public static void setSizeColumn(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(50);
@@ -181,8 +182,7 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(50);
         tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(50);
-        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(250);              
+        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(250);              
     }
     
     public static void setDataTable(){

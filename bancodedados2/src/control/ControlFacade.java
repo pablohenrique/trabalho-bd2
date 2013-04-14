@@ -284,12 +284,10 @@ public class ControlFacade {
         FuncoesControle f = new FuncoesControle();
         for(int i=0; i<list.size(); i++){
             Departamento dep = list.get(i);
-            Empregado emp = list.get(i).getGerenteSsn();
-
-            
+            Empregado emp = list.get(i).getGerenteSsn();            
             
             dados[i] = new String[] {dep.getNome(), Integer.toString(dep.getNumero()), emp.getNome(), f.converteData(dep.getGerenteDataInicio()), emp.getSsn(),
-                                     emp.getSexo(), emp.getEndereco(), emp.getSalarioString(), f.converteData(emp.getDataNascimento()), emp.getSuperSsn().getNome(), emp.getSuperSsn().getSsn()}; 
+                                     emp.getSexo(), emp.getEndereco(), emp.getSalarioString(), f.converteData(emp.getDataNascimento())}; 
         }
         
         return dados;         
