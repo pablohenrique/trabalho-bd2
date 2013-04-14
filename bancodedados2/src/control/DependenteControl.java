@@ -48,7 +48,7 @@ public class DependenteControl  {
     
     public void delete(String essn, String nomedependente) throws Exception{
         DependenteDAO dependentedao = new DependenteDAO();
-     //   dependentedao.deleteDep(essn, nomedependente);
+        dependentedao.deletarDependente(essn, nomedependente);
     }
     
     public Vector<Dependente> getAll() throws Exception{
