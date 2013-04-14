@@ -30,8 +30,8 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_READ_SUPERSSN = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.superssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN cia.departamento AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) ORDER BY e.nome ASC;";
     private final String SQL_COUNTEMP = "SELECT COUNT(ssn) FROM empregado;";
-    private final String SQL_GETBIRTH = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.empregado AS s WHERE e.datanasc = ?";
-    private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?)";
+    private final String SQL_GETBIRTH = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.datanasc = ?";
+    private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?)";
     
     private PreparedStatement ps;
     private ResultSet rs;
