@@ -122,7 +122,7 @@ public class ControlFacade {
      * @return Vector<Empregado> 
      * retorna empregados com endereco informado
      */
-    public Vector<Empregado> buscarEmpregadoNascimento(String endereco){
+    public Vector<Empregado> buscarEmpregadoEndereco(String endereco){
         return empregadoControl.buscarEndereco(endereco);
     }
     
@@ -653,11 +653,11 @@ public class ControlFacade {
      
      /**
       * 
-      * @param ssn 
+      * @param ssn , projetonumero
       * apaga trabalhaem com ssn informado
       */
-     public void deletaTrabalha(String ssn) throws Exception{
-         trabalhaControl.delete(ssn);
+     public void deletaTrabalha(String ssn, int projetonumero) throws Exception{
+         trabalhaControl.delete(ssn,projetonumero);
      }  
      
      /**

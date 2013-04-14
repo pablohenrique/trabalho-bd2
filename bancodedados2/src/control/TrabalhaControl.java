@@ -50,8 +50,8 @@ public class TrabalhaControl {
         
     }
     
-    public void delete(String ssn) throws Exception{
-        this.dao.delete(ssn);
+    public void delete(String ssn, int projetonumero) throws Exception{
+        this.dao.deletarEmpregadoProjeto(ssn, projetonumero);
     }
     
     
