@@ -22,7 +22,7 @@ public class TrabalhaDAO implements IObjectDAO{
 " FROM cia.trabalha_em AS t, cia.empregado AS e, cia.projeto AS p, cia.departamento AS d";
     
     private final String SQL_POST = "INSERT INTO cia.trabalha_em VALUES(?,?,?);";
-    private final String SQL_UPDATERIGHT = "UPDATE cia.trabalha_em SET horas = ? WHERE essn = ? AND pnumero = ?;";
+    private final String SQL_UPDATERIGHT = "UPDATE cia.trabalha_em SET horas = ? WHERE essn = ? AND pjnumero = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.trabalha_em WHERE essn = ?;";
     private final String SQL_DELETERIGHT = "DELETE FROM cia.trabalha_em WHERE essn = ? AND pnumero = ?;";
     private final String SQL_GET = BEFORECOND + " WHERE t.essn = ? AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
