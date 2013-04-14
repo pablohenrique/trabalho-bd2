@@ -28,8 +28,12 @@ public class TrabalhaControl {
     
     private Trabalha createObjectTemplate(String ssn, int projetonumero, float horas) throws Exception{
         Trabalha trabalha = new Trabalha();
-        trabalha.setEssn((Empregado) FactoryDAO.getFactory("Empregado").get(ssn));
-        trabalha.setProjeto((Projeto) FactoryDAO.getFactory("Projeto").get(projetonumero));
+        Empregado e = new Empregado();
+        e.setSsn(ssn);
+        Projeto p = new Projeto();
+        p.setNumero(projetonumero);
+        trabalha.setEssn(e);
+        trabalha.setProjeto(p);
         trabalha.setHoras(horas);
         return trabalha;
     }
