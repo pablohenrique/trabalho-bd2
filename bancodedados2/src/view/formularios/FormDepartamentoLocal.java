@@ -114,6 +114,7 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
     }
     
     public void editar(Departamento d){
+        depAtual=d;
         nome.setText(d.getNome());
         gerente.setText(d.getGerenteSsn().getNome());
         dataInicio.setText(Principal.cf.converteDataString(d.getGerenteDataInicio()));
@@ -130,9 +131,9 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
 
         if(origem == btnOK)
             this.dispose();
-        else if(origem == btnNovo)
+        else if(origem == btnNovo){
             formLocalizacao(depAtual);
-        else if(origem == btnRemover && (item != -1)) {
+        }else if(origem == btnRemover && (item != -1)) {
             String local = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Local"));            
 
             int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover a localizacao "+local+"?","Atenção!",JOptionPane.YES_NO_OPTION);    

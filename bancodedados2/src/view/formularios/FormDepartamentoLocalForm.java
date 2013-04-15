@@ -76,7 +76,8 @@ public class FormDepartamentoLocalForm extends JDialog implements ActionListener
         Object origem = e.getSource();
                
         if(origem == btnOK){
-                try{                    
+                try{     
+                    System.out.println("inserir" + dEdit.getNumero() + nomeLocal.getText());
                     Principal.cf.inserirLocalizacoes(dEdit.getNumero() , nomeLocal.getText());                                           
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
