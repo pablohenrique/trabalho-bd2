@@ -39,7 +39,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_AVGPAYMENT = "select MAX(e.salario) FROM cia.empregado as e;";
     private final String SQL_WORKAHOLIC = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as tt where tt.horas = (select MAX(t.horas) FROM cia.trabalha_em as t) AND tt.essn = e.ssn AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_NOTWORKAHOLIC = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as tt where tt.horas = (select MIN(t.horas) FROM cia.trabalha_em as t) AND tt.essn = e.ssn AND e.superssn = s.ssn AND e.dno = d.numero;";
-    private final String SQL_WORKMOSTPROJ = BEFORECOND + "FROM (empregado AS e INNER JOIN (SELECT t.essn, count(t.essn) FROM trabalha_em AS t GROUP BY t.essn) AS a ON e.ssn = a.essn AND a.count = (SELECT max(a.contador) from (SELECT t.essn, count(t.essn) AS contador FROM trabalha_em AS t GROUP BY t.essn) AS a) INNER JOIN departamento AS d ON d.numero = 1 AND d.numero = e.dno INNER JOIN empregado AS s ON e.superssn = s.ssn);";
+    private final String SQL_WORKMOSTPROJ = BEFORECOND + "FROM (empregado AS e INNER JOIN (SELECT t.essn, count(t.essn) FROM trabalha_em AS t GROUP BY t.essn) AS a ON e.ssn = a.essn AND a.count = (SELECT max(a.contador) from (SELECT t.essn, count(t.essn) AS contador FROM trabalha_em AS t GROUP BY t.essn) AS a) INNER JOIN departamento AS d ON d.numero = ? AND d.numero = e.dno INNER JOIN empregado AS s ON e.superssn = s.ssn);";
     
     private PreparedStatement ps;
     private ResultSet rs;
