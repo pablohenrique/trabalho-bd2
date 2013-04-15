@@ -39,6 +39,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_AVGPAYMENT = "select MAX(e.salario) FROM cia.empregado as e;";
     private final String SQL_WORKAHOLIC = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as tt where tt.horas = (select MAX(t.horas) FROM cia.trabalha_em as t) AND tt.essn = e.ssn AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_NOTWORKAHOLIC = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as tt where tt.horas = (select MIN(t.horas) FROM cia.trabalha_em as t) AND tt.essn = e.ssn AND e.superssn = s.ssn AND e.dno = d.numero;";
+    private final String SQL_WORKMOSTPROJ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as t, cia.projeto as p, (SELECT count(t.essn) as contador, t.essn FROM cia.trabalha_em AS t, cia.projeto AS p WHERE t.pjnumero = p.pnumero AND p.dnum = ? GROUP BY t.essn) as a where p.dnum = 1 AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND t.essn = e.ssn AND e.superssn = s.ssn and e.dno = d.numero GROUP BY e.ssn, s.ssn, d.numero order by count(contador) desc limit 1 ;";
     
     private PreparedStatement ps;
     private ResultSet rs;
@@ -273,7 +274,7 @@ public class EmpregadoDAO implements IObjectDAO{
                 return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            System.err.println("Erro ao recuperar todos os objetos:  " + e.toString() );
             return null;
         }
     }
@@ -287,7 +288,7 @@ public class EmpregadoDAO implements IObjectDAO{
             return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            System.err.println("Erro ao recuperar todos os objetos:  " + e.toString() );
             return null;
         }
     }
@@ -301,7 +302,7 @@ public class EmpregadoDAO implements IObjectDAO{
             return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            System.err.println("Erro ao recuperar todos os objetos:  " + e.toString() );
             return null;
         }
     }
@@ -344,6 +345,20 @@ public class EmpregadoDAO implements IObjectDAO{
             
         } catch (Exception e) {
             System.err.println("Erro ao buscar empregado por horas: " + e.toString());
+            return null;
+        }
+    }
+    
+    public Object buscarEmpregadoTrabalhaMaisDepartamento(int departamento){
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_WORKMOSTPROJ);
+            this.ps.setInt(1,departamento);
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao recuperar todos os objetos:  " + e.toString() );
             return null;
         }
     }
