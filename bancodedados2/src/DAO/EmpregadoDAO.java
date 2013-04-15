@@ -33,7 +33,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_COUNTEMP = "SELECT COUNT(ssn) FROM empregado;";
     private final String SQL_GETADDRESS = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.endereco LIKE UPPER(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
     private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
-    private final String SQL_GETPROJECT = BEFORECOND + " FROM trabalha_em as t, empregado as e, empregado as s, departamento as d WHERE t.pjnumero = ? AND t.essn = e.ssn AND e.superssn = s.ssn and e.dno = d.numero;";
+    private final String SQL_GETPROJECT = BEFORECOND + " FROM cia.trabalha_em as t, cia.empregado as e, cia.empregado as s, cia.departamento as d WHERE t.pjnumero = ? AND t.essn = e.ssn AND e.superssn = s.ssn and e.dno = d.numero;";
     
     private PreparedStatement ps;
     private ResultSet rs;
