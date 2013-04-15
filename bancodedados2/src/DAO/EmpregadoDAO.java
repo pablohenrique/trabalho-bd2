@@ -349,7 +349,7 @@ public class EmpregadoDAO implements IObjectDAO{
         }
     }
     
-    public Object buscarEmpregadoTrabalhaMaisDepartamento(int departamento){
+    public ArrayList<Object> buscarEmpregadoTrabalhaMaisDepartamento(int departamento){
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_WORKMOSTPROJ);
             this.ps.setInt(1,departamento);
