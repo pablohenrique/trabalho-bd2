@@ -677,7 +677,6 @@ public class ControlFacade {
       * @param ssn
       * @param projetonumero
       * @return Trabalha
-      * retorna objeto q trabalha q trabalha no projeto informado
       */
      public Trabalha buscarEmpregadoProjeto(String ssn, int projetonumero){
          return trabalhaControl.buscarEmpregadoProjeto(ssn, projetonumero);
