@@ -654,11 +654,32 @@ public class ControlFacade {
      
      /**
       * 
+      * @param ssn
+      * @return Vector<Trabalha>
+      * @throws Exception 
+      * retorna vetor de projetos que empregados trabalham
+      */
+     public Vector<Trabalha> getTrabalha(String ssn) throws Exception{
+         return trabalhaControl.getById(ssn);
+     }
+     
+     /**
+      * 
       * @return Vector<Trabalha>
       * Retorna todos os trabalha_em
       */
      public Vector<Trabalha> listarTrabalha() throws Exception { 
          return trabalhaControl.getAll();
+     }
+     
+     /**
+      * 
+      * @param ssn
+      * @param projetonumero
+      * @return Trabalha
+      */
+     public Trabalha buscarEmpregadoProjeto(String ssn, int projetonumero){
+         return trabalhaControl.buscarEmpregadoProjeto(ssn, projetonumero);
      }
      
      /**

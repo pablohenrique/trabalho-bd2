@@ -60,8 +60,11 @@ public class TrabalhaControl {
 
 
 // retorn usando ssn
-    public Trabalha getById(String input) throws Exception {
-        return (Trabalha) this.dao.get(input);
+    public Vector<Trabalha> getById(String input) throws Exception {
+        Vector<Trabalha> trabalha = new Vector<Trabalha>();
+        for(Object aux : (ArrayList<Object>) this.dao.get(input))
+            trabalha.add((Trabalha) aux);
+        return trabalha;
     }
     
     public Vector<Trabalha> getAll() throws Exception {
@@ -81,6 +84,10 @@ public class TrabalhaControl {
             trabalha.add((Trabalha) aux);
         
         return trabalha;
+    }
+    
+    public Trabalha buscarEmpregadoProjeto(String ssn, int projeto){
+       return (Trabalha) this.dao.buscarEmpregadoProjeto(ssn, projeto);
     }
 
     public float somarHoras() throws SQLException {

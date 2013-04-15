@@ -26,6 +26,7 @@ public class TrabalhaDAO implements IObjectDAO{
     private final String SQL_DELETE = "DELETE FROM cia.trabalha_em WHERE essn = ?;";
     private final String SQL_DELETERIGHT = "DELETE FROM cia.trabalha_em WHERE essn = ? AND pnumero = ?;";
     private final String SQL_GET = BEFORECOND + " WHERE t.essn = ? AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
+    private final String SQL_GETONE = BEFORECOND + " WHERE t.essn = ? AND e.ssn = t.essn AND t.pjnumero = ? AND p.dnum = d.numero;";
     private final String SQL_READ = BEFORECOND + " WHERE t.pjnumero = ?  AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " WHERE t.essn = e.ssn" + " AND t.pjnumero = p.pnumero" + " AND p.dnum = d.numero;";
     private final String SQL_COUNTHOURS = "SELECT SUM(horas) FROM cia.trabalha_em;";
@@ -180,6 +181,24 @@ public class TrabalhaDAO implements IObjectDAO{
             
         } catch (Exception e) {
             System.err.println("Erro ao deletar objeto:  " + e.toString() );
+        }
+    }
+    
+    public Object buscarEmpregadoProjeto(String ssn, int projeto) {
+        try {
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETONE);
+            this.ps.setString(1,ssn);
+            this.ps.setInt(1,projeto);
+            this.rs = this.ps.executeQuery();
+            
+            if(!this.rs.next())
+                throw new SQLException("Objeto nao foi encontrado.");
+            
+            return this.criarObjetoTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
+            return null;
         }
     }
     
