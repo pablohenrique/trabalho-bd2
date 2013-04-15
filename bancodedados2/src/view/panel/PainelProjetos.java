@@ -36,6 +36,7 @@ import javax.swing.table.DefaultTableModel;
 import view.Principal;
 import view.formularios.FormProjetos;
 import view.formularios.FormProjetosFuncionarios;
+import view.formularios.FormProjetosPropagandas;
 
 public final class PainelProjetos extends JPanel  implements ActionListener {	
     
@@ -44,8 +45,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     private JButton editar = new JButton("Editar");
     private JButton excluir = new JButton("Excluir");
     private JButton empregados = new JButton("Empregados");
-    private JButton informacoes = new JButton("Informacoes");
-    private JButton financeiro =  new JButton("Financeiro");
+    private JButton balanco =  new JButton("Balanco Financeiro");
     private JButton publicidade =  new JButton("Publicidade");
     private JTextField txtBusca  = new JTextField();
     private JButton btnBusca  = new JButton("Pesquisar");
@@ -58,6 +58,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
     
     private static FormProjetos formprojetos = null;
     private static FormProjetosFuncionarios formFuncionarios = null; 
+    private static FormProjetosPropagandas formPropagandas = null;
     
     public PainelProjetos(){			
         
@@ -108,7 +109,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         btnBusca.addActionListener(this);
         excluir.addActionListener(this);        
         empregados.addActionListener(this);
-        informacoes.addActionListener(this);
+        publicidade.addActionListener(this);
         
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));
@@ -126,19 +127,18 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             botoes.add(Box.createHorizontalStrut(3));
             botoes.add(excluir);
             botoes.add(Box.createHorizontalStrut(3));
-            botoes.add(empregados);         
+            botoes.add(empregados);    
+            botoes.add(Box.createHorizontalStrut(3));
+            botoes.add(publicidade);     
+            botoes.add(Box.createHorizontalStrut(3));
+            botoes.add(balanco);              
             botoes.add(Box.createHorizontalGlue());
             botoes.add(contaRegistros);
             botoes.add(Box.createHorizontalGlue());            
         }            
-        else if(Principal.user.getTipoLogin() == 0){          
-            botoes.add(Box.createHorizontalStrut(5));
-            botoes.add(informacoes);        
-            botoes.add(Box.createHorizontalStrut(3));
-            botoes.add(publicidade);        
-            botoes.add(Box.createHorizontalStrut(3));
-            botoes.add(financeiro);                    
+        else if(Principal.user.getTipoLogin() == 0){                                     
             botoes.add(Box.createHorizontalGlue());          
+            botoes.add(Box.createHorizontalGlue());
             botoes.add(contaRegistros);      ;            
             botoes.add(Box.createHorizontalGlue());
         }
@@ -205,7 +205,9 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             PainelProjetos.setSizeColumn();     
             contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
 
-        }        
+        } else if (origem == publicidade  && (item != -1)){    
+                formPropagandas(dadosLista(item));
+        }
     }   
     
     //em teste
@@ -253,7 +255,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             try {
                 formprojetos.editar(p);
             } catch (Exception ex) {
-                 JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+                 JOptionPane.showMessageDialog(null,"Erro Projeto: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
             }
             formprojetos.setVisible(true);
         }
@@ -271,6 +273,19 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             formFuncionarios.setVisible(true);
         }
     } 
+    
+    public static void formPropagandas(Projeto p){
+        if(formPropagandas == null)
+            formPropagandas = new FormProjetosPropagandas(p);
+        else{
+            try {
+                formPropagandas.editar(p);
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Propagandas: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+            formPropagandas.setVisible(true);
+        }
+    }    
     
     public Projeto dadosLista(int item){
         String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));

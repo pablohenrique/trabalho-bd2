@@ -104,7 +104,8 @@ public class FormDepartamentoProjetos extends JDialog implements ActionListener
  
         
     @Override
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent e)
+    {
         Object origem = e.getSource();
 
         if(origem == btnOK)

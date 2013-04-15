@@ -23,12 +23,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
 
-public class FormProjetosFuncionarios extends JDialog implements ActionListener
+public class FormProjetosPropagandas extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
     
-    private JButton novo  = new JButton("Add Empregado");
-    private JButton editarHora  = new JButton("Editar Hora");
+    private JButton novo  = new JButton("Novo");
+    private JButton editarHora  = new JButton("Editar");
     private JButton excluir = new JButton("Excluir");   
     private JLabel nomeProjeto = new JLabel();
     private JLabel localProjeto = new JLabel();
@@ -42,8 +42,8 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     private static FormProjetosFuncionariosEditPro editFormProj = null;
     private static Projeto proj;    
     
-    public FormProjetosFuncionarios(Projeto p){
-        super(Principal.janela,"Todos Empregados do Projeto", true);
+    public FormProjetosPropagandas(Projeto p){
+        super(Principal.janela,"Todas Propagandas do Projeto", true);
                                
         btnOK.setPreferredSize(new Dimension(100, 25));
         proj = p;
@@ -51,8 +51,7 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         btnOK.addActionListener(this);
         editarHora.addActionListener(this);
 
-        JLabel nome = new JLabel("Nome: ");
-                 
+        JLabel nome = new JLabel("Nome: ");                 
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         grid.setLayout(new GridLayout(3, 2, 5, 5));
@@ -129,7 +128,7 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         localProjeto.setText(p.getLocalizacao());
         depProjeto.setText(p.getDepartamento().getNome());
         
-        FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
+        FormProjetosPropagandas.setDataTableFuncionariosProjetos();
     }
     
     @Override
@@ -184,9 +183,9 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         
         dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoProjeto(proj.getNumero()));        
         
-        FormProjetosFuncionarios.modelo = new DefaultTableModel(dados, FormProjetosFuncionarios.colunas);
-        FormProjetosFuncionarios.tabela.setModel(FormProjetosFuncionarios.modelo);                    
-        FormProjetosFuncionarios.setSizeColumnFuncionariosProjetos();        
+        FormProjetosPropagandas.modelo = new DefaultTableModel(dados, FormProjetosPropagandas.colunas);
+        FormProjetosPropagandas.tabela.setModel(FormProjetosPropagandas.modelo);                    
+        FormProjetosPropagandas.setSizeColumnFuncionariosProjetos();        
     }
     
     public static FormProjetosFuncionariosEditPro FormFuncionarioProjetosForm(Trabalha e) throws Exception{

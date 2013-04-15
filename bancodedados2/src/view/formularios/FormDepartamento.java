@@ -192,5 +192,5 @@ public class FormDepartamento extends JDialog implements ActionListener
                 this.dispose();
         } 
     }
-    
+   
 }

@@ -1,6 +1,5 @@
 package view.formularios;
 
-import Model.Departamento;
 import Model.Empregado;
 import Model.Projeto;
 import Model.Trabalha;
@@ -10,10 +9,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -22,7 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import view.Principal;
-import view.ViewObjectPool;
 
 public class FormProjetosFuncionariosEditPro extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;    
@@ -38,12 +34,10 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
     
     public FormProjetosFuncionariosEditPro(Trabalha t){       
         super(Principal.janela,"Inserir Empregado em Projeto", true);
-                
-        
+                        
         if(t.getProjeto() == null)
             return;
-                
-        
+                        
         projeto = t.getProjeto();
         emp = t.getEssn();
         
@@ -115,10 +109,13 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
             emp = null;
             this.clean();
             return;
-        }
-                
+        }            
+        
         emp = t.getEssn();
-        projeto = t.getProjeto();        
+        projeto = t.getProjeto();                
+        horas.setText("");
+        empregados.setEditable(false);
+        empregados.setSelectedIndex(this.selecionarComboBoxSup(emp, empregados));        
         
         this.setTitle("Editar Trabalha Em");
     }   
@@ -146,8 +143,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
         
         if(origem == btnOK && projeto != null){
             if(emp == null){
-                try
-                {
+                try{
                     Empregado supervisionado = (Empregado) empregados.getSelectedItem();
                     
                     System.out.println("trabalha - " + supervisionado.getSsn() + " " + projeto.getNumero() + " - " + horas.getText());
@@ -156,27 +152,24 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     
-                    //FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
+                    FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
                     this.dispose();
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }               
             } else{
-               try
-                {                
+               try{                
                     Empregado supervisionado = (Empregado) empregados.getSelectedItem();
                                         
                     Principal.cf.atualizarTrabalha(supervisionado.getSsn(), projeto.getNumero(), Float.valueOf(horas.getText()));
                     
                     JOptionPane.showMessageDialog(this,"Edicao realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     
-                    //FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
+                    FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
                     this.dispose();
                 }
-                catch(Exception ex)
-                {
+                catch(Exception ex){
                     JOptionPane.showMessageDialog(this,"Erro: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                            
                 }                 
             }                                     

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -64,12 +65,17 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
         nomeLabel.setPreferredSize(new Dimension(250, 25));
         
         JPanel botoes = new JPanel();
+        botoes.setLayout(new BoxLayout(botoes, BoxLayout.X_AXIS));
+        botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY)); 
         
+        botoes.add(Box.createHorizontalStrut(5));       
         botoes.add(btnNovo);
-        botoes.add(btnRemover);
-        botoes.add(btnOK);       
+        botoes.add(Box.createHorizontalStrut(3));       
+        botoes.add(btnRemover);               
         botoes.add(Box.createVerticalStrut(45));
-        botoes.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0,Color.LIGHT_GRAY));        
+        botoes.add(Box.createHorizontalStrut(3));                          
+        botoes.add(btnOK);               
+        botoes.add(Box.createHorizontalStrut(5));        
                 
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;

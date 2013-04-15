@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -24,10 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
-import view.formularios.FormDepartamento;
-import view.formularios.FormDependente;
-import view.formularios.FormFuncionario;
-import view.formularios.FormProjetos;
+import view.formularios.FormHoras;
 import view.formularios.FormProjetosDepartamento;
 import view.formularios.FormSalario;
 import view.panel.PainelDepartamento;
@@ -60,8 +56,6 @@ public class WindowGerente extends JFrame implements ActionListener {
     private static JButton btnDep;
     private static JButton btnDepartamentos;
     private static JButton btnProjetos;
-    private static JButton btnPropagandas;
-    private static JButton btnFinancas;
     private static JButton btnCargaHoraria;
     private static JButton btnCalculadora;
     private static JButton btnProjetosDepatamento;
@@ -73,6 +67,7 @@ public class WindowGerente extends JFrame implements ActionListener {
     private static JPanel painel_funcionarios = null;
     private static FormSalario formSalario = null;
     private static FormProjetosDepartamento formDepProjetos = null;
+    private static FormHoras formHoras = null;
     
     public WindowGerente(){
             super("Sistema de Gerenciamento");
@@ -160,14 +155,6 @@ public class WindowGerente extends JFrame implements ActionListener {
             btnProjetos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/projetos.png")));
             botoes.add(btnProjetos); 
             
-            btnFinancas = new JButton("Financas");
-            btnFinancas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/finanacas.png")));
-            botoes.add(btnFinancas);             
-
-            btnPropagandas = new JButton("Propagandas");
-            btnPropagandas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/propagandas.png")));
-            botoes.add(btnPropagandas);   
-
             btnCalculadora = new JButton("Calculos Salarios");
             btnCalculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/max-min.png")));
             botoes.add(btnCalculadora);
@@ -197,8 +184,6 @@ public class WindowGerente extends JFrame implements ActionListener {
             barraFerramentas.add(btnDep);
             barraFerramentas.add(btnDepartamentos);
             barraFerramentas.add(btnProjetos);
-            barraFerramentas.add(btnFinancas);
-            barraFerramentas.add(btnPropagandas);
             barraFerramentas.add(btnCalculadora);
             barraFerramentas.add(btnCargaHoraria);
             barraFerramentas.add(btnProjetosDepatamento);
@@ -224,9 +209,8 @@ public class WindowGerente extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e){
         Object origem = e.getSource();
 
-        if(origem == menuAbout){
-            JOptionPane.showMessageDialog(this,"Grupo:\nCaio Thomás\nPablo Henrique\nYuri Campos","Sobre", JOptionPane.PLAIN_MESSAGE);
-        }		
+        if(origem == menuAbout)
+            JOptionPane.showMessageDialog(this,"Grupo:\nCaio Thomás\nPablo Henrique\nYuri Campos","Sobre", JOptionPane.PLAIN_MESSAGE);        		
         else if(origem == menuExit)
             System.exit(0);
         else if (origem == menuInit)
@@ -244,17 +228,19 @@ public class WindowGerente extends JFrame implements ActionListener {
             painelCentral.add(painel_projetos(), "projeto");            
             WindowGerente.card.show(WindowGerente.painelCentral, "projeto");
         } else if (origem == menuFuncionarioCadastro)
-                PainelFuncionarios.form_funcionarios(null);
+            PainelFuncionarios.form_funcionarios(null);
         else if (origem == menuProjetosCadastro)
-                PainelProjetos.formProjeto(null);
+            PainelProjetos.formProjeto(null);
         else if (origem == menuDepartamentoCadastro)
-                PainelDepartamento.formDepartamentos(null);
+            PainelDepartamento.formDepartamentos(null);
         else if (origem == menuDependentesCadastro)
-                PainelDependentes.form_dependente(null);
+            PainelDependentes.form_dependente(null);
         else if (origem == btnCalculadora)
             WindowGerente.form_Salario();    
         else if (origem == btnProjetosDepatamento)
-            WindowGerente.formProjetosDepartamentos();    
+            WindowGerente.formProjetosDepartamentos();   
+        else if(origem == btnCargaHoraria)
+            WindowGerente.form_Horas();
     }
     
     public static JPanel painel_projetos(){
@@ -293,7 +279,17 @@ public class WindowGerente extends JFrame implements ActionListener {
         }
         return formSalario;
     }     
-        
+     
+    
+    public static FormHoras form_Horas(){
+        if(formHoras == null)
+            formHoras = new FormHoras();
+        else {
+            formHoras.execute();
+        }
+        return formHoras;
+    }  
+    
     public static FormProjetosDepartamento formProjetosDepartamentos(){
         if(formDepProjetos == null)
             formDepProjetos = new FormProjetosDepartamento();
