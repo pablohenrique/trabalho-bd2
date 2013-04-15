@@ -142,4 +142,30 @@ public class EmpregadoControl {
         
         return empregados;
     }
+    
+    public float mediaSalarios(){
+        return this.dao.buscarValoresSalario("media");
+    }
+    
+    public float maiorSalario(){
+        return this.dao.buscarValoresSalario("maior");
+    }
+    
+    public float menorSalario(){
+        return this.dao.buscarValoresSalario("menor");   
+    }
+    
+    public Empregado empregadoMaisHoras(){
+        return (Empregado) this.dao.buscarEmpregadoHoras("maior");
+    }
+    
+    public Empregado empregadoMenosHoras() {
+        return (Empregado) this.dao.buscarEmpregadoHoras("menor");
+    }
+    
+    
+    
+    
+    
+    
 }

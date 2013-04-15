@@ -148,6 +148,52 @@ public class ControlFacade {
     
     /**
      * 
+     * @return float
+     * media de salario de todos os empregados
+     */
+    public float mediaSalarios(){
+       return empregadoControl.mediaSalarios();
+    }
+    
+    /**
+     * 
+     * @return float
+     * maior salario de todos os empregados
+     */
+    public float maiorSalario(){
+        return empregadoControl.maiorSalario();
+    }
+    
+    /**
+     * 
+     * @return float
+     * menor salario
+     */
+    public float menorSalario(){
+        return empregadoControl.menorSalario();
+    }
+    
+    /**
+     * 
+     * @return Empregado
+     * empregado com mais horas
+     */
+    public Empregado empregadoMaisHoras(){
+        return empregadoControl.empregadoMaisHoras();
+    }
+    
+    /**
+     * 
+     * @return Empregado
+     * empregado com menos horas
+     */
+    public Empregado empregadoMenosHoras(){
+        return empregadoControl.empregadoMenosHoras();
+    }
+             
+    
+    /**
+     * 
      * @param dptonumero
      * @return Vector<Empregado> 
      * retorna empregado que trabalha em mais projetos de departamento
