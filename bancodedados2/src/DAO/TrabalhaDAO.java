@@ -188,7 +188,7 @@ public class TrabalhaDAO implements IObjectDAO{
         try {
             this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETONE);
             this.ps.setString(1,ssn);
-            this.ps.setInt(1,projeto);
+            this.ps.setInt(2,projeto);
             this.rs = this.ps.executeQuery();
             
             if(!this.rs.next())
