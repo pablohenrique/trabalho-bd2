@@ -1,6 +1,8 @@
 package view.formularios;
 
+import Model.Departamento;
 import Model.Empregado;
+import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +17,10 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 import view.Principal;
 import view.ViewObjectPool;
 
@@ -22,20 +28,21 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
         
-    private static Empregado emp;
-    private JLabel nome = new JLabel();
-    private JLabel ssn = new JLabel();
-    private JLabel departamentoNome = new JLabel();
+    private static Departamento dep;
     private JComboBox departamento = new JComboBox();
     private JButton btnOK = new JButton("OK");
     
+    private static JTable tabela;
+    private static DefaultTableModel modelo;
+    private static String[] colunas;
+    private static Projeto proj;    
+    
     public FormProjetosDepartamento(){
-        super(Principal.janela,"O empregado que trabalha em mais projetos de um Detartamento", true);
+        super(Principal.janela,"Empregado que trabalha em mais projetos de um Detartamento", true);
         
         btnOK.setPreferredSize(new Dimension(100, 25));             
         
         btnOK.addActionListener(this);
-        departamento.addActionListener(this);
         
         try {
             departamento = new JComboBox((Vector<Object>) ViewObjectPool.get("todosDapartamentos"));  
@@ -47,20 +54,37 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
         
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-        grid.setLayout(new GridLayout(4, 2, 5, 5));
+        grid.setLayout(new GridLayout(1, 2, 5, 5));
         grid.add(busca);
         grid.add(departamento);
-        grid.add(new JLabel("Nome empregado: "));
-        grid.add(nome);     
-        grid.add(new JLabel("Ssn: "));
-        grid.add(ssn);
-        grid.add(new JLabel("Departamento: "));
-        grid.add(departamentoNome);
         
         busca.setPreferredSize(new Dimension(250, 25));
         departamento.setPreferredSize(new Dimension(250, 25));
         departamento.setMaximumSize(new Dimension(250, 25));
+        departamento.addActionListener(this);
+
+        tabela = new JTable(){
+            private static final long serialVersionUID = 1L;
+
+            public boolean isCellEditable(int rowIndex, int vColIndex){
+                    return false;
+            }
+        };
+
+        colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
+                                           "Departamento", "Dno", "Supervisor", "SuperSnn"};  
         
+        FormProjetosDepartamento.setDados(null);
+        
+        tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabela.setGridColor(new Color(220,220,220));        
+        
+        FormProjetosDepartamento.setSizeColumnDepartmentoProjetos();
+        
+        JScrollPane scrollPane = new JScrollPane(tabela);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());        
+            
         JPanel botoes = new JPanel();
         
         botoes.add(btnOK);
@@ -71,8 +95,9 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
         painel.add(grid);              
         
         this.add(painel, BorderLayout.NORTH);
+        this.add(scrollPane, BorderLayout.CENTER);             
         this.add(botoes, BorderLayout.SOUTH);
-        this.setSize(550, 240);
+        this.setSize(550, 440);
         this.setLocation((java.awt.Toolkit.getDefaultToolkit()
                                         .getScreenSize().width / 2)
                                         - (this.getWidth() / 2), (java.awt.Toolkit
@@ -87,26 +112,47 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
     public void actionPerformed(ActionEvent e){
         
         if (e.getSource() == departamento){
-            System.out.println(departamento.getSelectedItem());
+            Departamento d = (Departamento) departamento.getSelectedItem();  
+            dep = d;
+            System.out.println(dep.getNumero() + " " + dep.getNumero());
+            FormProjetosDepartamento.setDataTableDepartamentoProjetos();
+            dep = null;
         }
         
         if (e.getSource() == btnOK)
                 this.dispose();
     }
 
-    public void setEmpregado(Empregado e) {
-        emp = e;
-        departamento.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosDapartamentos")));
-        departamentoNome.setText(e.getDepartamento().getNome());
-        nome.setText(e.getNome());
-        ssn.setText(e.getSsn());        
+    public static void setSizeColumnDepartmentoProjetos(){
+        tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(35);
+        tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(30);
+        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(100);
+        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(35);
+        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(250);
+        tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(35);      
     }
-
+    
+    public static void setDataTableDepartamentoProjetos(){
+        String[][] dados = null;
+        
+        dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoTrabalhaMaisDepartamento(dep.getNumero()));        
+        FormProjetosDepartamento.setDados(dados);
+    }
+    
+    public static void setDados(String[][] dados){
+        FormProjetosDepartamento.modelo = new DefaultTableModel(dados, FormProjetosDepartamento.colunas);
+        FormProjetosDepartamento.tabela.setModel(FormProjetosDepartamento.modelo);                    
+        FormProjetosDepartamento.setSizeColumnDepartmentoProjetos();              
+    }
+       
     public void execute() {
-        emp = null;
-        departamentoNome.setText("");
-        nome.setText("");
-        ssn.setText("");        
+        dep = null;     
+        departamento.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosDapartamentos")));
+        
         this.setVisible(true);        
     }
 }

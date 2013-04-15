@@ -93,13 +93,13 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
                                            "Departamento", "Dno", "Supervisor", "SuperSnn"};  
         
-        this.setDataTableFuncionariosProjetos();
+        FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setGridColor(new Color(220,220,220));        
         
-        this.setSizeColumnFuncionariosProjetos();
+        FormProjetosFuncionarios.setSizeColumnFuncionariosProjetos();
         
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());        
@@ -122,9 +122,10 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         this.setVisible(true);
     }
  
-    public void editar(Projeto p){
+    public void editar(Projeto p){        
         proj = p;
         
+        System.out.println("projeto id" + proj.getNome() + proj.getNumero());
         nomeProjeto.setText(p.getNome());
         localProjeto.setText(p.getLocalizacao());
         depProjeto.setText(p.getDepartamento().getNome());
@@ -138,30 +139,32 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         int item = tabela.getSelectedRow();
         
         if(origem == novo){
-            
+            System.out.println("novo elem");
             Trabalha t = new Trabalha();
             t.setProjeto(proj);
             t.setEssn(null);
             
             try {
-                FormFuncionarioProjetosForm(t);
+                FormFuncionarioProjetosForm(t).setVisible(true);
             } catch (Exception ex) {
                 System.err.println("Erro: " + ex);
             }
             
          } else if(origem == editarHora && (item != -1)){
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            
-            Trabalha t = null;
-            Empregado em;
-           
-            try {
-                t = Principal.cf.buscarEmpregadoProjeto(ssn, proj.getNumero());
-                //FormFuncionarioProjetosForm(t);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-            }                 
-            
+            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));   
+            String SuperSnn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("SuperSnn"));   
+
+            if(SuperSnn.equals(Principal.user.getSsn())){
+                Trabalha t = null;
+                System.out.print("editar" + ssn);
+                try {
+                    t = Principal.cf.buscarEmpregadoProjeto(ssn, proj.getNumero());
+                    FormFuncionarioProjetosForm(t).setVisible(true);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+                }                 
+            } else
+                JOptionPane.showMessageDialog(this,"Voce nao eh supervisor desse empregado!", "Atenção", JOptionPane.ERROR_MESSAGE);
          }else if(origem == btnOK)
             this.dispose();   
     }

@@ -234,7 +234,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         String[][] dados = null;
 
         try {        
-            if(Principal.user.getTipoLogin() != 0)//supervisor (verificar gerente se pode crud projetos)
+            if(Principal.user.getTipoLogin() != 0)//supervisor
                 dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
             else if(Principal.user.getTipoLogin() == 0)//funcionario
                 dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));

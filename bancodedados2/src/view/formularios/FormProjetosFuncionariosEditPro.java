@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import view.Principal;
+import view.ViewObjectPool;
 
 public class FormProjetosFuncionariosEditPro extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;    
@@ -26,6 +28,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
     private JLabel projetos = new JLabel();
     
     private JComboBox empregados;    
+    private JComboBox todosEmpregados;
        
     private JButton btnOK = new JButton("OK");
     private JButton btnCancelar = new JButton("Cancelar");
@@ -41,11 +44,11 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
         projeto = t.getProjeto();
         emp = t.getEssn();
         
-        System.out.println(projeto.getNome());
+        System.out.println(projeto.getNumero());
   
         try {
             //deve listar apenas empregados do ssn logado
-            empregados = new JComboBox(Principal.cf.buscaSuperSnn(Principal.user.getSsn()));  
+            empregados = new JComboBox(Principal.cf.buscaSuperSnn(Principal.user.getSsn()));              
         } catch (Exception ex) {
             empregados = new JComboBox();  
         }               
@@ -99,31 +102,34 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
                                         .getDefaultToolkit().getScreenSize().height / 2)
                                         - (this.getHeight() / 2));
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        this.setVisible(true);
     }
 
     
     public void editar(Trabalha t) throws Exception{
         //new projeto
         if(t.getEssn() == null){
-            emp = null;
+            emp = null;            
+            projeto = t.getProjeto();    
             this.clean();
+            this.setTitle("Inserir Empregado em Projeto");
             return;
         }            
         
         emp = t.getEssn();
         projeto = t.getProjeto();                
-        horas.setText("");
-        empregados.setEditable(false);
+        horas.setText(String.valueOf(t.getHoras()));
+        empregados.setEnabled(false);
+        System.out.println(projeto.getNumero());
+
         empregados.setSelectedIndex(this.selecionarComboBoxSup(emp, empregados));        
         
-        this.setTitle("Editar Trabalha Em");
+        this.setTitle("Editar Hora");
     }   
     
     public void clean(){
         horas.setText("");
         empregados.setSelectedIndex(0);
-        this.setVisible(true);
+        empregados.setEnabled(true);                
     }
     
     public int selecionarComboBoxSup(Empregado e, JComboBox<Empregado> box){
@@ -161,6 +167,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
             } else{
                try{                
                     Empregado supervisionado = (Empregado) empregados.getSelectedItem();
+                    System.out.println("update trabalha - " + supervisionado.getSsn() + " " + projeto.getNumero() + " - " + horas.getText());
                                         
                     Principal.cf.atualizarTrabalha(supervisionado.getSsn(), projeto.getNumero(), Float.valueOf(horas.getText()));
                     
