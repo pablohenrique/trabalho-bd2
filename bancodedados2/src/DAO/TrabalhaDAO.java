@@ -45,7 +45,7 @@ public class TrabalhaDAO implements IObjectDAO{
             Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
             Departamento dep = (Departamento) depdao.get(this.rs.getInt("d_numero"));
             
-            Empregado emp = (Empregado) empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanascimento"), this.rs.getString("e_senha"), supervisor, dep);
+            Empregado emp = (Empregado) empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
             Projeto pro = (Projeto) prodao.createObject(this.rs.getInt("p_numero"), this.rs.getString("p_nome"), this.rs.getString("p_localizacao"), dep);
             
             Trabalha output = new Trabalha();
