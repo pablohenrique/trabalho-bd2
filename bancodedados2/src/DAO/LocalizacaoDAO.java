@@ -25,7 +25,7 @@ public class LocalizacaoDAO implements IObjectDAO{
     private final String SQL_POST = "INSERT INTO cia.dept_localizacao VALUES(?,?);";
     private final String SQL_UPDATE = "UPDATE dept_localizacao SET dlocalizacao = ? WHERE departamento_numero = ?;";
     private final String SQL_DELETE = "DELETE FROM cia.dept_localizacao WHERE dlocalizacao = ?;";
-    private final String SQL_GET = BEFORECOND + " WHERE d.numero = ? " + AFTERCOND;
+    private final String SQL_GET = BEFORECOND + " WHERE d.numero = ? " + AFTERCOND + "AND d.numero = l.departamento_numero;";
     private final String SQL_READ = BEFORECOND + " WHERE l.dlocalizacao LIKE ? " + AFTERCOND;
     private final String SQL_GETALL = BEFORECOND + " WHERE " + AFTERCOND;
     private final String SQL_GETALL_BYDEP = BEFORECOND + " WHERE l.departamento_numero = ? AND " + AFTERCOND;

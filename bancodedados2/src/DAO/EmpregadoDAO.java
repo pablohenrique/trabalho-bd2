@@ -34,20 +34,25 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_GETADDRESS = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.endereco LIKE UPPER(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
     private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
     private final String SQL_GETPROJECT = BEFORECOND + " FROM cia.trabalha_em as t, cia.empregado as e, cia.empregado as s, cia.departamento as d WHERE t.pjnumero = ? AND t.essn = e.ssn AND e.superssn = s.ssn and e.dno = d.numero;";
+    private final String SQL_MAXPAYMENT = "select MIN(e.salario) FROM cia.empregado as e;";
+    private final String SQL_MINPAYMENT = "select AVG(e.salario) FROM cia.empregado as e;";
+    private final String SQL_AVGPAYMENT = "select MAX(e.salario) FROM cia.empregado as e;";
+    private final String SQL_WORKAHOLIC = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as tt where tt.horas = (select MAX(t.horas) FROM cia.trabalha_em as t) AND tt.essn = e.ssn AND e.superssn = s.ssn AND e.dno = d.numero;";
+    private final String SQL_NOTWORKAHOLIC = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as tt where tt.horas = (select MIN(t.horas) FROM cia.trabalha_em as t) AND tt.essn = e.ssn AND e.superssn = s.ssn AND e.dno = d.numero;";
     
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object criarObjetoTemplate(String column){
+    private Object criarObjetoTemplate(){
         try {
             Empregado output = new Empregado();
-            output.setSsn(this.rs.getString(column+"ssn"));
-            output.setNome(this.rs.getString(column+"nome"));
-            output.setSexo(this.rs.getString(column+"sexo"));
-            output.setEndereco(this.rs.getString(column+"endereco"));
-            output.setSalario(this.rs.getFloat(column+"salario"));
-            output.setDataNascimento(this.rs.getDate(column+"datanasc"));
-            output.setSenha(this.rs.getString(column+"senha"));
+            output.setSsn(this.rs.getString("e_ssn"));
+            output.setNome(this.rs.getString("e_nome"));
+            output.setSexo(this.rs.getString("e_sexo"));
+            output.setEndereco(this.rs.getString("e_endereco"));
+            output.setSalario(this.rs.getFloat("e_salario"));
+            output.setDataNascimento(this.rs.getDate("e_datanasc"));
+            output.setSenha(this.rs.getString("e_senha"));
             
             DepartamentoDAO dao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
             output.setDepartamento((Departamento) dao.gerarObjeto(this.rs.getInt("d_numero"), this.rs.getString("d_nome"), this.rs.getDate("d_gerdatainicio"), null));
@@ -82,7 +87,7 @@ public class EmpregadoDAO implements IObjectDAO{
     private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
         ArrayList<Object> output = new ArrayList<>();
         while(this.rs.next())
-            output.add((Empregado) this.criarObjetoTemplate("e_"));
+            output.add((Empregado) this.criarObjetoTemplate());
         return output;
     }
     
@@ -153,7 +158,7 @@ public class EmpregadoDAO implements IObjectDAO{
             if(!this.rs.next())
                 throw new Exception("Empregado nao encontrado.");
             
-            return this.criarObjetoTemplate("e_");
+            return this.criarObjetoTemplate();
             
         } catch (Exception e) {
              throw new Exception(e.toString());
@@ -169,7 +174,7 @@ public class EmpregadoDAO implements IObjectDAO{
             this.rs = this.ps.executeQuery();
             
             if(this.rs.isLast())
-                return this.criarObjetoTemplate("e_");
+                return this.criarObjetoTemplate();
             else
                 return this.buscarVariosObjetosTemplate();
             
@@ -263,7 +268,7 @@ public class EmpregadoDAO implements IObjectDAO{
             this.rs = this.ps.executeQuery();
             
             if(this.rs.isLast())
-                return this.criarObjetoTemplate("e_");
+                return this.criarObjetoTemplate();
             else
                 return this.buscarVariosObjetosTemplate();
             
@@ -297,6 +302,48 @@ public class EmpregadoDAO implements IObjectDAO{
             
         } catch (Exception e) {
             System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
+            return null;
+        }
+    }
+    
+    public float buscarValoresSalario(String minavgmax){
+        try {
+            switch(minavgmax.toLowerCase()){
+                case("maior"):
+                    this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_MAXPAYMENT);
+                break;
+                case("media"):
+                    this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_AVGPAYMENT);
+                break;
+                default:
+                    this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_MINPAYMENT);
+                break;
+            }
+            this.rs = this.ps.executeQuery();
+            return this.rs.getFloat(1);
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar salario: " + e.toString());
+            return -1;
+        }
+    }
+    
+    public Object buscarEmpregadoHoras(String minmax){
+        try {
+            switch(minmax.toLowerCase()){
+                case("maior"):
+                    this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_WORKAHOLIC);
+                break;
+                default:
+                    this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_NOTWORKAHOLIC);
+                break;
+            }
+            this.rs = this.ps.executeQuery();
+            
+            return this.buscarVariosObjetosTemplate();
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar empregado por horas: " + e.toString());
             return null;
         }
     }
