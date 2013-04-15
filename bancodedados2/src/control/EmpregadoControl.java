@@ -131,8 +131,15 @@ public class EmpregadoControl {
         
 
         return empregados;
-
-
-
+    }
+    
+    
+    public Vector<Empregado> buscarEmpregadoTrabalhaMaisDepartamento(int dpnumero){
+        Vector<Empregado> empregados = new Vector<Empregado>();
+        
+        for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoTrabalhaMaisDepartamento(dpnumero))
+            empregados.add((Empregado) aux);
+        
+        return empregados;
     }
 }
