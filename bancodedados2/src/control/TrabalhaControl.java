@@ -85,6 +85,10 @@ public class TrabalhaControl {
         
         return trabalha;
     }
+    
+    public Trabalha buscarEmpregadoProjeto(String ssn, int projeto){
+       return (Trabalha) this.dao.buscarEmpregadoProjeto(ssn, projeto);
+    }
 
     public float somarHoras() throws SQLException {
         return this.dao.somarHoras();
