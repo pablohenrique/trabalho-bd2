@@ -321,6 +321,8 @@ public class EmpregadoDAO implements IObjectDAO{
                 break;
             }
             this.rs = this.ps.executeQuery();
+            if(!this.rs.next())
+                throw new Exception("Empregado nao encontrado.");
             return this.rs.getFloat(1);
             
         } catch (Exception e) {
