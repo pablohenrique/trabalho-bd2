@@ -333,7 +333,7 @@ BEGIN
 	RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario %', NEW.superssn;
     ELSEIF(TG_OP = 'UPDATE')
         IF NEW.salario > OLD.salario THEN
-            INSERT INTO auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
+            INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
         ELSE
             RAISE EXCEPTION 'Valor de salario nao pode ser persistido. Nao se pode reduzir o salario de um empregado, senhor %', OLD.superssn;
         END IF;
@@ -347,8 +347,73 @@ $BODY$
 ALTER FUNCTION cia.trigger_emp_salario()
   OWNER TO postgres;
 
-CREATE TRIGGER trigger_emp_salario BEFORE INSERT OR UPDATE ON empregado
+CREATE TRIGGER trigger_emp_salario BEFORE INSERT OR UPDATE ON cia.empregado
 FOR EACH ROW EXECUTE PROCEDURE trigger_emp_salario();
+
+--
+--
+--
+
+CREATE OR REPLACE FUNCTION dependeteConjugue()
+RETURNS trigger AS 
+$$
+DECLARE
+dep INTEGER;
+BEGIN
+    IF(NEW.parentesco = 'conjugue') THEN 
+        SELECT COUNT(d.essn) 
+        FROM cia.dependentes AS d 
+        WHERE d.essn = NEW.essn AND parentesco = 'conjugue' INTO dep;	
+
+        IF (dep = 1) THEN 
+            RAISE EXCEPTION 'NO BRASIL VC SOH PODE TER 1 CONJUGUE';
+        END IF;
+    END IF;	
+
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+
+CREATE TRIGGER verificaConjugue
+BEFORE INSERT OR UPDATE
+ON cia.dependentes FOR EACH ROW
+EXECUTE PROCEDURE dependeteConjugue();
+
+--
+--
+--
+
+CREATE OR REPLACE FUNCTION projetoDep()
+RETURNS trigger AS 
+$$
+DECLARE dep_emp empregado.dno%TYPE;
+DECLARE dep_proj projeto.dnum%TYPE;
+
+BEGIN
+    SELECT e.dno 
+    FROM cia.empregado AS e
+    WHERE e.ssn = NEW.essn
+    INTO dep_emp;
+
+    SELECT p.dnum
+    FROM cia.projeto AS p
+    WHERE p.pnumero = NEW.projeto_pnumero
+    INTO dep_proj;
+
+    IF(dep_emp <> dep_proj) THEN 
+        RAISE EXCEPTION 'O empregado so pode trablhar em projetos de seu departamento.';
+    END IF;
+
+RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER verificaDep
+BEFORE INSERT OR UPDATE
+ON cia.trabalha_em FOR EACH ROW
+EXECUTE PROCEDURE projetoDep();
+
 
 --
 --CONSULTAS BASICAS
