@@ -34,9 +34,9 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_GETADDRESS = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.endereco LIKE UPPER(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
     private final String SQL_GETGENDER = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.sexo = cia.sexoToBd(?) AND e.superssn = s.ssn AND d.numero = e.dno;";
     private final String SQL_GETPROJECT = BEFORECOND + " FROM cia.trabalha_em as t, cia.empregado as e, cia.empregado as s, cia.departamento as d WHERE t.pjnumero = ? AND t.essn = e.ssn AND e.superssn = s.ssn and e.dno = d.numero;";
-    private final String SQL_MAXPAYMENT = "select MIN(e.salario) FROM cia.empregado as e;";
-    private final String SQL_MINPAYMENT = "select AVG(e.salario) FROM cia.empregado as e;";
-    private final String SQL_AVGPAYMENT = "select MAX(e.salario) FROM cia.empregado as e;";
+    private final String SQL_MAXPAYMENT = "select MAX(e.salario) FROM cia.empregado as e;";
+    private final String SQL_MINPAYMENT = "select MIN(e.salario) FROM cia.empregado as e;";
+    private final String SQL_AVGPAYMENT = "select AVG(e.salario) FROM cia.empregado as e;";
     private final String SQL_WORKAHOLIC = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as tt where tt.horas = (select MAX(t.horas) FROM cia.trabalha_em as t) AND tt.essn = e.ssn AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_NOTWORKAHOLIC = BEFORECOND + "FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s, cia.trabalha_em as tt where tt.horas = (select MIN(t.horas) FROM cia.trabalha_em as t) AND tt.essn = e.ssn AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_WORKMOSTPROJ = BEFORECOND + "FROM (cia.empregado AS e INNER JOIN (SELECT t.essn, count(t.essn) FROM cia.trabalha_em AS t GROUP BY t.essn) AS a ON e.ssn = a.essn AND a.count = (SELECT max(a.contador) from (SELECT t.essn, count(t.essn) AS contador FROM cia.trabalha_em AS t GROUP BY t.essn) AS a) INNER JOIN cia.departamento AS d ON d.numero = ? AND d.numero = e.dno INNER JOIN cia.empregado AS s ON e.superssn = s.ssn);";
@@ -321,8 +321,10 @@ public class EmpregadoDAO implements IObjectDAO{
                 break;
             }
             this.rs = this.ps.executeQuery();
+            
             if(!this.rs.next())
                 throw new Exception("Empregado nao encontrado.");
+            
             return this.rs.getFloat(1);
             
         } catch (Exception e) {
