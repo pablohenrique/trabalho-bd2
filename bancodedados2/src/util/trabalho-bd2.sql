@@ -422,7 +422,7 @@ BEGIN
 
     SELECT p.dnum
     FROM cia.projeto AS p
-    WHERE p.pnumero = NEW.projeto_pnumero
+    WHERE p.pnumero = NEW.pjnumero
     INTO dep_proj;
 
     IF(dep_emp <> dep_proj) THEN 
