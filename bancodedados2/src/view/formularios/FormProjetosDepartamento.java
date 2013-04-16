@@ -1,7 +1,6 @@
 package view.formularios;
 
 import Model.Departamento;
-import Model.Empregado;
 import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,7 +28,7 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
     private static final long serialVersionUID = 1L;    
         
     private static Departamento dep;
-    private JComboBox departamento = new JComboBox();
+    private JComboBox departamento;
     private JButton btnOK = new JButton("OK");
     
     private static JTable tabela;
@@ -37,7 +36,7 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
     private static String[] colunas;
     private static Projeto proj;    
     private Vector<Departamento> valuesDepartamento;
-    
+
     public FormProjetosDepartamento(){
         super(Principal.janela,"Empregado que trabalha em mais projetos de um Detartamento", true);
         
@@ -60,11 +59,13 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
         grid.add(busca);
         grid.add(departamento);
         
+        
         busca.setPreferredSize(new Dimension(250, 25));
         departamento.setPreferredSize(new Dimension(250, 25));
         departamento.setMaximumSize(new Dimension(250, 25));
         departamento.addActionListener(this);
 
+        
         tabela = new JTable(){
             private static final long serialVersionUID = 1L;
 
@@ -76,7 +77,8 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
         colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
                                            "Departamento", "Dno", "Supervisor", "SuperSnn"};  
         
-        FormProjetosDepartamento.setDados(null);
+        dep = (Departamento) departamento.getSelectedItem(); 
+        FormProjetosDepartamento.setDataTableDepartamentoProjetos();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -153,8 +155,8 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
        
     public void execute() {
         dep = null;     
-        departamento.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosDapartamentos")));
-        
+        valuesDepartamento = (Vector<Departamento>) ViewObjectPool.get("todosDepartamento");            
+        departamento.setModel(new javax.swing.DefaultComboBoxModel(valuesDepartamento));          
         this.setVisible(true);        
     }
 }
