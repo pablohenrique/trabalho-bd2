@@ -316,6 +316,30 @@ RETURNS VARCHAR AS $$
 $$ language 'plpgsql';
 
 
+--
+--
+--
+
+CREATE OR REPLACE FUNCTION gera_tarifa(projetoID cia.projeto.pnumero%TYPE)
+RETURNS FLOAT AS
+$gera_tarifa$
+DECLARE
+acumulador cia.propaganda.tarifa%TYPE;
+contador cia.propaganda.tarifa%TYPE;
+dias INTEGER;
+BEGIN
+	acumulador := 0;
+	FOR contador IN SELECT pp.tarifa FROM cia.propaganda as pp WHERE pp.projeto = projetoID
+	LOOP
+		SELECT (pp.dataInicio - pp.dataFinal) INTO dias;
+		acumulador := acumulador + (contador * dias);
+	END LOOP;
+	RETURN acumulador;
+END;
+$gera_tarifa$
+LANGUAGE plpgsql;
+
+
 
 ---
 -- TRIGGERS
