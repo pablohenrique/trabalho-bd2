@@ -16,9 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import view.formularios.FormFuncionario;
-import view.panel.PainelDependentes;
 import view.panel.PainelInit;
-import view.panel.PainelProjetos;
 
 public class WindowFuncionario extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -144,11 +142,11 @@ public class WindowFuncionario extends JFrame implements ActionListener {
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "inicio");
             }		
             else if (origem == menuDependentesListar || origem == btnDependentes){
-                    painelCentral.add(painel_dependentes(), "dependente");                
+                    painelCentral.add(WindowGerente.painelDependentes(), "dependente");                
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "dependente");
             }
             else if( origem == btnProjetos || origem == menuProjetosListar){
-                    painelCentral.add(painel_projetos(), "projeto");            
+                    painelCentral.add(WindowGerente.painelProjetos(), "projeto");            
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "projeto");
             }            
             else if (origem == menuEditarFuncionario || origem == btnFuncionarios){           
@@ -163,20 +161,6 @@ public class WindowFuncionario extends JFrame implements ActionListener {
                 }                                 
             }		
     }
-    
-    public JPanel painel_projetos(){
-        if(painel_projetos == null)
-            painel_projetos = new PainelProjetos();      
-        
-        return painel_projetos;
-    }      
-    
-    public JPanel painel_dependentes(){
-        if(painel_dependentes == null)
-            painel_dependentes = new PainelDependentes();
-                
-        return painel_dependentes;
-    }      
     
     public void form_funcionarios(Empregado e){
         if(formFuncionario == null)

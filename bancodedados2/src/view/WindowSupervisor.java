@@ -23,9 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
-import view.panel.PainelFuncionarios;
 import view.panel.PainelInit;
-import view.panel.PainelProjetos;
 
 public class WindowSupervisor extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -150,31 +148,12 @@ public class WindowSupervisor extends JFrame implements ActionListener {
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "inicio");
             }		
             else if (origem == btnFuncionarios || origem == menuFuncionariosListar){
-                painelCentral.add(painel_funcionario(), "funcionario");                     
+                painelCentral.add(WindowGerente.painelFuncionarios(), "funcionario");                     
                 WindowSupervisor.card.show(WindowSupervisor.painelCentral, "funcionario");
             }
             else if( origem == btnProjetos){
-                painelCentral.add(painel_projetos(), "projeto"); 
+                painelCentral.add(WindowGerente.painelProjetos(), "projeto"); 
                 WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
             }                   
-    }
-    
-    /**
-     * Singleton JPanel
-     */
-    public static JPanel painel_funcionario(){
-        if(painel_funcionario == null){
-            painel_funcionario = new PainelFuncionarios();                
-        }
-        return painel_funcionario;
-    }
-    
-    
-    public static JPanel painel_projetos(){
-        if(painel_projetos == null){
-            painel_projetos = new PainelProjetos();
-        }
-        
-        return painel_projetos;
-    }
+    }    
 }

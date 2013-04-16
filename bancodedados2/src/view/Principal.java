@@ -1,6 +1,8 @@
 package view;
+import Model.Departamento;
 import Model.Empregado;
 import control.ControlFacade;
+import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -48,8 +50,10 @@ public class Principal{
          update = (Projeto) FactoryDAO.getFactory("Projeto").read("MINERACAO");
          System.out.println(update.getLocalizacao());
          */
-         ViewObjectPool.set("todosEmpregados", Principal.cf.listarEmpregados());
-         ViewObjectPool.set("todosDapartamentos", Principal.cf.listarDepartamentos());         
+        ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
+        ViewObjectPool.set("todosDepartamento", (Vector<Departamento>) Principal.cf.listarDepartamentos());  
+                
+            
          login = new WindowLogin();
 //         janela = new WindowFuncionario();
     }

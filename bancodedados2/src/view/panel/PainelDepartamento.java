@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -28,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
+import view.ViewObjectPool;
 import view.formularios.FormDepartamento;
 import view.formularios.FormDepartamentoLocal;
 import view.formularios.FormDepartamentoProjetos;
@@ -136,7 +138,9 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
                 try {
                     Principal.cf.apagarDepartamento(Integer.parseInt(numero));
                     modelo.removeRow(item);
-                    contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
+                    ViewObjectPool.set("todosDapartamentos", (Vector<Departamento>) Principal.cf.listarDepartamentos());    
+                    PainelDepartamento.setDataTable();                       
+                    contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");  
                 }
                 catch (Exception ex){
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
@@ -183,7 +187,8 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
         String[][] dados = null;
         
         try {        
-            dados = Principal.cf.getDepartamentosTable(Principal.cf.listarDepartamentos());
+            Vector<Departamento> values = (Vector<Departamento>) ViewObjectPool.get("todosDepartamento");
+            dados = Principal.cf.getDepartamentosTable(values);
         } catch (Exception ex) {
             System.err.println("Erro Painel Departamentos: " + ex);
         }

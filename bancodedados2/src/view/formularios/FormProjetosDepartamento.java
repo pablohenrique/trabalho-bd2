@@ -36,6 +36,7 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
     private static DefaultTableModel modelo;
     private static String[] colunas;
     private static Projeto proj;    
+    private Vector<Departamento> valuesDepartamento;
     
     public FormProjetosDepartamento(){
         super(Principal.janela,"Empregado que trabalha em mais projetos de um Detartamento", true);
@@ -45,7 +46,8 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
         btnOK.addActionListener(this);
         
         try {
-            departamento = new JComboBox((Vector<Object>) ViewObjectPool.get("todosDapartamentos"));  
+            valuesDepartamento = new Vector((Vector<Departamento>) ViewObjectPool.get("todosDepartamento"));            
+            departamento = new JComboBox(valuesDepartamento); 
         } catch (Exception ex) {
             departamento = new JComboBox();  
         }

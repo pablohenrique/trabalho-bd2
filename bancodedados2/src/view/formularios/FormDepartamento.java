@@ -40,6 +40,7 @@ public class FormDepartamento extends JDialog implements ActionListener
     private JPanel botoes = new JPanel();
     private JPanel painel = new JPanel();
     private JPanel grid = new JPanel();
+    private Vector<Empregado> valuesEmpregado;
     
     public JComboBox gerente;
     
@@ -61,7 +62,8 @@ public class FormDepartamento extends JDialog implements ActionListener
         }
         
         try {            
-            gerente = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));  
+            valuesEmpregado = new Vector((Vector<Empregado>) ViewObjectPool.get("todosEmpregados"));
+            gerente = new JComboBox(valuesEmpregado);  
         } catch (Exception ex) {
             gerente = new JComboBox();
         }
@@ -120,7 +122,8 @@ public class FormDepartamento extends JDialog implements ActionListener
             return;
         }
         
-        gerente.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosEmpregados")));        
+        valuesEmpregado = (Vector<Empregado>) ViewObjectPool.get("todosEmpregados");
+        gerente.setModel(new javax.swing.DefaultComboBoxModel(valuesEmpregado));        
         depEdit = dep;
         
         nome.setText(dep.getNome());
@@ -161,8 +164,9 @@ public class FormDepartamento extends JDialog implements ActionListener
                     Principal.cf.inserirDepartamento(nome.getText(), gerssn.getSsn(), dataInicio.getText());
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
+                    
+                    ViewObjectPool.set("todosDepartamento", (Vector<Departamento>) Principal.cf.listarDepartamentos());        
                     PainelDepartamento.setDataTable();
-                    ViewObjectPool.set("todosDapartamentos", Principal.cf.listarDepartamentos());    
                     this.dispose();
                 }
                 catch(Exception ex){
@@ -178,8 +182,9 @@ public class FormDepartamento extends JDialog implements ActionListener
                     Principal.cf.atualizarDepartamento(depEdit.getNumero(), nome.getText(), gerssn.getSsn(), dataInicio.getText());
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelDepartamento.setDataTable();
-                    ViewObjectPool.set("todosDapartamentos", Principal.cf.listarDepartamentos());    
+                                       
+                    ViewObjectPool.set("todosDepartamento", (Vector<Departamento>) Principal.cf.listarDepartamentos());    
+                    PainelDepartamento.setDataTable();      
                     this.dispose();
                 }
                 catch(Exception ex){

@@ -8,12 +8,15 @@
  */
 package view;
 
+import Model.Dependente;
 import Model.Empregado;
+import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -216,16 +219,16 @@ public class WindowGerente extends JFrame implements ActionListener {
         else if (origem == menuInit)
             WindowGerente.card.show(WindowGerente.painelCentral, "inicio");		
         else if (origem == btnFunc || origem == menuFuncionariosListar){
-            painelCentral.add(painel_funcionarios(), "funcionario");                                                                            
+            painelCentral.add(painelFuncionarios(), "funcionario");                                                                            
             WindowGerente.card.show(WindowGerente.painelCentral, "funcionario");
         } else if (origem == btnDep || origem == menuDependentesListar){
-            painelCentral.add(painel_dependentes(), "dependente");                                 
+            painelCentral.add(painelDependentes(), "dependente");                                 
             WindowGerente.card.show(WindowGerente.painelCentral, "dependente");
         } else if( origem == btnDepartamentos || origem == menuDepartamentoListar){
-            painelCentral.add(painel_departamento(), "departamento");                
+            painelCentral.add(painelDepartamento(), "departamento");                
             WindowGerente.card.show(WindowGerente.painelCentral, "departamento");
         } else if( origem == btnProjetos || origem == menuProjetosListar){
-            painelCentral.add(painel_projetos(), "projeto");            
+            painelCentral.add(painelProjetos(), "projeto");            
             WindowGerente.card.show(WindowGerente.painelCentral, "projeto");
         } else if (origem == menuFuncionarioCadastro)
             PainelFuncionarios.form_funcionarios(null);
@@ -236,66 +239,90 @@ public class WindowGerente extends JFrame implements ActionListener {
         else if (origem == menuDependentesCadastro)
             PainelDependentes.form_dependente(null);
         else if (origem == btnCalculadora)
-            WindowGerente.form_Salario();    
+            WindowGerente.formSalario();    
         else if (origem == btnProjetosDepatamento)
             WindowGerente.formProjetosDepartamentos();   
         else if(origem == btnCargaHoraria)
-            WindowGerente.form_Horas();
+            WindowGerente.formHoras();
     }
     
-    public static JPanel painel_projetos(){
-        if(painel_projetos == null)
-            painel_projetos = new PainelProjetos();      
-        
+    public static JPanel painelProjetos(){
+        if(painel_projetos == null){  
+            try {                
+                if(Principal.user.getTipoLogin() != 0)//supervisor
+                    ViewObjectPool.set("todosProjetos", (Vector<Projeto>) Principal.cf.listarProjetos());
+                else if(Principal.user.getTipoLogin() == 0)//funcionario
+                    ViewObjectPool.set("todosProjetos", (Vector<Projeto>) Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));
+                
+                painel_projetos = new PainelProjetos();    
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Listar Projetos: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                    }
+        }
+        PainelProjetos.setDataTable();
         return painel_projetos;
     } 
     
-    public static JPanel painel_funcionarios(){
+    public static JPanel painelFuncionarios(){
         if(painel_funcionarios == null)
-            painel_funcionarios = new PainelFuncionarios();      
+            painel_funcionarios = new PainelFuncionarios();
         
+        PainelFuncionarios.setDataTable();        
         return painel_funcionarios;
     } 
     
-    public static JPanel painel_departamento(){
+    public static JPanel painelDepartamento(){
         if(painel_departamento == null)
-            painel_departamento = new PainelDepartamento();      
+            painel_departamento = new PainelDepartamento();              
         
+        PainelDepartamento.setDataTable();        
         return painel_departamento;
     }          
     
-    public static JPanel painel_dependentes(){
-        if(painel_dependentes == null)
-            painel_dependentes = new PainelDependentes();
+    public static JPanel painelDependentes(){
+        if(painel_dependentes == null){           
+            try {                
+                if(Principal.user.getTipoLogin() == 0 || Principal.user.getTipoLogin() == 1)
+                   ViewObjectPool.set("todosDependentes", (Vector<Dependente>) Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
+                else if (Principal.user.getTipoLogin() == 2)            
+                   ViewObjectPool.set("todosDependentes", (Vector<Dependente>)Principal.cf.listarDependentes());
                 
+                painel_dependentes = new PainelDependentes();                            
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Listar Dependentes: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+        }
+        PainelDependentes.setDataTable();
         return painel_dependentes;
     }  
-
-    public static FormSalario form_Salario(){
+    
+    public static JPanel getPainelDependentes(){
+        return painel_dependentes;
+    }
+    
+    public static FormSalario formSalario(){
         if(formSalario == null)
             formSalario = new FormSalario();
-        else {
+        else
             formSalario.execute();
-        }
+        
         return formSalario;
     }     
      
     
-    public static FormHoras form_Horas(){
+    public static FormHoras formHoras(){
         if(formHoras == null)
             formHoras = new FormHoras();
-        else {
+        else
             formHoras.execute();
-        }
         return formHoras;
     }  
     
     public static FormProjetosDepartamento formProjetosDepartamentos(){
         if(formDepProjetos == null)
             formDepProjetos = new FormProjetosDepartamento();
-        else {
+        else 
             formDepProjetos.execute();
-        }
+
         return formDepProjetos;
     }       
 }

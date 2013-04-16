@@ -41,8 +41,8 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     private JButton novo  = new JButton("Novo");
     private JButton editar = new JButton("Editar");
     private JButton excluir = new JButton("Excluir"); 
-    public static JComboBox empregados = null;                 
-    public static Empregado emp = new Empregado();
+    private JComboBox empregadosDependentes = null;
+    private Empregado empDependentes = new Empregado();
     
     private static JLabel contaRegistros =  new JLabel();            
     public static JTable tabela;
@@ -79,29 +79,22 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         JLabel imagem = new JLabel();
         imagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/busca.png")));
 
-        emp.setNome("Todos Empregados");
-        emp.setSsn("-1");
+        empDependentes.setNome("Todos Empregados");
+        empDependentes.setSsn("-1");
         
-        try {
-            if(Principal.user.getTipoLogin() == 2)
-                empregados = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));  
-            else
-                throw new Exception();
-        } catch (Exception ex) {
-            empregados = new JComboBox();
-        }
-        
-        empregados.addItem(emp);
-        empregados.setSelectedItem(emp);
-        empregados.setPreferredSize(new Dimension(320, 24));
-        empregados.setMaximumSize(new Dimension(320, 24));
+        Vector<Empregado> values = new Vector((Vector<Empregado>) ViewObjectPool.get("todosEmpregados"));
+        empregadosDependentes = new JComboBox(values);
+        empregadosDependentes.addItem(empDependentes);
+        empregadosDependentes.setSelectedItem(empDependentes);
+        empregadosDependentes.setPreferredSize(new Dimension(320, 24));
+        empregadosDependentes.setMaximumSize(new Dimension(320, 24));
 
         botoes = nivelView(botoes);        
         
         novo.addActionListener(this);
         editar.addActionListener(this);
         excluir.addActionListener(this);        
-        empregados.addActionListener(this);
+        empregadosDependentes.addActionListener(this);
         
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));         
@@ -122,7 +115,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             botoes.add(Box.createHorizontalGlue());            
             botoes.add(contaRegistros);
             botoes.add(Box.createHorizontalGlue());
-            botoes.add(empregados);
+            botoes.add(empregadosDependentes);
             botoes.add(Box.createHorizontalStrut(7));        
         } else if(Principal.user.getTipoLogin() == 0) {
             botoes.add(Box.createHorizontalGlue());        
@@ -164,7 +157,8 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
                 try {
                     Principal.cf.apagarDependente(nome, essn);
                     modelo.removeRow(item);
-                    contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
+                    FormDependente.updatePool();
+                    contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                                        
                 }
                 catch (Exception ex){
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
@@ -172,8 +166,8 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
                 }
             }
         }
-        else if (origem == empregados){
-            Empregado emp = (Empregado) empregados.getSelectedItem();
+        else if (origem == empregadosDependentes){
+            Empregado emp = (Empregado) empregadosDependentes.getSelectedItem();
             
             if(!emp.getSsn().equals("-1")){
                 String[][] dados = null;        
@@ -207,14 +201,12 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     public static void setDataTable(){
         String[][] dados = null;        
 
-        try {
-            if(Principal.user.getTipoLogin() == 0 || Principal.user.getTipoLogin() == 1)
-                dados = Principal.cf.getDependentesTable(Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
-            else if (Principal.user.getTipoLogin() == 2)
-                dados = Principal.cf.getDependentesTable(Principal.cf.listarDependentes());
+        try {            
+            Vector<Dependente> values = new Vector((Vector<Dependente>) ViewObjectPool.get("todosDependentes"));
+            dados = Principal.cf.getDependentesTable(values);
         } catch (Exception ex) {
             System.err.println("Erro listar dependentes: " + ex);
-        }
+        }        
         
         PainelDependentes.modelo = new DefaultTableModel(dados, PainelDependentes.colunas);
         PainelDependentes.tabela.setModel(PainelDependentes.modelo);                    

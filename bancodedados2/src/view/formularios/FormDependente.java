@@ -10,8 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -41,7 +39,7 @@ public class FormDependente extends JDialog implements ActionListener
     private JButton btnOK;
     private JButton btnCancelar;
     private Dependente dep_edit = null;
-    
+    private Vector<Empregado> valuesEmpregado;
     public FormDependente(Dependente dep)
     {
         super(Principal.janela,"Cadastro de Dependente", true);
@@ -66,7 +64,8 @@ public class FormDependente extends JDialog implements ActionListener
         parentesco.addItem("Nao sei");
         
         try {
-            empregado = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));  
+            valuesEmpregado = new Vector((Vector<Empregado>) ViewObjectPool.get("todosEmpregados"));
+            empregado = new JComboBox(valuesEmpregado);  
         } catch (Exception ex) {
             empregado = new JComboBox();
         }
@@ -136,7 +135,8 @@ public class FormDependente extends JDialog implements ActionListener
             this.cleanDependente();
             return;
         }
-        empregado.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosEmpregados")));
+        valuesEmpregado = (Vector<Empregado>) ViewObjectPool.get("todosEmpregados");
+        empregado.setModel(new javax.swing.DefaultComboBoxModel(valuesEmpregado));
         dep_edit = d;
         
         nome.setText(d.getNome());
@@ -203,7 +203,8 @@ public class FormDependente extends JDialog implements ActionListener
                     Principal.cf.inserirDependente(nome.getText(), emp.getSsn(), sexo.getItemAt(sexo.getSelectedIndex()), dataNasc.getText(),  parentesco.getItemAt(parentesco.getSelectedIndex()));                              
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelDependentes.setDataTable();
+
+                    FormDependente.updatePool();
                     this.dispose();
                 }
                 catch(Exception ex){
@@ -219,8 +220,9 @@ public class FormDependente extends JDialog implements ActionListener
 
                     Principal.cf.atualizarDependente(nome.getText(), emp.getSsn(), sexo.getItemAt(sexo.getSelectedIndex()), dataNasc.getText(),  parentesco.getItemAt(parentesco.getSelectedIndex()));                              
 
-                    JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelDependentes.setDataTable();
+                    JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                                            
+                    
+                    FormDependente.updatePool();
                     this.dispose();
                 }
                 catch(Exception ex){
@@ -232,5 +234,13 @@ public class FormDependente extends JDialog implements ActionListener
 
         if (origem == btnCancelar)
                 this.dispose();
+    }
+    
+    public static void updatePool() throws Exception{
+        if(Principal.user.getTipoLogin() == 0 || Principal.user.getTipoLogin() == 1)
+           ViewObjectPool.set("todosDependentes", (Vector<Dependente>)Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
+        else if (Principal.user.getTipoLogin() == 2)            
+           ViewObjectPool.set("todosDependentes", (Vector<Dependente>)Principal.cf.listarDependentes());
+        PainelDependentes.setDataTable();
     }
 }

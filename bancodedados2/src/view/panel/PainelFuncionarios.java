@@ -16,6 +16,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -31,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
+import view.ViewObjectPool;
 import view.formularios.FormFuncionario;
 import view.formularios.FormFuncionarioProjetos;
 
@@ -161,6 +163,8 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
                 try {
                     Principal.cf.apagarEmpregado(ssn);
                     modelo.removeRow(item);
+                    ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
+                    PainelFuncionarios.setDataTable();                        
                     contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
                 }
                 catch (Exception ex){
@@ -224,14 +228,15 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
     public static void setDataTable(){
         
         String[][] dados = null;                         
-
         try {
             if(Principal.user.getTipoLogin() == 1)
                 dados = Principal.cf.getEmpregadosTable(Principal.cf.buscaSuperSnn(Principal.user.getSsn()));            
-            else
-                dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());
+            else{
+                Vector<Empregado> values = new Vector((Vector<Empregado>) ViewObjectPool.get("todosEmpregados"));
+                dados = Principal.cf.getEmpregadosTable(values);
+            }
         } catch (Exception ex) {
-            System.err.println("Erro em Painel Funcionario: " + ex);
+            System.err.println("Erro em Painel Funcionario2: " + ex);
         }
 
         PainelFuncionarios.modelo = new DefaultTableModel(dados, PainelFuncionarios.colunas);

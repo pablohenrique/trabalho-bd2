@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
+import view.ViewObjectPool;
 import view.formularios.FormProjetos;
 import view.formularios.FormProjetosFuncionarios;
 import view.formularios.FormProjetosPropagandas;
@@ -176,8 +178,9 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
             if(opcao == JOptionPane.YES_OPTION) {
                 try {
                     Principal.cf.apagarProjeto(Integer.parseInt(numero));
-                    modelo.removeRow(item);
-                    contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                    
+                    modelo.removeRow(item);                    
+                    FormProjetos.updatePool();
+                    contaRegistros.setText(tabela.getRowCount() + " registro(s) encontrado(s)");                          
                 }
                 catch (Exception ex){
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
@@ -234,10 +237,8 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         String[][] dados = null;
 
         try {        
-            if(Principal.user.getTipoLogin() != 0)//supervisor
-                dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
-            else if(Principal.user.getTipoLogin() == 0)//funcionario
-                dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));
+            Vector<Projeto> values = (Vector<Projeto>) ViewObjectPool.get("todosProjetos");
+            dados = Principal.cf.getProjetosTable(values);
         } catch (Exception ex) {
             System.err.println("Erro Painel Projetos: " + ex);
         }

@@ -32,6 +32,7 @@ public class FormProjetos extends JDialog implements ActionListener
     private JButton btnOK;
     private JButton btnCancelar;
     private Projeto pEdit = null;
+    private Vector<Departamento> valuesDepartamento;
     
     public FormProjetos(Projeto p)
     {
@@ -41,7 +42,8 @@ public class FormProjetos extends JDialog implements ActionListener
         localizacao = new JTextField();                
         
         try {
-            departamento = new JComboBox((Vector<Object>) ViewObjectPool.get("todosDapartamentos"));  
+            valuesDepartamento = new Vector((Vector<Departamento>) ViewObjectPool.get("todosDepartamento"));            
+            departamento = new JComboBox(valuesDepartamento); 
         } catch (Exception ex) {
             departamento = new JComboBox();  
         }
@@ -104,7 +106,10 @@ public class FormProjetos extends JDialog implements ActionListener
             return;
         }
         pEdit = p;
-        departamento.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosDapartamentos")));
+        
+        valuesDepartamento = new Vector((Vector<Departamento>) ViewObjectPool.get("todosDepartamento"));            
+        departamento.setModel(new javax.swing.DefaultComboBoxModel(valuesDepartamento));
+        
         nome.setText(p.getNome());
         localizacao.setText(p.getLocalizacao());
         departamento.setSelectedIndex(this.selecionarComboBoxDep(p.getDepartamento().getNumero(), departamento));                
@@ -140,7 +145,9 @@ public class FormProjetos extends JDialog implements ActionListener
                     Principal.cf.inserirProjeto(nome.getText(), localizacao.getText(), d.getNumero());
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelProjetos.setDataTable();
+                    
+                    FormProjetos.updatePool();
+                    
                     this.dispose();
                 }
                 catch(Exception ex){
@@ -153,8 +160,9 @@ public class FormProjetos extends JDialog implements ActionListener
 
                     Principal.cf.atualizarProjeto(pEdit.getNumero(), nome.getText(), localizacao.getText(), d.getNumero());
                     
-                    JOptionPane.showMessageDialog(this,"Atualizacao realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelProjetos.setDataTable();
+                    JOptionPane.showMessageDialog(this,"Atualizacao realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                                            
+                    
+                    FormProjetos.updatePool();
                     this.dispose();
                 }
                 catch(Exception ex) {
@@ -165,6 +173,14 @@ public class FormProjetos extends JDialog implements ActionListener
 
         if (origem == btnCancelar)
             this.dispose();
+    }
+    
+    public static void updatePool() throws Exception{
+        if(Principal.user.getTipoLogin() != 0)//supervisor
+            ViewObjectPool.set("todosProjetos", Principal.cf.getProjetosTable(Principal.cf.listarProjetos()));
+        else if(Principal.user.getTipoLogin() == 0)//funcionario
+            ViewObjectPool.set("todosProjetos", Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));    
+        PainelProjetos.setDataTable();                    
     }
 
 }

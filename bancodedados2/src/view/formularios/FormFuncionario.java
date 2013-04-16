@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -29,45 +28,38 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 import view.Principal;
 import view.ViewObjectPool;
-import view.panel.PainelDepartamento;
-import view.panel.PainelDependentes;
 import view.panel.PainelFuncionarios;
 
 public class FormFuncionario extends JDialog implements ActionListener
 {
     private static final long serialVersionUID = 1L;    
-    private JTextField nome;
-    private JTextField ssn;
-    private JTextField endereco;
-    private JTextField salario;
-    private JFormattedTextField dataNasc;  
+    private JTextField nome = new JTextField();
+    private JTextField ssn = new JTextField();
+    private JTextField endereco = new JTextField();
+    private JTextField salario = new JTextField();
+    private JFormattedTextField dataNasc = new JFormattedTextField();
 
     private JComboBox<String> sexo;
-    public JComboBox departamento;
-    public JComboBox supervisor;
+    public JComboBox departamento = new JComboBox();
+    public JComboBox supervisor = new JComboBox();
     
     private JPasswordField senha;
     
     private JButton btnOK;
     private JButton btnCancelar;
     private static Empregado emp_edit = null;
+    private Vector<Empregado> valuesEmpregado;
+    private Vector<Departamento> valuesDepartamento;
     
     public FormFuncionario(Empregado emp)
     {
         super(Principal.janela,"Cadastro de Empregado", true);
         emp_edit = emp;
-        nome = new JTextField();
-        endereco = new JTextField();
-        ssn = new JTextField();
-        salario = new JTextField();
-        dataNasc = new JFormattedTextField();
-                        
-        try
-        {
+
+        try{
             dataNasc.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));  
         }
-        catch (ParseException ex)
-        {
+        catch (ParseException ex){
             Logger.getLogger(FormFuncionario.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Erro mascara! " + ex);
         }
@@ -81,23 +73,22 @@ public class FormFuncionario extends JDialog implements ActionListener
         superssn.setNome("Nenhum Supervisor");
         
         try {
-            departamento = new JComboBox((Vector<Object>) ViewObjectPool.get("todosDapartamentos"));  
+            valuesDepartamento = new Vector((Vector<Departamento>) ViewObjectPool.get("todosDepartamento"));            
+            departamento.setModel(new javax.swing.DefaultComboBoxModel((valuesDepartamento)));
         } catch (Exception ex) {
-            departamento = new JComboBox();
+            System.err.println("Nao fooi possivel listar departamentos no combox");
         }
         
         try { 
-            supervisor = new JComboBox((Vector<Object>) ViewObjectPool.get("todosEmpregados"));  
+            valuesEmpregado =  new Vector((Vector<Empregado>) ViewObjectPool.get("todosEmpregados"));            
+            supervisor.setModel(new javax.swing.DefaultComboBoxModel((valuesEmpregado)));
         } catch (Exception ex) {
-            supervisor = new JComboBox();  
+            System.err.println("Nao fooi possivel listar supervisor no combox");
         }
         supervisor.addItem(superssn);
                         
-        if (emp_edit != null)
-        {            
-            try
-            {
-                //System.out.println("EMPREGADO "+ emp.getNome());
+        if (emp_edit != null){            
+            try{
                 this.editarEmpregado(emp_edit);
             }
             catch (Exception ex)
@@ -165,14 +156,19 @@ public class FormFuncionario extends JDialog implements ActionListener
     public void editarEmpregado(Empregado e) throws Exception
     {
         this.nivelUser(Principal.user);
+        valuesEmpregado =  (Vector<Empregado>) ViewObjectPool.get("todosEmpregados");
         
+        supervisor.setModel(new javax.swing.DefaultComboBoxModel((valuesEmpregado)));
+     
+        valuesDepartamento = (Vector<Departamento>) ViewObjectPool.get("todosDepartamento");            
+        departamento.setModel(new javax.swing.DefaultComboBoxModel(valuesDepartamento));//        nao consegui arrumar esse erro
+              
         if(e == null){
             emp_edit = null;
             this.cleanEmpregadoForm();
             return;
         }
-        supervisor.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosEmpregados")));        
-        departamento.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosDapartamentos")));        
+       
         emp_edit = e;
         
         nome.setText(e.getNome());
@@ -190,7 +186,7 @@ public class FormFuncionario extends JDialog implements ActionListener
             supervisor.setSelectedIndex(this.selecionarComboBoxSup(e.getSuperSsn(), supervisor));
         else
             supervisor.setSelectedIndex(supervisor.getItemCount()-1);
-        
+     
         this.setTitle("Editar Empregado");
     }  
     
@@ -272,8 +268,10 @@ public class FormFuncionario extends JDialog implements ActionListener
                                                  superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                    PainelFuncionarios.setDataTable();                    
-                    this.updatePool();
+                    
+                    ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
+                    PainelFuncionarios.setDataTable();                   
+                    
                     this.dispose();                    
                 }
                 catch(Exception ex){
@@ -291,9 +289,8 @@ public class FormFuncionario extends JDialog implements ActionListener
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                                        
-                    if(Principal.user.getTipoLogin() == 2 || Principal.user.getTipoLogin() == 1)
-                        PainelFuncionarios.setDataTable();                     
-                    this.updatePool();
+                    ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
+                    PainelFuncionarios.setDataTable();                     
                     this.dispose();                    
                 }
                 catch(Exception ex){
@@ -305,14 +302,5 @@ public class FormFuncionario extends JDialog implements ActionListener
         if (origem == btnCancelar)
             this.dispose();
     }    
-    
-    public void updatePool() throws Exception{
-        //ViewObjectPool.set("todosEmpregados", Principal.cf.listarEmpregados());
-        //nao tem como tirar, sempre que inserir um funcionario, no painel de dependentes tem que atualizar o combo box
-        if(PainelDependentes.empregados != null){
-            PainelDependentes.empregados.setModel(new javax.swing.DefaultComboBoxModel((Vector) ViewObjectPool.get("todosEmpregados")));       
-            PainelDependentes.empregados.addItem(PainelDependentes.emp);
-            PainelDependentes.empregados.setSelectedItem(PainelDependentes.emp);
-        }
-    }
+
 }
