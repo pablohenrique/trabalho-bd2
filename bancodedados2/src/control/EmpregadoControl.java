@@ -155,12 +155,18 @@ public class EmpregadoControl {
         return this.dao.buscarValoresSalario("menor");   
     }
     
-    public Empregado empregadoMaisHoras(){
-        return (Empregado) this.dao.buscarEmpregadoHoras("maior");
+    public Vector<Empregado> empregadoMaisHoras(){
+        Vector<Empregado> empregados = new Vector<Empregado>();
+        for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoHoras("maior"))
+            empregados.add((Empregado)aux);
+        return empregados;
     }
     
-    public Empregado empregadoMenosHoras() {
-        return (Empregado) this.dao.buscarEmpregadoHoras("menor");
+    public Vector<Empregado> empregadoMenosHoras(){
+        Vector<Empregado> empregados = new Vector<Empregado>();
+        for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoHoras("menor"))
+            empregados.add((Empregado)aux);
+        return empregados;
     }
     
     

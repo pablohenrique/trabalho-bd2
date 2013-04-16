@@ -175,19 +175,19 @@ public class ControlFacade {
     
     /**
      * 
-     * @return Empregado
+     * @return Vector<Empregado>
      * empregado com mais horas
      */
-    public Empregado empregadoMaisHoras(){
+    public Vector<Empregado> empregadoMaisHoras(){
         return empregadoControl.empregadoMaisHoras();
     }
     
     /**
      * 
-     * @return Empregado
+     * @return Vector<Empregado>
      * empregado com menos horas
      */
-    public Empregado empregadoMenosHoras(){
+    public Vector<Empregado> empregadoMenosHoras(){
         return empregadoControl.empregadoMenosHoras();
     }
              
