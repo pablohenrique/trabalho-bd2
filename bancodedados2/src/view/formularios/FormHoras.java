@@ -152,9 +152,6 @@ public class FormHoras extends JDialog implements ActionListener
     }
        
     public void execute() {
-        dep = null;     
-        valuesDepartamento = (Vector<Departamento>) ViewObjectPool.get("todosDepartamento");            
-        tipo.setModel(new javax.swing.DefaultComboBoxModel(valuesDepartamento));          
         
         this.setVisible(true);        
     }
