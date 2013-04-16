@@ -331,12 +331,14 @@ $BODY$
 BEGIN
     IF NEW.salario < 100 THEN
 	RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario %', NEW.superssn;
+    ELSEIF(TG_OP = 'UPDATE')
+        IF NEW.salario > OLD.salario THEN
+            INSERT INTO auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
+        ELSE
+            RAISE EXCEPTION 'Valor de salario nao pode ser persistido. Nao se pode reduzir o salario de um empregado, senhor %', OLD.superssn;
+        END IF;
     END IF;
-
-    IF NEW.salario != OLD.salario THEN
-        INSERT INTO auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
-    END IF;
-
+    
     RETURN NEW;
 END;
 $BODY$
