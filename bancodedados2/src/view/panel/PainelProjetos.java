@@ -165,10 +165,17 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         int item = tabela.getSelectedRow();
         
         if (origem == novo)
-                formProjeto(null);
+            formProjeto(null);
         else if (origem == editar && (item != -1)){           
-                //String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));                
-                formProjeto(dadosLista(item));        
+            String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));                
+            
+            try {
+                Projeto p = Principal.cf.getProjetoByNumero(Integer.parseInt(id));
+                formProjeto(p);        
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+            }
+               
         } else if (origem == excluir  && (item != -1)) {
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome Projeto"));
@@ -237,7 +244,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         String[][] dados = null;
 
         try {        
-            Vector<Projeto> values = (Vector<Projeto>) ViewObjectPool.get("todosProjetos");
+            Vector<Projeto> values = (Vector<Projeto>) ViewObjectPool.get("todosProj");
             dados = Principal.cf.getProjetosTable(values);
         } catch (Exception ex) {
             System.err.println("Erro Painel Projetos: " + ex);

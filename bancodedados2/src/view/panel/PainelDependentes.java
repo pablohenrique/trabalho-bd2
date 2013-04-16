@@ -139,8 +139,8 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
             String nome = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Nome"));
             Dependente dep = null;
             try {
-                //dep = Principal.cf.buscaDependenteEssnNome(essn, nome);
-                form_dependente(dadosItem(item));
+                dep = Principal.cf.buscaDependenteEssnNome(essn, nome);
+                form_dependente(dep);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }            

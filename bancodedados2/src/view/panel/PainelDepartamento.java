@@ -121,8 +121,8 @@ public final class PainelDepartamento extends JPanel  implements ActionListener 
             String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
             Departamento dep;
             try {
-                //dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));                
-                formDepartamentos(dadosLista(item));
+                dep = Principal.cf.getDepartamentoByNumero(Integer.parseInt(numero));                
+                formDepartamentos(dep);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }

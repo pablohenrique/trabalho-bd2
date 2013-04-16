@@ -50,7 +50,8 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         
         btnOK.addActionListener(this);
         editarHora.addActionListener(this);
-
+        excluir.addActionListener(this);
+        
         JLabel nome = new JLabel("Nome: ");
                  
         JPanel grid = new JPanel();
@@ -153,8 +154,9 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
          } else if(origem == editarHora && (item != -1)){
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));   
             String SuperSnn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("SuperSnn"));   
-
+            
             if(SuperSnn.equals(Principal.user.getSsn())){
+                
                 Trabalha t = null;
                 System.out.print("editar" + ssn);
                 try {
@@ -162,11 +164,29 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
                     FormFuncionarioProjetosForm(t).setVisible(true);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-                }                 
+                }     
+                
             } else
                 JOptionPane.showMessageDialog(this,"Voce nao eh supervisor desse empregado!", "Atenção", JOptionPane.ERROR_MESSAGE);
-         }else if(origem == btnOK)
+         }else if (origem == excluir && (item != -1)){
+            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));   
+            String SuperSnn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("SuperSnn"));  
+            
+            if(SuperSnn.equals(Principal.user.getSsn())){
+
+                System.out.print("remover" + ssn);
+                try {
+                    Principal.cf.deletaTrabalha(ssn, proj.getNumero());
+                    FormProjetosFuncionarios.setDataTableFuncionariosProjetos();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+                }                 
+                
+             } else
+                JOptionPane.showMessageDialog(this,"Voce nao eh supervisor desse empregado!", "Atenção", JOptionPane.ERROR_MESSAGE);
+         } else if(origem == btnOK){
             this.dispose();   
+         }
     }
 
     public static void setSizeColumnFuncionariosProjetos(){

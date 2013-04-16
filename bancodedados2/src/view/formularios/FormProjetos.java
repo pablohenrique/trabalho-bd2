@@ -177,9 +177,9 @@ public class FormProjetos extends JDialog implements ActionListener
     
     public static void updatePool() throws Exception{
         if(Principal.user.getTipoLogin() != 0)//supervisor
-            ViewObjectPool.set("todosProjetos", Principal.cf.getProjetosTable(Principal.cf.listarProjetos()));
+            ViewObjectPool.set("todosProj", (Vector<Projeto>) Principal.cf.listarProjetos());
         else if(Principal.user.getTipoLogin() == 0)//funcionario
-            ViewObjectPool.set("todosProjetos", Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));    
+            ViewObjectPool.set("todosProj", (Vector<Projeto>) Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));    
         PainelProjetos.setDataTable();                    
     }
 

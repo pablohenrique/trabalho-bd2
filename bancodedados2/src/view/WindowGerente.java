@@ -239,7 +239,7 @@ public class WindowGerente extends JFrame implements ActionListener {
         else if (origem == menuDependentesCadastro)
             PainelDependentes.form_dependente(null);
         else if (origem == btnCalculadora)
-            WindowGerente.formSalario();    
+            WindowGerente.formSalario().setVisible(true);    
         else if (origem == btnProjetosDepatamento)
             WindowGerente.formProjetosDepartamentos();   
         else if(origem == btnCargaHoraria)
@@ -250,9 +250,9 @@ public class WindowGerente extends JFrame implements ActionListener {
         if(painel_projetos == null){  
             try {                
                 if(Principal.user.getTipoLogin() != 0)//supervisor
-                    ViewObjectPool.set("todosProjetos", (Vector<Projeto>) Principal.cf.listarProjetos());
+                    ViewObjectPool.set("todosProj", (Vector<Projeto>) Principal.cf.listarProjetos());
                 else if(Principal.user.getTipoLogin() == 0)//funcionario
-                    ViewObjectPool.set("todosProjetos", (Vector<Projeto>) Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));
+                    ViewObjectPool.set("todosProj", (Vector<Projeto>) Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));
                 
                 painel_projetos = new PainelProjetos();    
             } catch (Exception ex) {
