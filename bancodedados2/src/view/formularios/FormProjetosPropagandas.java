@@ -1,17 +1,13 @@
 package view.formularios;
 
-import Model.Empregado;
 import Model.Projeto;
 import Model.Propaganda;
-import Model.Trabalha;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -95,7 +91,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
 
         colunas = new String [] { "Agencia", "Numero", "Data Inicio", "Data Final", "Projeto", "Tarifa"};  
         
-        FormProjetosPropagandas.setDataTableFuncionariosProjetos();
+        FormProjetosPropagandas.setDataTableProjetosPropagandas(proj);
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -131,7 +127,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
         localProjeto.setText(p.getLocalizacao());
         depProjeto.setText(p.getDepartamento().getNome());
         
-        FormProjetosPropagandas.setDataTableFuncionariosProjetos();
+        FormProjetosPropagandas.setDataTableProjetosPropagandas(proj);
     }
     
     @Override
@@ -143,7 +139,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
             try {
                 FormFuncionarioProjetosForm(null, proj).setVisible(true);
             } catch (Exception ex) {
-                System.err.println("Erro: " + ex);
+                JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }            
          }else if(origem == editar) {
             String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));   
@@ -153,7 +149,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
                 System.out.println(id);
                 FormFuncionarioProjetosForm(p, p.getProjeto()).setVisible(true);
             } catch (Exception ex) {
-                Logger.getLogger(FormProjetosPropagandas.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
             }
          }else if (origem == excluir){
             String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));                
@@ -163,7 +159,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
             if(opcao == JOptionPane.YES_OPTION) {
                 try {
                     Principal.cf.deletePropaganda(Integer.parseInt(id));                      
-                    FormProjetosPropagandas.setDataTableFuncionariosProjetos();
+                    FormProjetosPropagandas.setDataTableProjetosPropagandas(proj);
                 }
                 catch (Exception ex){
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
@@ -180,13 +176,14 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
         tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(250);
         tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(100);
     }
-    
-    public static void setDataTableFuncionariosProjetos(){
+        
+    public static void setDataTableProjetosPropagandas(Projeto projeto){
         String[][] dados = null;
         try {
-            dados = Principal.cf.getPropagandasByProjeto(Principal.cf.getPropagandaProjeto(proj.getNumero()));        
+            if(projeto != null)
+            dados = Principal.cf.getPropagandasByProjeto(Principal.cf.getPropagandaProjeto(projeto.getNumero()));        
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null,"Erro listar" + ex, "Atenção", JOptionPane.ERROR_MESSAGE);
         }
         
         FormProjetosPropagandas.modelo = new DefaultTableModel(dados, FormProjetosPropagandas.colunas);

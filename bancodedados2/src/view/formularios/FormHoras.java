@@ -1,7 +1,6 @@
 package view.formularios;
 
 import Model.Departamento;
-import Model.Empregado;
 import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,8 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -26,7 +23,6 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import view.Principal;
-import view.ViewObjectPool;
 
 public class FormHoras extends JDialog implements ActionListener
 {

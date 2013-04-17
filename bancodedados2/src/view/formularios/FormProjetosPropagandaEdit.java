@@ -3,14 +3,12 @@ package view.formularios;
 import Model.Empregado;
 import Model.Projeto;
 import Model.Propaganda;
-import Model.Trabalha;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -160,7 +158,7 @@ public class FormProjetosPropagandaEdit extends JDialog implements ActionListene
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     
-                    FormProjetosPropagandas.setDataTableFuncionariosProjetos();
+                    FormProjetosPropagandas.setDataTableProjetosPropagandas(proj);
                     this.dispose();
                 }
                 catch(Exception ex){
@@ -173,7 +171,7 @@ public class FormProjetosPropagandaEdit extends JDialog implements ActionListene
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     
-                    FormProjetosPropagandas.setDataTableFuncionariosProjetos();                   
+                    FormProjetosPropagandas.setDataTableProjetosPropagandas(proj);
                     this.dispose();
                 }
                 catch(Exception ex){

@@ -9,7 +9,6 @@
  */
 package view.panel;
 
-import Model.Departamento;
 import Model.Empregado;
 import java.awt.BorderLayout;
 import java.awt.Color;

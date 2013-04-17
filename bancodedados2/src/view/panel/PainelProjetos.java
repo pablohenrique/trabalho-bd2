@@ -10,16 +10,15 @@
 package view.panel;
 
 import Model.Departamento;
-import Model.Empregado;
 import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -112,6 +111,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         excluir.addActionListener(this);        
         empregados.addActionListener(this);
         publicidade.addActionListener(this);
+        balanco.addActionListener(this);
         
         this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.DARK_GRAY));
@@ -217,6 +217,27 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
 
         } else if (origem == publicidade  && (item != -1)){    
                 formPropagandas(dadosLista(item));
+        } else if (origem == balanco  && (item != -1)){  
+           
+            try {
+                String numero = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));
+
+                double receitas = 0.0;
+                double despesas = 0.0;
+                double total = 0.0;
+                DecimalFormat df = new DecimalFormat();
+                df.setMaximumFractionDigits(2);
+
+                receitas = Principal.cf.receita(Integer.valueOf(numero));     
+                despesas  = Principal.cf.despesa(Integer.valueOf(numero));     
+                total = receitas - despesas;
+                JOptionPane.showMessageDialog(null,"Receitas: R$ "+ df.format(receitas) +"\nDespesas: R$ "+ df.format(despesas) + "\nTotal: R$ " + df.format(total) , "Balanco Geral", JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null,"Erro Balanco Sql: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null,"Erro Balanco Exception: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }   
     
