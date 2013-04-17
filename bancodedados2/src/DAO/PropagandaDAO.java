@@ -34,26 +34,20 @@ public class PropagandaDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object criarObjetoTemplate(){
-        try {
-            Propaganda output = new Propaganda();
-            output.setNumero(this.rs.getInt("pp_id"));
-            output.setAgencia(this.rs.getString("pp_agencia"));
-            output.setDataInicio(this.rs.getDate("pp_dataInicio"));
-            output.setDataFinal(this.rs.getDate("pp_dataFinal"));
-            output.setTarifa(this.rs.getFloat("pp_tarifa"));
-            
-            ProjetoDAO dao = (ProjetoDAO) FactoryDAO.getFactory("Projeto");
-            Projeto pro = (Projeto) dao.createObject(this.rs.getInt("p_pnumero"), this.rs.getString("p_pjnome"), this.rs.getString("p_localizacao"), null);
-            
-            output.setProjeto(pro);
-            System.gc();
-            return output;
-            
-        } catch (Exception e) {
-            System.err.println("Erro [PROP] useObjectTemplate:  " + e.toString() );
-            return null;
-        }
+    private Object criarObjetoTemplate() throws SQLException{
+        Propaganda output = new Propaganda();
+        output.setNumero(this.rs.getInt("pp_id"));
+        output.setAgencia(this.rs.getString("pp_agencia"));
+        output.setDataInicio(this.rs.getDate("pp_dataInicio"));
+        output.setDataFinal(this.rs.getDate("pp_dataFinal"));
+        output.setTarifa(this.rs.getFloat("pp_tarifa"));
+
+        ProjetoDAO dao = (ProjetoDAO) FactoryDAO.getFactory("Projeto");
+        Projeto pro = (Projeto) dao.createObject(this.rs.getInt("p_pnumero"), this.rs.getString("p_pjnome"), this.rs.getString("p_localizacao"), null);
+
+        output.setProjeto(pro);
+        System.gc();
+        return output;
     }
     
     private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
@@ -64,158 +58,110 @@ public class PropagandaDAO implements IObjectDAO{
     }
     
     @Override
-    public void post(Object input) throws Exception {
-        try{
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
-        
-            Propaganda pro = (Propaganda) input;
-            this.ps.setInt(1, pro.getProjeto().getNumero());
-            this.ps.setDate(2, pro.getDataInicio());
-            this.ps.setDate(3, pro.getDataFinal());
-            this.ps.setString(4, pro.getAgencia());
-            this.ps.setFloat(5, pro.getTarifa());
+    public void post(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
 
-            this.rs = this.ps.executeQuery();
-            if(!this.rs.next())
-                throw new Exception("Propaganda nao cadastrada.");
-        } catch(Exception e){
-            System.err.println("Erro [POST] propaganda:  " + e.toString());
-        }
+        Propaganda pro = (Propaganda) input;
+        this.ps.setInt(1, pro.getProjeto().getNumero());
+        this.ps.setDate(2, pro.getDataInicio());
+        this.ps.setDate(3, pro.getDataFinal());
+        this.ps.setString(4, pro.getAgencia());
+        this.ps.setFloat(5, pro.getTarifa());
+
+        this.rs = this.ps.executeQuery();
+        if(!this.rs.next())
+            throw new Exception("Propaganda nao cadastrada.");
     }
 
     @Override
-    public void update(Object input) throws Exception {
-        try{
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-        
-            Propaganda pro = (Propaganda) input;
-            this.ps.setInt(1, pro.getProjeto().getNumero());
-            this.ps.setDate(2, pro.getDataInicio());
-            this.ps.setDate(3, pro.getDataFinal());
-            this.ps.setString(4, pro.getAgencia());
-            this.ps.setFloat(5, pro.getTarifa());
-            this.ps.setInt(6, pro.getNumero());
+    public void update(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
 
-            this.rs = this.ps.executeQuery();
-            if(!this.rs.next())
-                throw new Exception("Propaganda nao atualizada.");
-        } catch(Exception e){
-            System.err.println("Erro [UPDATE] propaganda:  " + e.toString());
-        }
+        Propaganda pro = (Propaganda) input;
+        this.ps.setInt(1, pro.getProjeto().getNumero());
+        this.ps.setDate(2, pro.getDataInicio());
+        this.ps.setDate(3, pro.getDataFinal());
+        this.ps.setString(4, pro.getAgencia());
+        this.ps.setFloat(5, pro.getTarifa());
+        this.ps.setInt(6, pro.getNumero());
+
+        this.rs = this.ps.executeQuery();
+        if(!this.rs.next())
+            throw new Exception("Propaganda nao atualizada.");
     }
 
     // busca a propaganda pelo id
     @Override
-    public Object get(Object input) throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
-            this.ps.setInt(1,(int) input);
-            this.rs = this.ps.executeQuery();
-            
-            if(!this.rs.next())
-                throw new Exception("Nao foi encontrada tarifas");
-            
-            return this.criarObjetoTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro [GET] ao buscar propaganda por ID:  " + e.toString() );
-            return -1;
-        }
+    public Object get(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
+        this.ps.setInt(1,(int) input);
+        this.rs = this.ps.executeQuery();
+
+        if(!this.rs.next())
+            throw new Exception("Nao foi encontrada tarifas");
+
+        return this.criarObjetoTemplate();
     }
 
     // busca a propaganda pelo projeto
     @Override
-    public Object read(Object input) throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            this.ps.setInt(1,(int) input);
-            this.rs = this.ps.executeQuery();
-            
-            if(this.rs.isLast())
-                return this.criarObjetoTemplate();
-            
-            return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro [READ] ao somar tarifas:  " + e.toString() );
-            return null;
-        }
+    public Object read(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
+        this.ps.setInt(1,(int) input);
+        this.rs = this.ps.executeQuery();
+
+        if(this.rs.isLast())
+            return this.criarObjetoTemplate();
+
+        return this.buscarVariosObjetosTemplate();
     }
 
     @Override
-    public ArrayList<Object> getAll() throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            this.rs = this.ps.executeQuery();
-            
-            return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro [GETALL] ao somar tarifas:  " + e.toString() );
-            return null;
-        }
+    public ArrayList<Object> getAll() throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
+        this.rs = this.ps.executeQuery();
+
+        return this.buscarVariosObjetosTemplate();
     }
     
     @Override
-    public void delete(Object input) throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
-            this.ps.setInt(1,(int) input);
-            
-            if(this.ps.executeUpdate() == 0)
-                throw new Exception("Propaganda nao foi deletada");
-            
-        } catch (Exception e) {
-            System.err.println("Erro [DELETE] deletar uma propaganda:  " + e.toString() );
-        }
+    public void delete(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
+        this.ps.setInt(1,(int) input);
+
+        if(this.ps.executeUpdate() == 0)
+            throw new Exception("Propaganda nao foi deletada");
     }
     
     // deletar propaganda pelo projeto
-    public void deletarProjeto(int projeto) throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETEPROJ);
-            this.ps.setInt(1,projeto);
-            
-            if(this.ps.executeUpdate() == 0)
-                throw new Exception("Propaganda nao foi deletada");
-            
-        } catch (Exception e) {
-            System.err.println("Erro deletar uma propaganda:  " + e.toString() );
-        }
+    public void deletarProjeto(int projeto) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETEPROJ);
+        this.ps.setInt(1,projeto);
+
+        if(this.ps.executeUpdate() == 0)
+            throw new Exception("Propaganda nao foi deletada");
     }
     
-    public float somarTarifa(int projeto){
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_SUMTAXES);
-            this.ps.setInt(1,projeto);
-            this.rs = this.ps.executeQuery();
-            
-            if(!this.rs.next())
-                throw new Exception("Nao foi encontrada tarifas");
-            
-            return this.rs.getFloat(1);
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao somar tarifas:  " + e.toString() );
-            return -1;
-        }
+    public float somarTarifa(int projeto) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_SUMTAXES);
+        this.ps.setInt(1,projeto);
+        this.rs = this.ps.executeQuery();
+
+        if(!this.rs.next())
+            throw new Exception("Nao foi encontrada tarifas");
+
+        return this.rs.getFloat(1);
     }
     
-    public float somarDespesa(int projeto){
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_SUMEMPPAY);
-            this.ps.setInt(1,projeto);
-            this.rs = this.ps.executeQuery();
-            
-            if(!this.rs.next())
-                throw new Exception("Nao foi encontrada despesas");
-            
-            return this.rs.getFloat(1);
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao somar despesas:  " + e.toString() );
-            return -1;
-        }
+    public float somarDespesa(int projeto) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_SUMEMPPAY);
+        this.ps.setInt(1,projeto);
+        this.rs = this.ps.executeQuery();
+
+        if(!this.rs.next())
+            throw new Exception("Nao foi encontrada despesas");
+
+        return this.rs.getFloat(1);
     }
     
 }

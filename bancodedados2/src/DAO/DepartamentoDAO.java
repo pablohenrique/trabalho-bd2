@@ -39,26 +39,18 @@ public class DepartamentoDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    public Object criarObjetoTemplate(){
-        try {
-            String column = "d_";
-            Departamento output = new Departamento();
-            output.setNumero(this.rs.getInt(column+"numero"));
-            output.setNome(this.rs.getString(column+"nome"));
-            output.setGerenteDataInicio(this.rs.getDate(column+"dataInicio"));
-            
-            EmpregadoDAO dao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
-            Empregado emp = (Empregado) dao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), null, null);
-            
-            //output.setGerenteSsn((Empregado) FactoryDAO.getFactory("Empregado").get(this.rs.getString("e_superssn")));
-            output.setGerenteSsn(emp);
-            System.gc();
-            return output;
-            
-        } catch (Exception e) {
-            System.err.println("Erro [DEPA] useObjectTemplate:  " + e.toString() );
-            return null;
-        }
+    public Object criarObjetoTemplate() throws SQLException{
+        Departamento output = new Departamento();
+        output.setNumero(this.rs.getInt("d_numero"));
+        output.setNome(this.rs.getString("d_nome"));
+        output.setGerenteDataInicio(this.rs.getDate("d_dataInicio"));
+
+        EmpregadoDAO dao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
+        Empregado emp = (Empregado) dao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), null, null);
+
+        output.setGerenteSsn(emp);
+        System.gc();
+        return output;
     }
     
     public Object gerarObjeto(int numero, String nome, Date gerenteInicio, Empregado gerente){
@@ -67,10 +59,8 @@ public class DepartamentoDAO implements IObjectDAO{
         dep.setNome(nome);
         dep.setGerenteDataInicio(gerenteInicio);
         dep.setGerenteSsn(gerente);
-        //gerente.setDepartamento(dep);
         
         System.gc();
-        
         return dep;
     }
     
@@ -83,136 +73,91 @@ public class DepartamentoDAO implements IObjectDAO{
     }
     
     @Override
-    public void post(Object input) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
-            
-            Departamento aux = (Departamento) input;
-            this.ps.setString(1,aux.getNome());
-            this.ps.setString(2,aux.getGerenteSsn().getSsn());
-            this.ps.setDate(3,aux.getGerenteDataInicio());
-            
-            System.gc();
-            
-            if(this.ps.executeUpdate() != 1)
-                throw new SQLException("Objeto nao foi gravado.");
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao salvar objeto:  " + e.toString() );
-        }
+    public void post(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
+
+        Departamento aux = (Departamento) input;
+        this.ps.setString(1,aux.getNome());
+        this.ps.setString(2,aux.getGerenteSsn().getSsn());
+        this.ps.setDate(3,aux.getGerenteDataInicio());
+
+        System.gc();
+
+        if(this.ps.executeUpdate() != 1)
+            throw new Exception("Objeto nao foi gravado.");
     }
 
     @Override
-    public void update(Object input) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-            
-            Departamento aux = (Departamento) input;
-            this.ps.setString(1,aux.getNome());
-            this.ps.setString(2,aux.getGerenteSsn().getSsn());
-            this.ps.setDate(3,aux.getGerenteDataInicio());
-            this.ps.setInt(4,aux.getNumero());
-            
-            System.gc();
-            
-            if(this.ps.executeUpdate() == 0)
-                throw new SQLException("Objeto nao foi atualizado.");
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao atualizar o objeto:  " + e.toString() );
-        }
+    public void update(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
+
+        Departamento aux = (Departamento) input;
+        this.ps.setString(1,aux.getNome());
+        this.ps.setString(2,aux.getGerenteSsn().getSsn());
+        this.ps.setDate(3,aux.getGerenteDataInicio());
+        this.ps.setInt(4,aux.getNumero());
+
+        System.gc();
+
+        if(this.ps.executeUpdate() == 0)
+            throw new Exception("Objeto nao foi atualizado.");
     }
 
     @Override
-    public Object get(Object input) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
-            this.ps.setInt(1,(int) input);
-            this.rs = this.ps.executeQuery();
-            
-            if(!this.rs.next())
-                throw new Exception("Departamento nao encontrado.");
-            
+    public Object get(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
+        this.ps.setInt(1,(int) input);
+        this.rs = this.ps.executeQuery();
+
+        if(!this.rs.next())
+            throw new Exception("Departamento nao encontrado.");
+
+        return this.criarObjetoTemplate();
+    }
+    
+    @Override
+    public Object read(Object input) throws SQLException {
+        String aux = "%" + (String) input + "%";
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
+        this.ps.setString(1,aux);
+        this.rs = this.ps.executeQuery();
+
+        if(this.rs.isLast())
             return this.criarObjetoTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
-            return null;
-        }
-    }
-    
-    @Override
-    public Object read(Object input) {
-        try {
-            String aux = "%" + (String) input + "%";
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            this.ps.setString(1,aux);
-            this.rs = this.ps.executeQuery();
-            
-            if(this.rs.isLast())
-                return this.criarObjetoTemplate();
-            else
-                return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
-            return null;
-        }
+        else
+            return this.buscarVariosObjetosTemplate();
     }
 
     @Override
-    public ArrayList<Object> getAll() {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            this.rs = this.ps.executeQuery();
-            
-            return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao recuperar todos os objeto:  " + e.toString() );
-            return null;
-        }
+    public ArrayList<Object> getAll() throws SQLException {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
+        this.rs = this.ps.executeQuery();
+
+        return this.buscarVariosObjetosTemplate();
     }
 
     @Override
-    public void delete(Object input) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
-            this.ps.setInt(1,(int) input);
-            
-            if(this.ps.executeUpdate() == 0)
-                throw new SQLException("Objeto nao foi deletado.");
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao deletar objeto:  " + e.toString() );
-        }
+    public void delete(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
+        this.ps.setInt(1,(int) input);
+
+        if(this.ps.executeUpdate() == 0)
+            throw new Exception("Objeto nao foi deletado.");
     }
     
-    public ArrayList<Object> buscarGerente(String gerssn) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
-            this.ps.setString(1,gerssn);
-            this.rs = this.ps.executeQuery();
-            
-            return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
-            return null;
-        }
+    public ArrayList<Object> buscarGerente(String gerssn) throws SQLException {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETGER);
+        this.ps.setString(1,gerssn);
+        this.rs = this.ps.executeQuery();
+
+        return this.buscarVariosObjetosTemplate();
     }
     
-    public ArrayList<Object> buscarEmpregados(){
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_EDITAR);
-            this.rs = this.ps.executeQuery();
-            
-            return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
-            return null;
-        }
+    public ArrayList<Object> buscarEmpregados() throws SQLException{
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_EDITAR);
+        this.rs = this.ps.executeQuery();
+
+        return this.buscarVariosObjetosTemplate();
     }
     
 }

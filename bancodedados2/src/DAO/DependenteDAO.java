@@ -33,35 +33,27 @@ public class DependenteDAO implements IObjectDAO{
     private PreparedStatement ps;
     private ResultSet rs;
     
-    private Object criarObjetoTemplate(){
-        try {
-            String column = "d_";
-                        
-            EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
-            DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
-            
-            Departamento dep = (Departamento) depdao.get(this.rs.getInt("e_dno"));
-            
-            Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
-            Empregado emp = (Empregado) empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
-            
-            Dependente output = new Dependente();
-            output.setNome(this.rs.getString(column+"nomedependente"));
-            output.setSexo(this.rs.getString(column+"sexo"));
-            output.setDataNascimento(this.rs.getDate(column+"datanascimento"));
-            output.setParentesco(this.rs.getString(column+"parentesco"));
-            output.setEssn(emp);
-            
-            System.gc();
-            return output;
-            
-        } catch (Exception e) {
-            System.err.println("Erro [DEPE] useObjectTemplate:  " + e.toString() );
-            return null;
-        }
+    private Object criarObjetoTemplate() throws SQLException, Exception{
+        EmpregadoDAO empdao = (EmpregadoDAO) FactoryDAO.getFactory("Empregado");
+        DepartamentoDAO depdao = (DepartamentoDAO) FactoryDAO.getFactory("Departamento");
+
+        Departamento dep = (Departamento) depdao.get(this.rs.getInt("e_dno"));
+
+        Empregado supervisor = (Empregado) empdao.get(this.rs.getString("e_superssn"));
+        Empregado emp = (Empregado) empdao.gerarObjeto(this.rs.getString("e_ssn"), this.rs.getString("e_nome"), this.rs.getString("e_sexo"), this.rs.getString("e_endereco"), this.rs.getFloat("e_salario"), this.rs.getDate("e_datanasc"), this.rs.getString("e_senha"), supervisor, dep);
+
+        Dependente output = new Dependente();
+        output.setNome(this.rs.getString("d_nomedependente"));
+        output.setSexo(this.rs.getString("d_sexo"));
+        output.setDataNascimento(this.rs.getDate("d_datanascimento"));
+        output.setParentesco(this.rs.getString("d_parentesco"));
+        output.setEssn(emp);
+
+        System.gc();
+        return output;
     }
     
-    private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException{
+    private ArrayList<Object> buscarVariosObjetosTemplate() throws SQLException, Exception{
         ArrayList<Object> output = new ArrayList<>();
         while(this.rs.next())
             output.add((Dependente) this.criarObjetoTemplate());
@@ -70,132 +62,87 @@ public class DependenteDAO implements IObjectDAO{
     }
 
     @Override
-    public void post(Object input) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
-            
-            Dependente aux = (Dependente) input;
-            this.ps.setString(1,aux.getNome());
-            this.ps.setString(2,aux.getEssn().getSsn());
-            this.ps.setString(3,aux.getSexo());
-            this.ps.setDate(4,aux.getDataNascimento());
-            this.ps.setString(5,aux.getParentesco());
-            
-            System.gc();
-            if(this.ps.executeUpdate() != 1)
-                throw new SQLException("Objeto nao foi gravado.");
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao salvar objeto:  " + e.toString() );
-        }
+    public void post(Object input) throws SQLException {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
+
+        Dependente aux = (Dependente) input;
+        this.ps.setString(1,aux.getNome());
+        this.ps.setString(2,aux.getEssn().getSsn());
+        this.ps.setString(3,aux.getSexo());
+        this.ps.setDate(4,aux.getDataNascimento());
+        this.ps.setString(5,aux.getParentesco());
+
+        System.gc();
+        if(this.ps.executeUpdate() != 1)
+            throw new SQLException("Objeto nao foi gravado.");
     }
 
     @Override
-    public void update(Object input) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
-            
-            Dependente aux = (Dependente) input;
-            this.ps.setString(1,aux.getSexo());
-            this.ps.setDate(2,aux.getDataNascimento());
-            this.ps.setString(3,aux.getParentesco());
-            this.ps.setString(4,aux.getEssn().getSsn());
-            this.ps.setString(5,aux.getNome());
-            
-            System.gc();
-           if(this.ps.executeUpdate() != 1)
-                throw new SQLException("Objeto nao foi atualizado.");
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao atualizar o objeto:  " + e.toString() );
-        }
+    public void update(Object input) throws SQLException {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
+
+        Dependente aux = (Dependente) input;
+        this.ps.setString(1,aux.getSexo());
+        this.ps.setDate(2,aux.getDataNascimento());
+        this.ps.setString(3,aux.getParentesco());
+        this.ps.setString(4,aux.getEssn().getSsn());
+        this.ps.setString(5,aux.getNome());
+
+        System.gc();
+       if(this.ps.executeUpdate() != 1)
+            throw new SQLException("Objeto nao foi atualizado.");
     }
 
     @Override
-    public Object get(Object input) {
-        try {
-            String aux = (String) input;
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
-            this.ps.setString(1,aux);
-            this.rs = this.ps.executeQuery();
-            
-            return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
-            return null;
-        }
+    public Object get(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET);
+        this.ps.setString(1,(String) input);
+        this.rs = this.ps.executeQuery();
+
+        return this.buscarVariosObjetosTemplate();
     }
     
     @Override
-    public Object read(Object input) {
-        try {
-            String aux = "'%" + (String) input + "%'";
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
-            this.ps.setString(1,aux);
-            
-            return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [READ] o objeto:  " + e.toString() );
-            return null;
-        }
+    public Object read(Object input) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_READ);
+        this.ps.setString(1,"%" + (String) input + "%");
+
+        return this.buscarVariosObjetosTemplate();
     }
 
     @Override
-    public ArrayList<Object> getAll() throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
-            this.rs = this.ps.executeQuery();
-            
-            return this.buscarVariosObjetosTemplate();
-            
-        } catch (Exception e) {
-            throw new Exception("Erro ao recuperar todos os objeto:  " + e.toString() );
-        }
+    public ArrayList<Object> getAll() throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GETALL);
+        this.rs = this.ps.executeQuery();
+
+        return this.buscarVariosObjetosTemplate();
     }
 
     @Override
-    public void delete(Object input) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
-            this.ps.setString(1,(String) input);
-            
-            if(this.ps.executeUpdate() == 0)
-                throw new SQLException("Objeto nao foi deletado.");
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao salvar objeto:  " + e.toString() );
-        }
-    }
-    
-    public Object buscarDependente(String essn, String nome) {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET_DEPENDENTE);
-            this.ps.setString(1,essn);
-            this.ps.setString(2,nome);
-            this.rs = this.ps.executeQuery();
-            
-            return this.buscarVariosObjetosTemplate().get(0);
-            
-        } catch (Exception e) {
-            System.err.println("Erro ao buscar [GET] o objeto:  " + e.toString() );
-            return null;
-        }
-    }
-    
-    public void deletarDependente(String essn, String nomedependente) throws Exception {
-        try {
-            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETEFULL);
-            this.ps.setString(1, nomedependente);
-            this.ps.setString(2, essn);
-            
-            if (this.ps.executeUpdate() == 0)
-                throw new SQLException("Restricao de integridade de empregado.");
+    public void delete(Object input) throws SQLException {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETE);
+        this.ps.setString(1,(String) input);
 
-        } catch (Exception e) {
-           throw new SQLException("Erro ao apagar dependente:  " + e.toString());
-        }
+        if(this.ps.executeUpdate() == 0)
+            throw new SQLException("Objeto nao foi deletado.");
+    }
+    
+    public Object buscarDependente(String essn, String nome) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_GET_DEPENDENTE);
+        this.ps.setString(1,essn);
+        this.ps.setString(2,nome);
+        this.rs = this.ps.executeQuery();
+
+        return this.buscarVariosObjetosTemplate().get(0);
+    }
+    
+    public void deletarDependente(String essn, String nomedependente) throws SQLException, Exception {
+        this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_DELETEFULL);
+        this.ps.setString(1, nomedependente);
+        this.ps.setString(2, essn);
+
+        if (this.ps.executeUpdate() == 0)
+            throw new SQLException("Restricao de integridade de empregado.");
     }
     
     
