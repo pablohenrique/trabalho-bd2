@@ -21,7 +21,7 @@ public class PropagandaDAO implements IObjectDAO{
     private final String BEFORECOND = "select pp.id as pp_id, pp.projeto as pp_projeto, pp.datainicio as pp_dataInicio, pp.datafinal as pp_dataFinal, pp.agencia as pp_agencia, pp.tarifa as pp_tarifa,\n" +
 "p.pnumero as p_pnumero, p.pjnome as p_pjnome, p.plocalizacao as p_localizacao, p.dnum as p_dnum";
     
-    private final String SQL_POST = "INSERT INTO cia.propaganda(projeto, dataInicio, dataFinal, agencia, tarifa) VALUES(?,?,?,?,?);";
+    private final String SQL_POST = "INSERT INTO cia.propaganda VALUES(DEFAULT,?,?,?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.propaganda SET dataInicio = ?, dataFinal = ?,agencia = ?, tarifa = ? WHERE id = ?;";
     private final String SQL_GET = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.id = ? AND pp.projeto = p.pnumero;";
     private final String SQL_READ = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.projeto = ? AND pp.projeto = p.pnumero;";
@@ -67,9 +67,8 @@ public class PropagandaDAO implements IObjectDAO{
         this.ps.setDate(3, pro.getDataFinal());
         this.ps.setString(4, pro.getAgencia());
         this.ps.setFloat(5, pro.getTarifa());
-
-        this.rs = this.ps.executeQuery();
-        if(!this.rs.next())
+        
+        if(this.ps.executeUpdate() == 0)
             throw new Exception("Propaganda nao cadastrada.");
     }
 
@@ -84,8 +83,7 @@ public class PropagandaDAO implements IObjectDAO{
         this.ps.setFloat(4, pro.getTarifa());
         this.ps.setInt(5, pro.getNumero());
 
-        this.rs = this.ps.executeQuery();
-        if(!this.rs.next())
+        if(this.ps.executeUpdate() == 0)
             throw new Exception("Propaganda nao atualizada.");
     }
 
