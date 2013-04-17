@@ -22,11 +22,11 @@ public class PropagandaDAO implements IObjectDAO{
 "p.pnumero as p_pnumero, p.pjnome as p_pjnome, p.plocalizacao as p_localizacao, p.dnum as p_dnum";
     
     private final String SQL_POST = "INSERT INTO cia.propaganda(projeto, dataInicio, dataFinal, agencia, tarifa) VALUES(?,?,?,?,?);";
-    private final String SQL_UPDATE = "UPDATE cia.propaganda AS p SET p.projeto = ? AND p.dataInicio = ? AND p.dataFinal = ? AND p.agencia = ? AND p.tarifa = ? WHERE p.id = ?;";
+    private final String SQL_UPDATE = "UPDATE cia.propaganda AS pp SET pp.projeto = ? AND pp.dataInicio = ? AND pp.dataFinal = ? AND pp.agencia = ? AND pp.tarifa = ? WHERE pp.id = ?;";
     private final String SQL_GET = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.id = ? AND pp.projeto = p.pnumero;";
     private final String SQL_READ = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.projeto = ? AND pp.projeto = p.pnumero;";
     private final String SQL_GETALL = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.projeto = p.pnumero;";
-    private final String SQL_DELETE = "DELETE FROM  as pp, cia.projeto as p WHERE id = ?;";
+    private final String SQL_DELETE = "DELETE FROM  cia.propaganda as pp, cia.projeto as p WHERE id = ?;";
     private final String SQL_DELETEPROJ = "DELETE FROM cia.propaganda WHERE projeto = ?;";
     private final String SQL_SUMTAXES = "SELECT cia.gera_tarifa(?)";
     private final String SQL_SUMEMPPAY = "SELECT sum(e.salario) FROM cia.empregado AS e, cia.trabalha_em as tt where tt.pjnumero = ? AND tt.essn = e.ssn";
