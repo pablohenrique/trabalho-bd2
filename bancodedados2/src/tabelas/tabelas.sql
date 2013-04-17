@@ -1,3 +1,22 @@
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+DROP SCHEMA IF EXISTS cia CASCADE;
+CREATE SCHEMA cia;
+
+SET search_path TO cia;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+
+
+
 CREATE TABLE departamento (
     numero integer NOT NULL,
     nome character varying(15) NOT NULL,
@@ -69,10 +88,12 @@ CREATE SEQUENCE departamento_seq INCREMENT 1;
 CREATE SEQUENCE projeto_seq INCREMENT 1; 
 CREATE SEQUENCE propaganda_seq INCREMENT 1;
 
+INSERT INTO departamento VALUES(1,'FACOM','11011','17-04-2013');
+INSERT INTO empregado VALUES('11011','YURI CAMPOS','M','RUA X',1000,'25-08-1992',1,'11011','123');
+
 ALTER TABLE departamento ALTER COLUMN numero SET DEFAULT nextval('departamento_seq');
 ALTER TABLE projeto ALTER COLUMN pnumero SET DEFAULT nextval('projeto_seq');
 ALTER TABLE propaganda ALTER COLUMN id SET DEFAULT nextval('propaganda_seq');
-
 
 
 ALTER TABLE ONLY departamento

@@ -1,3 +1,5 @@
+set search_path to cia;
+
 ---
 -- Confere salario
 ---

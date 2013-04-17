@@ -94,6 +94,13 @@ CREATE SEQUENCE departamento_seq INCREMENT 1;
 CREATE SEQUENCE projeto_seq INCREMENT 1; 
 CREATE SEQUENCE propaganda_seq INCREMENT 1;
 
+
+--
+-- INSERTS BASICOS
+--
+INSERT INTO departamento VALUES(1,'FACOM','11011','17-04-2013');
+INSERT INTO empregado VALUES('11011','YURI CAMPOS','M','RUA X',1000,'25-08-1992',1,'11011','123');
+
 ALTER TABLE departamento ALTER COLUMN numero SET DEFAULT nextval('departamento_seq');
 ALTER TABLE projeto ALTER COLUMN pnumero SET DEFAULT nextval('projeto_seq');
 ALTER TABLE propaganda ALTER COLUMN id SET DEFAULT nextval('propaganda_seq');
@@ -123,32 +130,9 @@ ALTER TABLE empregado DROP CONSTRAINT pk_empregado CASCADE;
 ALTER TABLE trabalha_em DROP CONSTRAINT pk_trabalha_em;
 */
 
---
--- INSERTS BASICOS
---
-    
-INSERT INTO departamento VALUES('1', 'PESQUISA', '11013', '2013-02-01');
-INSERT INTO departamento VALUES('2', 'TESTES', '11012', '2013-02-01');
 
-INSERT INTO empregado VALUES('11011', 'CAIO THOMAS OLIVEIRA', 'M', 'RUA DA ALEGRIA', 1234.09, '1991-11-21', 1, '11011', 123);
-INSERT INTO empregado VALUES('11012', 'RICARDO DA SILVA', 'M', 'RUA DA FELICIADE', 934.09, '1990-02-12', 1, '11011', 123);
-INSERT INTO empregado VALUES('11013', 'LUCIANA FERREIRA', 'F', 'RUA DA FELICIADE', 934.09, '1990-04-29', 1, '11011', 123);
-INSERT INTO empregado VALUES('11014', 'MARIANA DA SILVA', 'F', 'RUA DA FELICIADE', 934.09, '1990-02-12', 1, '11011', 123);
-INSERT INTO empregado VALUES('11015', 'SUELEN GIMENEZ', 'F', 'RUA JOHEN CARNEIRO', 900.00, '1989-02-12', 2, '11011', 123);
 
-INSERT INTO projeto VALUES(1, 'XML', 'FACOM', 1);
-INSERT INTO projeto VALUES(2, 'MINERACAO', 'FACOM', 1);
 
-INSERT INTO trabalha_em VALUES('11011', 1, 8);
-INSERT INTO trabalha_em VALUES('11011', 2, 8);
-INSERT INTO trabalha_em VALUES('11012', 1, 8);
-INSERT INTO trabalha_em VALUES('11013', 2, 8);
-INSERT INTO trabalha_em VALUES('11014', 1, 8);
-INSERT INTO trabalha_em VALUES('11014', 2, 8);
-
-INSERT INTO dept_localizacao VALUES('BLOCO A', 1);
-INSERT INTO dept_localizacao VALUES('BLOCO B', 2);
-INSERT INTO dept_localizacao VALUES('BLOCO C', 1);
 --
 -- RESTRICOES PRIMARY KEY
 --
@@ -372,22 +356,22 @@ BEGIN
             RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario % . Salario deve ser maior que 600.', NEW.superssn;
         ELSE
             INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,NEW.salario,NEW.salario,current_date);
-            RETURN NEW;
         END IF;
     ELSEIF(TG_OP = 'UPDATE' AND NEW.salario <> OLD.salario) THEN
         IF NEW.salario > OLD.salario THEN
             INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
-            RETURN NEW;
         ELSE
             RAISE EXCEPTION 'Valor de salario nao pode ser persistido. Nao se pode reduzir o salario de um empregado, senhor %', OLD.superssn;
         END IF;
     END IF;
+    RETURN NEW;
 END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
 ALTER FUNCTION cia.trigger_emp_salario()
   OWNER TO postgres;
+
 
 CREATE TRIGGER trigger_emp_salario 
    BEFORE INSERT OR UPDATE ON cia.empregado
@@ -455,39 +439,3 @@ CREATE TRIGGER verificaDep
     BEFORE INSERT OR UPDATE ON cia.trabalha_em 
     FOR EACH ROW EXECUTE PROCEDURE projetoDep();
 
-
---
---CONSULTAS BASICAS
---
-
---Recuperar todos empregados com seu dependente e supervisor
-
-SELECT *, cia.sexo(e.sexo) AS sexoEmp, cia.sexo(ger.sexo) AS sexoGer, cia.sexo(s.sexo) AS sexoSuper
-    FROM (((cia.empregado AS e LEFT JOIN cia.departamento
-        AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger
-        ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s 
-            ON e.superssn = s.ssn)
-    ORDER BY e.nome ASC;
-
-
-
-
-
-SELECT e.ssn AS E_ssn, e.nome AS E_nome, cia.sexo(e.sexo) AS E_sexo, e.endereco AS E_endereco, e.salario AS E_salario, e.datanasc AS E_datanasc, e.dno AS E_dno, 
-       e.superssn AS E_superssn, e.senha AS E_senha, s.ssn AS S_ssn, s.nome AS S_nome, cia.sexo(s.sexo) AS S_sexo, s.endereco AS S_endereco, s.salario AS S_salario,
-       s.datanasc AS S_datanasc, s.dno AS S_dno, s.superssn AS S_superssn, s.senha AS S_senha, d.numero AS D_numero, d.nome AS D_nome, d.gerssn AS D_gerssn, d.gerdatainicio AS D_gerdatainicio
-    FROM (((cia.empregado AS e LEFT JOIN cia.departamento
-        AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger
-        ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s 
-            ON e.superssn = s.ssn)
-    ORDER BY e.nome ASC;
-
-
---SELECIONAR TODOS PROJETOS E O DEPARTAMENTO DE UM EMPREGADO       
-SELECT p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, d.numero AS d_numero,
-       d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio
-       FROM empregado AS e, projeto AS p, departamento AS d, trabalha_em AS t
-       WHERE e.ssn = t.essn AND
-         t.pjnumero = p.pnumero AND
-         p.dnum = d.numero AND
-         e.ssn = '11014';

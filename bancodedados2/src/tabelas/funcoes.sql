@@ -1,3 +1,13 @@
+set search_path to cia;
+
+CREATE OR REPLACE VIEW login AS 
+SELECT e.ssn, e.superssn, e.senha, d.gerssn, d1.gerssn AS gerente
+  FROM ((empregado e LEFT JOIN departamento d ON e.ssn = d.gerssn)
+         JOIN departamento d1 ON d1.numero = e.dno);
+
+
+DROP FUNCTION IF EXISTS cia.login(varchar(9),varchar(15));
+
 CREATE OR REPLACE FUNCTION cia.login (argssn VARCHAR(9),argsenha VARCHAR(15))
 RETURNS int4 AS $$
 DECLARE 
