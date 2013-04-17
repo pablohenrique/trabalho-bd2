@@ -35,10 +35,15 @@ public class Conexao {
     }
     
     public static Conexao getInstance() {
+        try{
         if(instance != null)
             return instance;
         else
             return new Conexao();
+        }
+        catch(Exception e){
+            return null;
+        }
     }
     
     public static Connection getConexao() throws SQLException{
