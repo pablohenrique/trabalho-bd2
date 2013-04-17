@@ -6,11 +6,15 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import view.Principal;
 
@@ -76,8 +80,14 @@ public class FormSalario extends JDialog implements ActionListener{
     }
 
     public void execute() {
-        max.setText("R$" + String.valueOf(Principal.cf.maiorSalario()));
-        medio.setText("R$" + String.valueOf(Principal.cf.mediaSalarios()));
-        min.setText("R$" + String.valueOf(Principal.cf.menorSalario()));       
+        try {
+            max.setText("R$" + String.valueOf(Principal.cf.maiorSalario()));
+            medio.setText("R$" + String.valueOf(Principal.cf.mediaSalarios()));       
+            min.setText("R$" + String.valueOf(Principal.cf.menorSalario()));
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

@@ -9,6 +9,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -204,8 +207,12 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     
     public static void setDataTableFuncionariosProjetos(){
         String[][] dados = null;
-        
-        dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoProjeto(proj.getNumero()));        
+
+        try {
+            dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoProjeto(proj.getNumero()));        
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+        }
         
         FormProjetosFuncionarios.modelo = new DefaultTableModel(dados, FormProjetosFuncionarios.colunas);
         FormProjetosFuncionarios.tabela.setModel(FormProjetosFuncionarios.modelo);                    

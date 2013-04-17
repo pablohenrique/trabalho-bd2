@@ -9,13 +9,17 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -116,7 +120,11 @@ public class FormHoras extends JDialog implements ActionListener
                 FormHoras.setDataTableMaisHoras();
             }else if(tipo.getSelectedIndex() == 1){
                 System.out.println("menos Horas");
-                dados = Principal.cf.getEmpregadosTable(Principal.cf.empregadoMenosHoras());                                    
+                try {                                    
+                    dados = Principal.cf.getEmpregadosTable(Principal.cf.empregadoMenosHoras());
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+                }
                 FormHoras.setDados(dados);
             }            
         }
@@ -141,7 +149,11 @@ public class FormHoras extends JDialog implements ActionListener
     public static void setDataTableMaisHoras(){
         String[][] dados = null;
          System.out.println("imprimindo mais horas Horas");
-         dados = Principal.cf.getEmpregadosTable(Principal.cf.empregadoMaisHoras());
+         try {
+            dados = Principal.cf.getEmpregadosTable(Principal.cf.empregadoMaisHoras());
+         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+         }
         FormHoras.setDados(dados);
     }
     

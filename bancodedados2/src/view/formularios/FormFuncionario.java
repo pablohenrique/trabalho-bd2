@@ -68,9 +68,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         sexo = new JComboBox<String>();
         sexo.addItem("Masculino");
         sexo.addItem("Feminino");    
-                
-        Empregado superssn = new Empregado();
-        superssn.setNome("Nenhum Supervisor");
+                 
         
         try {
             valuesDepartamento = new Vector((Vector<Departamento>) ViewObjectPool.get("todosDepartamento"));            
@@ -85,7 +83,6 @@ public class FormFuncionario extends JDialog implements ActionListener
         } catch (Exception ex) {
             System.err.println("Nao fooi possivel listar supervisor no combox");
         }
-        supervisor.addItem(superssn);
                         
         if (emp_edit != null){            
             try{

@@ -2,6 +2,7 @@ package view.formularios;
 
 import Model.Empregado;
 import Model.Projeto;
+import Model.Propaganda;
 import Model.Trabalha;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,6 +10,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -28,7 +31,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
     private static final long serialVersionUID = 1L;    
     
     private JButton novo  = new JButton("Novo");
-    private JButton editarHora  = new JButton("Editar");
+    private JButton editar  = new JButton("Editar");
     private JButton excluir = new JButton("Excluir");   
     private JLabel nomeProjeto = new JLabel();
     private JLabel localProjeto = new JLabel();
@@ -39,7 +42,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
     private static JTable tabela;
     private static DefaultTableModel modelo;
     private static String[] colunas;
-    private static FormProjetosFuncionariosEditPro editFormProj = null;
+    private static FormProjetosPropagandaEdit editFormPublicidade = null;
     private static Projeto proj;    
     
     public FormProjetosPropagandas(Projeto p){
@@ -49,8 +52,9 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
         proj = p;
         
         btnOK.addActionListener(this);
-        editarHora.addActionListener(this);
-
+        editar.addActionListener(this);
+        excluir.addActionListener(this);
+        
         JLabel nome = new JLabel("Nome: ");                 
         JPanel grid = new JPanel();
         grid.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
@@ -71,7 +75,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
         botoes.add(Box.createHorizontalStrut(5));
         botoes.add(novo);
         botoes.add(Box.createHorizontalStrut(3));
-        botoes.add(editarHora);
+        botoes.add(editar);
         botoes.add(Box.createHorizontalStrut(3));
         botoes.add(excluir);
         botoes.add(Box.createVerticalStrut(45));
@@ -89,16 +93,15 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
             }
         };
 
-        colunas = new String [] { "Nome", "Ssn", "Sexo", "Endereco", "Salario", "Data de Nascimento",
-                                           "Departamento", "Dno", "Supervisor", "SuperSnn"};  
+        colunas = new String [] { "Agencia", "Numero", "Data Inicio", "Data Final", "Projeto", "Tarifa"};  
         
-        this.setDataTableFuncionariosProjetos();
+        FormProjetosPropagandas.setDataTableFuncionariosProjetos();
         
         tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setGridColor(new Color(220,220,220));        
         
-        this.setSizeColumnFuncionariosProjetos();
+        FormProjetosPropagandas.setSizeColumnFuncionariosProjetos();
         
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());        
@@ -136,64 +139,67 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
         Object origem = e.getSource();
         int item = tabela.getSelectedRow();
         
-        if(origem == novo){
-            
-            Trabalha t = new Trabalha();
-            t.setProjeto(proj);
-            t.setEssn(null);
-            
+        if(origem == novo){                         
             try {
-                FormFuncionarioProjetosForm(t);
+                FormFuncionarioProjetosForm(null, proj).setVisible(true);
             } catch (Exception ex) {
                 System.err.println("Erro: " + ex);
-            }
-            
-         } else if(origem == editarHora && (item != -1)){
-            String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            
-            Trabalha t = null;
-            Empregado em;
-           
+            }            
+         }else if(origem == editar) {
+            String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));   
+            Propaganda p;
             try {
-                t = Principal.cf.buscarEmpregadoProjeto(ssn, proj.getNumero());
-                //FormFuncionarioProjetosForm(t);
+                p = Principal.cf.getPropaganda(Integer.parseInt(id));
+                System.out.println(id);
+                FormFuncionarioProjetosForm(p, p.getProjeto()).setVisible(true);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
-            }                 
-            
+                Logger.getLogger(FormProjetosPropagandas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         }else if (origem == excluir){
+            String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));                
+            String agencia = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Agencia"));   
+            int opcao = JOptionPane.showConfirmDialog(this,"Deseja remover Agencia "+agencia.trim()+"?","Atenção!",JOptionPane.YES_NO_OPTION);    
+                        
+            if(opcao == JOptionPane.YES_OPTION) {
+                try {
+                    Principal.cf.deletePropaganda(Integer.parseInt(id));                      
+                    FormProjetosPropagandas.setDataTableFuncionariosProjetos();
+                }
+                catch (Exception ex){
+                    JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+                }
+            }                          
          }else if(origem == btnOK)
             this.dispose();   
     }
 
     public static void setSizeColumnFuncionariosProjetos(){
         tabela.getTableHeader().getColumnModel().getColumn(0).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(35);
+        tabela.getTableHeader().getColumnModel().getColumn(1).setMinWidth(100);
         tabela.getTableHeader().getColumnModel().getColumn(2).setMinWidth(100);
         tabela.getTableHeader().getColumnModel().getColumn(3).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(30);
-        tabela.getTableHeader().getColumnModel().getColumn(5).setMinWidth(100);
-        tabela.getTableHeader().getColumnModel().getColumn(6).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(7).setMinWidth(35);
-        tabela.getTableHeader().getColumnModel().getColumn(8).setMinWidth(250);
-        tabela.getTableHeader().getColumnModel().getColumn(9).setMinWidth(35);         
+        tabela.getTableHeader().getColumnModel().getColumn(4).setMinWidth(100);
     }
     
     public static void setDataTableFuncionariosProjetos(){
         String[][] dados = null;
-        
-        dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoProjeto(proj.getNumero()));        
+        try {
+            dados = Principal.cf.getPropagandasByProjeto(Principal.cf.getPropagandaProjeto(proj.getNumero()));        
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+        }
         
         FormProjetosPropagandas.modelo = new DefaultTableModel(dados, FormProjetosPropagandas.colunas);
         FormProjetosPropagandas.tabela.setModel(FormProjetosPropagandas.modelo);                    
         FormProjetosPropagandas.setSizeColumnFuncionariosProjetos();        
     }
     
-    public static FormProjetosFuncionariosEditPro FormFuncionarioProjetosForm(Trabalha e) throws Exception{
-        if(editFormProj == null)
-            editFormProj = new FormProjetosFuncionariosEditPro(e);
+    public static FormProjetosPropagandaEdit FormFuncionarioProjetosForm(Propaganda e, Projeto p) throws Exception{
+        if(editFormPublicidade == null)
+            editFormPublicidade = new FormProjetosPropagandaEdit(e, p);
         else
-           editFormProj.editar(e);        
+           editFormPublicidade.editar(e, p);        
         
-        return editFormProj;
+        return editFormPublicidade;
     }     
 }

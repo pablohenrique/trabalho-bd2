@@ -8,13 +8,17 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -142,8 +146,11 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
     
     public static void setDataTableDepartamentoProjetos(){
         String[][] dados = null;
-        
-        dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoTrabalhaMaisDepartamento(dep.getNumero()));        
+        try {
+            dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoTrabalhaMaisDepartamento(dep.getNumero()));        
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,ex, "Atenção", JOptionPane.ERROR_MESSAGE);
+        }
         FormProjetosDepartamento.setDados(dados);
     }
     
