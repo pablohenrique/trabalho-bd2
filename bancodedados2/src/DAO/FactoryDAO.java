@@ -31,6 +31,10 @@ public class FactoryDAO {
                     factoryInUse = "Projeto";
                     instance = new ProjetoDAO();
                     break;
+                case("Propaganda"):
+                    factoryInUse = "Propaganda";
+                    instance = new PropagandaDAO();
+                    break;
                 case("Trabalha"):
                     factoryInUse = "Trabalha";
                     instance = new TrabalhaDAO();

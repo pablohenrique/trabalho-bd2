@@ -78,6 +78,17 @@ CREATE TABLE trabalha_em (
     horas numeric(3,1) NOT NULL
 );
 
+CREATE TABLE propaganda(
+id SERIAL NOT NULL,
+projeto INTEGER NOT NULL,
+dataInicio DATE NOT NULL,
+dataFinal DATE,
+agencia VARCHAR(15),
+tarifa FLOAT,
+CONSTRAINT pkey_id PRIMARY KEY (id),
+CONSTRAINT fkey_projeto FOREIGN KEY(projeto) REFERENCES projeto(pnumero)
+);
+
 --
 -- criando sequencias 
 --

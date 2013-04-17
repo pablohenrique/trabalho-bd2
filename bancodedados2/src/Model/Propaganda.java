@@ -12,6 +12,7 @@ import java.sql.Date;
  */
 public class Propaganda {
     
+    private int numero;
     private Projeto projeto;
     private Date dataInicio;
     private Date dataFinal;
@@ -86,6 +87,20 @@ public class Propaganda {
      */
     public void setTarifa(float tarifa) {
         this.tarifa = tarifa;
+    }
+
+    /**
+     * @return the numero
+     */
+    public int getNumero() {
+        return numero;
+    }
+
+    /**
+     * @param numero the numero to set
+     */
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
             
     

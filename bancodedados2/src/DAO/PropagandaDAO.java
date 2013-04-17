@@ -18,12 +18,15 @@ import java.util.ArrayList;
  */
 public class PropagandaDAO implements IObjectDAO{
     
+    private final String BEFORECOND = "select pp.id as pp_id, pp.projeto as pp_projeto, pp.datainicio as pp_dataInicio, pp.datafinal as pp_dataFinal, pp.agencia as pp_agencia, pp.tarifa as pp_tarifa,\n" +
+"p.pnumero as p_pnumero, p.pjnome as p_pjnome, p.plocalizacao as p_localizacao, p.dnum as p_dnum";
+    
     private final String SQL_POST = "INSERT INTO cia.propaganda(projeto, dataInicio, dataFinal, agencia, tarifa) VALUES(?,?,?,?,?);";
-    private final String SQL_UPDATE = "UPDATE cia.propaganda AS p SET p.projeto = ? AND p.dataInicio = ? AND p.dataFinal = ? AND p.agencia = ? AND p.tarifa = ? AND p.ganhos = ? WHERE p.id = ?;";
-    private final String SQL_GET = "SELECT * FROM cia.propaganda WHERE id = ?;";
-    private final String SQL_READ = "SELECT * FROM cia.propaganda WHERE projeto = ?;";
-    private final String SQL_GETALL = "SELECT * FROM cia.propaganda;";
-    private final String SQL_DELETE = "DELETE FROM cia.propaganda WHERE id = ?;";
+    private final String SQL_UPDATE = "UPDATE cia.propaganda AS p SET p.projeto = ? AND p.dataInicio = ? AND p.dataFinal = ? AND p.agencia = ? AND p.tarifa = ? WHERE p.id = ?;";
+    private final String SQL_GET = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.id = ? AND pp.projeto = p.pnumero;";
+    private final String SQL_READ = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.projeto = ? AND pp.projeto = p.pnumero;";
+    private final String SQL_GETALL = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.projeto = p.pnumero;";
+    private final String SQL_DELETE = "DELETE FROM  as pp, cia.projeto as p WHERE id = ?;";
     private final String SQL_DELETEPROJ = "DELETE FROM cia.propaganda WHERE projeto = ?;";
     private final String SQL_SUMTAXES = "SELECT cia.gera_tarifa(?)";
     private final String SQL_SUMEMPPAY = "SELECT sum(e.salario) FROM cia.empregado AS e, cia.trabalha_em as tt where tt.pjnumero = ? AND tt.essn = e.ssn";
@@ -34,6 +37,7 @@ public class PropagandaDAO implements IObjectDAO{
     private Object criarObjetoTemplate(){
         try {
             Propaganda output = new Propaganda();
+            output.setNumero(this.rs.getInt("pp_id"));
             output.setAgencia(this.rs.getString("pp_agencia"));
             output.setDataInicio(this.rs.getDate("pp_dataInicio"));
             output.setDataFinal(this.rs.getDate("pp_dataFinal"));
@@ -43,6 +47,7 @@ public class PropagandaDAO implements IObjectDAO{
             Projeto pro = (Projeto) dao.createObject(this.rs.getInt("p_pnumero"), this.rs.getString("p_pjnome"), this.rs.getString("p_localizacao"), null);
             
             output.setProjeto(pro);
+            System.gc();
             return output;
             
         } catch (Exception e) {
@@ -60,12 +65,43 @@ public class PropagandaDAO implements IObjectDAO{
     
     @Override
     public void post(Object input) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try{
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_POST);
+        
+            Propaganda pro = (Propaganda) input;
+            this.ps.setInt(1, pro.getProjeto().getNumero());
+            this.ps.setDate(2, pro.getDataInicio());
+            this.ps.setDate(3, pro.getDataFinal());
+            this.ps.setString(4, pro.getAgencia());
+            this.ps.setFloat(5, pro.getTarifa());
+
+            this.rs = this.ps.executeQuery();
+            if(!this.rs.next())
+                throw new Exception("Propaganda nao cadastrada.");
+        } catch(Exception e){
+            System.err.println("Erro [POST] propaganda:  " + e.toString());
+        }
     }
 
     @Override
     public void update(Object input) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try{
+            this.ps = Conexao.getInstance().getConexao().prepareStatement(SQL_UPDATE);
+        
+            Propaganda pro = (Propaganda) input;
+            this.ps.setInt(1, pro.getProjeto().getNumero());
+            this.ps.setDate(2, pro.getDataInicio());
+            this.ps.setDate(3, pro.getDataFinal());
+            this.ps.setString(4, pro.getAgencia());
+            this.ps.setFloat(5, pro.getTarifa());
+            this.ps.setInt(6, pro.getNumero());
+
+            this.rs = this.ps.executeQuery();
+            if(!this.rs.next())
+                throw new Exception("Propaganda nao atualizada.");
+        } catch(Exception e){
+            System.err.println("Erro [UPDATE] propaganda:  " + e.toString());
+        }
     }
 
     // busca a propaganda pelo id
@@ -82,7 +118,7 @@ public class PropagandaDAO implements IObjectDAO{
             return this.criarObjetoTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao somar tarifas:  " + e.toString() );
+            System.err.println("Erro [GET] ao buscar propaganda por ID:  " + e.toString() );
             return -1;
         }
     }
@@ -95,11 +131,14 @@ public class PropagandaDAO implements IObjectDAO{
             this.ps.setInt(1,(int) input);
             this.rs = this.ps.executeQuery();
             
+            if(this.rs.isLast())
+                return this.criarObjetoTemplate();
+            
             return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao somar tarifas:  " + e.toString() );
-            return -1;
+            System.err.println("Erro [READ] ao somar tarifas:  " + e.toString() );
+            return null;
         }
     }
 
@@ -112,7 +151,7 @@ public class PropagandaDAO implements IObjectDAO{
             return this.buscarVariosObjetosTemplate();
             
         } catch (Exception e) {
-            System.err.println("Erro ao somar tarifas:  " + e.toString() );
+            System.err.println("Erro [GETALL] ao somar tarifas:  " + e.toString() );
             return null;
         }
     }
@@ -127,7 +166,7 @@ public class PropagandaDAO implements IObjectDAO{
                 throw new Exception("Propaganda nao foi deletada");
             
         } catch (Exception e) {
-            System.err.println("Erro deletar uma propaganda:  " + e.toString() );
+            System.err.println("Erro [DELETE] deletar uma propaganda:  " + e.toString() );
         }
     }
     

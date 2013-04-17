@@ -9,6 +9,7 @@ import Model.Dependente;
 import Model.Localizacao;
 import Model.Empregado;
 import Model.Projeto;
+import Model.Propaganda;
 import Model.Trabalha;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -26,6 +27,7 @@ public class ControlFacade {
     private EmpregadoControl empregadoControl = new EmpregadoControl();
     private ProjetoControl projetoControl = new ProjetoControl();
     private TrabalhaControl trabalhaControl = new TrabalhaControl();
+    private PropagandaControl propagandaControl = new PropagandaControl();
     
     /**
      * Funcoes de funcionario
@@ -810,4 +812,116 @@ public class ControlFacade {
      public Date coverteStringData(String data){
          return FuncoesControle.coverteStringData(data);
      }
+     
+     /**
+      * Funcoes Propaganda
+      */
+     
+     /**
+      * 
+      * @param agencia
+      * @param dataFinal
+      * @param dataInicial
+      * @param pnumero
+      * @param tarifa
+      * @throws Exception 
+      * inserir propaganda
+      */
+     public void inserirPropaganda(String agencia, String dataFinal, String dataInicial, int pnumero, float tarifa) throws Exception{
+         propagandaControl.post(agencia, coverteStringData(dataFinal), coverteStringData(dataInicial), pnumero, tarifa);
+         
+     }
+     
+     /**
+      * 
+      * @param numero
+      * @param agencia
+      * @param dataFinal
+      * @param dataInicial
+      * @param pnumero
+      * @param tarifa
+      * @throws Exception 
+      * atualizar propaganda
+      */
+     public void atualizarPropaganda(int numero, String agencia, String dataFinal, String dataInicial, int pnumero, float tarifa) throws Exception{
+         propagandaControl.update(numero, agencia, coverteStringData(dataFinal),coverteStringData(dataInicial), pnumero, tarifa);
+         
+     }
+     
+     /**
+      * 
+      * @param numeroprop
+      * @throws Exception 
+      * apagar propaganda pelo seu número
+      */
+     public void deletePropaganda(int numeroprop) throws Exception{
+         propagandaControl.deletePropaganda(numeroprop);  
+     }
+     
+     /**
+      * 
+      * @param numeroprojeto
+      * @throws Exception 
+      * deletar propaganda pelo numero do projeto
+      */
+     public void deleteProjeto(int numeroprojeto) throws Exception{
+         propagandaControl.deleteProjeto(numeroprojeto);
+     }
+     
+     /**
+      * 
+      * @param nropropaganda
+      * @return Propaganda
+      * @throws Exception 
+      * pegar propaganda pelo seu numero
+      */
+     public Propaganda getPropaganda(int nropropaganda) throws Exception{
+         return propagandaControl.getPropaganda(nropropaganda);
+     }
+     
+     /**
+      * 
+      * @param nroprojeto
+      * @return Vector<Propaganda>
+      * @throws Exception 
+      * pegar propaganda por projeto
+      */
+     public Vector<Propaganda> getPropagandaProjeto(int nroprojeto) throws Exception {
+         return propagandaControl.getPropagandaProjeto(nroprojeto);
+         
+     }
+     
+     /**
+      * 
+      * @return Vector<Propaganda>
+      * @throws Exception 
+      * pegar todas as propagandas
+      */
+     public Vector<Propaganda> getAll() throws Exception{
+         return propagandaControl.getAll();
+         
+     }
+     
+     /**
+      * 
+      * @param projeto
+      * @return float
+      * receitas do projeto
+      */
+     public float receita(int projeto){
+         return propagandaControl.somarTarifa(projeto);
+     }
+     
+     /**
+      * 
+      * @param projeto
+      * @return float
+      * despesas do projeto
+      */
+     public float despesa(int projeto){
+         return propagandaControl.somarDespesa(projeto);
+         
+     }
 }
+
+
