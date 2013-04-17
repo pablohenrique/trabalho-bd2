@@ -9,6 +9,7 @@ import DAO.PropagandaDAO;
 import Model.Projeto;
 import Model.Propaganda;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -75,11 +76,11 @@ public class PropagandaControl {
         return propagandas;
     }
     
-    public float somarTarifa(int projeto){
+    public float somarTarifa(int projeto) throws SQLException, Exception{
         return this.dao.somarTarifa(projeto);
     }
     
-    public float somarDespesa(int projeto){
+    public float somarDespesa(int projeto) throws SQLException, Exception{
         return this.dao.somarDespesa(projeto);
     }
     

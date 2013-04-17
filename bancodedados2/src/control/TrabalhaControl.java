@@ -77,7 +77,7 @@ public class TrabalhaControl {
     }    
     
  //retorna usando projeto
-    public Vector<Trabalha> SearchByName(String input){
+    public Vector<Trabalha> SearchByName(String input) throws SQLException, Exception{
         Vector<Trabalha> trabalha = new Vector<Trabalha>();
         
         for(Object aux : (ArrayList<Object>) this.dao.read(input))
@@ -86,7 +86,7 @@ public class TrabalhaControl {
         return trabalha;
     }
     
-    public Trabalha buscarEmpregadoProjeto(String ssn, int projeto){
+    public Trabalha buscarEmpregadoProjeto(String ssn, int projeto) throws SQLException, Exception{
        return (Trabalha) this.dao.buscarEmpregadoProjeto(ssn, projeto);
     }
 

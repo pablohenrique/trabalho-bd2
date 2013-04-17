@@ -8,6 +8,7 @@ import DAO.EmpregadoDAO;
 import DAO.FactoryDAO;
 import Model.Departamento;
 import Model.Empregado;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -78,7 +79,7 @@ public class EmpregadoControl {
         return empregados;
     }
 
-    public Vector<Empregado> SearchByName(String input) {
+    public Vector<Empregado> SearchByName(String input) throws SQLException {
         Vector<Empregado> empregados = new Vector<Empregado>();
 
         for (Object aux : (ArrayList<Object>) this.dao.read(input)) 
@@ -88,7 +89,7 @@ public class EmpregadoControl {
         return empregados;
     }
 
-    public Vector<Empregado> SearchBySuperSnn(String superssn) {
+    public Vector<Empregado> SearchBySuperSnn(String superssn) throws SQLException {
         Vector<Empregado> empregados = new Vector<Empregado>();
 
         for (Object aux : (ArrayList<Object>) this.dao.buscarSupervisor(superssn)) 
@@ -98,11 +99,11 @@ public class EmpregadoControl {
         return empregados;
     }
 
-    public int login(String usuario, String senha) {
+    public int login(String usuario, String senha) throws SQLException {
         return this.dao.acessar(usuario, senha);
     }
 
-    public Vector<Empregado> buscarEndereco(String endereco) {
+    public Vector<Empregado> buscarEndereco(String endereco) throws SQLException {
         Vector<Empregado> empregados = new Vector<Empregado>();
         for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoEndereco(endereco)) 
             empregados.add((Empregado) aux);
@@ -112,7 +113,7 @@ public class EmpregadoControl {
 
     }
 
-    public Vector<Empregado> buscarEmpregadoSexo(String sexo) {
+    public Vector<Empregado> buscarEmpregadoSexo(String sexo) throws SQLException {
         Vector<Empregado> empregados = new Vector<Empregado>();
 
         for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoSexo(sexo)) 
@@ -123,7 +124,7 @@ public class EmpregadoControl {
 
     }
 
-    public Vector<Empregado> buscarEmpregadoProjeto(int numero) {
+    public Vector<Empregado> buscarEmpregadoProjeto(int numero) throws SQLException {
         Vector<Empregado> empregados = new Vector<Empregado>();
 
         for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoProjeto(numero))
@@ -134,7 +135,7 @@ public class EmpregadoControl {
     }
     
     
-    public Vector<Empregado> buscarEmpregadoTrabalhaMaisDepartamento(int dpnumero){
+    public Vector<Empregado> buscarEmpregadoTrabalhaMaisDepartamento(int dpnumero) throws SQLException{
         Vector<Empregado> empregados = new Vector<Empregado>();
         
         for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoTrabalhaMaisDepartamento(dpnumero))
@@ -143,26 +144,26 @@ public class EmpregadoControl {
         return empregados;
     }
     
-    public float mediaSalarios(){
+    public float mediaSalarios() throws SQLException, Exception{
         return this.dao.buscarValoresSalario("media");
     }
     
-    public float maiorSalario(){
+    public float maiorSalario() throws SQLException, Exception{
         return this.dao.buscarValoresSalario("maior");
     }
     
-    public float menorSalario(){
+    public float menorSalario() throws SQLException, Exception{
         return this.dao.buscarValoresSalario("menor");   
     }
     
-    public Vector<Empregado> empregadoMaisHoras(){
+    public Vector<Empregado> empregadoMaisHoras() throws SQLException{
         Vector<Empregado> empregados = new Vector<Empregado>();
         for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoHoras("maior"))
             empregados.add((Empregado)aux);
         return empregados;
     }
     
-    public Vector<Empregado> empregadoMenosHoras(){
+    public Vector<Empregado> empregadoMenosHoras() throws SQLException{
         Vector<Empregado> empregados = new Vector<Empregado>();
         for (Object aux : (ArrayList<Object>) this.dao.buscarEmpregadoHoras("menor"))
             empregados.add((Empregado)aux);

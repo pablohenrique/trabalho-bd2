@@ -9,6 +9,7 @@ import DAO.FactoryDAO;
 import DAO.ProjetoDAO;
 import Model.Departamento;
 import Model.Projeto;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -53,7 +54,7 @@ public class ProjetoControl  {
         return (Projeto) this.dao.get(input);
     }
     
-    public Vector<Projeto> getByIdVector(int input){
+    public Vector<Projeto> getByIdVector(int input) throws SQLException, Exception{
         Vector<Projeto> projeto = new Vector<Projeto>();
         projeto.add((Projeto) this.dao.get(input));
         return projeto;

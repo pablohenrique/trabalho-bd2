@@ -8,6 +8,7 @@ import DAO.DependenteDAO;
 import DAO.FactoryDAO;
 import Model.Dependente;
 import Model.Empregado;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -71,7 +72,7 @@ public class DependenteControl  {
         return (Dependente) this.dao.buscarDependente(essn, nome);
     }
     
-    public Vector<Dependente> SearchByEssnNomeVector(String essn, String nome){
+    public Vector<Dependente> SearchByEssnNomeVector(String essn, String nome) throws SQLException, Exception{
         Vector<Dependente> dependente = new Vector<Dependente>();
         dependente.add((Dependente) this.dao.buscarDependente(essn, nome));
         return dependente;

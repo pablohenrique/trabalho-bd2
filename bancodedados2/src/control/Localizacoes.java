@@ -8,6 +8,7 @@ import DAO.FactoryDAO;
 import DAO.LocalizacaoDAO;
 import Model.Departamento;
 import Model.Localizacao;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -64,7 +65,7 @@ public class Localizacoes {
     } 
     
     //remove essa funcao
-    public Vector<Localizacao>  SearchByName(String input){
+    public Vector<Localizacao>  SearchByName(String input) throws SQLException, Exception{
         Vector<Localizacao> localizacao = new Vector<Localizacao>();
         
         for(Object aux : (ArrayList<Object>) this.dao.read(input))
