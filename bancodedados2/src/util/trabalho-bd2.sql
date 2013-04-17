@@ -424,8 +424,8 @@ EXECUTE PROCEDURE dependeteConjugue();
 CREATE OR REPLACE FUNCTION projetoDep()
 RETURNS trigger AS 
 $$
-DECLARE dep_emp empregado.dno%TYPE;
-DECLARE dep_proj projeto.dnum%TYPE;
+DECLARE dep_emp cia.empregado.dno%TYPE;
+DECLARE dep_proj cia.projeto.dnum%TYPE;;
 
 BEGIN
     SELECT e.dno 
