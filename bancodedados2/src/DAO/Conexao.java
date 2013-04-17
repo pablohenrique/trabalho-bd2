@@ -22,11 +22,19 @@ public class Conexao {
     private static Connection connection;
     
     private Conexao() throws ClassNotFoundException, SQLException, Exception{
-        Class.forName( "org.postgresql.Driver" );
-        connection = DriverManager.getConnection(url, user, pass);
+        try {
+            Class.forName( "org.postgresql.Driver" );
+            connection = DriverManager.getConnection(url, user, pass);
+        } 
+        catch ( ClassNotFoundException cnfex ) {
+            System.err.println("Failed to load JDBC/ODBC driver. erro" + cnfex.toString() );
+        }
+        catch ( SQLException sqlex ) {
+            System.err.println( "Unable to connect" + sqlex.toString() );
+        }
     }
     
-    public static Conexao getInstance() throws ClassNotFoundException, SQLException, Exception {
+    public static Conexao getInstance() {
         if(instance != null)
             return instance;
         else
