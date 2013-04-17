@@ -25,9 +25,10 @@ public class ProjetoDAO implements IObjectDAO{
     //private final String BEFORECOND = SELECT_PRJETO + ", "  + SELECT_DEP + ", " + SELECT_EMP + ", " + SELECT_TRB + " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
     private final String BEFORECOND = SELECT_PRJETO + SELECT_DEP + SELECT_EMP + " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
     
-    private final String SQL_POST = "INSERT INTO cia.projeto(pjnome, plocalizacao, dnum) VALUES(?,?,?);";
+    private final String SQL_POST = "INSERT INTO cia.projeto VALUES(DEFAULT,?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.projeto SET pjnome = ?, plocalizacao = ?, dnum = ? WHERE pnumero = ?;";
-    private final String SQL_DELETE = "DELETE FROM cia.projeto WHERE pnumero = ?;";
+    private final String SQL_DELETE = "DELETE FROM cia.projeto WHERE pjnumero = ?;";
+    ;;;;;;
     private final String SQL_GET = "SELECT DISTINCT(p.pnumero)," + SELECT_PRJETO + SELECT_DEP + SELECT_EMP + " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d WHERE p.pnumero = ? AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_READ = "SELECT DISTINCT(p.pnumero)," + SELECT_PRJETO + SELECT_DEP + SELECT_EMP + " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d WHERE p.pjnome LIKE UPPER(?) AND d.gerssn = e.ssn AND p.dnum = d.numero;";
     private final String SQL_GETALL_JOIN = "SELECT p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao,d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio,e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha FROM ((cia.projeto as p LEFT OUTER JOIN cia.departamento AS d ON d.numero = p.dnum) LEFT OUTER JOIN cia.empregado AS e ON d.gerssn = e.ssn);";
