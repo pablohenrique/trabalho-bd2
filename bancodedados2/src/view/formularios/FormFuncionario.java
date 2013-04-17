@@ -261,9 +261,9 @@ public class FormFuncionario extends JDialog implements ActionListener
                 try{
                     Departamento d = (Departamento) departamento.getSelectedItem();  
                     Empregado superssn = (Empregado) supervisor.getSelectedItem();                    
-                    
+                    String salS = salario.getText().replaceAll("\\,", ".");
                     DecimalFormat formato = new DecimalFormat("0.00");  
-                    double sa = formato.parse(salario.getText()).doubleValue();
+                    double sa = formato.parse(salS).doubleValue();
                     
                     Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
                                                   endereco.getText(), String.valueOf(sa) , dataNasc.getText(), d.getNumero(),
@@ -285,9 +285,11 @@ public class FormFuncionario extends JDialog implements ActionListener
                     Departamento d = (Departamento) departamento.getSelectedItem();  
                     Empregado superssn = (Empregado) supervisor.getSelectedItem();
                     
+                    String salS = salario.getText().replaceAll("\\,", ".");
                     DecimalFormat formato = new DecimalFormat("0.00");  
-                    double sa = formato.parse(salario.getText()).doubleValue();
-                    
+                    double sa = formato.parse(salS).doubleValue();
+                    System.out.println("salario" + sa);
+                    System.out.println("salariotx" + salario.getText());
                     Principal.cf.atualizarEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
                                                     endereco.getText(), String.valueOf(sa), dataNasc.getText(), d.getNumero(),
                                                     superssn.getSsn(), new String (senha.getPassword()));                                           
