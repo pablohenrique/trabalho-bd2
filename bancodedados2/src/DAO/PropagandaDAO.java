@@ -26,7 +26,7 @@ public class PropagandaDAO implements IObjectDAO{
     private final String SQL_GET = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.id = ? AND pp.projeto = p.pnumero;";
     private final String SQL_READ = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.projeto = ? AND pp.projeto = p.pnumero;";
     private final String SQL_GETALL = BEFORECOND + " FROM cia.propaganda as pp, cia.projeto as p WHERE pp.projeto = p.pnumero;";
-    private final String SQL_DELETE = "DELETE FROM  cia.propaganda as pp, cia.projeto as p WHERE id = ?;";
+    private final String SQL_DELETE = "DELETE FROM  cia.propaganda as pp WHERE id = ?;";
     private final String SQL_DELETEPROJ = "DELETE FROM cia.propaganda WHERE projeto = ?;";
     private final String SQL_SUMTAXES = "SELECT cia.gera_tarifa(?)";
     private final String SQL_SUMEMPPAY = "SELECT sum(e.salario) FROM cia.empregado AS e, cia.trabalha_em as tt where tt.pjnumero = ? AND tt.essn = e.ssn";
