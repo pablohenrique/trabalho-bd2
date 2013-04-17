@@ -78,13 +78,13 @@ CREATE TABLE trabalha_em (
     horas numeric(3,1) NOT NULL
 );
 
-CREATE TABLE propaganda(
-id SERIAL NOT NULL,
-projeto INTEGER NOT NULL,
-dataInicio DATE NOT NULL,
-dataFinal DATE,
-agencia VARCHAR(15),
-tarifa FLOAT
+CREATE TABLE propaganda (
+    id integer NOT NULL,
+    projeto INTEGER NOT NULL,
+    dataInicio DATE NOT NULL,
+    dataFinal DATE,
+    agencia VARCHAR(15),
+    tarifa FLOAT
 );
 
 --
@@ -92,9 +92,11 @@ tarifa FLOAT
 --
 CREATE SEQUENCE departamento_seq INCREMENT 1; 
 CREATE SEQUENCE projeto_seq INCREMENT 1; 
+CREATE SEQUENCE propaganda_seq INCREMENT 1;
 
 ALTER TABLE departamento ALTER COLUMN numero SET DEFAULT nextval('departamento_seq');
 ALTER TABLE projeto ALTER COLUMN pnumero SET DEFAULT nextval('projeto_seq');
+ALTER TABLE propaganda ALTER COLUMN id SET DEFAULT nextval('propaganda_seq');
 
 
 --
@@ -151,9 +153,6 @@ INSERT INTO dept_localizacao VALUES('BLOCO C', 1);
 -- RESTRICOES PRIMARY KEY
 --
 
-ALTER TABLE ONLY propaganda 
-    ADD CONSTRAINT pkey_id PRIMARY KEY (id);
-
 ALTER TABLE ONLY departamento
     ADD CONSTRAINT pk_departamento PRIMARY KEY (numero);
 
@@ -172,6 +171,8 @@ ALTER TABLE ONLY trabalha_em
 ALTER TABLE ONLY dept_localizacao
     ADD CONSTRAINT pk_localizacao PRIMARY KEY (dlocalizacao, departamento_numero);
 
+ALTER TABLE ONLY propaganda 
+    ADD CONSTRAINT pkey_id PRIMARY KEY (id);
 
 --
 -- RESTRICOES UNIQUE
@@ -245,19 +246,18 @@ ALTER TABLE trabalha_em ADD CONSTRAINT  fk_trabalha_em_projeto
 
 ALTER TABLE propaganda ADD CONSTRAINT fkey_projeto 
     FOREIGN KEY(projeto) REFERENCES projeto(pnumero)
-    ON DELETE CASCADE 
-    ON UPDATE CASCADE;
+    ON DELETE CASCADE --quando remover um projeto remove todas propagadas
+    ON UPDATE CASCADE;--quando alterar um projeto update todas propagadas
 
 
 --
--- FUNCOES
---
+-- FUNCAO LOGIN: funcao responsavel por verificar o tipo do usuario
+-- 0 NORMAL, 1 FUNCIONARIO, 2 GERENTE, 3 FUNCIONARIO E GERENTE
 
 CREATE OR REPLACE VIEW login AS 
 SELECT e.ssn, e.superssn, e.senha, d.gerssn, d1.gerssn AS gerente
-  FROM empregado e
-  LEFT JOIN departamento d ON e.ssn = d.gerssn
-  JOIN departamento d1 ON d1.numero = e.dno;
+  FROM ((empregado e LEFT JOIN departamento d ON e.ssn = d.gerssn)
+         JOIN departamento d1 ON d1.numero = e.dno);
 
 
 DROP FUNCTION IF EXISTS login(varchar(9),varchar(15));
@@ -297,10 +297,10 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-SELECT login('11024','senha4');
+--SELECT login('11024','senha4');
 
 --
--- FUNCAO SEXO 
+-- FUNCAO SEXO: responsavel por converter para o banco e o software
 --
 
 
@@ -330,29 +330,29 @@ $$ language 'plpgsql';
 
 
 --
---
+-- Funcao responsavel por contar a tarifa de propagandas de um determinado projeto
 --
 
 CREATE OR REPLACE FUNCTION gera_tarifa(projetoID cia.projeto.pnumero%TYPE)
 RETURNS FLOAT AS
 $gera_tarifa$
-DECLARE
-acumulador cia.propaganda.tarifa%TYPE;
-contador cia.propaganda.tarifa%TYPE;
-propaganda RECORD;
-dias INTEGER;
-BEGIN
-    acumulador := 0;
-    FOR propaganda IN SELECT * FROM cia.propaganda as pp WHERE pp.projeto = projetoID
-    LOOP
-        SELECT (propaganda.dataFinal - propaganda.dataInicio)  INTO dias;
-        acumulador := acumulador + (propaganda.tarifa * dias);
-    END LOOP;
-    RETURN acumulador;
-END;
-$gera_tarifa$
-LANGUAGE plpgsql;
+    DECLARE acumulador cia.propaganda.tarifa%TYPE;
+    DECLARE contador cia.propaganda.tarifa%TYPE;
+    DECLARE propaganda RECORD;
+    DECLARE dias INTEGER;
 
+    BEGIN
+        acumulador := 0;
+        FOR propaganda IN SELECT * FROM cia.propaganda as pp WHERE pp.projeto = projetoID
+        LOOP
+            SELECT (propaganda.dataFinal - propaganda.dataInicio)  INTO dias;
+            acumulador := acumulador + (propaganda.tarifa * dias);
+        END LOOP;
+        RETURN acumulador;
+    END;
+
+$gera_tarifa$
+LANGUAGE 'plpgsql';
 
 
 ---
@@ -369,7 +369,7 @@ $BODY$
 BEGIN
     IF (NEW.salario < 100) THEN
     RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario %', NEW.superssn;
-    ELSEIF(TG_OP = 'UPDATE') THEN
+    ELSEIF(TG_OP = 'UPDATE' AND NEW.salario <> OLD.salario) THEN
         IF NEW.salario > OLD.salario THEN
             INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
         ELSE
@@ -385,8 +385,9 @@ $BODY$
 ALTER FUNCTION cia.trigger_emp_salario()
   OWNER TO postgres;
 
-CREATE TRIGGER trigger_emp_salario BEFORE INSERT OR UPDATE ON cia.empregado
-FOR EACH ROW EXECUTE PROCEDURE trigger_emp_salario();
+CREATE TRIGGER trigger_emp_salario 
+   BEFORE INSERT OR UPDATE ON cia.empregado
+   FOR EACH ROW EXECUTE PROCEDURE trigger_emp_salario();
 
 --
 --
@@ -398,13 +399,13 @@ $$
 DECLARE
 dep INTEGER;
 BEGIN
-    IF(NEW.parentesco = 'conjugue') THEN 
+    IF(NEW.parentesco = 'Conjugue') THEN 
         SELECT COUNT(d.essn) 
         FROM cia.dependentes AS d 
-        WHERE d.essn = NEW.essn AND parentesco = 'conjugue' INTO dep;   
+        WHERE d.essn = NEW.essn AND parentesco = 'Conjugue' INTO dep;   
 
         IF (dep = 1) THEN 
-            RAISE EXCEPTION 'NO BRASIL VC SOH PODE TER 1 CONJUGUE';
+            RAISE EXCEPTION 'No Brasil vc soh pode casar com uma pessoa!';
         END IF;
     END IF; 
 
@@ -414,9 +415,8 @@ $$ language 'plpgsql';
 
 
 CREATE TRIGGER verificaConjugue
-BEFORE INSERT OR UPDATE
-ON cia.dependentes FOR EACH ROW
-EXECUTE PROCEDURE dependeteConjugue();
+    BEFORE INSERT OR UPDATE ON cia.dependentes 
+    FOR EACH ROW EXECUTE PROCEDURE dependeteConjugue();
 
 --
 --
@@ -425,32 +425,31 @@ EXECUTE PROCEDURE dependeteConjugue();
 CREATE OR REPLACE FUNCTION projetoDep()
 RETURNS trigger AS 
 $$
-DECLARE dep_emp cia.empregado.dno%TYPE;
-DECLARE dep_proj cia.projeto.dnum%TYPE;;
+    DECLARE dep_emp cia.empregado.dno%TYPE;
+    DECLARE dep_proj cia.projeto.dnum%TYPE;
 
-BEGIN
-    SELECT e.dno 
-    FROM cia.empregado AS e
-    WHERE e.ssn = NEW.essn
-    INTO dep_emp;
+    BEGIN
+        SELECT e.dno 
+        FROM cia.empregado AS e
+        WHERE e.ssn = NEW.essn
+        INTO dep_emp;
 
-    SELECT p.dnum
-    FROM cia.projeto AS p
-    WHERE p.pnumero = NEW.pjnumero
-    INTO dep_proj;
+        SELECT p.dnum
+        FROM cia.projeto AS p
+        WHERE p.pnumero = NEW.pjnumero
+        INTO dep_proj;
 
-    IF(dep_emp <> dep_proj) THEN 
-        RAISE EXCEPTION 'O empregado so pode trablhar em projetos de seu departamento.';
-    END IF;
+        IF(dep_emp <> dep_proj) THEN 
+            RAISE EXCEPTION 'O empregado so pode trablhar em projetos de seu departamento.';
+        END IF;
 
-RETURN NEW;
-END;
+    RETURN NEW;
+    END;
 $$ language 'plpgsql';
 
 CREATE TRIGGER verificaDep
-BEFORE INSERT OR UPDATE
-ON cia.trabalha_em FOR EACH ROW
-EXECUTE PROCEDURE projetoDep();
+    BEFORE INSERT OR UPDATE ON cia.trabalha_em 
+    FOR EACH ROW EXECUTE PROCEDURE projetoDep();
 
 
 --
