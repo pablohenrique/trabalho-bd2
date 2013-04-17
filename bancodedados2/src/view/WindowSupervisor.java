@@ -72,7 +72,7 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             
             JMenu projetos = new JMenu("Projetos");		
             menuProjetosListar = new  JMenuItem("Listar todos Funcionarios");
-           
+            projetos.add(menuProjetosListar);
 
             JMenu ajuda = new JMenu("Ajuda");
             menuAbout = new JMenuItem("Sobre");
@@ -89,7 +89,8 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             menuFuncionariosEditar.addActionListener(this);
             menuInit.addActionListener(this);
             menuAbout.addActionListener(this);
-            menuExit.addActionListener(this);	            
+            menuExit.addActionListener(this);	  
+            menuProjetosListar.addActionListener(this);
 
 
             JToolBar barraFerramentas = new JToolBar();
@@ -151,7 +152,7 @@ public class WindowSupervisor extends JFrame implements ActionListener {
                 painelCentral.add(WindowGerente.painelFuncionarios(), "funcionario");                     
                 WindowSupervisor.card.show(WindowSupervisor.painelCentral, "funcionario");
             }
-            else if( origem == btnProjetos){
+            else if( origem == btnProjetos || origem == menuProjetosListar){
                 painelCentral.add(WindowGerente.painelProjetos(), "projeto"); 
                 WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
             }                   

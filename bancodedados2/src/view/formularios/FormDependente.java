@@ -61,7 +61,7 @@ public class FormDependente extends JDialog implements ActionListener
         parentesco = new JComboBox<>();
         parentesco.addItem("Filho(a)");
         parentesco.addItem("Conjugue");
-        parentesco.addItem("Nao sei");
+        parentesco.addItem("Amante");
         
         try {
             valuesEmpregado = new Vector((Vector<Empregado>) ViewObjectPool.get("todosEmpregados"));

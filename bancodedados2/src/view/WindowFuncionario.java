@@ -63,6 +63,7 @@ public class WindowFuncionario extends JFrame implements ActionListener {
             
             JMenu projetos = new JMenu("Projetos");                        
             projetos.add(menuProjetosListar);
+            projetos.add(new JSeparator());
 
             JMenu ajuda = new JMenu("Ajuda");
             ajuda.add(menuAbout);
@@ -76,6 +77,7 @@ public class WindowFuncionario extends JFrame implements ActionListener {
             //actions listerns
             menuEditarFuncionario.addActionListener(this);
             menuDependentesListar.addActionListener(this);
+            menuProjetosListar.addActionListener(this);
             menuInit.addActionListener(this);
             menuAbout.addActionListener(this);
             menuExit.addActionListener(this);	            

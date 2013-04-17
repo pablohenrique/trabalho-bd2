@@ -108,10 +108,10 @@ public class WindowGerente extends JFrame implements ActionListener {
             dep.add(menuDepartamentoListar);
             
             JMenu projetos = new JMenu("Projetos");		
-            menuProjetosCadastro = new JMenuItem("Cadastro de Projetos");           
+            //menuProjetosCadastro = new JMenuItem("Cadastro de Projetos");           
             menuProjetosListar = new JMenuItem("Listar Projetos");           
             
-            projetos.add(menuProjetosCadastro);
+            //projetos.add(menuProjetosCadastro);
             projetos.add(menuProjetosListar);
             
             JMenu ajuda = new JMenu("Ajuda");
@@ -132,7 +132,6 @@ public class WindowGerente extends JFrame implements ActionListener {
             menuDepartamentoListar.addActionListener(this);
             menuDependentesCadastro.addActionListener(this);
             menuDependentesListar.addActionListener(this);
-            menuProjetosCadastro.addActionListener(this);
             menuProjetosListar.addActionListener(this);
             menuInit.addActionListener(this);
             menuAbout.addActionListener(this);
