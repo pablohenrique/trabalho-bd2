@@ -43,7 +43,7 @@ public class ControlFacade {
      * @return 2 funcionario gerente
      * @return 3 funcionario supervisor e gerente
      */
-    public int login(String usuario, String senha)
+    public int login(String usuario, String senha) throws SQLException
     {
         return empregadoControl.login(usuario, senha);
     }
@@ -124,7 +124,7 @@ public class ControlFacade {
      * @return Vector<Empregado> 
      * retorna empregados com endereco informado
      */
-    public Vector<Empregado> buscarEmpregadoEndereco(String endereco){
+    public Vector<Empregado> buscarEmpregadoEndereco(String endereco) throws SQLException{
         return empregadoControl.buscarEndereco(endereco);
     }
     
@@ -134,7 +134,7 @@ public class ControlFacade {
      * @return Vector<Empregado> 
      * retorna empregado com sexo informado
      */
-    public Vector<Empregado> buscarEmpregadoSexo(String sexo){
+    public Vector<Empregado> buscarEmpregadoSexo(String sexo) throws SQLException{
         return empregadoControl.buscarEmpregadoSexo(sexo);
     }
     
@@ -144,7 +144,7 @@ public class ControlFacade {
      * @return  Vector<Empregado> 
      * dado projeto retorna empregados
      */
-    public Vector<Empregado> buscarEmpregadoProjeto(int numero){
+    public Vector<Empregado> buscarEmpregadoProjeto(int numero) throws SQLException{
         return empregadoControl.buscarEmpregadoProjeto(numero);
     }
     
@@ -153,7 +153,7 @@ public class ControlFacade {
      * @return float
      * media de salario de todos os empregados
      */
-    public float mediaSalarios(){
+    public float mediaSalarios() throws SQLException, Exception{
        return empregadoControl.mediaSalarios();
     }
     
@@ -162,7 +162,7 @@ public class ControlFacade {
      * @return float
      * maior salario de todos os empregados
      */
-    public float maiorSalario(){
+    public float maiorSalario() throws SQLException, Exception{
         return empregadoControl.maiorSalario();
     }
     
@@ -171,7 +171,7 @@ public class ControlFacade {
      * @return float
      * menor salario
      */
-    public float menorSalario(){
+    public float menorSalario() throws SQLException, Exception{
         return empregadoControl.menorSalario();
     }
     
@@ -180,7 +180,7 @@ public class ControlFacade {
      * @return Vector<Empregado>
      * empregado com mais horas
      */
-    public Vector<Empregado> empregadoMaisHoras(){
+    public Vector<Empregado> empregadoMaisHoras() throws SQLException{
         return empregadoControl.empregadoMaisHoras();
     }
     
@@ -189,7 +189,7 @@ public class ControlFacade {
      * @return Vector<Empregado>
      * empregado com menos horas
      */
-    public Vector<Empregado> empregadoMenosHoras(){
+    public Vector<Empregado> empregadoMenosHoras() throws SQLException{
         return empregadoControl.empregadoMenosHoras();
     }
              
@@ -200,7 +200,7 @@ public class ControlFacade {
      * @return Vector<Empregado> 
      * retorna empregado que trabalha em mais projetos de departamento
      */
-    public Vector<Empregado> buscarEmpregadoTrabalhaMaisDepartamento(int dptonumero){
+    public Vector<Empregado> buscarEmpregadoTrabalhaMaisDepartamento(int dptonumero) throws SQLException{
         return empregadoControl.buscarEmpregadoTrabalhaMaisDepartamento(dptonumero);
     }
     
@@ -242,7 +242,7 @@ public class ControlFacade {
      * @return Vector<Empregado>
      * retorna vetores de empregados que possuem nome informado (LIKE)
      */
-    public Vector<Empregado> buscaNomeEmpregado(String nome){
+    public Vector<Empregado> buscaNomeEmpregado(String nome) throws SQLException{
         return empregadoControl.SearchByName(nome);
     }
     
@@ -253,7 +253,7 @@ public class ControlFacade {
      * @return Vector<Empregado>
      * retorna empregados de um superssn informado
      */     
-    public Vector<Empregado> buscaSuperSnn(String superssn) {
+    public Vector<Empregado> buscaSuperSnn(String superssn) throws SQLException {
         return empregadoControl.SearchBySuperSnn(superssn);
     }
     
@@ -437,7 +437,7 @@ public class ControlFacade {
      * @return Vector<Dependente> 
      * retorna dependente com ssn e nome informado em vetor
      */
-    public Vector<Dependente> buscaDependenteEssnNomeVector(String essn, String nome){
+    public Vector<Dependente> buscaDependenteEssnNomeVector(String essn, String nome) throws SQLException, Exception{
         return dependenteControl.SearchByEssnNomeVector(essn, nome);
     }
     
@@ -498,7 +498,7 @@ public class ControlFacade {
      * @return Vector<Projeto>
      * retorna projeto que possui numero informado em vetor
      */
-    public Vector<Projeto> getProjetoByNumeroVector(int numero){
+    public Vector<Projeto> getProjetoByNumeroVector(int numero) throws SQLException, Exception{
         return projetoControl.getByIdVector(numero);
     }
     
@@ -641,7 +641,7 @@ public class ControlFacade {
      * @return deptlocalizacao
      * Retorna um deptlocalizacao de acordo com nome da localizacao
      */
-    public Vector<Localizacao> BuscaNomeLocalizacao(String nome){
+    public Vector<Localizacao> BuscaNomeLocalizacao(String nome) throws SQLException, Exception{
         return localizacoesControl.SearchByName(nome);
     }         
     
@@ -736,7 +736,7 @@ public class ControlFacade {
       * @param projetonumero
       * @return Trabalha
       */
-     public Trabalha buscarEmpregadoProjeto(String ssn, int projetonumero){
+     public Trabalha buscarEmpregadoProjeto(String ssn, int projetonumero) throws SQLException, Exception{
          return trabalhaControl.buscarEmpregadoProjeto(ssn, projetonumero);
      }
      
@@ -908,7 +908,7 @@ public class ControlFacade {
       * @return float
       * receitas do projeto
       */
-     public float receita(int projeto){
+     public float receita(int projeto) throws SQLException, Exception{
          return propagandaControl.somarTarifa(projeto);
      }
      
@@ -918,10 +918,23 @@ public class ControlFacade {
       * @return float
       * despesas do projeto
       */
-     public float despesa(int projeto){
+     public float despesa(int projeto) throws SQLException, Exception{
          return propagandaControl.somarDespesa(projeto);
          
      }
+     
+    public String[][] getPropagandasByProjeto(Vector<Propaganda> list) {
+        String[][] dados = new String[list.size()][];
+        FuncoesControle f = new FuncoesControle();
+
+        for (int i = 0; i < list.size(); i++) {
+            Propaganda p = list.get(i);
+            dados[i] = new String[]{p.getAgencia(), String.valueOf(p.getNumero()), f.converteData(p.getDataInicio()), f.converteData(p.getDataFinal()),
+                p.getProjeto().getNome(), String.valueOf(p.getTarifa())};
+        }
+
+        return dados;
+    }
 }
 
 

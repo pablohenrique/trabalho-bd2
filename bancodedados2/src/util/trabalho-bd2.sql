@@ -27,7 +27,7 @@ CREATE TABLE departamento (
     numero integer NOT NULL,
     nome character varying(15) NOT NULL,
     gerssn character(9) NOT NULL,
-    gerdatainicio date NOT NULL,
+    gerdatainicio date NOT NULL
 );
 
 CREATE TABLE dept_localizacao (
@@ -84,9 +84,7 @@ projeto INTEGER NOT NULL,
 dataInicio DATE NOT NULL,
 dataFinal DATE,
 agencia VARCHAR(15),
-tarifa FLOAT,
-CONSTRAINT pkey_id PRIMARY KEY (id),
-CONSTRAINT fkey_projeto FOREIGN KEY(projeto) REFERENCES projeto(pnumero)
+tarifa FLOAT
 );
 
 --
@@ -130,7 +128,7 @@ ALTER TABLE trabalha_em DROP CONSTRAINT pk_trabalha_em;
 INSERT INTO departamento VALUES('1', 'PESQUISA', '11013', '2013-02-01');
 INSERT INTO departamento VALUES('2', 'TESTES', '11012', '2013-02-01');
 
-INSERT INTO empregado VALUES('11011', 'CAIO THOMAS OLIVEIRA', 'M', 'RUA DA ALEGRIA', 1234.09, '1991-11-21', 1, NULL, 123);
+INSERT INTO empregado VALUES('11011', 'CAIO THOMAS OLIVEIRA', 'M', 'RUA DA ALEGRIA', 1234.09, '1991-11-21', 1, '11011', 123);
 INSERT INTO empregado VALUES('11012', 'RICARDO DA SILVA', 'M', 'RUA DA FELICIADE', 934.09, '1990-02-12', 1, '11011', 123);
 INSERT INTO empregado VALUES('11013', 'LUCIANA FERREIRA', 'F', 'RUA DA FELICIADE', 934.09, '1990-04-29', 1, '11011', 123);
 INSERT INTO empregado VALUES('11014', 'MARIANA DA SILVA', 'F', 'RUA DA FELICIADE', 934.09, '1990-02-12', 1, '11011', 123);
@@ -148,19 +146,19 @@ INSERT INTO trabalha_em VALUES('11014', 2, 8);
 
 INSERT INTO dept_localizacao VALUES('BLOCO A', 1);
 INSERT INTO dept_localizacao VALUES('BLOCO B', 2);
-INSERT INTO dept_localizacao VALUES('BLOCO C', 3);
+INSERT INTO dept_localizacao VALUES('BLOCO C', 1);
 --
 -- RESTRICOES PRIMARY KEY
 --
+
+ALTER TABLE ONLY propaganda 
+    ADD CONSTRAINT pkey_id PRIMARY KEY (id);
 
 ALTER TABLE ONLY departamento
     ADD CONSTRAINT pk_departamento PRIMARY KEY (numero);
 
 ALTER TABLE ONLY dependentes
     ADD CONSTRAINT pk_dependentes PRIMARY KEY (nome_dependente, essn);
-
-ALTER TABLE ONLY dept_localizacao
-    ADD CONSTRAINT pk_dept_localizacao PRIMARY KEY (dlocalizacao, departamento_numero);
 
 ALTER TABLE ONLY empregado
     ADD CONSTRAINT pk_empregado PRIMARY KEY (ssn);
@@ -245,6 +243,10 @@ ALTER TABLE trabalha_em ADD CONSTRAINT  fk_trabalha_em_projeto
     ON DELETE NO ACTION --caso remova um projeto nao pode remover o trabalha em, pois tem trabalhadores
     ON UPDATE CASCADE;--caso atualize chave primaria de projeto posso atualizar em trabalha em
 
+ALTER TABLE propaganda ADD CONSTRAINT fkey_projeto 
+    FOREIGN KEY(projeto) REFERENCES projeto(pnumero)
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE;
 
 
 --
@@ -273,21 +275,21 @@ BEGIN
     
     IF ( userInfo.senha != argsenha OR userInfo.qtdusuario = 0 OR userInfo.qtdusuario IS NULL)
     THEN 
-	RETURN -1;
+    RETURN -1;
     ELSE
         IF (argssn = userInfo.gerssn AND argssn = userInfo.superssn)
         THEN
-	    RETURN 3;
+        RETURN 3;
         ELSE
             IF (argssn = userInfo.gerssn)
             THEN
-		RETURN 2;
+        RETURN 2;
             ELSE
                 IF (argssn = userInfo.superssn)
                 THEN
-		    RETURN 1;
+            RETURN 1;
                 ELSE
-		    RETURN 0;
+            RETURN 0;
                 END IF;
             END IF;
         END IF;
@@ -310,7 +312,7 @@ RETURNS VARCHAR AS $$
         ELSEIF(lower(sexo) = 'f') THEN            
             RETURN 'Feminino';
         ELSE 
-		RETURN '';
+        RETURN '';
         END IF;
     END;
 $$ language 'plpgsql';
@@ -339,13 +341,13 @@ acumulador cia.propaganda.tarifa%TYPE;
 contador cia.propaganda.tarifa%TYPE;
 dias INTEGER;
 BEGIN
-	acumulador := 0;
-	FOR contador IN SELECT pp.tarifa FROM cia.propaganda as pp WHERE pp.projeto = projetoID
-	LOOP
-		SELECT (pp.dataInicio - pp.dataFinal) INTO dias;
-		acumulador := acumulador + (contador * dias);
-	END LOOP;
-	RETURN acumulador;
+    acumulador := 0;
+    FOR contador IN SELECT pp.tarifa FROM cia.propaganda as pp WHERE pp.projeto = projetoID
+    LOOP
+        SELECT (pp.dataInicio - pp.dataFinal) INTO dias;
+        acumulador := acumulador + (contador * dias);
+    END LOOP;
+    RETURN acumulador;
 END;
 $gera_tarifa$
 LANGUAGE plpgsql;
@@ -365,7 +367,7 @@ CREATE OR REPLACE FUNCTION trigger_emp_salario()
 $BODY$
 BEGIN
     IF NEW.salario < 100 THEN
-	RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario %', NEW.superssn;
+    RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario %', NEW.superssn;
     ELSEIF(TG_OP = 'UPDATE')
         IF NEW.salario > OLD.salario THEN
             INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
@@ -398,12 +400,12 @@ BEGIN
     IF(NEW.parentesco = 'conjugue') THEN 
         SELECT COUNT(d.essn) 
         FROM cia.dependentes AS d 
-        WHERE d.essn = NEW.essn AND parentesco = 'conjugue' INTO dep;	
+        WHERE d.essn = NEW.essn AND parentesco = 'conjugue' INTO dep;   
 
         IF (dep = 1) THEN 
             RAISE EXCEPTION 'NO BRASIL VC SOH PODE TER 1 CONJUGUE';
         END IF;
-    END IF;	
+    END IF; 
 
     RETURN NEW;
 END;
@@ -458,9 +460,9 @@ EXECUTE PROCEDURE projetoDep();
 
 SELECT *, cia.sexo(e.sexo) AS sexoEmp, cia.sexo(ger.sexo) AS sexoGer, cia.sexo(s.sexo) AS sexoSuper
     FROM (((cia.empregado AS e LEFT JOIN cia.departamento
-		AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger
-		ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s 
-			ON e.superssn = s.ssn)
+        AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger
+        ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s 
+            ON e.superssn = s.ssn)
     ORDER BY e.nome ASC;
 
 
@@ -471,9 +473,9 @@ SELECT e.ssn AS E_ssn, e.nome AS E_nome, cia.sexo(e.sexo) AS E_sexo, e.endereco 
        e.superssn AS E_superssn, e.senha AS E_senha, s.ssn AS S_ssn, s.nome AS S_nome, cia.sexo(s.sexo) AS S_sexo, s.endereco AS S_endereco, s.salario AS S_salario,
        s.datanasc AS S_datanasc, s.dno AS S_dno, s.superssn AS S_superssn, s.senha AS S_senha, d.numero AS D_numero, d.nome AS D_nome, d.gerssn AS D_gerssn, d.gerdatainicio AS D_gerdatainicio
     FROM (((cia.empregado AS e LEFT JOIN cia.departamento
-		AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger
-		ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s 
-			ON e.superssn = s.ssn)
+        AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger
+        ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s 
+            ON e.superssn = s.ssn)
     ORDER BY e.nome ASC;
 
 
@@ -482,6 +484,6 @@ SELECT p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizaca
        d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio
        FROM empregado AS e, projeto AS p, departamento AS d, trabalha_em AS t
        WHERE e.ssn = t.essn AND
-	     t.pjnumero = p.pnumero AND
-	     p.dnum = d.numero AND
-	     e.ssn = '11014';
+         t.pjnumero = p.pnumero AND
+         p.dnum = d.numero AND
+         e.ssn = '11014';
