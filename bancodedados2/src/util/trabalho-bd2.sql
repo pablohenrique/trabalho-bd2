@@ -363,12 +363,12 @@ LANGUAGE plpgsql;
 ---
 
 CREATE OR REPLACE FUNCTION trigger_emp_salario()
-  RETURNS trigger AS
+RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF NEW.salario < 100 THEN
+    IF (NEW.salario < 100) THEN
     RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario %', NEW.superssn;
-    ELSEIF(TG_OP = 'UPDATE')
+    ELSEIF(TG_OP = 'UPDATE') THEN
         IF NEW.salario > OLD.salario THEN
             INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
         ELSE
