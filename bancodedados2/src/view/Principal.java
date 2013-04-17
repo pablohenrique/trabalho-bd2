@@ -13,7 +13,8 @@ public class Principal{
     public static JFrame janela;
     public static Empregado user;
     public static ControlFacade cf = new ControlFacade();
-
+    public static int value = -1;
+    
     public static void main(String[] args) throws Exception{
          Principal.initLookAndFeel();
          //String ssn = "11014";
@@ -52,10 +53,8 @@ public class Principal{
          */
         ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
         ViewObjectPool.set("todosDepartamento", (Vector<Departamento>) Principal.cf.listarDepartamentos());  
-                
-            
+                            
          login = new WindowLogin();
-//         janela = new WindowFuncionario();
     }
 
     private static void initLookAndFeel(){		 

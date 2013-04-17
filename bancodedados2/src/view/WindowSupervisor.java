@@ -32,16 +32,18 @@ public class WindowSupervisor extends JFrame implements ActionListener {
     
     public static Empregado usuario = null;
     
-    private static JMenuItem menuProjetosListar;	
-    private static JMenuItem menuFuncionariosListar;
-    private static JMenuItem menuFuncionariosEditar;
+    private JMenuItem menuProjetosListar;	
+    private JMenuItem menuFuncionariosListar;
+    private JMenuItem menuFuncionariosEditar;
     
-    private static JMenuItem menuExit;
-    private static JMenuItem menuInit;
-    private static JMenuItem menuAbout;
-
-    private static JButton btnFuncionarios; 
-    private static JButton btnProjetos;
+    private JMenuItem menuExit;
+    private JMenuItem menuInit;
+    private JMenuItem menuAbout;
+    private JMenuItem menuFuncionario = new JMenuItem("Logar Funcionário");
+    private JMenuItem menuGerente = new JMenuItem("Logar Gerente");
+    
+    private JButton btnFuncionarios; 
+    private JButton btnProjetos;
     private static CardLayout card;
     
     private static JPanel painel_funcionario = null;
@@ -60,10 +62,18 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             menuExit = new JMenuItem("Sair");
             menuInit = new JMenuItem("Inicio");
             arquivo.add(menuInit);
+            if(Principal.value == 3){
+                arquivo.add(new JSeparator());
+                arquivo.add(menuGerente);   
+                arquivo.add(menuFuncionario);
+            } else if (Principal.value == 2){
+                arquivo.add(new JSeparator()); 
+                arquivo.add(menuFuncionario);
+            }                        
             arquivo.add(new JSeparator());
             arquivo.add(menuExit);		
             
-            JMenu funcionarios = new JMenu("Funcionarios");		
+            JMenu funcionarios = new JMenu("Funcionários");		
             menuFuncionariosListar = new  JMenuItem("Listar todos Funcionarios");
             menuFuncionariosEditar =  new  JMenuItem("Editar Meu Cadastro");
            
@@ -91,12 +101,14 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             menuAbout.addActionListener(this);
             menuExit.addActionListener(this);	  
             menuProjetosListar.addActionListener(this);
+            menuFuncionario.addActionListener(this);
+            menuGerente.addActionListener(this);
 
 
             JToolBar barraFerramentas = new JToolBar();
             ArrayList<JButton> botoes = new ArrayList<JButton>();
 
-            btnFuncionarios = new JButton("Funcionarios");
+            btnFuncionarios = new JButton("Funcionários");
             btnFuncionarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/funcionarios.png")));
             botoes.add(btnFuncionarios);
             
@@ -155,6 +167,14 @@ public class WindowSupervisor extends JFrame implements ActionListener {
             else if( origem == btnProjetos || origem == menuProjetosListar){
                 painelCentral.add(WindowGerente.painelProjetos(), "projeto"); 
                 WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
+            } else if(menuFuncionario == origem){
+                Principal.user.setTipoLogin(0);                
+                Principal.janela = new WindowFuncionario();            
+                this.dispose();                            
+            } else if (menuGerente == origem) {
+                Principal.user.setTipoLogin(2);
+                Principal.janela = new WindowGerente();              
+                this.dispose();                            
             }                   
     }    
 }

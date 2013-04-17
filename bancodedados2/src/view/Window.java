@@ -54,7 +54,7 @@ public class Window extends JFrame implements ActionListener {
     private static JButton btnCargaHoraria;
     private static JButton btnCalculadora;
     private static CardLayout card;
-
+    
     public Window(){
             super("Sistema de Gerenciamento");
             //definir todos painel central

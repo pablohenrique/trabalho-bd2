@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -171,7 +172,8 @@ public class FormFuncionario extends JDialog implements ActionListener
         nome.setText(e.getNome());
         endereco.setText(e.getEndereco());
         dataNasc.setText(Principal.cf.converteDataString(e.getDataNascimento()));
-        salario.setText(e.getSalarioString());
+        String value = e.getSalarioString().replaceAll("\\.", ",");
+        salario.setText(value);
         ssn.setText(e.getSsn());
         senha.setText(e.getSenha());
         sexo.setSelectedItem(e.getSexo());
@@ -260,8 +262,11 @@ public class FormFuncionario extends JDialog implements ActionListener
                     Departamento d = (Departamento) departamento.getSelectedItem();  
                     Empregado superssn = (Empregado) supervisor.getSelectedItem();                    
                     
+                    DecimalFormat formato = new DecimalFormat("0.00");  
+                    double sa = formato.parse(salario.getText()).doubleValue();
+                    
                     Principal.cf.inserirEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                  endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
+                                                  endereco.getText(), String.valueOf(sa) , dataNasc.getText(), d.getNumero(),
                                                  superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
@@ -280,8 +285,11 @@ public class FormFuncionario extends JDialog implements ActionListener
                     Departamento d = (Departamento) departamento.getSelectedItem();  
                     Empregado superssn = (Empregado) supervisor.getSelectedItem();
                     
+                    DecimalFormat formato = new DecimalFormat("0.00");  
+                    double sa = formato.parse(salario.getText()).doubleValue();
+                    
                     Principal.cf.atualizarEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
-                                                    endereco.getText(), salario.getText(), dataNasc.getText(), d.getNumero(),
+                                                    endereco.getText(), String.valueOf(sa), dataNasc.getText(), d.getNumero(),
                                                     superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        

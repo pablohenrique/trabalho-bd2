@@ -37,7 +37,7 @@ public class FormFuncionarioProjetos extends JDialog implements ActionListener
     private JLabel sssn = new JLabel();
     
     public FormFuncionarioProjetos(Empregado e){
-        super(Principal.janela,"Todos Projetos do Empregado", true);
+        super(Principal.janela,"Projeto(s) do empregado", true);
         
         btnOK.setPreferredSize(new Dimension(100, 25));             
         

@@ -39,7 +39,7 @@ public class FormHoras extends JDialog implements ActionListener
     private Vector<Departamento> valuesDepartamento;
     
     public FormHoras(){
-        super(Principal.janela,"Encontre os empregados que trabalhavam mais/menos horas", true);
+        super(Principal.janela,"Empregados que trabalham mais e menos horas", true);
         
         btnOK.setPreferredSize(new Dimension(100, 25));             
         

@@ -30,6 +30,8 @@ public class WindowFuncionario extends JFrame implements ActionListener {
     private JMenuItem menuExit = new JMenuItem("Sair");
     private JMenuItem menuInit = new JMenuItem("Inicio");
     private JMenuItem menuAbout = new JMenuItem("Sobre");
+    private JMenuItem menuSupervisor = new JMenuItem("Logar Supervisor");
+    private JMenuItem menuGerente = new JMenuItem("Logar Gerente");
 
     private JButton btnFuncionarios; 
     private JButton btnDependentes;
@@ -52,11 +54,23 @@ public class WindowFuncionario extends JFrame implements ActionListener {
             JMenu arquivo = new JMenu("Arquivo");		            
 
             arquivo.add(menuInit);
+            if(Principal.value == 3){
+                arquivo.add(new JSeparator());
+                arquivo.add(menuGerente);   
+                arquivo.add(menuSupervisor);
+            } else if (Principal.value == 1){
+                arquivo.add(new JSeparator()); 
+                arquivo.add(menuSupervisor);
+            } else if (Principal.value == 2){
+                arquivo.add(new JSeparator()); 
+                arquivo.add(menuGerente);   
+            }            
             arquivo.add(new JSeparator());
             arquivo.add(menuExit);		
             
-            JMenu funcionarios = new JMenu("Funcionario");		
-
+            JMenu funcionarios = new JMenu("Funcionário");		
+            
+            arquivo.add(new JSeparator());            
             funcionarios.add(menuEditarFuncionario);
             funcionarios.add(new JSeparator());
             funcionarios.add(menuDependentesListar);
@@ -81,8 +95,9 @@ public class WindowFuncionario extends JFrame implements ActionListener {
             menuInit.addActionListener(this);
             menuAbout.addActionListener(this);
             menuExit.addActionListener(this);	            
-
-
+            menuSupervisor.addActionListener(this);
+            menuGerente.addActionListener(this);
+            
             JToolBar barraFerramentas = new JToolBar();
             ArrayList<JButton> botoes = new ArrayList<JButton>();
 
@@ -161,7 +176,15 @@ public class WindowFuncionario extends JFrame implements ActionListener {
                 } catch (Exception ex) {
                     System.err.println("Erro: " + ex);
                 }                                 
-            }		
+            } else if(menuSupervisor == origem)	{
+                Principal.user.setTipoLogin(1);
+                Principal.janela = new WindowSupervisor();              
+                this.dispose();                            
+            } else if (menuGerente == origem) {
+                Principal.user.setTipoLogin(2);
+                Principal.janela = new WindowGerente();              
+                this.dispose();                            
+            }
     }
     
     public void form_funcionarios(Empregado e){

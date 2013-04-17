@@ -23,16 +23,13 @@ public class WindowLogin extends JFrame implements ActionListener
     private JPasswordField senha;
     private JButton btnOK;
     private JButton btnSair;    
-    private int value = -1;
 
     public WindowLogin()
     {		
         super("Bem-vindo ao Sistema de Gerenciamento");
 
-        usuario = new JTextField();
-        usuario.setText("11024");
+        usuario = new JTextField();        
         senha = new JPasswordField();
-        senha.setText("a");
         senha.requestFocus();
         btnOK = new JButton("Iniciar sessão");
         btnSair = new JButton("Sair");
@@ -90,8 +87,8 @@ public class WindowLogin extends JFrame implements ActionListener
                     return;
                 }                 
                     try{
-                        value = Principal.cf.login(user, new String (senha.getPassword()));
-                                                
+                        int value = Principal.cf.login(user, new String (senha.getPassword()));
+                        Principal.value = value;
                         FactoryWindow fabrica = new FactoryWindow();
                         fabrica.execute(this, value, user);                                        
                     }

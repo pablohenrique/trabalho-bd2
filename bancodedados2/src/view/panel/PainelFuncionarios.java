@@ -198,6 +198,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
                     dados = Principal.cf.getEmpregadosTable(Principal.cf.buscarEmpregadoEndereco(txtBusca.getText()));                                                         
                 else
                     dados = Principal.cf.getEmpregadosTable(Principal.cf.listarEmpregados());                    
+                txtBusca.setText("");
             } catch (Exception ex) {
                  JOptionPane.showMessageDialog(null,"Erro Empregado: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
                 System.err.println("Erro Painel Projetos: " + ex);

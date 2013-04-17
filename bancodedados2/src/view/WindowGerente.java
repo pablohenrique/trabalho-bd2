@@ -42,28 +42,30 @@ public class WindowGerente extends JFrame implements ActionListener {
     
     public static Empregado usuario = null;
     
-    private static JMenuItem menuFuncionarioCadastro;
-    private static JMenuItem menuDepartamentoCadastro;
-    private static JMenuItem menuDepartamentoListar;
-    private static JMenuItem menuDependentesCadastro;   
-    private static JMenuItem menuProjetosCadastro;	
-    private static JMenuItem menuProjetosListar;	
-    private static JMenuItem menuFuncionariosListar;
-    private static JMenuItem menuDependentesListar;
+    private JMenuItem menuFuncionarioCadastro;
+    private JMenuItem menuDepartamentoCadastro;
+    private JMenuItem menuDepartamentoListar;
+    private JMenuItem menuDependentesCadastro;   
+    private JMenuItem menuProjetosCadastro;	
+    private JMenuItem menuProjetosListar;	
+    private JMenuItem menuFuncionariosListar;
+    private JMenuItem menuDependentesListar;
     
-    private static JMenuItem menuExit;
-    private static JMenuItem menuInit;
-    private static JMenuItem menuAbout;
+    private JMenuItem menuExit;
+    private JMenuItem menuAbout;
+    private JMenuItem menuInit;
+    private JMenuItem menuSupervisor = new JMenuItem("Logar Supervisor");
+    private JMenuItem menuFuncionario = new JMenuItem("Logar Funcionario");
 
-    private static JButton btnFunc; 
-    private static JButton btnDep;
-    private static JButton btnDepartamentos;
-    private static JButton btnProjetos;
-    private static JButton btnCargaHoraria;
-    private static JButton btnCalculadora;
-    private static JButton btnProjetosDepatamento;
-    private static CardLayout card;
+    private JButton btnFunc; 
+    private JButton btnDep;
+    private JButton btnDepartamentos;
+    private JButton btnProjetos;
+    private JButton btnCargaHoraria;
+    private JButton btnCalculadora;
+    private JButton btnProjetosDepatamento;
     
+    private static CardLayout card;    
     private static JPanel painel_projetos = null;
     private static JPanel painel_dependentes = null;
     private static JPanel painel_departamento = null;
@@ -84,7 +86,17 @@ public class WindowGerente extends JFrame implements ActionListener {
             
             menuExit = new JMenuItem("Sair");
             menuInit = new JMenuItem("Inicio");
+
             arquivo.add(menuInit);
+            
+            if(Principal.value == 3){
+                arquivo.add(new JSeparator());
+                arquivo.add(menuSupervisor);   
+                arquivo.add(menuFuncionario);
+            } else if (Principal.value == 2){
+                arquivo.add(new JSeparator()); 
+                arquivo.add(menuFuncionario);
+            }            
             arquivo.add(new JSeparator());
             arquivo.add(menuExit);		
             
@@ -135,13 +147,15 @@ public class WindowGerente extends JFrame implements ActionListener {
             menuProjetosListar.addActionListener(this);
             menuInit.addActionListener(this);
             menuAbout.addActionListener(this);
-            menuExit.addActionListener(this);	            
+            menuExit.addActionListener(this);
+            menuSupervisor.addActionListener(this);
+            menuFuncionario.addActionListener(this);
 
 
             JToolBar barraFerramentas = new JToolBar();
             ArrayList<JButton> botoes = new ArrayList<JButton>();
 
-            btnFunc = new JButton("Funcionarios");
+            btnFunc = new JButton("Funcionários");
             btnFunc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/funcionarios.png")));
             botoes.add(btnFunc);
             
@@ -157,16 +171,12 @@ public class WindowGerente extends JFrame implements ActionListener {
             btnProjetos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/projetos.png")));
             botoes.add(btnProjetos); 
             
-            btnCalculadora = new JButton("Calculos Salarios");
+            btnCalculadora = new JButton("Checar Salários");
             btnCalculadora.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/max-min.png")));
             botoes.add(btnCalculadora);
             
-            
-            btnCargaHoraria = new JButton("Carga Horaria");
-            btnCargaHoraria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/carga-horaria.png")));
-            botoes.add(btnCargaHoraria);
 
-            btnCargaHoraria = new JButton("Carga Horaria");
+            btnCargaHoraria = new JButton("Carga Horária");
             btnCargaHoraria.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/carga-horaria.png")));
             botoes.add(btnCargaHoraria);
             
@@ -243,6 +253,16 @@ public class WindowGerente extends JFrame implements ActionListener {
             WindowGerente.formProjetosDepartamentos();   
         else if(origem == btnCargaHoraria)
             WindowGerente.formHoras();
+        else if(origem == menuFuncionario){
+            Principal.user.setTipoLogin(0);                
+            Principal.janela = new WindowFuncionario();       
+            this.dispose();            
+        }
+        else if(origem == menuSupervisor){
+            Principal.user.setTipoLogin(1);
+            Principal.janela = new WindowSupervisor();              
+            this.dispose();            
+        }            
     }
     
     public static JPanel painelProjetos(){

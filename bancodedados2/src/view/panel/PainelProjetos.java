@@ -199,13 +199,14 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         } else if (origem == btnBusca){
             String[][] dados = null;
 
-            try {   
+            try {                   
                 if(comboBusca.getSelectedIndex() == 0 && !txtBusca.getText().equals(""))//busca nome
                     dados = Principal.cf.getProjetosTable(Principal.cf.buscaProjetosByNome(txtBusca.getText()));
                 else if(comboBusca.getSelectedIndex() == 1 && !txtBusca.getText().equals(""))//busca numero
                     dados = Principal.cf.getProjetosTable(Principal.cf.getProjetoByNumeroVector(Integer.parseInt(txtBusca.getText())));
                 else
                     dados = Principal.cf.getProjetosTable(Principal.cf.listarProjetos());
+                txtBusca.setText("");
             } catch (Exception ex) {
                 System.err.println("Erro Painel Projetos: " + ex);
             }

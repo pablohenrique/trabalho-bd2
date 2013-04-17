@@ -40,7 +40,7 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
     private Vector<Departamento> valuesDepartamento;
 
     public FormProjetosDepartamento(){
-        super(Principal.janela,"Empregado que trabalha em mais projetos de um Detartamento", true);
+        super(Principal.janela,"Empregado que trabalha mais dado um Departamento", true);
         
         btnOK.setPreferredSize(new Dimension(100, 25));             
         
