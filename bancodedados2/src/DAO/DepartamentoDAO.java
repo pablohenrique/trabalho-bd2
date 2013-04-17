@@ -27,7 +27,7 @@ public class DepartamentoDAO implements IObjectDAO{
 " e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha "+
 " FROM ((cia.empregado AS e LEFT JOIN cia.departamento AS d ON d.gerssn = e.ssn)) ";
           
-    private final String SQL_POST = "INSERT INTO cia.departamento(nome, gerssn, gerdatainicio) VALUES(?,?,?);";
+    private final String SQL_POST = "INSERT INTO cia.departamento VALUES(DEFAULT,?,?,?);";
     private final String SQL_UPDATE = "UPDATE cia.departamento SET nome = ?, gerssn = ?, gerdatainicio = ? WHERE numero = ?";
     private final String SQL_DELETE = "DELETE FROM cia.departamento WHERE numero = ?";
     private final String SQL_GET = BEFORECOND + " WHERE d.numero = ? AND d.gerssn = e.ssn;";
