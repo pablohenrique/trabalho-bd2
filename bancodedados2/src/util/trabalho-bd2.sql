@@ -260,9 +260,9 @@ SELECT e.ssn, e.superssn, e.senha, d.gerssn, d1.gerssn AS gerente
          JOIN departamento d1 ON d1.numero = e.dno);
 
 
-DROP FUNCTION IF EXISTS login(varchar(9),varchar(15));
+DROP FUNCTION IF EXISTS cia.login(varchar(9),varchar(15));
 
-CREATE OR REPLACE FUNCTION login (argssn VARCHAR(9),argsenha VARCHAR(15))
+CREATE OR REPLACE FUNCTION cia.login (argssn VARCHAR(9),argsenha VARCHAR(15))
 RETURNS int4 AS $$
 DECLARE 
     userInfo record;
@@ -304,7 +304,7 @@ $$ language 'plpgsql';
 --
 
 
-CREATE OR REPLACE FUNCTION sexo (sexo VARCHAR(1))
+CREATE OR REPLACE FUNCTION cia.sexo (sexo VARCHAR(1))
 RETURNS VARCHAR AS $$
     BEGIN
         IF(lower(sexo) = 'm') THEN            
@@ -333,7 +333,7 @@ $$ language 'plpgsql';
 -- Funcao responsavel por contar a tarifa de propagandas de um determinado projeto
 --
 
-CREATE OR REPLACE FUNCTION gera_tarifa(projetoID cia.projeto.pnumero%TYPE)
+CREATE OR REPLACE FUNCTION cia.gera_tarifa(projetoID cia.projeto.pnumero%TYPE)
 RETURNS FLOAT AS
 $gera_tarifa$
     DECLARE acumulador cia.propaganda.tarifa%TYPE;
@@ -363,21 +363,25 @@ LANGUAGE 'plpgsql';
 -- Confere salario
 ---
 
-CREATE OR REPLACE FUNCTION trigger_emp_salario()
+CREATE OR REPLACE FUNCTION cia.trigger_emp_salario()
 RETURNS TRIGGER AS
 $BODY$
 BEGIN
-    IF (NEW.salario < 100) THEN
-    RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario %', NEW.superssn;
+    IF (TG_OP = 'INSERT') THEN
+        IF (NEW.salario <= 600) THEN
+            RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario % . Salario deve ser maior que 600.', NEW.superssn;
+        ELSE
+            INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,NEW.salario,NEW.salario,current_date);
+            RETURN NEW;
+        END IF;
     ELSEIF(TG_OP = 'UPDATE' AND NEW.salario <> OLD.salario) THEN
         IF NEW.salario > OLD.salario THEN
             INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
+            RETURN NEW;
         ELSE
             RAISE EXCEPTION 'Valor de salario nao pode ser persistido. Nao se pode reduzir o salario de um empregado, senhor %', OLD.superssn;
         END IF;
     END IF;
-    
-    RETURN NEW;
 END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
@@ -393,7 +397,7 @@ CREATE TRIGGER trigger_emp_salario
 --
 --
 
-CREATE OR REPLACE FUNCTION dependeteConjugue()
+CREATE OR REPLACE FUNCTION cia.dependeteConjugue()
 RETURNS trigger AS 
 $$
 DECLARE
@@ -422,7 +426,7 @@ CREATE TRIGGER verificaConjugue
 --
 --
 
-CREATE OR REPLACE FUNCTION projetoDep()
+CREATE OR REPLACE FUNCTION cia.projetoDep()
 RETURNS trigger AS 
 $$
     DECLARE dep_emp cia.empregado.dno%TYPE;
