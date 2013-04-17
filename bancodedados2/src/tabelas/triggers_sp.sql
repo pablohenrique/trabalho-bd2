@@ -11,16 +11,15 @@ BEGIN
             RAISE EXCEPTION 'Nao aceitamos escravos nesta companhia, usuario % . Salario deve ser maior que 600.', NEW.superssn;
         ELSE
             INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,NEW.salario,NEW.salario,current_date);
-            RETURN NEW;
         END IF;
     ELSEIF(TG_OP = 'UPDATE' AND NEW.salario <> OLD.salario) THEN
         IF NEW.salario > OLD.salario THEN
             INSERT INTO cia.auditoria VALUES(NEW.superssn,NEW.ssn,OLD.salario,NEW.salario,current_date);
-            RETURN NEW;
         ELSE
             RAISE EXCEPTION 'Valor de salario nao pode ser persistido. Nao se pode reduzir o salario de um empregado, senhor %', OLD.superssn;
         END IF;
     END IF;
+    RETURN NEW;
 END;
 $BODY$
   LANGUAGE plpgsql VOLATILE
