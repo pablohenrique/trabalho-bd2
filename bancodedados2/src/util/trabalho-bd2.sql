@@ -339,13 +339,14 @@ $gera_tarifa$
 DECLARE
 acumulador cia.propaganda.tarifa%TYPE;
 contador cia.propaganda.tarifa%TYPE;
+propaganda RECORD;
 dias INTEGER;
 BEGIN
     acumulador := 0;
-    FOR contador IN SELECT pp.tarifa FROM cia.propaganda as pp WHERE pp.projeto = projetoID
+    FOR propaganda IN SELECT * FROM cia.propaganda as pp WHERE pp.projeto = projetoID
     LOOP
-        SELECT (pp.dataInicio - pp.dataFinal) INTO dias;
-        acumulador := acumulador + (contador * dias);
+        SELECT (propaganda.dataFinal - propaganda.dataInicio)  INTO dias;
+        acumulador := acumulador + (propaganda.tarifa * dias);
     END LOOP;
     RETURN acumulador;
 END;
