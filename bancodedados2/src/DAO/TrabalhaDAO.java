@@ -26,7 +26,7 @@ public class TrabalhaDAO implements IObjectDAO{
     private final String SQL_DELETE = "DELETE FROM cia.trabalha_em WHERE essn = ?;";
     private final String SQL_DELETERIGHT = "DELETE FROM cia.trabalha_em WHERE essn = ? AND pjnumero = ?;";
     private final String SQL_GET = BEFORECOND + " WHERE t.essn = ? AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
-    private final String SQL_GETONE = BEFORECOND + " WHERE t.essn = ? AND e.ssn = t.essn AND t.pjnumero = ? AND p.dnum = d.numero;";
+    private final String SQL_GETONE = BEFORECOND + " WHERE t.essn = ? AND e.ssn = t.essn AND t.pjnumero = ? AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
     private final String SQL_READ = BEFORECOND + " WHERE t.pjnumero = ?  AND e.ssn = t.essn AND t.pjnumero = p.pnumero AND p.dnum = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " WHERE t.essn = e.ssn" + " AND t.pjnumero = p.pnumero" + " AND p.dnum = d.numero;";
     private final String SQL_COUNTHOURS = "SELECT SUM(horas) FROM cia.trabalha_em;";
