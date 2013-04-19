@@ -159,7 +159,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         supervisor.setModel(new javax.swing.DefaultComboBoxModel((valuesEmpregado)));
      
         valuesDepartamento = (Vector<Departamento>) ViewObjectPool.get("todosDepartamento");            
-        departamento.setModel(new javax.swing.DefaultComboBoxModel(valuesDepartamento));//        nao consegui arrumar esse erro
+        departamento.setModel(new javax.swing.DefaultComboBoxModel(valuesDepartamento));
               
         if(e == null){
             emp_edit = null;
@@ -295,9 +295,12 @@ public class FormFuncionario extends JDialog implements ActionListener
                                                     superssn.getSsn(), new String (senha.getPassword()));                                           
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
-                                       
-                    ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
-                    PainelFuncionarios.setDataTable();                     
+                    
+                    if(Principal.user.getTipoLogin() != 0){
+                      ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
+                      PainelFuncionarios.setDataTable(); 
+                    }
+                    
                     this.dispose();                    
                 }
                 catch(Exception ex){

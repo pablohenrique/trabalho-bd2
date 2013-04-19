@@ -9,6 +9,7 @@
  */
 package view.panel;
 
+import Model.Departamento;
 import Model.Dependente;
 import Model.Empregado;
 import java.awt.BorderLayout;
@@ -41,7 +42,7 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
     private JButton novo  = new JButton("Novo");
     private JButton editar = new JButton("Editar");
     private JButton excluir = new JButton("Excluir"); 
-    private JComboBox empregadosDependentes = null;
+    private static JComboBox empregadosDependentes = null;
     private Empregado empDependentes = new Empregado();
     
     private static JLabel contaRegistros =  new JLabel();            
@@ -202,7 +203,12 @@ public final class PainelDependentes extends JPanel  implements ActionListener {
         String[][] dados = null;        
 
         try {            
-            Vector<Dependente> values = new Vector((Vector<Dependente>) ViewObjectPool.get("todosDependentes"));
+            if(empregadosDependentes != null){
+                Vector<Empregado> emp = new Vector((Vector<Empregado>) ViewObjectPool.get("todosEmpregados"));      
+                empregadosDependentes.setModel(new javax.swing.DefaultComboBoxModel(emp));
+            }
+                        
+            Vector<Dependente> values = new Vector((Vector<Dependente>) ViewObjectPool.get("todosDependentes"));                        
             dados = Principal.cf.getDependentesTable(values);
         } catch (Exception ex) {
             System.err.println("Erro listar dependentes: " + ex);
