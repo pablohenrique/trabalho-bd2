@@ -26,7 +26,6 @@ public class EmpregadoDAO implements IObjectDAO{
     private final String SQL_DELETE = "DELETE FROM cia.empregado WHERE ssn = ?;";
     private final String SQL_LOGIN = " SELECT cia.login(?,?); ";
     private final String SQL_GET = BEFORECOND + " FROM ((cia.empregado AS e LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) LEFT JOIN cia.departamento AS d ON e.dno = d.numero) WHERE  e.ssn=?;";
-    //private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE UPPER('%'|| ? ||'%') AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_READ = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.nome LIKE UPPER(?) AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_READ_SUPERSSN = BEFORECOND + " FROM cia.empregado AS e, cia.departamento AS d, cia.empregado AS s WHERE e.superssn = ? AND e.superssn = s.ssn AND e.dno = d.numero;";
     private final String SQL_GETALL = BEFORECOND + " FROM (((cia.empregado AS e LEFT JOIN cia.departamento AS d ON e.dno = d.numero) LEFT JOIN cia.empregado AS ger ON d.gerssn = ger.ssn) LEFT JOIN cia.empregado AS s ON e.superssn = s.ssn) ORDER BY e.nome ASC;";

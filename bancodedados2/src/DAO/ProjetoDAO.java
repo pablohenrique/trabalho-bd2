@@ -19,10 +19,7 @@ public class ProjetoDAO implements IObjectDAO{
    
     private final String SELECT_PRJETO = "p.pnumero AS p_numero, p.pjnome AS p_nome, p.plocalizacao AS p_localizacao, "; 
     private final String SELECT_DEP = "d.numero AS d_numero, d.nome AS d_nome, d.gerssn AS d_gerssn, d.gerdatainicio AS d_dataInicio, ";
-    //private final String SELECT_EMP = "e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha, ";
     private final String SELECT_EMP = "e.ssn AS e_ssn, e.nome AS e_nome, cia.sexo(e.sexo) AS e_sexo, e.endereco AS e_endereco, e.salario AS e_salario, e.datanasc AS e_datanasc, e.dno AS e_dno, e.superssn AS e_superssn, e.senha AS e_senha ";
-    //private final String SELECT_TRB = "t.essn as t_essn, t.pjnumero AS t_numero, t.horas AS t_horas ";
-    //private final String BEFORECOND = SELECT_PRJETO + ", "  + SELECT_DEP + ", " + SELECT_EMP + ", " + SELECT_TRB + " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
     private final String BEFORECOND = SELECT_PRJETO + SELECT_DEP + SELECT_EMP + " FROM cia.empregado AS e,  cia.projeto AS p,  cia.departamento AS d,  cia.trabalha_em AS t";
     
     private final String SQL_POST = "INSERT INTO cia.projeto VALUES(DEFAULT,?,?,?);";
