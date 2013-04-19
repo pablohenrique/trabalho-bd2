@@ -112,10 +112,10 @@ public class FormHoras extends JDialog implements ActionListener
         
         if (e.getSource() == tipo){
             if(tipo.getSelectedIndex() == 0){
-                System.out.println("mais Horas");
+                //System.out.println("mais Horas");
                 FormHoras.setDataTableMaisHoras();
             }else if(tipo.getSelectedIndex() == 1){
-                System.out.println("menos Horas");
+                //System.out.println("menos Horas");
                 try {                                    
                     dados = Principal.cf.getEmpregadosTable(Principal.cf.empregadoMenosHoras());
                 } catch (SQLException ex) {
@@ -144,7 +144,7 @@ public class FormHoras extends JDialog implements ActionListener
     
     public static void setDataTableMaisHoras(){
         String[][] dados = null;
-         System.out.println("imprimindo mais horas Horas");
+         //System.out.println("imprimindo mais horas Horas");
          try {
             dados = Principal.cf.getEmpregadosTable(Principal.cf.empregadoMaisHoras());
          } catch (SQLException ex) {

@@ -51,7 +51,7 @@ public class FormDependente extends JDialog implements ActionListener
             dataNasc.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));  
         }
         catch (ParseException ex){
-            System.out.println("Erro mascara! " + ex);
+            System.err.println("Erro mascara! " + ex);
         }        
         
         sexo = new JComboBox<>();

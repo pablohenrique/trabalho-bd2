@@ -42,7 +42,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
         projeto = t.getProjeto();
         emp = t.getEssn();
         
-        System.out.println(projeto.getNumero());
+        //System.out.println(projeto.getNumero());
   
         try {
             //deve listar apenas empregados do ssn logado
@@ -119,7 +119,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
         projeto = t.getProjeto();                
         horas.setText(String.valueOf(t.getHoras()));
         empregados.setEnabled(false);
-        System.out.println(projeto.getNumero());
+        //System.out.println(projeto.getNumero());
 
         empregados.setSelectedIndex(this.selecionarComboBoxSup(emp, empregados));        
         
@@ -152,7 +152,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
                 try{
                     Empregado supervisionado = (Empregado) empregados.getSelectedItem();
                     
-                    System.out.println("trabalha - " + supervisionado.getSsn() + " " + projeto.getNumero() + " - " + horas.getText());
+                    //System.out.println("trabalha - " + supervisionado.getSsn() + " " + projeto.getNumero() + " - " + horas.getText());
                     
                     Principal.cf.inserirTrabalha(supervisionado.getSsn(), projeto.getNumero(), Float.parseFloat(horas.getText()));
                     
@@ -167,7 +167,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
             } else{
                try{                
                     Empregado supervisionado = (Empregado) empregados.getSelectedItem();
-                    System.out.println("update trabalha - " + supervisionado.getSsn() + " " + projeto.getNumero() + " - " + horas.getText());
+                    //System.out.println("update trabalha - " + supervisionado.getSsn() + " " + projeto.getNumero() + " - " + horas.getText());
                                         
                     Principal.cf.atualizarTrabalha(supervisionado.getSsn(), projeto.getNumero(), Float.parseFloat(horas.getText()));
                     

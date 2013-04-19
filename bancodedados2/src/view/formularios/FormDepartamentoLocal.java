@@ -158,7 +158,7 @@ public class FormDepartamentoLocal extends JDialog implements ActionListener
     public static void setDataTableDepLocal(Departamento d){
         String[][] dados = null;
         try {        
-            System.out.println(d.getNumero());
+            //System.out.println(d.getNumero());
             dados = Principal.cf.getLocalizacaoPorDep(Principal.cf.listarLocalizacaoPorDep(d.getNumero()));
         } catch (Exception ex) {
             System.err.println("Erro listar projetos de Departamento: " + ex);

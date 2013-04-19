@@ -141,7 +141,7 @@ public class FormProjetos extends JDialog implements ActionListener
             if(pEdit == null){
                 try{
                     Departamento d = (Departamento) departamento.getSelectedItem();                      
-                    System.out.println(nome.getText()+ " - "+ localizacao.getText()+ " - "+ d.getNumero());
+                    //System.out.println(nome.getText()+ " - "+ localizacao.getText()+ " - "+ d.getNumero());
                     Principal.cf.inserirProjeto(nome.getText(), localizacao.getText(), d.getNumero());
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        

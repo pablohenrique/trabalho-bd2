@@ -51,10 +51,11 @@ public class Principal{
          update = (Projeto) FactoryDAO.getFactory("Projeto").read("MINERACAO");
          System.out.println(update.getLocalizacao());
          */
+
         ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
         ViewObjectPool.set("todosDepartamento", (Vector<Departamento>) Principal.cf.listarDepartamentos());  
          
-         login = new WindowLogin();
+        login = new WindowLogin();
     }
 
     private static void initLookAndFeel(){		 

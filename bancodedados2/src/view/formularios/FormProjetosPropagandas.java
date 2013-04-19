@@ -145,8 +145,7 @@ public class FormProjetosPropagandas extends JDialog implements ActionListener
             String id = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Numero"));   
             Propaganda p;
             try {
-                p = Principal.cf.getPropaganda(Integer.parseInt(id));
-                System.out.println(id);
+                p = Principal.cf.getPropaganda(Integer.parseInt(id));               
                 FormFuncionarioProjetosForm(p, p.getProjeto()).setVisible(true);
             } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this,ex, "Atenção", JOptionPane.ERROR_MESSAGE);

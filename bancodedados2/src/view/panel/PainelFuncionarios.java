@@ -142,8 +142,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
          if (origem == editar && (item != -1)){
             
             String ssn = (String) tabela.getValueAt(item, tabela.getColumnModel().getColumnIndex("Ssn"));
-            
-            System.out.println("SSN " + ssn);            
+                                  
             Empregado em;
             try {
                 em = Principal.cf.getEmpregadoBySsn(ssn);

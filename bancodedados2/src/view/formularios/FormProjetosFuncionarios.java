@@ -126,7 +126,7 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
     public void editar(Projeto p){        
         proj = p;
         
-        System.out.println("projeto id" + proj.getNome() + proj.getNumero());
+        //System.out.println("projeto id" + proj.getNome() + proj.getNumero());
         nomeProjeto.setText(p.getNome());
         localProjeto.setText(p.getLocalizacao());
         depProjeto.setText(p.getDepartamento().getNome());
@@ -140,7 +140,7 @@ public class FormProjetosFuncionarios extends JDialog implements ActionListener
         int item = tabela.getSelectedRow();
         
         if(origem == novo){
-            System.out.println("novo elem");
+            //System.out.println("novo elem");
             Trabalha t = new Trabalha();
             t.setProjeto(proj);
             t.setEssn(null);

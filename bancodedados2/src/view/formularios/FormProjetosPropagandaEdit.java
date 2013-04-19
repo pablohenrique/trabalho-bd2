@@ -50,10 +50,10 @@ public class FormProjetosPropagandaEdit extends JDialog implements ActionListene
         }
         catch (ParseException ex){
             Logger.getLogger(FormFuncionario.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Erro mascara! " + ex);
+            //System.out.println("Erro mascara! " + ex);
         }
         
-        System.out.println("Inserir propaganda projeto, new "+ projeto.getNome());
+        //System.out.println("Inserir propaganda projeto, new "+ projeto.getNome());
         publi = p;                      
         proj = projeto;
         
@@ -151,9 +151,8 @@ public class FormProjetosPropagandaEdit extends JDialog implements ActionListene
         
         if(origem == btnOK && proj != null){
             if(publi == null){
-                try{                    
-                  
-                    System.out.println(proj.getNumero() + " " + proj.getNome());
+                try{                                      
+                    //System.out.println(proj.getNumero() + " " + proj.getNome());
                     Principal.cf.inserirPropaganda(agencia.getText(), dataFim.getText(), dataInicio.getText(), proj.getNumero(), Float.valueOf(tarifa.getText()));
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
@@ -166,7 +165,7 @@ public class FormProjetosPropagandaEdit extends JDialog implements ActionListene
                 }               
             } else{
                try{
-                    System.out.println(proj.getNumero() + " " + proj.getNome());
+                    //System.out.println(proj.getNumero() + " " + proj.getNome());
                     Principal.cf.atualizarPropaganda(publi.getNumero(), agencia.getText(), dataFim.getText(), dataInicio.getText(), proj.getNumero(), Float.valueOf(tarifa.getText()));
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        

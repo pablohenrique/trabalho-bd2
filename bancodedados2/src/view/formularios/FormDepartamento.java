@@ -58,7 +58,7 @@ public class FormDepartamento extends JDialog implements ActionListener
         }
         catch (ParseException ex){
             Logger.getLogger(FormDepartamento.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Erro mascara! " + ex);
+            System.err.println("Erro mascara! " + ex);
         }
         
         try {            
@@ -178,7 +178,7 @@ public class FormDepartamento extends JDialog implements ActionListener
                try{                
                     Empregado gerssn = (Empregado) gerente.getSelectedItem();
                     
-                    System.out.println(depEdit.getNumero()+ " - " + nome.getText()+ " - " +gerssn.getSsn()+ " - " +dataInicio.getText());
+                    //System.out.println(depEdit.getNumero()+ " - " + nome.getText()+ " - " +gerssn.getSsn()+ " - " +dataInicio.getText());
                     Principal.cf.atualizarDepartamento(depEdit.getNumero(), nome.getText(), gerssn.getSsn(), dataInicio.getText());
                     
                     JOptionPane.showMessageDialog(this,"Atualização realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        

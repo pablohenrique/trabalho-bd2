@@ -120,7 +120,7 @@ public class FormProjetosDepartamento extends JDialog implements ActionListener
         if (e.getSource() == departamento){
             Departamento d = (Departamento) departamento.getSelectedItem();  
             dep = d;
-            System.out.println(dep.getNumero() + " " + dep.getNumero());
+            //System.out.println(dep.getNumero() + " " + dep.getNumero());
             FormProjetosDepartamento.setDataTableDepartamentoProjetos();
             dep = null;
         }

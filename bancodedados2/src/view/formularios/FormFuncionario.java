@@ -62,7 +62,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         }
         catch (ParseException ex){
             Logger.getLogger(FormFuncionario.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Erro mascara! " + ex);
+            System.err.println("Erro mascara! " + ex);
         }
         
         senha = new JPasswordField();
@@ -179,7 +179,7 @@ public class FormFuncionario extends JDialog implements ActionListener
         sexo.setSelectedItem(e.getSexo());
         departamento.setSelectedIndex(this.selecionarComboBoxDep(e.getDepartamento().getNumero(), departamento));
                        
-        System.out.println("ssn" + e.getSuperSsn().getSsn());
+        //System.out.println("ssn" + e.getSuperSsn().getSsn());
 
         if(e.getSuperSsn().getSsn() != null)
             supervisor.setSelectedIndex(this.selecionarComboBoxSup(e.getSuperSsn(), supervisor));
@@ -288,8 +288,8 @@ public class FormFuncionario extends JDialog implements ActionListener
                     String salS = salario.getText().replaceAll("\\,", ".");
                     DecimalFormat formato = new DecimalFormat("0.00");  
                     double sa = formato.parse(salS).doubleValue();
-                    System.out.println("salario" + sa);
-                    System.out.println("salariotx" + salario.getText());
+                    //System.out.println("salario" + sa);
+                    //System.out.println("salariotx" + salario.getText());
                     Principal.cf.atualizarEmpregado(ssn.getText(), nome.getText(), sexo.getItemAt(sexo.getSelectedIndex()), 
                                                     endereco.getText(), String.valueOf(sa), dataNasc.getText(), d.getNumero(),
                                                     superssn.getSsn(), new String (senha.getPassword()));                                           
