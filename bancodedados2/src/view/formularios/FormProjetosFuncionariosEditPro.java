@@ -104,6 +104,8 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
 
     
     public void editar(Trabalha t) throws Exception{
+        
+        empregados.setModel(new javax.swing.DefaultComboBoxModel(Principal.cf.buscaSuperSnn(Principal.user.getSsn())));                   
         //new projeto
         if(t.getEssn() == null){
             emp = null;            

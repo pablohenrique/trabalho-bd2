@@ -96,7 +96,7 @@ public final class PainelProjetos extends JPanel  implements ActionListener {
         
         comboBusca.addItem("Nome");
         comboBusca.addItem("Numero");
-        comboBusca.addItem("Todos Projetos");
+        //comboBusca.addItem("Todos Projetos");
         comboBusca.setPreferredSize(new Dimension(100, 24));
         comboBusca.setMaximumSize(new Dimension(100, 24));
         

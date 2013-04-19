@@ -28,8 +28,8 @@ public class WindowLogin extends JFrame implements ActionListener
     {		
         super("Bem-vindo ao Sistema de Gerenciamento");
 
-        usuario = new JTextField();        
-        senha = new JPasswordField();
+        usuario = new JTextField("11011");        
+        senha = new JPasswordField("a");
         senha.requestFocus();
         btnOK = new JButton("Iniciar sessão");
         btnSair = new JButton("Sair");

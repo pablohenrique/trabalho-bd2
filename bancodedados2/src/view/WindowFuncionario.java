@@ -1,11 +1,14 @@
 package view;
 
+import Model.Dependente;
 import Model.Empregado;
+import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -16,7 +19,9 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 import view.formularios.FormFuncionario;
+import view.panel.PainelDependentes;
 import view.panel.PainelInit;
+import view.panel.PainelProjetos;
 
 public class WindowFuncionario extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -38,9 +43,9 @@ public class WindowFuncionario extends JFrame implements ActionListener {
     private JButton btnDepartamentos;
     private JButton btnProjetos;
     private static CardLayout card;
-    private static JPanel painel_projetos = null;
-    private static JPanel painel_dependentes = null;
-    private static FormFuncionario formFuncionario = null;
+    private JPanel painel_projetos = null;
+    private JPanel painel_dependentes = null;
+    private FormFuncionario formFuncionario = null;
     
     public WindowFuncionario(){
             super("Sistema de Gerenciamento - Funcionario");
@@ -159,11 +164,11 @@ public class WindowFuncionario extends JFrame implements ActionListener {
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "inicio");
             }		
             else if (origem == menuDependentesListar || origem == btnDependentes){
-                    painelCentral.add(WindowGerente.painelDependentes(), "dependente");                
+                    painelCentral.add(painelDependentes(), "dependente");                
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "dependente");
             }
             else if( origem == btnProjetos || origem == menuProjetosListar){
-                    painelCentral.add(WindowGerente.painelProjetos(), "projeto");            
+                    painelCentral.add(painelProjetos(), "projeto");            
                     WindowFuncionario.card.show(WindowFuncionario.painelCentral, "projeto");
             }            
             else if (origem == menuEditarFuncionario || origem == btnFuncionarios){           
@@ -199,5 +204,38 @@ public class WindowFuncionario extends JFrame implements ActionListener {
             formFuncionario.setVisible(true);
         }
     }
+    
+    public JPanel painelProjetos(){
+        if(painel_projetos == null){  
+            try {                
+                if(Principal.user.getTipoLogin() != 0)//supervisor
+                    ViewObjectPool.set("todosProj", (Vector<Projeto>) Principal.cf.listarProjetos());
+                else if(Principal.user.getTipoLogin() == 0)//funcionario
+                    ViewObjectPool.set("todosProj", (Vector<Projeto>) Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));
+                
+                painel_projetos = new PainelProjetos();    
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Listar Projetos: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                    }
+        }
+        PainelProjetos.setDataTable();
+        return painel_projetos;
+    }     
+    
+    public JPanel painelDependentes(){
+        if(painel_dependentes == null){           
+            try {                
+                if(Principal.user.getTipoLogin() == 0 || Principal.user.getTipoLogin() == 1)
+                   ViewObjectPool.set("todosDependentes", (Vector<Dependente>) Principal.cf.DependenteBuscaByEssn(Principal.user.getSsn()));
+                else if (Principal.user.getTipoLogin() == 2)            
+                   ViewObjectPool.set("todosDependentes", (Vector<Dependente>)Principal.cf.listarDependentes());
+                
+                painel_dependentes = new PainelDependentes();                            
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Listar Dependentes: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                        
+            }
+        }
+        PainelDependentes.setDataTable();
+        return painel_dependentes;
+    }      
        
 }

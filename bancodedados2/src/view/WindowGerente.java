@@ -257,8 +257,7 @@ public class WindowGerente extends JFrame implements ActionListener {
             Principal.user.setTipoLogin(0);                
             Principal.janela = new WindowFuncionario();       
             this.dispose();            
-        }
-        else if(origem == menuSupervisor){
+        } else if(origem == menuSupervisor){
             Principal.user.setTipoLogin(1);
             Principal.janela = new WindowSupervisor();              
             this.dispose();            

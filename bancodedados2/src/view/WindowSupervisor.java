@@ -9,11 +9,13 @@
 package view;
 
 import Model.Empregado;
+import Model.Projeto;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -23,7 +25,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
+import view.panel.PainelFuncionarios;
 import view.panel.PainelInit;
+import view.panel.PainelProjetos;
 
 public class WindowSupervisor extends JFrame implements ActionListener {
     private static final long serialVersionUID = 1L;
@@ -46,8 +50,8 @@ public class WindowSupervisor extends JFrame implements ActionListener {
     private JButton btnProjetos;
     private static CardLayout card;
     
-    private static JPanel painel_funcionario = null;
-    private static JPanel painel_projetos = null;
+    private JPanel painel_funcionarios = null;
+    private JPanel painel_projetos = null;
 
     public WindowSupervisor(){
             super("Sistema de Gerenciamento - Supervisor");
@@ -161,11 +165,11 @@ public class WindowSupervisor extends JFrame implements ActionListener {
                     WindowSupervisor.card.show(WindowSupervisor.painelCentral, "inicio");
             }		
             else if (origem == btnFuncionarios || origem == menuFuncionariosListar){
-                painelCentral.add(WindowGerente.painelFuncionarios(), "funcionario");                     
+                painelCentral.add(painelFuncionarios(), "funcionario");                     
                 WindowSupervisor.card.show(WindowSupervisor.painelCentral, "funcionario");
             }
             else if( origem == btnProjetos || origem == menuProjetosListar){
-                painelCentral.add(WindowGerente.painelProjetos(), "projeto"); 
+                painelCentral.add(painelProjetos(), "projeto"); 
                 WindowSupervisor.card.show(WindowSupervisor.painelCentral, "projeto");
             } else if(menuFuncionario == origem){
                 Principal.user.setTipoLogin(0);                
@@ -176,5 +180,30 @@ public class WindowSupervisor extends JFrame implements ActionListener {
                 Principal.janela = new WindowGerente();              
                 this.dispose();                            
             }                   
-    }    
+    }   
+    
+    public JPanel painelFuncionarios(){
+        if(painel_funcionarios == null)
+            painel_funcionarios = new PainelFuncionarios();
+        
+        PainelFuncionarios.setDataTable();        
+        return painel_funcionarios;
+    } 
+    
+    public JPanel painelProjetos(){
+        if(painel_projetos == null){  
+            try {                
+                if(Principal.user.getTipoLogin() != 0)//supervisor
+                    ViewObjectPool.set("todosProj", (Vector<Projeto>) Principal.cf.listarProjetos());
+                else if(Principal.user.getTipoLogin() == 0)//funcionario
+                    ViewObjectPool.set("todosProj", (Vector<Projeto>) Principal.cf.listarProjetosByEmp(Principal.user.getSsn()));
+                
+                painel_projetos = new PainelProjetos();    
+            } catch (Exception ex) {
+                 JOptionPane.showMessageDialog(null,"Erro Listar Projetos: " + ex, "Atenção", JOptionPane.ERROR_MESSAGE);                                                                                    }
+        }
+        PainelProjetos.setDataTable();
+        return painel_projetos;
+    }     
+        
 }

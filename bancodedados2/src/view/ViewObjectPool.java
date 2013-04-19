@@ -45,8 +45,8 @@ public class ViewObjectPool {
     }
     
     public static void set(String chave, Object objeto){
-        /*for(String aux : objetos.keySet())
-            if(objetos.get(aux).getClass() == objeto.getClass()){
+/*        for(String aux : objetos.keySet())
+            if(objetos.get(aux).getClass() == chave){
                 objetos.remove(aux);
                 objetos.put(aux, objeto);
                 return;
@@ -54,6 +54,10 @@ public class ViewObjectPool {
         
         if(!objetos.containsKey(objeto))
             objetos.put(chave, objeto);
+        else{
+            objetos.remove(objeto);
+            objetos.put(chave, objeto);
+        }
         return;
     }
 }

@@ -69,7 +69,7 @@ public final class PainelFuncionarios extends JPanel  implements ActionListener 
         comboBusca.addItem("Masculino");
         comboBusca.addItem("Feminino");
         comboBusca.addItem("Endereco");
-        comboBusca.addItem("Todos Empregados");
+        //comboBusca.addItem("Todos Empregados");
         comboBusca.setPreferredSize(new Dimension(100, 24));
         comboBusca.setMaximumSize(new Dimension(100, 24));
         
