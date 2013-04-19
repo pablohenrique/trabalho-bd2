@@ -15,10 +15,8 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 
-
-
 CREATE TABLE departamento (
-    numero integer NOT NULL,
+    numero SERIAL NOT NULL,
     nome character varying(15) NOT NULL,
     gerssn character(9) NOT NULL,
     gerdatainicio date NOT NULL
@@ -49,7 +47,6 @@ CREATE TABLE empregado (
     senha character(15) NOT NULL
 );
 
-
 CREATE TABLE auditoria(
     gerssn character(9) NOT NULL,
     essn character(9) NOT NULL,
@@ -58,9 +55,8 @@ CREATE TABLE auditoria(
     datamodificado date
 );
 
-
 CREATE TABLE projeto (
-    pnumero integer NOT NULL,
+    pnumero SERIAL NOT NULL,
     pjnome character varying(15) NOT NULL,
     plocalizacao character varying(15),
     dnum integer NOT NULL
@@ -73,7 +69,7 @@ CREATE TABLE trabalha_em (
 );
 
 CREATE TABLE propaganda (
-    id integer NOT NULL,
+    id SERIAL NOT NULL,
     projeto INTEGER NOT NULL,
     dataInicio DATE NOT NULL,
     dataFinal DATE,
@@ -84,17 +80,36 @@ CREATE TABLE propaganda (
 --
 -- criando sequencias 
 --
-CREATE SEQUENCE departamento_seq INCREMENT 1; 
-CREATE SEQUENCE projeto_seq INCREMENT 1; 
-CREATE SEQUENCE propaganda_seq INCREMENT 1;
 
-INSERT INTO departamento VALUES(1,'FACOM','11011','17-04-2013');
-INSERT INTO empregado VALUES('11011','YURI CAMPOS','M','RUA X',1000,'25-08-1992',1,'11011','123');
+--CREATE SEQUENCE departamento_seq INCREMENT 1; 
+--CREATE SEQUENCE projeto_seq INCREMENT 1; 
+--CREATE SEQUENCE propaganda_seq INCREMENT 1;
 
-ALTER TABLE departamento ALTER COLUMN numero SET DEFAULT nextval('departamento_seq');
-ALTER TABLE projeto ALTER COLUMN pnumero SET DEFAULT nextval('projeto_seq');
-ALTER TABLE propaganda ALTER COLUMN id SET DEFAULT nextval('propaganda_seq');
+INSERT INTO departamento VALUES(1,'APPLE','00001','2013-04-18');
+INSERT INTO empregado VALUES('00001','STEVE JOBS','M','PALO ALTO',1000,'1955-02-24',1,'00001','apple');
 
+--ALTER TABLE departamento ALTER COLUMN numero SET DEFAULT nextval('departamento_seq');
+--ALTER TABLE projeto ALTER COLUMN pnumero SET DEFAULT nextval('projeto_seq');
+--ALTER TABLE propaganda ALTER COLUMN id SET DEFAULT nextval('propaganda_seq');
+
+
+--
+-- Criando os indexes
+--
+
+CREATE INDEX index_empregado_nome 
+    ON empregado(salario);
+
+CREATE INDEX index_empregado_departamento
+    ON empregado(dno);
+
+CREATE INDEX index_departamento_gerente
+    ON departamento(gerssn);
+
+
+--
+-- RESTRICOES PRIMARY KEY
+--
 
 ALTER TABLE ONLY departamento
     ADD CONSTRAINT pk_departamento PRIMARY KEY (numero);
@@ -121,9 +136,11 @@ ALTER TABLE ONLY propaganda
 -- RESTRICOES UNIQUE
 --
 
+ALTER TABLE ONLY empregado
+    ADD CONSTRAINT uq_enome UNIQUE (nome);
+
 ALTER TABLE ONLY departamento
     ADD CONSTRAINT uq_dnome UNIQUE (nome);
-
 
 ALTER TABLE ONLY projeto
     ADD CONSTRAINT uq_pnome UNIQUE (pjnome);
