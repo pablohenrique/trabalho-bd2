@@ -53,7 +53,7 @@ public class Principal{
          */
         ViewObjectPool.set("todosEmpregados", (Vector<Empregado>) Principal.cf.listarEmpregados());
         ViewObjectPool.set("todosDepartamento", (Vector<Departamento>) Principal.cf.listarDepartamentos());  
-                            
+         
          login = new WindowLogin();
     }
 

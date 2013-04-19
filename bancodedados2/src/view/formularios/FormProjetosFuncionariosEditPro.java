@@ -154,7 +154,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
                     
                     System.out.println("trabalha - " + supervisionado.getSsn() + " " + projeto.getNumero() + " - " + horas.getText());
                     
-                    Principal.cf.inserirTrabalha(supervisionado.getSsn(), projeto.getNumero(), Float.valueOf(horas.getText()));
+                    Principal.cf.inserirTrabalha(supervisionado.getSsn(), projeto.getNumero(), Float.parseFloat(horas.getText()));
                     
                     JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     
@@ -169,7 +169,7 @@ public class FormProjetosFuncionariosEditPro extends JDialog implements ActionLi
                     Empregado supervisionado = (Empregado) empregados.getSelectedItem();
                     System.out.println("update trabalha - " + supervisionado.getSsn() + " " + projeto.getNumero() + " - " + horas.getText());
                                         
-                    Principal.cf.atualizarTrabalha(supervisionado.getSsn(), projeto.getNumero(), Float.valueOf(horas.getText()));
+                    Principal.cf.atualizarTrabalha(supervisionado.getSsn(), projeto.getNumero(), Float.parseFloat(horas.getText()));
                     
                     JOptionPane.showMessageDialog(this,"Edicao realizada com sucesso!", "Atenção", JOptionPane.INFORMATION_MESSAGE);                                                                        
                     
