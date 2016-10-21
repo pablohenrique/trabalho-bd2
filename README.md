@@ -1,9 +1,12 @@
-trabalho-bd2
+Database project
 ============
 
-trabalho banco de dados 2
+This is a Java Project for the Database Class 2012. It was considered the best application developed during the semester.
 
-Grupo de BD2 do curso de BSi - FACOM - UFU:
-Caio Thomas
-Pablo Henrique
-Yuri Campos
+## What it does?
+It will create database and give the user an interface so the user can play with data. Its main goal was to test a great majority of SQL commands. Some Design patterns were used, like: Object Pool, Factory, and Singleton.
+
+## Involved
+Pablo Henrique @pablohpsilva
+Caio Thomas @caiothomas
+Yuri Campos @yuricampos
